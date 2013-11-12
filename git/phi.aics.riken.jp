@@ -9,6 +9,6 @@ cd $BUILDDIR
 rm -rf git-$GIT_VERSION
 tar zxf $HOME/source/git-$GIT_VERSION.tar.gz
 cd git-$GIT_VERSION
-./configure --prefix=$PREFIX_OPT --with-python=$PREFIX_OPT/bin/python-2.7
+./configure --prefix=$PREFIX_OPT --with-python=$PREFIX_OPT/bin/python2.7
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH make -j4
 sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH make install
