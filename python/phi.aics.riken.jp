@@ -1,0 +1,50 @@
+#!/bin/sh
+
+BASEDIR=`dirname $0`
+. $BASEDIR/../prefix.sh
+. $BASEDIR/../builddir.sh
+. $BASEDIR/version.sh
+
+cd $BUILDDIR
+rm -rf Python-$PYTHON_VERSION
+tar jxf $HOME/source/Python-$PYTHON_VERSION.tar.bz2
+cd Python-$PYTHON_VERSION
+./configure --prefix=$PREFIX_OPT --enable-shared
+make -j4
+sudo make install
+
+cd $BUILDDIR
+rm -rf nose-$NOSE_VERSION
+tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
+cd nose-$NOSE_VERSION
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py build
+sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+
+cd $BUILDDIR
+rm -rf numpy-$NUMPY_VERSION
+tar zxf $HOME/source/numpy-$NUMPY_VERSION.tar.gz
+cd numpy-$NUMPY_VERSION
+patch -p1 < $HOME/source/numpy-$NUMPY_VERSION.patch
+cat << EOF > site.cfg
+[mkl]
+library_dirs = /home/issp/intel/mkl/lib/intel64
+include_dirs = /home/issp/intel/mkl/include
+mkl_libs = mkl_rt
+lapack_libs =
+EOF
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py config --compiler=intel build_clib --compiler=intel build_ext --compiler=intel
+sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+
+cd $BUILDDIR
+rm -rf scipy-$SCIPY_VERSION
+tar zxf $HOME/source/scipy-$SCIPY_VERSION.tar.gz
+cd scipy-$SCIPY_VERSION
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py config --compiler=intel --fcompiler=intel build_clib --compiler=intel --fcompiler=intel build_ext --compiler=intel --fcompiler=intel
+sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+
+cd $BUILDDIR
+rm -rf matplotlib-$MATPLOTLIB_VERSION
+tar zxf $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz
+cd matplotlib-$MATPLOTLIB_VERSION
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py build
+sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install

@@ -8,16 +8,29 @@ HOST=`hostname -f`
 # Mac OS X
 if [ "$UNAME" = Darwin ]; then
   if [ -d /opt/alps ]; then
-    PREFIX_ALPS="/opt/alps"
+    PREFIX_ALPS_DEF="/opt/alps"
   else
-    PREFIX_ALPS="$HOME/alps"
+    PREFIX_ALPS_DEF="$HOME/alps"
   fi
+fi
+
+# phi.aics.riken.jp
+if [[ "$HOST" = phi ]]; then
+  PREFIX_OPT_DEF="/opt/local"
+  PREFIX_ALPS_DEF="/opt/nano/alps"
 fi
 
 # tatara.cc.kyushu-u.ac.jp
 if [[ "$HOST" =~ sugoka.*\.qdai\.hpc ]]; then
-  PREFIX_OPT="$HOME/opt"
-  PREFIX_ALPS="$HOME/alps"
+  PREFIX_OPT_DEF="$HOME/opt"
+  PREFIX_ALPS_DEF="$HOME/alps"
+fi
+
+if [ -z "$PREFIX_OPT" ]; then
+  PREFIX_OPT="$PREFIX_OPT_DEF"
+fi
+if [ -z "$PREFIX_ALPS" ]; then
+  PREFIX_ALPS="$PREFIX_ALPS_DEF"
 fi
 
 if [ -n "$PREFIX_OPT" ]; then
