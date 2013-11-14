@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -z "$BUILDDIR" ]; then
-  BUILDDIR="$HOME/build"
+if [ -z "$BUILD_DIR" ]; then
+  BUILD_DIR="$HOME/build"
 fi
-mkdir -p "$BUILDDIR"
+mkdir -p "$BUILD_DIR"

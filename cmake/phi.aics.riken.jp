@@ -1,14 +1,15 @@
 #!/bin/sh
 
-BASEDIR=`dirname $0`
-. $BASEDIR/../prefix.sh
-. $BASEDIR/../builddir.sh
-. $BASEDIR/version.sh
+SCRIPT_DIR=`dirname $0`
+. $SCRIPT_DIR/../check.sh
+. $SCRIPT_DIR/../prefix.sh
+. $SCRIPT_DIR/../builddir.sh
+. $SCRIPT_DIR/version.sh
 
-cd $BUILDDIR
+cd $BUILD_DIR
 rm -rf cmake-$CMAKE_VERSION
-tar zxf $HOME/source/cmake-$CMAKE_VERSION.tar.gz
+check tar zxf $HOME/source/cmake-$CMAKE_VERSION.tar.gz
 cd cmake-$CMAKE_VERSION
-./bootstrap --prefix=$PREFIX_OPT
-make -j4
-sudo make install
+check ./bootstrap --prefix=$PREFIX_OPT
+check make -j4
+check sudo make install
