@@ -1,3 +1,2 @@
-#!/bin/sh
 HDF5_VERSION="1.8.12"
 SZIP_VERSION="2.1"
