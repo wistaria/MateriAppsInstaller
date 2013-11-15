@@ -1,0 +1,53 @@
+diff -crN numpy-1.6.2.orig/numpy/distutils/fcompiler/__init__.py numpy-1.6.2/numpy/distutils/fcompiler/__init__.py
+*** numpy-1.6.2.orig/numpy/distutils/fcompiler/__init__.py      2012-05-19 22:51:54.000000000 +0900
+--- numpy-1.6.2/numpy/distutils/fcompiler/__init__.py   2012-07-25 08:38:41.219803765 +0900
+***************
+*** 429,435 ****
+          assert self._is_customised
+          version = CCompiler.get_version(self, force=force, ok_status=ok_status)
+          if version is None:
+!             raise CompilerNotFound()
+          return version
+
+      ############################################################
+--- 429,435 ----
+          assert self._is_customised
+          version = CCompiler.get_version(self, force=force, ok_status=ok_status)
+          if version is None:
+!             return '12.1'
+          return version
+
+      ############################################################
+diff -crN numpy-1.6.2.orig/numpy/distutils/intelccompiler.py numpy-1.6.2/numpy/distutils/intelccompiler.py
+*** numpy-1.6.2.orig/numpy/distutils/intelccompiler.py  2012-03-25 23:05:46.000000000 +0900
+--- numpy-1.6.2/numpy/distutils/intelccompiler.py       2012-07-25 08:37:57.287802682 +0900
+***************
+*** 9,21 ****
+
+      def __init__ (self, verbose=0, dry_run=0, force=0):
+          UnixCCompiler.__init__ (self, verbose,dry_run, force)
+!         self.cc_exe = 'icc -fPIC'
+          compiler = self.cc_exe
+          self.set_executables(compiler=compiler,
+                               compiler_so=compiler,
+!                              compiler_cxx=compiler,
+!                              linker_exe=compiler,
+!                              linker_so=compiler + ' -shared')
+
+  class IntelItaniumCCompiler(IntelCCompiler):
+      compiler_type = 'intele'
+--- 9,22 ----
+
+      def __init__ (self, verbose=0, dry_run=0, force=0):
+          UnixCCompiler.__init__ (self, verbose,dry_run, force)
+!         self.cc_exe = 'icc -O3 -openmp -fPIC'
+          compiler = self.cc_exe
++         cxx_compiler = 'icpc -O3 -openmp -fPIC'
+          self.set_executables(compiler=compiler,
+                               compiler_so=compiler,
+!                              compiler_cxx=cxx_compiler,
+!                              linker_exe=cxx_compiler,
+!                              linker_so=cxx_compiler + ' -shared')
+
+  class IntelItaniumCCompiler(IntelCCompiler):
+      compiler_type = 'intele'
