@@ -6,7 +6,7 @@ SCRIPT_DIR=`dirname $0`
 set_prefix
 set_build_dir
 
-cd $BUILDDIR
+cd $BUILD_DIR
 rm -rf Python-$PYTHON_VERSION
 if [ -f $HOME/source/Python-$PYTHON_VERSION.tar.bz2 ]; then
   check tar jxf $HOME/source/Python-$PYTHON_VERSION.tar.bz2
@@ -18,7 +18,7 @@ check ./configure --prefix=$PREFIX_OPT --enable-shared
 check make -j4
 check sudo make install
 
-cd $BUILDDIR
+cd $BUILD_DIR
 rm -rf nose-$NOSE_VERSION
 if [ -f $HOME/source/nose-$NOSE_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
@@ -29,7 +29,7 @@ cd nose-$NOSE_VERSION
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
-cd $BUILDDIR
+cd $BUILD_DIR
 rm -rf numpy-$NUMPY_VERSION
 if [ -f$HOME/source/numpy-$NUMPY_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/numpy-$NUMPY_VERSION.tar.gz
@@ -48,7 +48,7 @@ EOF
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py config --compiler=intel build_clib --compiler=intel build_ext --compiler=intel
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
-cd $BUILDDIR
+cd $BUILD_DIR
 rm -rf scipy-$SCIPY_VERSION
 if [ -f $HOME/source/scipy-$SCIPY_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/scipy-$SCIPY_VERSION.tar.gz
@@ -59,7 +59,7 @@ cd scipy-$SCIPY_VERSION
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py config --compiler=intel --fcompiler=intel build_clib --compiler=intel --fcompiler=intel build_ext --compiler=intel --fcompiler=intel
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
-cd $BUILDDIR
+cd $BUILD_DIR
 rm -rf matplotlib-$MATPLOTLIB_VERSION
 if [ -f $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz

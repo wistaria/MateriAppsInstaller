@@ -24,8 +24,7 @@ set_prefix() {
     PREFIX_ALPS_DEF="/global/nano/alps"
   fi
 
-  # for phi.aics.riken.jp
-  if [[ `hostname -f` = phi ]]; then
+  if [ -d /opt/local -a -d /opt/nano/alps ]; then
     PREFIX_OPT_DEF="/opt/local"
     PREFIX_ALPS_DEF="/opt/nano/alps"
   fi
