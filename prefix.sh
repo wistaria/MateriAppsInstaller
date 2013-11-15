@@ -29,7 +29,7 @@ if [[ "$HOST" =~ maki.\.fx10hpc ]]; then
 fi
 
 # phi.aics.riken.jp
-if [[ "$HOST" = phi ]]; then
+if [ -d /opt/local -a -d /opt/nano/alps ]; then
   PREFIX_OPT_DEF="/opt/local"
   PREFIX_ALPS_DEF="/opt/nano/alps"
 fi
