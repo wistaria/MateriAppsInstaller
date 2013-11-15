@@ -30,7 +30,7 @@ LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
-rm -rf numpy-$NUMPY_VERSION
+sudo rm -rf numpy-$NUMPY_VERSION
 if [ -f$HOME/source/numpy-$NUMPY_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/numpy-$NUMPY_VERSION.tar.gz
 else
