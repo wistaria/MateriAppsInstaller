@@ -21,12 +21,12 @@ check sudo make install
 cd $BUILDDIR
 rm -rf nose-$NOSE_VERSION
 if [ -f $HOME/source/nose-$NOSE_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
+  tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
 else
-  check wget http://pypi.python.org/packages/source/n/nose/nose-$NOSE_VERSION.tar.gz | tar zxf -
+  wget http://pypi.python.org/packages/source/n/nose/nose-$NOSE_VERSION.tar.gz | tar zxf -
 fi
 cd nose-$NOSE_VERSION
-check LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py build
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILDDIR
@@ -37,7 +37,7 @@ else
   check wget -O - http://sourceforge.net/projects/numpy/files/NumPy/$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz/download numpy-$NUMPY_VERSION.tar.gz | tar zxf -
 fi
 cd numpy-$NUMPY_VERSION
-check LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py build
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILDDIR
@@ -48,7 +48,7 @@ else
   check wget -O - http://sourceforge.net/projects/scipy/files/scipy/$SCIPY_VERSION/scipy-$SCIPY_VERSION.tar.gz/download scipy-$SCIPY_VERSION.tar.gz | tar zxf -
 fi
 cd scipy-$SCIPY_VERSION
-check LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py build
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILDDIR
@@ -59,5 +59,5 @@ else
   check wget -O - http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-$MATPLOTLIB_VERSION/matplotlib-$MATPLOTLIB_VERSION.tar.gz/download matplotlib-$MATPLOTLIB_VERSION.tar.gz | tar zxf -
 fi
 cd matplotlib-$MATPLOTLIB_VERSION
-check LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py build
+LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
 check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
