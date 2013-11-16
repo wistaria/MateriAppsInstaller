@@ -16,4 +16,4 @@ fi
 cd cmake-$CMAKE_VERSION
 check ./bootstrap --prefix=$PREFIX_OPT
 check make -j4
-check sudo make install
+check $SUDO make install

@@ -17,7 +17,7 @@ fi
 cd szip-$SZIP_VERSION
 check ./configure --prefix=$PREFIX_OPT
 check make -j4
-check sudo make install
+check $SUDO make install
 
 cd $BUILD_DIR
 rm -rf hdf5-$HDF5_VERSION
@@ -29,4 +29,4 @@ fi
 cd hdf5-$HDF5_VERSION
 check ./configure --prefix=$PREFIX_OPT --with-szlib=$PREFIX_OPT
 check make -j4
-check sudo make install
+check $SUDO make install

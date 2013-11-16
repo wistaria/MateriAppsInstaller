@@ -16,7 +16,7 @@ fi
 cd Python-$PYTHON_VERSION
 check ./configure --prefix=$PREFIX_OPT --enable-shared
 check make -j4
-check sudo make install
+check $SUDO make install
 
 cd $BUILD_DIR
 rm -rf nose-$NOSE_VERSION
@@ -27,10 +27,10 @@ else
 fi
 cd nose-$NOSE_VERSION
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
-check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+check $SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
-sudo rm -rf numpy-$NUMPY_VERSION
+$SUDO rm -rf numpy-$NUMPY_VERSION
 if [ -f$HOME/source/numpy-$NUMPY_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/numpy-$NUMPY_VERSION.tar.gz
 else
@@ -38,7 +38,7 @@ else
 fi
 cd numpy-$NUMPY_VERSION
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
-check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+check $SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 rm -rf scipy-$SCIPY_VERSION
@@ -49,7 +49,7 @@ else
 fi
 cd scipy-$SCIPY_VERSION
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
-check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+check $SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 rm -rf matplotlib-$MATPLOTLIB_VERSION
@@ -60,4 +60,4 @@ else
 fi
 cd matplotlib-$MATPLOTLIB_VERSION
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check $PREFIX_OPT/bin/python2.7 setup.py build
-check sudo LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install
+check $SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH $PREFIX_OPT/bin/python2.7 setup.py install

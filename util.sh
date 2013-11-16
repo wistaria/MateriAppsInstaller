@@ -3,6 +3,7 @@
 set_prefix() {
   PREFIX_OPT_DEF="$HOME/opt"
   PREFIX_ALPS_DEF="$HOME/alps"
+  SUDO=
 
   # for Mac OS X
   if [ `uname` = Darwin ]; then
@@ -27,6 +28,7 @@ set_prefix() {
   if [ -d /opt/local -a -d /opt/nano/alps ]; then
     PREFIX_OPT_DEF="/opt/local"
     PREFIX_ALPS_DEF="/opt/nano/alps"
+    SUDO="sudo"
   fi
 
   if [ -z "$PREFIX_OPT" ]; then
@@ -37,6 +39,7 @@ set_prefix() {
   fi
   echo "PREFIX_OPT = $PREFIX_OPT"
   echo "PREFIX_ALPS = $PREFIX_ALPS"
+  echo "SUDO = $SUDO"
   return 0
 }
 
