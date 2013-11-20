@@ -6,6 +6,8 @@ SCRIPT_DIR=`dirname $0`
 set_prefix
 set_build_dir
 
+source $PREFIX_OPT/env.sh
+
 cd $BUILD_DIR
 rm -rf cmake-$CMAKE_VERSION
 if [ -f $HOME/source/cmake-$CMAKE_VERSION.tar.gz ]; then
@@ -16,4 +18,4 @@ fi
 cd cmake-$CMAKE_VERSION
 check ./bootstrap --prefix=$PREFIX_OPT
 check make -j4
-check $SUDO make install
+$SUDO make install

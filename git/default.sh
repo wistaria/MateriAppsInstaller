@@ -1,10 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 SCRIPT_DIR=`dirname $0`
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 set_build_dir
+
+source $PREFIX_OPT/env.sh
 
 cd $BUILD_DIR
 rm -rf git-$GIT_VERSION
@@ -16,4 +18,4 @@ fi
 cd git-$GIT_VERSION
 check ./configure --prefix=$PREFIX_OPT --with-python=$PREFIX_OPT/bin/python2.7
 LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check make -j4
-check $SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH make install
+$SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH make install
