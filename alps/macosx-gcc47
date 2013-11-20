@@ -6,6 +6,8 @@ SCRIPT_DIR=`dirname $0`
 set_prefix
 set_build_dir
 
+source $PREFIX_OPT/env.sh
+
 mkdir -p $PREFIX_ALPS/source $PREFIX_ALPS/script
 check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_REVISION.sh
 check cp -p $HOME/source/alps-$ALPS_REVISION.tar.gz $PREFIX_ALPS/source/
