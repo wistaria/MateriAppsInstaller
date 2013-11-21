@@ -6,7 +6,7 @@ set_prefix() {
   SUDO=
 
   # for Mac OS X
-  if [ `uname` = Darwin ]; then
+  if [ $(uname) = Darwin ]; then
     if [ -d /opt/alps ]; then
       PREFIX_OPT_DEF="/opt/alps"
       PREFIX_ALPS_DEF="/opt/alps"
@@ -14,13 +14,13 @@ set_prefix() {
   fi
 
   # for k.aics.riken.jp
-  if [[ `hostname -f` =~ fe01p.*\.k ]]; then
+  if [[ $(hostname -f) =~ fe01p.*\.k ]]; then
     PREFIX_OPT_DEF="/data/share002/opt"
     PREFIX_ALPS_DEF="/data/share002/alps"
   fi
 
   # for maki.issp.u-tokyo.ac.jp
-  if [[ `hostname -f` =~ maki.\.fx10hpc ]]; then
+  if [[ $(hostname -f) =~ maki.\.fx10hpc ]]; then
     PREFIX_OPT_DEF="/global/nano/alps"
     PREFIX_ALPS_DEF="/global/nano/alps"
   fi

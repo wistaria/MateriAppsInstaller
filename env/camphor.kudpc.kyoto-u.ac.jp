@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SCRIPT_DIR=`dirname $0`
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 set_prefix
 set_build_dir
