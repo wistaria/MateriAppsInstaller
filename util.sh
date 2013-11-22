@@ -7,10 +7,16 @@ set_prefix() {
 
   # for Mac OS X
   if [ $(uname) = Darwin ]; then
-    if [ -d /opt/alps ]; then
+   if [ -d /opt/alps ]; then
       PREFIX_OPT_DEF="/opt/alps"
       PREFIX_ALPS_DEF="/opt/alps"
     fi
+  fi
+
+  # for oakleaf-fx
+  if [[ $(hostname -f) =~ oakleaf-fx.* ]]; then
+    PREFIX_OPT_DEF="/group/gc25/share/opt"
+    PREFIX_ALPS_DEF="/group/gc25/share/opt"
   fi
 
   # for k.aics.riken.jp
