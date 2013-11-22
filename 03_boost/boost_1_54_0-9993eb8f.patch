@@ -1,0 +1,138 @@
+diff --git boost_1_54_0/boost/asio/detail/fenced_block.hpp boost_1_54_0/boost/asio/detail/fenced_block.hpp
+index 18a8ca1..c5e8698 100644
+--- boost_1_54_0/boost/asio/detail/fenced_block.hpp
++++ boost_1_54_0/boost/asio/detail/fenced_block.hpp
+@@ -34,7 +34,7 @@
+ #elif defined(__GNUC__) \
+   && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+   && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ # include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+ #elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+ # include <boost/asio/detail/win_fenced_block.hpp>
+@@ -63,7 +63,7 @@ typedef gcc_x86_fenced_block fenced_block;
+ #elif defined(__GNUC__) \
+   && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+   && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ typedef gcc_sync_fenced_block fenced_block;
+ #elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+ typedef win_fenced_block fenced_block;
+diff --git boost_1_54_0/boost/asio/detail/gcc_sync_fenced_block.hpp boost_1_54_0/boost/asio/detail/gcc_sync_fenced_block.hpp
+index dd31089..9efc2ce 100644
+--- boost_1_54_0/boost/asio/detail/gcc_sync_fenced_block.hpp
++++ boost_1_54_0/boost/asio/detail/gcc_sync_fenced_block.hpp
+@@ -20,7 +20,7 @@
+ #if defined(__GNUC__) \
+   && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+   && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ 
+ #include <boost/asio/detail/push_options.hpp>
+ 
+@@ -60,6 +60,6 @@ private:
+ #endif // defined(__GNUC__)
+        // && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4))
+        // && !defined(__INTEL_COMPILER) && !defined(__ICL)
+-       // && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++       // && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ 
+ #endif // BOOST_ASIO_DETAIL_GCC_SYNC_FENCED_BLOCK_HPP
+diff --git boost_1_54_0/boost/config/stdlib/stlport.hpp boost_1_54_0/boost/config/stdlib/stlport.hpp
+index bcc30b9..b66f697 100644
+--- boost_1_54_0/boost/config/stdlib/stlport.hpp
++++ boost_1_54_0/boost/config/stdlib/stlport.hpp
+@@ -128,7 +128,7 @@
+ // BCB6 does cause problems. If we detect C++ Builder, then don't define 
+ // BOOST_NO_STDC_NAMESPACE
+ //
+-#if !defined(__BORLANDC__) && !defined(__DMC__)
++#if !defined(__BORLANDC__) && !defined(__DMC__) && !defined(__FCC_VERSION)
+ //
+ // If STLport is using it's own namespace, and the real names are in
+ // the global namespace, then we duplicate STLport's using declarations
+diff --git boost_1_54_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp boost_1_54_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp
+index 8f9b94a..e1cd851 100644
+--- boost_1_54_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp
++++ boost_1_54_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp
+@@ -18,4 +18,4 @@
+ #include <boost/fusion/tuple/detail/preprocessed/tuple50.hpp>
+ #else
+ #error "FUSION_MAX_VECTOR_SIZE out of bounds for preprocessed headers"
+-#endif
+\ No newline at end of file
++#endif
+diff --git boost_1_54_0/boost/lexical_cast.hpp boost_1_54_0/boost/lexical_cast.hpp
+index 66e5370..86600bf 100644
+--- boost_1_54_0/boost/lexical_cast.hpp
++++ boost_1_54_0/boost/lexical_cast.hpp
+@@ -151,7 +151,7 @@ namespace boost
+     }
+ } // namespace boost
+ 
+-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC) && !defined(__PGIC__)
++#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC) && !defined(__PGIC__) && !defined(__FCC_VERSION)
+ 
+ #include <cmath>
+ #include <istream>
+diff --git boost_1_54_0/boost/math/special_functions/lanczos.hpp boost_1_54_0/boost/math/special_functions/lanczos.hpp
+index ed89154..fc158b3 100644
+--- boost_1_54_0/boost/math/special_functions/lanczos.hpp
++++ boost_1_54_0/boost/math/special_functions/lanczos.hpp
+@@ -1283,7 +1283,7 @@ struct lanczos
+ } // namespace math
+ } // namespace boost
+ 
+-#if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
++#if !defined(_CRAYC) && !defined(__CUDACC__) && !defiend(__FCC_VERSION) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
+ #if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
+ #include <boost/math/special_functions/detail/lanczos_sse2.hpp>
+ #endif
+diff --git boost_1_54_0/boost/mpi/detail/packed_iprimitive.hpp boost_1_54_0/boost/mpi/detail/packed_iprimitive.hpp
+index 6e981c7..bd139f5 100644
+--- boost_1_54_0/boost/mpi/detail/packed_iprimitive.hpp
++++ boost_1_54_0/boost/mpi/detail/packed_iprimitive.hpp
+@@ -93,8 +93,10 @@ public:
+         unsigned int l;
+         load(l);
+         s.resize(l);
+-        // note breaking a rule here - could be a problem on some platform
+-        load_impl(const_cast<CharType *>(s.data()),get_mpi_datatype(CharType()),l);
++        if (l > 0) {
++          // note breaking a rule here - could be a problem on some platform
++          load_impl(const_cast<CharType *>(s.data()),get_mpi_datatype(CharType()),l);
++        }
+     }
+ 
+ private:
+diff --git boost_1_54_0/boost/mpi/detail/packed_oprimitive.hpp boost_1_54_0/boost/mpi/detail/packed_oprimitive.hpp
+index 1f59df8..ff32bf1 100644
+--- boost_1_54_0/boost/mpi/detail/packed_oprimitive.hpp
++++ boost_1_54_0/boost/mpi/detail/packed_oprimitive.hpp
+@@ -81,7 +81,9 @@ public:
+     {
+       unsigned int l = static_cast<unsigned int>(s.size());
+       save(l);
+-      save_impl(s.data(),get_mpi_datatype(CharType()),s.size());
++      if (l > 0) {
++        save_impl(s.data(),get_mpi_datatype(CharType()),s.size());
++      }
+     }
+ 
+ private:
+diff --git boost_1_54_0/boost/smart_ptr/detail/sp_has_sync.hpp boost_1_54_0/boost/smart_ptr/detail/sp_has_sync.hpp
+index 16de21d..94d2a9a 100644
+--- boost_1_54_0/boost/smart_ptr/detail/sp_has_sync.hpp
++++ boost_1_54_0/boost/smart_ptr/detail/sp_has_sync.hpp
+@@ -30,7 +30,7 @@
+ 
+ # define BOOST_SP_HAS_SYNC
+ 
+-#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 )
++#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined(__FCC_VERSION)
+ 
+ #define BOOST_SP_HAS_SYNC
+ 
