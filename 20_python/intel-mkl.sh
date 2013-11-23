@@ -42,8 +42,8 @@ cd numpy-$NUMPY_VERSION
 check patch -p1 < $SCRIPT_DIR/numpy-$NUMPY_VERSION.patch
 cat << EOF > site.cfg
 [mkl]
-library_dirs = $MKLROOT/lib/intel64
-include_dirs = $MKLROOT/include
+library_dirs = $(echo $MKLROOT | cut -d : -f 1)/lib/intel64
+include_dirs = $(echo $MKLROOT | cut -d : -f 1)/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
