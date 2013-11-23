@@ -1,13 +1,13 @@
 #!/bin/sh
 
-SCRIPT_DIR=`dirname $0`
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 set_build_dir
 
-source $PREFIX_OPT/env.sh
-source $PREFIX_OPT/gcc-4.7.sh
+. $PREFIX_OPT/env.sh
+. $PREFIX_OPT/gcc-4.7.sh
 
 mkdir -p $PREFIX_ALPS/source $PREFIX_ALPS/script
 check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_REVISION.sh
@@ -49,9 +49,9 @@ echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
 cat << EOF >> $PREFIX_ALPS/alpsvars-$REVISION.sh
-source $PREFIX_OPT/env.sh
-source $PREFIX_OPT/gcc-4.7.sh
-source $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh
+. $PREFIX_OPT/env.sh
+. $PREFIX_OPT/gcc-4.7.sh
+. $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars.sh
 ln -s alpsvars-$REVISION.sh $PREFIX_ALPS/alpsvars.sh
@@ -79,9 +79,9 @@ echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
 cat << EOF >> $PREFIX_ALPS/alpsvars-$REVISION.sh
-source $PREFIX_OPT/env.sh
-source $PREFIX_OPT/gcc-4.7.sh
-source $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh
+. $PREFIX_OPT/env.sh
+. $PREFIX_OPT/gcc-4.7.sh
+. $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars-noomp.sh
 ln -s alpsvars-$REVISION.sh $PREFIX_ALPS/alpsvars-noomp.sh

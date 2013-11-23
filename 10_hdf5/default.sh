@@ -1,10 +1,12 @@
 #!/bin/sh
 
-SCRIPT_DIR=`dirname $0`
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 set_build_dir
+
+. $PREFIX_OPT/env.sh
 
 cd $BUILD_DIR
 rm -rf szip-$SZIP_VERSION
@@ -17,7 +19,7 @@ fi
 cd szip-$SZIP_VERSION
 check ./configure --prefix=$PREFIX_OPT
 check make -j4
-check $SUDO make install
+$SUDO make install
 
 cd $BUILD_DIR
 rm -rf hdf5-$HDF5_VERSION
@@ -29,4 +31,4 @@ fi
 cd hdf5-$HDF5_VERSION
 check ./configure --prefix=$PREFIX_OPT --with-szlib=$PREFIX_OPT
 check make -j4
-check $SUDO make install
+$SUDO make install
