@@ -5,6 +5,17 @@ set_prefix() {
   PREFIX_ALPS_DEF="$HOME/alps"
   SUDO=
 
+  if [ -d /opt/nano/alps ]; then
+    if [ -d /opt/local ]; then
+      PREFIX_OPT_DEF="/opt/local"
+      PREFIX_ALPS_DEF="/opt/nano/alps"
+      SUDO="sudo"
+    else
+      PREFIX_OPT_DEF="/opt/nano/alps"
+      PREFIX_ALPS_DEF="/opt/nano/alps"
+    fi
+  fi
+
   # for Mac OS X
   if [ $(uname) = Darwin ]; then
    if [ -d /opt/alps ]; then
@@ -19,12 +30,6 @@ set_prefix() {
     PREFIX_ALPS_DEF="/data/share002/alps"
   fi
 
-  # for kashiwa.issp.u-tokyo.ac.jp
-  if [[ $(hostname -f) =~ kashiwa ]]; then
-    PREFIX_OPT_DEF="/opt/nano/alps"
-    PREFIX_ALPS_DEF="/opt/nano/alps"
-  fi
-
   # for maki.issp.u-tokyo.ac.jp
   if [[ $(hostname -f) =~ maki.\.fx10hpc ]]; then
     PREFIX_OPT_DEF="/global/nano/alps"
@@ -35,12 +40,6 @@ set_prefix() {
   if [[ $(hostname -f) =~ oakleaf-fx.* ]]; then
     PREFIX_OPT_DEF="/group/gc25/share/opt"
     PREFIX_ALPS_DEF="/group/gc25/share/opt"
-  fi
-
-  if [ -d /opt/local -a -d /opt/nano/alps ]; then
-    PREFIX_OPT_DEF="/opt/local"
-    PREFIX_ALPS_DEF="/opt/nano/alps"
-    SUDO="sudo"
   fi
 
   if [ -z "$PREFIX_OPT" ]; then
