@@ -32,8 +32,8 @@ LD_LIBRARY_PATH_ORIG=$LD_LIBRARY_PATH
 ### Intel Compiler + OpenMP version
 
 . /home/etc/intel.sh
-export PATH=$PREFIX_OPT/bin:$PATH_ORIG
-export LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH_ORIG
+export PATH=$PREFIX_OPT/bin:$PATH
+export LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH
 
 VERSION="icc-$ALPS_VERSION"
 echo "[start alps-$VERSION]" >> $LOG 2>&1
@@ -48,7 +48,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   $HOME/build/alps-$ALPS_VERSION >> $LOG 2>&1
 
 echo "[make install]" >> $LOG 2>&1
-check make -j2 install >> $LOG 2>&1
+check make install >> $LOG 2>&1
 echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
@@ -86,7 +86,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   $HOME/build/alps-$ALPS_VERSION >> $LOG 2>&1
 
 echo "[make install]" >> $LOG 2>&1
-check make -j2 install >> $LOG 2>&1
+check make install >> $LOG 2>&1
 echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
