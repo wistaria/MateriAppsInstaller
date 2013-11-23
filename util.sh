@@ -13,12 +13,6 @@ set_prefix() {
     fi
   fi
 
-  # for oakleaf-fx
-  if [[ $(hostname -f) =~ oakleaf-fx.* ]]; then
-    PREFIX_OPT_DEF="/group/gc25/share/opt"
-    PREFIX_ALPS_DEF="/group/gc25/share/opt"
-  fi
-
   # for k.aics.riken.jp
   if [[ $(hostname -f) =~ fe01p.*\.k ]]; then
     PREFIX_OPT_DEF="/data/share002/opt"
@@ -29,6 +23,12 @@ set_prefix() {
   if [[ $(hostname -f) =~ maki.\.fx10hpc ]]; then
     PREFIX_OPT_DEF="/global/nano/alps"
     PREFIX_ALPS_DEF="/global/nano/alps"
+  fi
+
+  # for oakleaf-fx.cc.u-tokyo.ac.jp
+  if [[ $(hostname -f) =~ oakleaf-fx.* ]]; then
+    PREFIX_OPT_DEF="/group/gc25/share/opt"
+    PREFIX_ALPS_DEF="/group/gc25/share/opt"
   fi
 
   if [ -d /opt/local -a -d /opt/nano/alps ]; then
