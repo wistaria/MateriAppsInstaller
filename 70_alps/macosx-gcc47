@@ -3,70 +3,71 @@
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
+. $SCRIPT_DIR/../03_boost/version.sh
 set_prefix
 set_build_dir
 
 . $PREFIX_OPT/env.sh
 
 mkdir -p $PREFIX_ALPS/source $PREFIX_ALPS/script
-check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_REVISION.sh
-check cp -p $HOME/source/alps-$ALPS_REVISION.tar.gz $PREFIX_ALPS/source/
+check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_VERSION.sh
+check cp -p $HOME/source/alps-$ALPS_VERSION.tar.gz $PREFIX_ALPS/source/
 
 YMDT=`date +%Y%m%d%H%M%S`
-LOG=$PREFIX_ALPS/script/compile-$ALPS_REVISION.$YMDT.log
+LOG=$PREFIX_ALPS/script/compile-$ALPS_VERSION.$YMDT.log
 rm -f $LOG
 echo "LOG=$LOG"
 
 echo "PREFIX=$PREFIX_ALPS" > $LOG
-echo "ALPS_REVISION=$ALPS_REVISION" >> $LOG
-echo "BOOST_REVISION=$BOOST_REVISION" >> $LOG
-echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_REVISION.sh" >> $LOG
+echo "ALPS_VERSION=$ALPS_VERSION" >> $LOG
+echo "BOOST_VERSION=$BOOST_VERSION" >> $LOG
+echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_VERSION.sh" >> $LOG
 echo "LOG=$LOG" >> $LOG
 
-(cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_REVISION.tar.gz)
+(cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_VERSION.tar.gz)
 
 ### OpenMP version
 
-REVISION=$ALPS_REVISION
-echo "[start alps-$REVISION]" >> $LOG 2>&1
+VERSION=$ALPS_VERSION
+echo "[start alps-$VERSION]" >> $LOG 2>&1
 
-rm -rf $BUILD_DIR/alps-build-$REVISION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$REVISION.$YMDT
-cd $BUILD_DIR/alps-build-$REVISION.$YMDT
+rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
+cd $BUILD_DIR/alps-build-$VERSION.$YMDT
 echo "[cmake]" >> $LOG 2>&1
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$REVISION \
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DCMAKE_C_COMPILER="gcc-mp-4.7" -DCMAKE_CXX_COMPILER="g++-mp-4.7" -DCMAKE_Fortran_COMPILER="gfortran-mp-4.7" \
   -DPYTHON_INTERPRETER=python2.7 \
-  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_REVISION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_FORTRAN=ON \
-  $BUILD_DIR/alps-$ALPS_REVISION >> $LOG 2>&1
+  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_FORTRAN=ON \
+  $BUILD_DIR/alps-$ALPS_VERSION >> $LOG 2>&1
 
 echo "[make install]" >> $LOG 2>&1
 check make -j2 install >> $LOG 2>&1
 echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
-cp -fp $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh $PREFIX_ALPS/alpsvars-$REVISION.sh
+cp -fp $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh $PREFIX_ALPS/alpsvars-$VERSION.sh
 rm -f $PREFIX_ALPS/alpsvars.sh
-ln -s alpsvars-$REVISION.sh $PREFIX_ALPS/alpsvars.sh
+ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars.sh
 
 ### no-OpenMP version
 
-REVISION="noomp-$ALPS_REVISION"
-echo "[start alps-$REVISION]" >> $LOG 2>&1
+VERSION="noomp-$ALPS_VERSION"
+echo "[start alps-$VERSION]" >> $LOG 2>&1
 
-rm -rf $BUILD_DIR/alps-build-$REVISION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$REVISION.$YMDT
-cd $BUILD_DIR/alps-build-$REVISION.$YMDT
+rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
+cd $BUILD_DIR/alps-build-$VERSION.$YMDT
 echo "[cmake]" >> $LOG 2>&1
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$REVISION \
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DCMAKE_C_COMPILER="gcc-mp-4.7" -DCMAKE_CXX_COMPILER="g++-mp-4.7" -DCMAKE_Fortran_COMPILER="gfortran-mp-4.7" \
   -DPYTHON_INTERPRETER=python2.7 \
-  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_REVISION -DALPS_BUILD_FORTRAN=ON \
-  $BUILD_DIR/alps-$ALPS_REVISION >> $LOG 2>&1
+  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION -DALPS_BUILD_FORTRAN=ON \
+  $BUILD_DIR/alps-$ALPS_VERSION >> $LOG 2>&1
 
 echo "[make install]" >> $LOG 2>&1
 check make -j2 install >> $LOG 2>&1
 echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
-cp -fp $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh $PREFIX_ALPS/alpsvars-$REVISION.sh
+cp -fp $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh $PREFIX_ALPS/alpsvars-$VERSION.sh
 rm -f $PREFIX_ALPS/alpsvars-noomp.sh
-ln -s alpsvars-$REVISION.sh $PREFIX_ALPS/alpsvars-noomp.sh
+ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-noomp.sh

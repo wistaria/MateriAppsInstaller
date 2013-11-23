@@ -3,27 +3,28 @@
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
+. $SCRIPT_DIR/../03_boost/version.sh
 set_prefix
 set_build_dir
 
 . $PREFIX_OPT/env.sh
 
 mkdir -p $PREFIX_ALPS/source $PREFIX_ALPS/script
-check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_REVISION.sh
-check cp -p $HOME/source/alps-$ALPS_REVISION.tar.gz $PREFIX_ALPS/source/
+check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_VERSION.sh
+check cp -p $HOME/source/alps-$ALPS_VERSION.tar.gz $PREFIX_ALPS/source/
 
 YMDT=`date +%Y%m%d%H%M%S`
-LOG=$PREFIX_ALPS/script/compile-$ALPS_REVISION.$YMDT.log
+LOG=$PREFIX_ALPS/script/compile-$ALPS_VERSION.$YMDT.log
 rm -f $LOG
 echo "LOG=$LOG"
 
 echo "PREFIX=$PREFIX_ALPS" > $LOG
-echo "ALPS_REVISION=$ALPS_REVISION" >> $LOG
-echo "BOOST_REVISION=$BOOST_REVISION" >> $LOG
-echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_REVISION.sh" >> $LOG
+echo "ALPS_VERSION=$ALPS_VERSION" >> $LOG
+echo "BOOST_VERSION=$BOOST_FCC_VERSION" >> $LOG
+echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_VERSION.sh" >> $LOG
 echo "LOG=$LOG" >> $LOG
 
-(cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_REVISION.tar.gz)
+(cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_VERSION.tar.gz)
 
 PATH_ORIG=$PATH
 LD_LIBRARY_PATH_ORIG=$LD_LIBRARY_PATH
@@ -34,30 +35,30 @@ LD_LIBRARY_PATH_ORIG=$LD_LIBRARY_PATH
 export PATH=$PREFIX_OPT/bin:$PATH_ORIG
 export LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH_ORIG
 
-REVISION="icc-$ALPS_REVISION"
-echo "[start alps-$REVISION]" >> $LOG 2>&1
+VERSION="icc-$ALPS_VERSION"
+echo "[start alps-$VERSION]" >> $LOG 2>&1
 
-rm -rf $BUILD_DIR/alps-build-$REVISION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$REVISION.$YMDT
-cd $BUILD_DIR/alps-build-$REVISION.$YMDT
+rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
+cd $BUILD_DIR/alps-build-$VERSION.$YMDT
 echo "[cmake]" >> $LOG 2>&1
-cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/alps-$REVISION \
+cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DCMAKE_C_COMPILER="icc" -DCMAKE_CXX_COMPILER="icpc" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -DNDEBUG -DMPICH_IGNORE_CXX_SEEK -DMPICH_SKIP_MPICXX" -DCMAKE_Fortran_COMPILER="ifort" \
   -DPYTHON_INTERPRETER=python2.7 \
-  -DBoost_ROOT_DIR=$PREFIX/boost_$BOOST_REVISION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_APPLICATIONS=OFF -DALPS_BUILD_FORTRAN=ON \
-  $HOME/build/alps-$ALPS_REVISION >> $LOG 2>&1
+  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_FCC_VERSION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_APPLICATIONS=OFF -DALPS_BUILD_FORTRAN=ON \
+  $HOME/build/alps-$ALPS_VERSION >> $LOG 2>&1
 
 echo "[make install]" >> $LOG 2>&1
 check make -j2 install >> $LOG 2>&1
 echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
-cat << EOF >> $PREFIX_ALPS/alpsvars-$REVISION.sh
+cat << EOF >> $PREFIX_ALPS/alpsvars-$VERSION.sh
 . /home/etc/intel.sh
 . $PREFIX_OPT/env.sh
-. $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh
+. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars-icc.sh
-ln -s alpsvars-$REVISION.sh $PREFIX_ALPS/alpsvars-icc.sh
+ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-icc.sh
 
 ### no-OpenMP version
 
@@ -67,33 +68,33 @@ MPI_HOME=$(dirname $(dirname $(which fcc)))
 export PATH=$PREFIX_OPT/bin:$PATH_ORIG
 export LD_LIBRARY_PATH=$PREFIX_OPT/lib:$MPI_HOME/lib64:$LD_LIBRARY_PATH_ORIG
 
-REVISION="fcc-$ALPS_REVISION"
-echo "[start alps-$REVISION]" >> $LOG 2>&1
+VERSION="fcc-$ALPS_VERSION"
+echo "[start alps-$VERSION]" >> $LOG 2>&1
 
-rm -rf $BUILD_DIR/alps-build-$REVISION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$REVISION.$YMDT
-cd $BUILD_DIR/alps-build-$REVISION.$YMDT
+rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
+cd $BUILD_DIR/alps-build-$VERSION.$YMDT
 echo "[cmake]" >> $LOG 2>&1
-cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/alps-$REVISION \
+cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DCMAKE_CXX_COMPILER=mpiFCC -DCMAKE_CXX_FLAGS_RELEASE="-w -Xg -Kfast,ocl -KPIC -Kcmodel=small -Nnoline --alternative_tokens -Dmain=MAIN__" -DCMAKE_C_COMPILER=mpifcc -DCMAKE_C_FLAGS_RELEASE="-w -Xg -Kfast,ocl,ilfunc -KPIC -Kcmodel=small -Nnoline -Dmain=MAIN__" -DCMAKE_Fortran_COMPILER=mpifrt -DCMAKE_Fortran_FLAGS_RELEASE="-w -Kfast -KPIC -Kcmodel=small" \
   -DCMAKE_EXE_LINKER_FLAGS="-SSL2" -DCMAKE_SHARED_LINKER_FLAGS="-SSL2" \
   -DPYTHON_INTERPRETER=python2.7 \
   -DLAPACK_FOUND=TRUE \
   -DMPI_COMPILE_FLAGS="-lmpi" -DMPI_INCLUDE_PATH=$MPI_HOME/include/mpi/fujitsu -DMPI_LIBRARY=$MPI_HOME/lib64/libmpi.so \
   -DHdf5_INCLUDE_DIRS=$HOME/opt/include -DHdf5_LIBRARY_DIRS=$HOME/opt/lib \
-  -DBoost_ROOT_DIR=$PREFIX/boost_$BOOST_REVISION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_PYTHON=OFF -DALPS_BUILD_APPLICATIONS=OFF -DALPS_BUILD_EXAMPLES=OFF -DALPS_BUILD_FORTRAN=ON \
+  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_FCC_VERSION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_PYTHON=OFF -DALPS_BUILD_APPLICATIONS=OFF -DALPS_BUILD_EXAMPLES=OFF -DALPS_BUILD_FORTRAN=ON \
   -DOpenMP_CXX_FLAGS=-Kopenmp -DOpenMP_C_FLAGS=-Kopenmp \
-  $HOME/build/alps-$ALPS_REVISION >> $LOG 2>&1
+  $HOME/build/alps-$ALPS_VERSION >> $LOG 2>&1
 
 echo "[make install]" >> $LOG 2>&1
 check make -j2 install >> $LOG 2>&1
 echo "[ctest]" >> $LOG 2>&1
 ctest >> $LOG 2>&1
 
-cat << EOF >> $PREFIX_ALPS/alpsvars-$REVISION.sh
+cat << EOF >> $PREFIX_ALPS/alpsvars-$VERSION.sh
 MPI_HOME=$(dirname $(dirname $(which fcc)))
 export LD_LIBRARY_PATH=\$MPI_HOME/lib64:\$LD_LIBRARY_PATH
 . $PREFIX_OPT/env.sh
-. $PREFIX_ALPS/alps-$REVISION/bin/alpsvars.sh
+. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars-fcc.sh
-ln -s alpsvars-$REVISION.sh $PREFIX_ALPS/alpsvars-fcc.sh
+ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-fcc.sh
