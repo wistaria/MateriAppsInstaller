@@ -18,6 +18,12 @@ if [ -f $HOME/source/cmake-$CMAKE_VERSION.tar.gz ]; then
 else
   check wget -O - http://www.cmake.org/files/v$CMAKE_VERSION_MAJOR/cmake-$CMAKE_VERSION.tar.gz | tar zxf -
 fi
+if [ -f $SCRIPT_DIR/cmake-$CMAKE_VERSION.patch ]; then
+  cd cmake-$CMAKE_VERSION
+  check patch -p1 < $SCRIPT_DIR/cmake-$CMAKE_VERSION.patch
+fi
+
+cd $BUILD_DIR
 check rm -rf cmake-$CMAKE_VERSION-Linux-x86_64
 check mkdir -p cmake-$CMAKE_VERSION-Linux-x86_64
 check cd cmake-$CMAKE_VERSION-Linux-x86_64
