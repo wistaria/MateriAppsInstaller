@@ -17,5 +17,5 @@ else
 fi
 cd git-$GIT_VERSION
 check ./configure --prefix=$PREFIX_OPT --with-python=$PREFIX_OPT/bin/python2.7
-LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH check make -j4
-$SUDO LD_LIBRARY_PATH=$PREFIX_OPT/lib:$LD_LIBRARY_PATH make install
+check make -j4
+$SUDO make install
