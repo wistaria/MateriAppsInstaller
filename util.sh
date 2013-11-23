@@ -19,6 +19,12 @@ set_prefix() {
     PREFIX_ALPS_DEF="/data/share002/alps"
   fi
 
+  # for kashiwa.issp.u-tokyo.ac.jp
+  if [[ $(hostname -f) =~ kashiwa ]]; then
+    PREFIX_OPT_DEF="/opt/nano/alps"
+    PREFIX_ALPS_DEF="/opt/nano/alps"
+  fi
+
   # for maki.issp.u-tokyo.ac.jp
   if [[ $(hostname -f) =~ maki.\.fx10hpc ]]; then
     PREFIX_OPT_DEF="/global/nano/alps"
