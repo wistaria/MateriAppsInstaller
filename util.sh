@@ -25,9 +25,9 @@ set_prefix() {
   fi
 
   # for k.aics.riken.jp
-  if [[ $(hostname -f) =~ fe01p.*\.k ]]; then
-    PREFIX_OPT_DEF="/data/share002/opt"
-    PREFIX_ALPS_DEF="/data/share002/alps"
+  if [ -d /opt/spire/alps ]; then
+    PREFIX_OPT_DEF="/opt/spire/alps"
+    PREFIX_ALPS_DEF="/opt/spire/alps"
   fi
 
   # for maki.issp.u-tokyo.ac.jp
