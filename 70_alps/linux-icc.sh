@@ -19,7 +19,6 @@ echo "PREFIX=$PREFIX_ALPS"
 echo "ALPS_VERSION=$ALPS_VERSION"
 echo "BOOST_VERSION=$BOOST_VERSION"
 echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_VERSION.sh"
-echo "LOG=$LOG"
 
 (cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_VERSION.tar.gz)
 
