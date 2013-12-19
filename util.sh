@@ -39,7 +39,7 @@ set_prefix() {
   # for oakleaf-fx.cc.u-tokyo.ac.jp
   if [[ $(hostname -f) =~ oakleaf-fx.* ]]; then
     PREFIX_OPT_DEF="/group/gc25/share/opt"
-    PREFIX_ALPS_DEF="/group/gc25/share/opt"
+    PREFIX_ALPS_DEF="/group/gc25/share/alps"
   fi
 
   if [ -z "$PREFIX_OPT" ]; then
