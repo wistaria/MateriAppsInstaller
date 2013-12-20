@@ -48,7 +48,7 @@ check make install
 echo "[ctest]"
 ctest
 
-cat << EOF >> $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
 . /home/etc/intel.sh
 . $PREFIX_OPT/env.sh
 . $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
@@ -86,7 +86,7 @@ check make install
 echo "[ctest]"
 ctest
 
-cat << EOF >> $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
 MPI_HOME=$(dirname $(dirname $(which fcc)))
 export LD_LIBRARY_PATH=\$MPI_HOME/lib64:\$LD_LIBRARY_PATH
 . $PREFIX_OPT/env.sh

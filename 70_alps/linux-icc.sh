@@ -44,7 +44,7 @@ check make -j2 install
 echo "[ctest]"
 ctest
 
-cat << EOF >> $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
 . $PREFIX_OPT/env.sh
 . $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
 EOF
@@ -72,7 +72,7 @@ check make -j2 install
 echo "[ctest]"
 ctest
 
-cat << EOF >> $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
 . $PREFIX_OPT/env.sh
 . $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
 EOF
