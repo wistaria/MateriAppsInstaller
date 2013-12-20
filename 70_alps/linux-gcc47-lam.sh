@@ -40,7 +40,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
   -DALPS_BUILD_FORTRAN=ON \
   -DBLAS_LIBRARY=-lblas -DLAPACK_LIBRARY=-llapack \
-  $HOME/build/alps-$ALPS_VERSION
+  $BUILD_DIR/alps-$ALPS_VERSION
 
 echo "[make install]"
 check make -j2 install
@@ -71,7 +71,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
   -DALPS_BUILD_FORTRAN=ON \
   -DBLAS_LIBRARY=-lblas -DLAPACK_LIBRARY=-llapack \
-  $HOME/build/alps-$ALPS_VERSION
+  $BUILD_DIR/alps-$ALPS_VERSION
 
 echo "[make install]"
 check make -j2 install

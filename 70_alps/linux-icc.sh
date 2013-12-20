@@ -37,7 +37,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
   -DALPS_BUILD_FORTRAN=ON \
-  $HOME/build/alps-$ALPS_VERSION
+  $BUILD_DIR/alps-$ALPS_VERSION
 
 echo "[make install]"
 check make -j2 install
@@ -65,7 +65,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DHdf5_INCLUDE_DIRS=$PREFIX_OPT/include -DHdf5_LIBRARY_DIRS=$PREFIX_OPT/lib \
   -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
   -DALPS_BUILD_FORTRAN=ON \
-  $HOME/build/alps-$ALPS_VERSION
+  $BUILD_DIR/alps-$ALPS_VERSION
 
 echo "[make install]"
 check make -j2 install

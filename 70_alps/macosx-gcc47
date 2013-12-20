@@ -31,7 +31,9 @@ echo "[cmake]"
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DCMAKE_C_COMPILER="gcc-mp-4.7" -DCMAKE_CXX_COMPILER="g++-mp-4.7" -DCMAKE_Fortran_COMPILER="gfortran-mp-4.7" \
   -DPYTHON_INTERPRETER=python2.7 \
-  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON -DALPS_BUILD_FORTRAN=ON \
+  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
+  -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
+  -DALPS_BUILD_FORTRAN=ON \
   $BUILD_DIR/alps-$ALPS_VERSION
 
 echo "[make install]"
@@ -39,7 +41,9 @@ check make -j2 install
 echo "[ctest]"
 ctest
 
-cp -fp $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
+. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
+EOF
 rm -f $PREFIX_ALPS/alpsvars.sh
 ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars.sh
 
@@ -54,7 +58,8 @@ echo "[cmake]"
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
   -DCMAKE_C_COMPILER="gcc-mp-4.7" -DCMAKE_CXX_COMPILER="g++-mp-4.7" -DCMAKE_Fortran_COMPILER="gfortran-mp-4.7" \
   -DPYTHON_INTERPRETER=python2.7 \
-  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION -DALPS_BUILD_FORTRAN=ON \
+  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
+  -DALPS_BUILD_FORTRAN=ON \
   $BUILD_DIR/alps-$ALPS_VERSION
 
 echo "[make install]"
@@ -62,6 +67,8 @@ check make -j2 install
 echo "[ctest]"
 ctest
 
-cp -fp $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
+. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
+EOF
 rm -f $PREFIX_ALPS/alpsvars-noomp.sh
 ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-noomp.sh
