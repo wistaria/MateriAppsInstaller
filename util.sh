@@ -24,6 +24,12 @@ set_prefix() {
     fi
   fi
 
+  # for camphor.kudpc.kyoto-u.ac.jp
+  if [ -d /LARGE0/hp120237 ]; then
+    PREFIX_OPT_DEF="/LARGE0/hp120237/opt"
+    PREFIX_ALPS_DEF="/LARGE0/hp120237/alps"
+  fi
+
   # for k.aics.riken.jp
   if [ -d /opt/spire/alps ]; then
     PREFIX_OPT_DEF="/opt/spire/alps"
