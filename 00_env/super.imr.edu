@@ -6,6 +6,7 @@ set_prefix
 set_build_dir
 
 cat << EOF > $BUILD_DIR/env.sh
+export OBJECT_MODE=64
 export PATH=$PREFIX_OPT/bin:\$PATH
 export LD_LIBRARY_PATH=$PREFIX_OPT/lib:\$LD_LIBRARY_PATH
 EOF

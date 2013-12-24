@@ -5,6 +5,13 @@ set_prefix() {
   PREFIX_ALPS_DEF="$HOME/alps"
   SUDO=
 
+  hostname -f > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    HOSTNAME=$(hostname -f)
+  else
+    HOSTNAME=$(hostname)
+  fi
+
   if [ -d /opt/nano/alps ]; then
     if [ -d /opt/local ]; then
       PREFIX_OPT_DEF="/opt/local"
@@ -37,13 +44,13 @@ set_prefix() {
   fi
 
   # for maki.issp.u-tokyo.ac.jp
-  if [[ $(hostname -f) =~ maki.\.fx10hpc ]]; then
+  if [[ ! -z `echo "$HOSTNAME" | egrep "^maki.\.fx10hpc$` ]]; then
     PREFIX_OPT_DEF="/global/nano/alps"
     PREFIX_ALPS_DEF="/global/nano/alps"
   fi
 
   # for oakleaf-fx.cc.u-tokyo.ac.jp
-  if [[ $(hostname -f) =~ oakleaf-fx.* ]]; then
+  if [[ ! -z `echo "$HOSTNAME" | egrep "^oakleaf-fx.*$"` ]]; then
     PREFIX_OPT_DEF="/group/gc25/share/opt"
     PREFIX_ALPS_DEF="/group/gc25/share/alps"
   fi
