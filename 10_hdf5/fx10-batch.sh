@@ -52,6 +52,7 @@ CC="fccpx -O2 -Xg" check ./configure --cache-file=config.cache --prefix=$PREFIX_
 cd src
 check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
+touch touch H5lib_settings.c H5Tinit.c
 cd ..
 check make -j4
 $SUDO make install
@@ -62,6 +63,7 @@ CC="fccpx -O2 -Xg -KPIC" check ./configure --cache-file=config.cache --prefix=$P
 cd src
 check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
+touch touch H5lib_settings.c H5Tinit.c
 check make -j4
 check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A-Z]*.o
 $SUDO cp -fp libhdf5.so $PREFIX_BACKEND/lib
