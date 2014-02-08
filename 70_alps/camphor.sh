@@ -9,28 +9,22 @@ set_build_dir
 
 . $PREFIX_OPT/env.sh
 
-mkdir -p $PREFIX_ALPS/source $PREFIX_ALPS/script
-check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_VERSION.sh
-check cp -p $HOME/source/alps-$ALPS_VERSION.tar.gz $PREFIX_ALPS/source/
-
-YMDT=`date +%Y%m%d%H%M%S`
-
-echo "PREFIX=$PREFIX_ALPS"
-echo "ALPS_VERSION=$ALPS_VERSION"
-echo "BOOST_VERSION=$BOOST_VERSION"
-echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_VERSION.sh"
-
-(cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_VERSION.tar.gz)
-
-### OpenMP version
+cd $BUILD_DIR
+if [ -d alps-$ALPS_VERSION ]; then :; else
+  if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
+    check tar zxf $HOME/source/alps-$ALPS_VERSION.tar.gz
+  else
+    check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
+  fi
+fi
 
 VERSION=$ALPS_VERSION
 echo "[start alps-$VERSION]"
 
-rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
-cd $BUILD_DIR/alps-build-$VERSION.$YMDT
+rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION && mkdir -p $BUILD_DIR/alps-build-$ALPS_VERSION
+cd $BUILD_DIR/alps-build-$ALPS_VERSION
 echo "[cmake]"
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$ALPS_VERSION \
   -DCMAKE_C_COMPILER="cc" -DCMAKE_CXX_COMPILER="CC" -DCMAKE_Fortran_COMPILER="ftn" \
   -DCMAKE_EXE_LINKER_FLAGS="-Bdynamic" -DCMAKE_SHARED_LINKER_FLAGS="-Bdynamic" \
   -DPYTHON_INTERPRETER=python2.7 \
@@ -45,38 +39,9 @@ check make -j2 install
 echo "[ctest]"
 ctest
 
-cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$ALPS_VERSION.sh
 . $PREFIX_OPT/env.sh
-. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
+. $PREFIX_ALPS/alps-$ALPS_VERSION/bin/alpsvars.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars.sh
-ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars.sh
-
-### no-OpenMP version
-
-VERSION="noomp-$ALPS_VERSION"
-echo "[start alps-$VERSION]"
-
-rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
-cd $BUILD_DIR/alps-build-$VERSION.$YMDT
-echo "[cmake]"
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
-  -DCMAKE_C_COMPILER="cc" -DCMAKE_CXX_COMPILER="CC" -DCMAKE_Fortran_COMPILER="ftn" \
-  -DCMAKE_EXE_LINKER_FLAGS="-Bdynamic" -DCMAKE_SHARED_LINKER_FLAGS="-Bdynamic" \
-  -DPYTHON_INTERPRETER=python2.7 \
-  -DHdf5_INCLUDE_DIRS=$PREFIX_OPT/include -DHdf5_LIBRARY_DIRS=$PREFIX_OPT/lib \
-  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
-  -DALPS_BUILD_FORTRAN=ON \
-  $BUILD_DIR/alps-$ALPS_VERSION
-
-echo "[make install]"
-check make -j2 install
-echo "[ctest]"
-ctest
-
-cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
-. $PREFIX_OPT/env.sh
-. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
-EOF
-rm -f $PREFIX_ALPS/alpsvars-noomp.sh
-ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-noomp.sh
+ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/alpsvars.sh

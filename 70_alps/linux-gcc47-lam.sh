@@ -10,28 +10,19 @@ set_build_dir
 . $PREFIX_OPT/env.sh
 . $PREFIX_OPT/gcc-4.7.sh
 
-mkdir -p $PREFIX_ALPS/source $PREFIX_ALPS/script
-check cp -p $0 $PREFIX_ALPS/script/compile-$ALPS_VERSION.sh
-check cp -p $HOME/source/alps-$ALPS_VERSION.tar.gz $PREFIX_ALPS/source/
+cd $BUILD_DIR
+if [ -d alps-$ALPS_VERSION ]; then :; else
+  if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
+    check tar zxf $HOME/source/alps-$ALPS_VERSION.tar.gz
+  else
+    check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
+  fi
+fi
 
-YMDT=`date +%Y%m%d%H%M%S`
-
-echo "PREFIX=$PREFIX_ALPS"
-echo "ALPS_VERSION=$ALPS_VERSION"
-echo "BOOST_VERSION=$BOOST_VERSION"
-echo "SCRIPT=$PREFIX_ALPS/script/compile-$ALPS_VERSION.sh"
-
-(cd $BUILD_DIR && tar zxf $PREFIX_ALPS/source/alps-$ALPS_VERSION.tar.gz)
-
-### OpenMP version
-
-VERSION=$ALPS_VERSION
-echo "[start alps-$VERSION]"
-
-rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
-cd $BUILD_DIR/alps-build-$VERSION.$YMDT
+rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION && mkdir -p $BUILD_DIR/alps-build-$ALPS_VERSION
+cd $BUILD_DIR/alps-build-$ALPS_VERSION
 echo "[cmake]"
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$ALPS_VERSION \
   -DCMAKE_C_COMPILER="$PREFIX_OPT/gcc-4.7/bin/gcc" -DCMAKE_CXX_COMPILER="$PREFIX_OPT/gcc-4.7/bin/g++" -DCMAKE_Fortran_COMPILER="$PREFIX_OPT/gcc-4.7/bin/gfortran" \
   -DMPIEXEC="/usr/lib64/lam/bin/mpirun" -DMPI_LIBRARY="/usr/lib64/lam/lib/libmpi.so;/usr/lib64/lam/lib/liblammpi++.so;/usr/lib64/lam/lib/liblam.so" \
   -DPYTHON_INTERPRETER=python2.7 \
@@ -47,41 +38,10 @@ check make -j2 install
 echo "[ctest]"
 ctest
 
-cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
+cat << EOF > $PREFIX_ALPS/alpsvars-$ALPS_VERSION.sh
 . $PREFIX_OPT/env.sh
 . $PREFIX_OPT/gcc-4.7.sh
-. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
+. $PREFIX_ALPS/alps-$ALPS_VERSION/bin/alpsvars.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars.sh
-ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars.sh
-
-### no-OpenMP version
-
-VERSION="noomp-$ALPS_VERSION"
-echo "[start alps-$VERSION]"
-
-rm -rf $BUILD_DIR/alps-build-$VERSION.$YMDT && mkdir -p $BUILD_DIR/alps-build-$VERSION.$YMDT
-cd $BUILD_DIR/alps-build-$VERSION.$YMDT
-echo "[cmake]"
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$VERSION \
-  -DCMAKE_C_COMPILER="$PREFIX_OPT/gcc-4.7/bin/gcc" -DCMAKE_CXX_COMPILER="$PREFIX_OPT/gcc-4.7/bin/g++" -DCMAKE_Fortran_COMPILER="$PREFIX_OPT/gcc-4.7/bin/gfortran" \
-  -DMPIEXEC="/usr/lib64/lam/bin/mpirun" -DMPI_LIBRARY="/usr/lib64/lam/lib/libmpi.so;/usr/lib64/lam/lib/liblammpi++.so;/usr/lib64/lam/lib/liblam.so" \
-  -DPYTHON_INTERPRETER=python2.7 \
-  -DHdf5_INCLUDE_DIRS=$PREFIX_OPT/include -DHdf5_LIBRARY_DIRS=$PREFIX_OPT/lib \
-  -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
-  -DALPS_BUILD_FORTRAN=ON \
-  -DBLAS_LIBRARY=-lblas -DLAPACK_LIBRARY=-llapack \
-  $BUILD_DIR/alps-$ALPS_VERSION
-
-echo "[make install]"
-check make -j2 install
-echo "[ctest]"
-ctest
-
-cat << EOF > $PREFIX_ALPS/alpsvars-$VERSION.sh
-. $PREFIX_OPT/env.sh
-. $PREFIX_OPT/gcc-4.7.sh
-. $PREFIX_ALPS/alps-$VERSION/bin/alpsvars.sh
-EOF
-rm -f $PREFIX_ALPS/alpsvars-noomp.sh
-ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-noomp.sh
+ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/alpsvars.sh
