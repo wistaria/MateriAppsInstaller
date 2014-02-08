@@ -8,6 +8,9 @@ set_prefix
 set_build_dir
 
 . $PREFIX_OPT/env.sh
+if [ -z "$MPI_HOME"]; then
+  MPI_HOME=$(dirname $(dirname $(which FCCpx)))
+fi
 
 cd $BUILD_DIR
 if [ -d alps-$ALPS_VERSION ]; then :; else
