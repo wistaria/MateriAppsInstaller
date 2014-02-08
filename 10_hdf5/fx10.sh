@@ -21,7 +21,7 @@ else
   check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2
 fi
 cd hdf5-$HDF5_VERSION
-check ./configure --prefix=$PREFIX_FRONTEND --with-szlib=$PREFIX_FROTEND
+check ./configure --prefix=$PREFIX_FRONTEND --enable-threadsafe --with-pthread=yes
 check make -j4
 $SUDO make install
 
