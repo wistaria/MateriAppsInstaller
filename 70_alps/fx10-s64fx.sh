@@ -41,6 +41,6 @@ cat << EOF > $PREFIX_ALPS/Linux-s64fx/alpsvars-$ALPS_VERSION.sh
 . $PREFIX_OPT/env.sh
 . $PREFIX_ALPS/Linux-s64fx/alps-$ALPS_VERSION/bin/alpsvars.sh
 EOF
-rm -f $PREFIX_ALPS/Linux-s64fx/alpsvars.sh
+rm -f $PREFIX_ALPS/Linux-s64fx/alpsvars.sh $PREFIX_ALPS/alpsvars-s64fx.sh
 ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/Linux-s64fx/alpsvars.sh
 ln -s Linux-s64fx/alpsvars.sh $PREFIX_ALPS/alpsvars-s64fx.sh
