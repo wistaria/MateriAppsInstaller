@@ -22,7 +22,7 @@ rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION && mkdir -p $BUILD_DIR/alps-build-$AL
 cd $BUILD_DIR/alps-build-$ALPS_VERSION
 echo "[cmake]"
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/alps-$ALPS_VERSION \
-  -DCMAKE_C_COMPILER="gcc-mp-4.7" -DCMAKE_CXX_COMPILER="g++-mp-4.7" -DCMAKE_Fortran_COMPILER="gfortran-mp-4.7" \
+  -DCMAKE_C_COMPILER="gcc-mp-4.8" -DCMAKE_CXX_COMPILER="g++-mp-4.8" -DCMAKE_Fortran_COMPILER="gfortran-mp-4.8" \
   -DPYTHON_INTERPRETER=python2.7 \
   -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_VERSION \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
