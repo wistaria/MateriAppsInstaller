@@ -11,10 +11,10 @@ set_build_dir
 
 cd $BUILD_DIR
 if [ -d alps-$ALPS_VERSION ]; then :; else
-  if [ -d $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
+  if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
     check tar zxf $HOME/source/alps-$ALPS_VERSION.tar.gz
   else
-    check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz
+    check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
   fi
 fi
 
