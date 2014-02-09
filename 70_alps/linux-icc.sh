@@ -16,6 +16,9 @@ if [ -d alps-$ALPS_VERSION ]; then :; else
   else
     check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
   fi
+  if [ -f $SCRIPT_DIR/alps-$ALPS_VERSION.patch ]; then
+    check patch -d $BUILD_DIR/alps-$ALPS_VERSION -p1 < $SCRIPT_DIR/alps-$ALPS_VERSION.patch
+  fi
 fi
 
 rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION && mkdir -p $BUILD_DIR/alps-build-$ALPS_VERSION
