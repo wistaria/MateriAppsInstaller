@@ -4,6 +4,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 . $SCRIPT_DIR/../03_boost/version.sh
+start_info
 set_prefix
 set_build_dir
 
@@ -47,3 +48,5 @@ EOF
 rm -f $PREFIX_ALPS/Linux-s64fx/alpsvars.sh $PREFIX_ALPS/alpsvars-s64fx.sh
 ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/Linux-s64fx/alpsvars.sh
 ln -s Linux-s64fx/alpsvars.sh $PREFIX_ALPS/alpsvars-s64fx.sh
+
+finish_info
