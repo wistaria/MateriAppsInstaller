@@ -89,3 +89,11 @@ check() {
   fi
   return 0
 }
+
+start_info() {
+  echo "Start: $(date) on $(hostname)"
+}
+
+finish_info() {
+  echo "Finish: $(date)"
+}
