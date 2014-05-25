@@ -45,8 +45,8 @@ set_prefix() {
 
   # for maki.issp.u-tokyo.ac.jp
   if [[ ! -z `echo "$HOSTNAME" | egrep "^maki.\.fx10hpc$"` ]]; then
-    PREFIX_OPT_DEF="/global/nano/alps"
-    PREFIX_ALPS_DEF="/global/nano/alps"
+    PREFIX_OPT_DEF="/global/app/materiapps/opt"
+    PREFIX_ALPS_DEF="/global/app/materiapps/alps"
   fi
 
   # for oakleaf-fx.cc.u-tokyo.ac.jp
