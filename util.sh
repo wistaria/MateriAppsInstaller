@@ -43,10 +43,16 @@ set_prefix() {
     PREFIX_ALPS_DEF="/opt/spire/alps"
   fi
 
+  # for kashiwa.issp.u-tokyo.ac.jp
+  if [ -d /home/issp/materiapps ]; then
+    PREFIX_OPT_DEF="/home/issp/materiapps/opt"
+    PREFIX_ALPS_DEF="/home/issp/materiapps/alps"
+  fi
+
   # for maki.issp.u-tokyo.ac.jp
   if [[ ! -z `echo "$HOSTNAME" | egrep "^maki.\.fx10hpc$"` ]]; then
-    PREFIX_OPT_DEF="/global/nano/alps"
-    PREFIX_ALPS_DEF="/global/nano/alps"
+    PREFIX_OPT_DEF="/global/app/materiapps/opt"
+    PREFIX_ALPS_DEF="/global/app/materiapps/alps"
   fi
 
   # for oakleaf-fx.cc.u-tokyo.ac.jp
@@ -82,4 +88,12 @@ check() {
     exit $result
   fi
   return 0
+}
+
+start_info() {
+  echo "Start: $(date) on $(hostname)"
+}
+
+finish_info() {
+  echo "Finish: $(date)"
 }

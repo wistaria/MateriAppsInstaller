@@ -4,6 +4,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 . $SCRIPT_DIR/../03_boost/version.sh
+start_info
 set_prefix
 set_build_dir
 
@@ -51,3 +52,5 @@ export LD_LIBRARY_PATH=\$MPI_HOME/lib64:\$LD_LIBRARY_PATH
 EOF
 rm -f $PREFIX_ALPS/alpsvars-fcc.sh
 ln -s alpsvars-$VERSION.sh $PREFIX_ALPS/alpsvars-fcc.sh
+
+finish_info
