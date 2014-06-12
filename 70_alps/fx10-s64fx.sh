@@ -1,4 +1,5 @@
 #!/bin/sh
+# script alps_source prefix
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
@@ -13,16 +14,26 @@ if [ -z "$MPI_HOME" ]; then
   MPI_HOME=$(dirname $(dirname $(which FCCpx)))
 fi
 
-cd $BUILD_DIR
-if [ -d alps-$ALPS_VERSION ]; then :; else
-  if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
-    check tar zxf $HOME/source/alps-$ALPS_VERSION.tar.gz
-  else
-    check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
+if [ -n "$1" ]; then
+  ALPS_VERSION="svn"
+  ALPS_SOURCE="$1"
+else
+  ALPS_SOURCE="$BUILD_DIR/alps-$ALPS_VERSION"
+  cd $BUILD_DIR
+  if [ -d alps-$ALPS_VERSION ]; then :; else
+    if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
+      check tar zxf $HOME/source/alps-$ALPS_VERSION.tar.gz
+    else
+      check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
+    fi
   fi
+  rm -rf $BUILD_DIR/alps-build-Linux-s64fx-$ALPS_VERSION
+fi
+if [ -n "$2" ]; then
+  PREFIX_ALPS="$2"
 fi
 
-rm -rf $BUILD_DIR/alps-build-Linux-s64fx-$ALPS_VERSION && mkdir -p $BUILD_DIR/alps-build-Linux-s64fx-$ALPS_VERSION
+mkdir -p $BUILD_DIR/alps-build-Linux-s64fx-$ALPS_VERSION
 cd $BUILD_DIR/alps-build-Linux-s64fx-$ALPS_VERSION
 echo "[cmake]"
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/Linux-s64fx/alps-$ALPS_VERSION \
@@ -35,8 +46,8 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/Linux-s64fx/alps-$ALPS_VERSION \
   -DBoost_ROOT_DIR=$PREFIX_OPT/boost_$BOOST_FCC_VERSION \
   -DOpenMP_CXX_FLAGS=-Kopenmp -DOpenMP_C_FLAGS=-Kopenmp \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
-  -DALPS_INCLUDE_TUTORIALS=OFF -DALPS_BUILD_APPLICATIONS=OFF -DALPS_BUILD_EXAMPLES=OFF -DALPS_BUILD_FORTRAN=ON -DALPS_BUILD_TESTS=ON -DALPS_BUILD_PYTHON=OFF \
-  $BUILD_DIR/alps-$ALPS_VERSION
+  -DALPS_BUILD_FORTRAN=ON -DALPS_BUILD_TESTS=ON -DALPS_BUILD_PYTHON=OFF \
+  $ALPS_SOURCE
 
 echo "[make install]"
 check make -j2 install
