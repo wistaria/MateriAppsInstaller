@@ -14,18 +14,6 @@ export LANG C
 # for frontend
 
 cd $BUILD_DIR
-rm -rf szip-$SZIP_VERSION
-if [ -f $HOME/source/szip-$SZIP_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/szip-$SZIP_VERSION.tar.gz
-else
-  check wget -O - http://www.hdfgroup.org/ftp/lib-external/szip/$SZIP_VERSION/src/szip-$SZIP_VERSION.tar.gz | tar zxf -
-fi
-cd szip-$SZIP_VERSION
-check ./configure --prefix=$PREFIX_FRONTEND
-check make -j4
-$SUDO make install
-
-cd $BUILD_DIR
 rm -rf hdf5-$HDF5_VERSION
 if [ -f $HOME/source/hdf5-$HDF5_VERSION.tar.bz2 ]; then
   check tar jxf $HOME/source/hdf5-$HDF5_VERSION.tar.bz2
@@ -33,7 +21,7 @@ else
   check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2
 fi
 cd hdf5-$HDF5_VERSION
-check ./configure --prefix=$PREFIX_FRONTEND --with-szlib=$PREFIX_FROTEND
+check ./configure --prefix=$PREFIX_FRONTEND --enable-threadsafe --with-pthread=yes
 check make -j4
 $SUDO make install
 
@@ -65,7 +53,7 @@ check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
 touch touch H5lib_settings.c H5Tinit.c
 check make -j4
-check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A-Z]*.o
+check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]*.o
 $SUDO cp -fp libhdf5.so $PREFIX_BACKEND/lib
 cd ../hl/src
 check make -j4
