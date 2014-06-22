@@ -53,7 +53,7 @@ check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
 touch touch H5lib_settings.c H5Tinit.c
 check make -j4
-check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A-Z]*.o
+check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]*.o
 $SUDO cp -fp libhdf5.so $PREFIX_BACKEND/lib
 cd ../hl/src
 check make -j4
