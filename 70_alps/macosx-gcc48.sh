@@ -1,11 +1,14 @@
 #!/bin/sh
 # script alps_source prefix
 
+if [ -n "$2" ]; then
+  PREFIX_ALPS="$2"
+fi
+
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 . $SCRIPT_DIR/../03_boost/version.sh
-start_info
 set_prefix
 set_build_dir
 
@@ -25,9 +28,6 @@ else
     fi
   fi
   rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION
-fi
-if [ -n "$2" ]; then
-  PREFIX_ALPS="$2"
 fi
 
 mkdir -p $BUILD_DIR/alps-build-$ALPS_VERSION
@@ -53,5 +53,3 @@ cat << EOF > $PREFIX_ALPS/alpsvars-$ALPS_VERSION.sh
 EOF
 rm -f $PREFIX_ALPS/alpsvars.sh
 ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/alpsvars.sh
-
-finish_info
