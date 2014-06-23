@@ -5,7 +5,14 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 set_build_dir
 
+ENV_VERSION="1.2.0-16-2"
+
 cat << EOF > $BUILD_DIR/env.sh
+if [ -f /home/system/Env_base_$ENV_VERSION ]; then
+  . /home/system/Env_base_$ENV_VERSION
+elif [ -f /work/system/Env_base_$ENV_VERSION ]; then
+  . /work/system/Env_base_$ENV_VERSION
+fi
 export CMAKE_PATH=$PREFIX_OPT/bin/cmake
 export CTEST_PATH=$PREFIX_OPT/bin/ctest
 export PATH=$PREFIX_OPT/bin:$PREFIX_OPT/$(uname -s)-$(uname -m)/bin:/opt/local/gcc/bin:/opt/local/bin:\$PATH
