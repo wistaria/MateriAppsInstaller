@@ -1,11 +1,14 @@
 #!/bin/sh
 # script alps_source prefix
 
+if [ -n "$2" ]; then
+  PREFIX_ALPS="$2"
+fi
+
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 . $SCRIPT_DIR/../03_boost/version.sh
-start_info
 set_prefix
 set_build_dir
 ARCH=s64fx
@@ -30,9 +33,6 @@ else
   fi
   rm -rf $BUILD_DIR/alps-build-Linux-$ARCH-$ALPS_VERSION
 fi
-if [ -n "$2" ]; then
-  PREFIX_ALPS="$2"
-fi
 
 mkdir -p $BUILD_DIR/alps-build-Linux-$ARCH-$ALPS_VERSION
 cd $BUILD_DIR/alps-build-Linux-$ARCH-$ALPS_VERSION
@@ -49,6 +49,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_ALPS/Linux-$ARCH/alps-$ALPS_VERSION \
   -DOpenMP_CXX_FLAGS=-Kopenmp -DOpenMP_C_FLAGS=-Kopenmp \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
   -DALPS_BUILD_FORTRAN=ON -DALPS_BUILD_TESTS=ON -DALPS_BUILD_PYTHON=OFF \
+  -DALPS_BUILD_MPS=OFF \
   $ALPS_SOURCE
 
 echo "[make install]"
@@ -63,5 +64,3 @@ EOF
 rm -f $PREFIX_ALPS/Linux-$ARCH/alpsvars.sh $PREFIX_ALPS/alpsvars-$ARCH.sh
 ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/Linux-$ARCH/alpsvars.sh
 ln -s Linux-$ARCH/alpsvars.sh $PREFIX_ALPS/alpsvars-$ARCH.sh
-
-finish_info
