@@ -36,7 +36,7 @@ else
 fi
 cd hdf5-$HDF5_VERSION
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
-CC="fccpx -O2 -Xg" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86 --enable-threadsafe --with-pthread=yes
+CC="fccpx -O2 -Xg" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
 cd src
 check make -j4 H5make_libsettings H5detect
 check cp $SCRIPT_DIR/fx10-H5lib_settings.c H5lib_settings.c
@@ -47,13 +47,13 @@ $SUDO make install
 
 make distclean
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
-CC="fccpx -O2 -Xg -KPIC" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86 --enable-threadsafe --with-pthread=yes
+CC="fccpx -O2 -Xg -KPIC" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
 cd src
 check make -j4 H5make_libsettings H5detect
 check cp $SCRIPT_DIR/fx10-H5lib_settings.c H5lib_settings.c
 check cp $SCRIPT_DIR/fx10-H5Tinit.c H5Tinit.c
 check make -j4
-check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A-Z]*.o
+check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]*.o
 $SUDO cp -fp libhdf5.so $PREFIX_BACKEND/lib
 cd ../hl/src
 check make -j4

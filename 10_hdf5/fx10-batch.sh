@@ -36,7 +36,7 @@ else
 fi
 cd hdf5-$HDF5_VERSION
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
-CC="fccpx -O2 -Xg" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86 --enable-threadsafe --with-pthread=yes
+CC="fccpx -O2 -Xg" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
 cd src
 check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
@@ -47,7 +47,7 @@ $SUDO make install
 
 make distclean
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
-CC="fccpx -O2 -Xg -KPIC" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86 --enable-threadsafe --with-pthread=yes
+CC="fccpx -O2 -Xg -KPIC" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
 cd src
 check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
