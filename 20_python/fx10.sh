@@ -63,9 +63,5 @@ else
   check wget -O - http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-$MATPLOTLIB_VERSION/matplotlib-$MATPLOTLIB_VERSION.tar.gz/download matplotlib-$MATPLOTLIB_VERSION.tar.gz | tar zxf -
 fi
 cd matplotlib-$MATPLOTLIB_VERSION
-cat << EOF > setup.cfg
-[gui_support]
-tkagg = False
-EOF
 check $PREFIX_FRONTEND/bin/python2.7 setup.py build
 $SUDO $PREFIX_FRONTEND/bin/python2.7 setup.py install
