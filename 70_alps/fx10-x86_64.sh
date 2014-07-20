@@ -57,3 +57,7 @@ EOF
 rm -f $PREFIX_ALPS/Linux-$ARCH/alpsvars.sh $PREFIX_ALPS/alpsvars-$ARCH.sh
 ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/Linux-$ARCH/alpsvars.sh
 ln -s Linux-$ARCH/alpsvars.sh $PREFIX_ALPS/alpsvars-$ARCH.sh
+
+cat << EOF > $PREFIX_ALPS/alpsvars.sh
+. $PREFIX_ALPS/alpsvars-$ARCH.sh
+EOF
