@@ -3,6 +3,7 @@
 set_prefix() {
   PREFIX_OPT_DEF="$HOME/opt"
   PREFIX_ALPS_DEF="$HOME/alps"
+  PREFIX_ROKKO_DEF="$HOME/rokko"
   SUDO=
 
   hostname -f > /dev/null 2>&1
@@ -25,9 +26,12 @@ set_prefix() {
 
   # for Mac OS X
   if [ $(uname) = Darwin ]; then
-   if [ -d /opt/alps ]; then
-      PREFIX_OPT_DEF="/opt/alps"
-      PREFIX_ALPS_DEF="/opt/alps"
+    if [ -d /opt/alps ]; then
+      if [ -d /opt/rokko ]; then
+        PREFIX_OPT_DEF="/opt/alps"
+        PREFIX_ALPS_DEF="/opt/alps"
+        PREFIX_ROKKO_DEF="/opt/rokko"
+      fi
     fi
   fi
 
@@ -67,8 +71,12 @@ set_prefix() {
   if [ -z "$PREFIX_ALPS" ]; then
     PREFIX_ALPS="$PREFIX_ALPS_DEF"
   fi
+  if [ -z "$PREFIX_ROKKO" ]; then
+    PREFIX_ROKKO="$PREFIX_ROKKO_DEF"
+  fi
   echo "PREFIX_OPT = $PREFIX_OPT"
   echo "PREFIX_ALPS = $PREFIX_ALPS"
+  echo "PREFIX_ROKKO = $PREFIX_ROKKO"
   echo "SUDO = $SUDO"
   return 0
 }
