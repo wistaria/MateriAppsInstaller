@@ -1,0 +1,1424 @@
+diff -crN elpa_lib-201305.orig/CMakeLists.txt elpa_lib-201305/CMakeLists.txt
+*** elpa_lib-201305.orig/CMakeLists.txt	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/CMakeLists.txt	Fri Aug  8 01:09:25 2014
+***************
+*** 0 ****
+--- 1,19 ----
++ cmake_minimum_required(VERSION 2.8)
++ project(ELPA C Fortran)
++ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
++ 
++ # RPATH setting
++ if(APPLE)
++   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
++ else(APPLE)
++   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
++   set(CMAKE_SKIP_BUILD_RPATH FALSE)
++   set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
++   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
++ endif(APPLE)
++ 
++ find_package(MPI)
++ 
++ add_subdirectory(ELPA_2011.12)
++ add_subdirectory(ELPA_2013.02.BETA)
++ add_subdirectory(ELPA_development_version)
+diff -crN elpa_lib-201305.orig/ELPA_2011.12/CMakeLists.txt elpa_lib-201305/ELPA_2011.12/CMakeLists.txt
+*** elpa_lib-201305.orig/ELPA_2011.12/CMakeLists.txt	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/ELPA_2011.12/CMakeLists.txt	Fri Aug  8 01:14:32 2014
+***************
+*** 0 ****
+--- 1,13 ----
++ include_directories(${MPI_Fortran_INCLUDE_PATH})
++ 
++ set(SOURCES src/elpa1.f90 src/elpa2.f90 src/elpa2_kernels.f90 src/elpa1_wrap.f)
++ add_library(elpa-2011.12 ${SOURCES})
++ target_link_libraries(elpa-2011.12 ${SCALAPACK_LIB} ${MPI_Fortran_LIBRARIES})
++ install(TARGETS elpa-2011.12 ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
++ 
++ set(TARGETS read_real read_real_gen test_complex test_complex2 test_complex_gen test_real test_real2 test_real_gen)
++ foreach(t ${TARGETS})
++   add_executable(${t}-2011.12 test/${t}.f90)
++   set_target_properties(${t}-2011.12 PROPERTIES OUTPUT_NAME ${t})
++   target_link_libraries(${t}-2011.12 elpa-2011.12)
++ endforeach(t ${TARGETS})
+diff -crN elpa_lib-201305.orig/ELPA_2011.12/src/elpa1_wrap.f elpa_lib-201305/ELPA_2011.12/src/elpa1_wrap.f
+*** elpa_lib-201305.orig/ELPA_2011.12/src/elpa1_wrap.f	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/ELPA_2011.12/src/elpa1_wrap.f	Fri Aug  8 01:09:10 2014
+***************
+*** 0 ****
+--- 1,39 ----
++       subroutine get_elpa_row_col_comms_wrap(mpi_comm_global, 
++      &my_prow, my_pcol, mpi_comm_rows, mpi_comm_cols)
++ 
++       use ELPA1, only : get_elpa_row_col_comms
++ 
++       implicit none
++ 
++       include 'mpif.h'
++ 
++       integer, intent(in)  :: mpi_comm_global, my_prow, my_pcol
++       integer, intent(out) :: mpi_comm_rows, mpi_comm_cols
++ 
++       call get_elpa_row_col_comms(mpi_comm_global, my_prow, my_pcol,
++      &                          mpi_comm_rows, mpi_comm_cols)
++ 
++       return
++       end subroutine            ! get_elpa_row_col_comms_wrapper
++ 
++ 
++ 
++       subroutine solve_evp_real_wrap(na, nev, a, lda, ev, q, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols)
++ 
++       use ELPA1, only : solve_evp_real
++ 
++       implicit none
++ 
++       include 'mpif.h'
++ 
++       integer, intent(in) :: na, nev, lda, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols
++       real*8 :: a(lda,*), ev(na), q(ldq,*)
++ 
++       call solve_evp_real(na, nev, a, lda, ev, q, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols)
++ 
++       return
++       end subroutine            ! solve_evp_real
++ 
+diff -crN elpa_lib-201305.orig/ELPA_2011.12/src/elpa2.f90 elpa_lib-201305/ELPA_2011.12/src/elpa2.f90
+*** elpa_lib-201305.orig/ELPA_2011.12/src/elpa2.f90	Tue May 21 14:44:19 2013
+--- elpa_lib-201305/ELPA_2011.12/src/elpa2.f90	Fri Aug  8 01:09:10 2014
+***************
+*** 2411,2417 ****
+        local_size = limits(my_prow+1) - limits(my_prow)
+        if(mod(n-1,np_cols) == my_pcol .and. local_size>0 .and. nx>1) then
+           num_chunks  = num_chunks+1
+!          call mpi_irecv(hh_trans_complex(1,num_hh_vecs+1), nb*local_size, MPI_COMPLEX16, nt, &
+                          10+n-block_limits(nt), mpi_comm, ireq_hhr(num_chunks), mpierr)
+           num_hh_vecs = num_hh_vecs + local_size
+        endif
+--- 2411,2417 ----
+        local_size = limits(my_prow+1) - limits(my_prow)
+        if(mod(n-1,np_cols) == my_pcol .and. local_size>0 .and. nx>1) then
+           num_chunks  = num_chunks+1
+!          call mpi_irecv(hh_trans_complex(1,num_hh_vecs+1), nb*local_size, MPI_DOUBLE_COMPLEX, nt, &
+                          10+n-block_limits(nt), mpi_comm, ireq_hhr(num_chunks), mpierr)
+           num_hh_vecs = num_hh_vecs + local_size
+        endif
+***************
+*** 2458,2464 ****
+        ! send first column to previous PE
+        ! Only the PE owning the diagonal does that (sending 1 element of the subdiagonal block also)
+        ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!       call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+     endif
+  
+     do istep=1,na-1
+--- 2458,2464 ----
+        ! send first column to previous PE
+        ! Only the PE owning the diagonal does that (sending 1 element of the subdiagonal block also)
+        ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!       call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+     endif
+  
+     do istep=1,na-1
+***************
+*** 2486,2492 ****
+        else
+           if(na>na_s) then
+              ! Receive Householder vector from previous task, from PE owning subdiagonal
+!             call mpi_recv(hv,nb,MPI_COMPLEX16,my_pe-1,2,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+              tau = hv(1)
+              hv(1) = 1.
+           endif
+--- 2486,2492 ----
+        else
+           if(na>na_s) then
+              ! Receive Householder vector from previous task, from PE owning subdiagonal
+!             call mpi_recv(hv,nb,MPI_DOUBLE_COMPLEX,my_pe-1,2,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+              tau = hv(1)
+              hv(1) = 1.
+           endif
+***************
+*** 2519,2525 ****
+              ! Copy vectors into send buffer
+              hh_send(:,1:hh_cnt(iblk),iblk) = hh_gath(:,1:hh_cnt(iblk),iblk)
+              ! Send to destination
+!             call mpi_isend(hh_send(1,1,iblk), nb*hh_cnt(iblk), MPI_COMPLEX16, &
+                             global_id(hh_dst(iblk),mod(iblk+block_limits(my_pe)-1,np_cols)), &
+                             10+iblk, mpi_comm, ireq_hhs(iblk), mpierr)
+              ! Reset counter and increase destination row
+--- 2519,2525 ----
+              ! Copy vectors into send buffer
+              hh_send(:,1:hh_cnt(iblk),iblk) = hh_gath(:,1:hh_cnt(iblk),iblk)
+              ! Send to destination
+!             call mpi_isend(hh_send(1,1,iblk), nb*hh_cnt(iblk), MPI_DOUBLE_COMPLEX, &
+                             global_id(hh_dst(iblk),mod(iblk+block_limits(my_pe)-1,np_cols)), &
+                             10+iblk, mpi_comm, ireq_hhs(iblk), mpierr)
+              ! Reset counter and increase destination row
+***************
+*** 2552,2558 ****
+              if(nr>0) call ZGEMV('N',nr,nb-1,tau,ab(nb+1,ns),2*nb-1,hv,1,(0.d0,0.d0),hs,1)
+  
+              ! ... then request last column ...
+!             call mpi_recv(ab(1,ne),nb+1,MPI_COMPLEX16,my_pe+1,1,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+  
+              ! ... and complete the result
+              hs(1:nr) = hs(1:nr) + ab(2:nr+1,ne)*tau*hv(nb)
+--- 2552,2558 ----
+              if(nr>0) call ZGEMV('N',nr,nb-1,tau,ab(nb+1,ns),2*nb-1,hv,1,(0.d0,0.d0),hs,1)
+  
+              ! ... then request last column ...
+!             call mpi_recv(ab(1,ne),nb+1,MPI_DOUBLE_COMPLEX,my_pe+1,1,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+  
+              ! ... and complete the result
+              hs(1:nr) = hs(1:nr) + ab(2:nr+1,ne)*tau*hv(nb)
+***************
+*** 2593,2599 ****
+                 call mpi_wait(ireq_hv,MPI_STATUS_IGNORE,mpierr)
+                 hv_s(1) = tau_new
+                 hv_s(2:) = hv_new(2:)
+!                call mpi_isend(hv_s,nb,MPI_COMPLEX16,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+           endif
+--- 2593,2599 ----
+                 call mpi_wait(ireq_hv,MPI_STATUS_IGNORE,mpierr)
+                 hv_s(1) = tau_new
+                 hv_s(2:) = hv_new(2:)
+!                call mpi_isend(hv_s,nb,MPI_DOUBLE_COMPLEX,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+           endif
+***************
+*** 2614,2620 ****
+  
+              call mpi_wait(ireq_ab,MPI_STATUS_IGNORE,mpierr)
+              ab_s(1:nb+1) = ab(1:nb+1,ns)
+!             call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+  
+              ! ... and calculate remaining columns with rank-2 update
+              if(nc>1) call ZHER2('L',nc-1,(-1.d0,0.d0),hd(2),1,hv(2),1,ab(1,ns+1),2*nb-1)
+--- 2614,2620 ----
+  
+              call mpi_wait(ireq_ab,MPI_STATUS_IGNORE,mpierr)
+              ab_s(1:nb+1) = ab(1:nb+1,ns)
+!             call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+  
+              ! ... and calculate remaining columns with rank-2 update
+              if(nc>1) call ZHER2('L',nc-1,(-1.d0,0.d0),hd(2),1,hv(2),1,ab(1,ns+1),2*nb-1)
+***************
+*** 2804,2810 ****
+              do i=limits(ip)+1,limits(ip+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src < my_prow) then
+!                     call MPI_Recv(row, l_nev, MPI_COMPLEX16, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(ip))
+                  elseif(src==my_prow) then
+                      src_offset = src_offset+1
+--- 2804,2810 ----
+              do i=limits(ip)+1,limits(ip+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src < my_prow) then
+!                     call MPI_Recv(row, l_nev, MPI_DOUBLE_COMPLEX, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(ip))
+                  elseif(src==my_prow) then
+                      src_offset = src_offset+1
+***************
+*** 2819,2825 ****
+                  if(mod((i-1)/nblk, np_rows) == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_COMPLEX16, dst, 0, mpi_comm_rows, mpierr)
+                  endif
+                enddo
+              enddo
+--- 2819,2825 ----
+                  if(mod((i-1)/nblk, np_rows) == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_DOUBLE_COMPLEX, dst, 0, mpi_comm_rows, mpierr)
+                  endif
+                enddo
+              enddo
+***************
+*** 2831,2844 ****
+                  if(src == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_COMPLEX16, ip, 0, mpi_comm_rows, mpierr)
+                  endif
+              enddo
+              ! Receive all rows from PE ip
+              do i=limits(my_prow)+1,limits(my_prow+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src == ip) then
+!                     call MPI_Recv(row, l_nev, MPI_COMPLEX16, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(my_prow))
+                  endif
+              enddo
+--- 2831,2844 ----
+                  if(src == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_DOUBLE_COMPLEX, ip, 0, mpi_comm_rows, mpierr)
+                  endif
+              enddo
+              ! Receive all rows from PE ip
+              do i=limits(my_prow)+1,limits(my_prow+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src == ip) then
+!                     call MPI_Recv(row, l_nev, MPI_DOUBLE_COMPLEX, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(my_prow))
+                  endif
+              enddo
+***************
+*** 2862,2868 ****
+  
+      if(my_prow > 0 .and. l_nev>0) then ! note: row 0 always sends
+          do j = 1, min(num_result_buffers, num_result_blocks)
+!             call MPI_Irecv(result_buffer(1,1,j), l_nev*nblk, MPI_COMPLEX16, 0, result_recv_tag, &
+                             mpi_comm_rows, result_recv_request(j), mpierr)
+          enddo
+      endif
+--- 2862,2868 ----
+  
+      if(my_prow > 0 .and. l_nev>0) then ! note: row 0 always sends
+          do j = 1, min(num_result_buffers, num_result_blocks)
+!             call MPI_Irecv(result_buffer(1,1,j), l_nev*nblk, MPI_DOUBLE_COMPLEX, 0, result_recv_tag, &
+                             mpi_comm_rows, result_recv_request(j), mpierr)
+          enddo
+      endif
+***************
+*** 2934,2940 ****
+  
+          if(sweep==0 .and. current_n_end < current_n .and. l_nev > 0) then
+              do i = 1, stripe_count
+!                 call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_COMPLEX16, my_prow+1, bottom_recv_tag, &
+                             mpi_comm_rows, bottom_recv_request(i), mpierr)
+              enddo
+          endif
+--- 2934,2940 ----
+  
+          if(sweep==0 .and. current_n_end < current_n .and. l_nev > 0) then
+              do i = 1, stripe_count
+!                 call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, bottom_recv_tag, &
+                             mpi_comm_rows, bottom_recv_request(i), mpierr)
+              enddo
+          endif
+***************
+*** 2944,2950 ****
+                  bcast_buffer(:,1:current_local_n) = hh_trans_complex(:,current_tv_off+1:current_tv_off+current_local_n)
+                  current_tv_off = current_tv_off + current_local_n
+              endif
+!             call mpi_bcast(bcast_buffer, nbw*current_local_n, MPI_COMPLEX16, mod(sweep,np_cols), mpi_comm_cols, mpierr)
+          else
+              ! for current_local_n == 1 the one and only HH vector is 0 and not stored in hh_trans_complex
+              bcast_buffer(:,1) = 0
+--- 2944,2950 ----
+                  bcast_buffer(:,1:current_local_n) = hh_trans_complex(:,current_tv_off+1:current_tv_off+current_local_n)
+                  current_tv_off = current_tv_off + current_local_n
+              endif
+!             call mpi_bcast(bcast_buffer, nbw*current_local_n, MPI_DOUBLE_COMPLEX, mod(sweep,np_cols), mpi_comm_cols, mpierr)
+          else
+              ! for current_local_n == 1 the one and only HH vector is 0 and not stored in hh_trans_complex
+              bcast_buffer(:,1) = 0
+***************
+*** 2962,2968 ****
+                  n_off = current_local_n+a_off
+                  a(:,n_off+1:n_off+nbw,i) = bottom_border_recv_buffer(:,1:nbw,i)
+                  if(next_n_end < next_n) then
+!                     call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_COMPLEX16, my_prow+1, bottom_recv_tag, &
+                                     mpi_comm_rows, bottom_recv_request(i), mpierr)
+                  endif
+              endif
+--- 2962,2968 ----
+                  n_off = current_local_n+a_off
+                  a(:,n_off+1:n_off+nbw,i) = bottom_border_recv_buffer(:,1:nbw,i)
+                  if(next_n_end < next_n) then
+!                     call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, bottom_recv_tag, &
+                                     mpi_comm_rows, bottom_recv_request(i), mpierr)
+                  endif
+              endif
+***************
+*** 2983,2989 ****
+                  if(bottom_msg_length>0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_COMPLEX16, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+--- 2983,2989 ----
+                  if(bottom_msg_length>0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+***************
+*** 2997,3003 ****
+                  if(bottom_msg_length > 0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_COMPLEX16, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+--- 2997,3003 ----
+                  if(bottom_msg_length > 0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+***************
+*** 3016,3022 ****
+  
+              if(next_top_msg_length > 0) then
+                  !request top_border data
+!                 call MPI_Irecv(top_border_recv_buffer(1,1,i), next_top_msg_length*stripe_width, MPI_COMPLEX16, my_prow-1, &
+                                 top_recv_tag, mpi_comm_rows, top_recv_request(i), mpierr)
+              endif
+  
+--- 3016,3022 ----
+  
+              if(next_top_msg_length > 0) then
+                  !request top_border data
+!                 call MPI_Irecv(top_border_recv_buffer(1,1,i), next_top_msg_length*stripe_width, MPI_DOUBLE_COMPLEX, my_prow-1, &
+                                 top_recv_tag, mpi_comm_rows, top_recv_request(i), mpierr)
+              endif
+  
+***************
+*** 3024,3030 ****
+              if(my_prow > 0) then
+                  call MPI_Wait(top_send_request(i), MPI_STATUS_IGNORE, mpierr)
+                  top_border_send_buffer(:,1:nbw,i) = a(:,a_off+1:a_off+nbw,i)
+!                 call MPI_Isend(top_border_send_buffer(1,1,i), nbw*stripe_width, MPI_COMPLEX16, my_prow-1, bottom_recv_tag, &
+                                 mpi_comm_rows, top_send_request(i), mpierr)
+              endif
+  
+--- 3024,3030 ----
+              if(my_prow > 0) then
+                  call MPI_Wait(top_send_request(i), MPI_STATUS_IGNORE, mpierr)
+                  top_border_send_buffer(:,1:nbw,i) = a(:,a_off+1:a_off+nbw,i)
+!                 call MPI_Isend(top_border_send_buffer(1,1,i), nbw*stripe_width, MPI_DOUBLE_COMPLEX, my_prow-1, bottom_recv_tag, &
+                                 mpi_comm_rows, top_send_request(i), mpierr)
+              endif
+  
+***************
+*** 3074,3080 ****
+                      do i = 1, nblk
+                          call pack_row(result_buffer(:,i,nbuf),j*nblk+i+a_off)
+                      enddo
+!                     call MPI_Isend(result_buffer(1,1,nbuf), l_nev*nblk, MPI_COMPLEX16, dst, &
+                                     result_recv_tag, mpi_comm_rows, result_send_request(nbuf), mpierr)
+                  endif
+              enddo
+--- 3074,3080 ----
+                      do i = 1, nblk
+                          call pack_row(result_buffer(:,i,nbuf),j*nblk+i+a_off)
+                      enddo
+!                     call MPI_Isend(result_buffer(1,1,nbuf), l_nev*nblk, MPI_DOUBLE_COMPLEX, dst, &
+                                     result_recv_tag, mpi_comm_rows, result_send_request(nbuf), mpierr)
+                  endif
+              enddo
+***************
+*** 3106,3112 ****
+  
+                  ! Queue result buffer again if there are outstanding blocks left
+                  if(j+num_result_buffers < num_result_blocks) &
+!                     call MPI_Irecv(result_buffer(1,1,nbuf), l_nev*nblk, MPI_COMPLEX16, 0, result_recv_tag, &
+                                     mpi_comm_rows, result_recv_request(nbuf), mpierr)
+  
+              enddo
+--- 3106,3112 ----
+  
+                  ! Queue result buffer again if there are outstanding blocks left
+                  if(j+num_result_buffers < num_result_blocks) &
+!                     call MPI_Irecv(result_buffer(1,1,nbuf), l_nev*nblk, MPI_DOUBLE_COMPLEX, 0, result_recv_tag, &
+                                     mpi_comm_rows, result_recv_request(nbuf), mpierr)
+  
+              enddo
+***************
+*** 3362,3368 ****
+     if(l_real) then
+        call MPI_Alltoallv(r_sbuf,ncnt_s,nstart_s,MPI_REAL8,r_rbuf,ncnt_r,nstart_r,MPI_REAL8,mpi_comm,mpierr)
+     else
+!       call MPI_Alltoallv(c_sbuf,ncnt_s,nstart_s,MPI_COMPLEX16,c_rbuf,ncnt_r,nstart_r,MPI_COMPLEX16,mpi_comm,mpierr)
+     endif
+  
+     ! set band from receive buffer
+--- 3362,3368 ----
+     if(l_real) then
+        call MPI_Alltoallv(r_sbuf,ncnt_s,nstart_s,MPI_REAL8,r_rbuf,ncnt_r,nstart_r,MPI_REAL8,mpi_comm,mpierr)
+     else
+!       call MPI_Alltoallv(c_sbuf,ncnt_s,nstart_s,MPI_DOUBLE_COMPLEX,c_rbuf,ncnt_r,nstart_r,MPI_DOUBLE_COMPLEX,mpi_comm,mpierr)
+     endif
+  
+     ! set band from receive buffer
+diff -crN elpa_lib-201305.orig/ELPA_2013.02.BETA/CMakeLists.txt elpa_lib-201305/ELPA_2013.02.BETA/CMakeLists.txt
+*** elpa_lib-201305.orig/ELPA_2013.02.BETA/CMakeLists.txt	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/ELPA_2013.02.BETA/CMakeLists.txt	Fri Aug  8 01:14:43 2014
+***************
+*** 0 ****
+--- 1,13 ----
++ include_directories(${MPI_Fortran_INCLUDE_PATH})
++ 
++ set(SOURCES src/elpa1.f90 src/elpa2.f90 src/elpa2_kernels/elpa2_kernels_complex.f90 src/elpa2_kernels/elpa2_kernels_real.f90 src/elpa1_wrap.f)
++ add_library(elpa-2013.02.beta ${SOURCES})
++ target_link_libraries(elpa-2013.02.beta ${SCALAPACK_LIB} ${MPI_Fortran_LIBRARIES})
++ install(TARGETS elpa-2013.02.beta ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
++ 
++ set(TARGETS read_real read_real_gen test_complex test_complex2 test_complex_gen test_real test_real2 test_real_gen)
++ foreach(t ${TARGETS})
++   add_executable(${t}-2013.02.beta test/${t}.f90)
++   set_target_properties(${t}-2013.02.beta PROPERTIES OUTPUT_NAME ${t})
++   target_link_libraries(${t}-2013.02.beta elpa-2013.02.beta)
++ endforeach(t ${TARGETS})
+diff -crN elpa_lib-201305.orig/ELPA_2013.02.BETA/src/elpa1_wrap.f elpa_lib-201305/ELPA_2013.02.BETA/src/elpa1_wrap.f
+*** elpa_lib-201305.orig/ELPA_2013.02.BETA/src/elpa1_wrap.f	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/ELPA_2013.02.BETA/src/elpa1_wrap.f	Fri Aug  8 01:09:10 2014
+***************
+*** 0 ****
+--- 1,39 ----
++       subroutine get_elpa_row_col_comms_wrap(mpi_comm_global, 
++      &my_prow, my_pcol, mpi_comm_rows, mpi_comm_cols)
++ 
++       use ELPA1, only : get_elpa_row_col_comms
++ 
++       implicit none
++ 
++       include 'mpif.h'
++ 
++       integer, intent(in)  :: mpi_comm_global, my_prow, my_pcol
++       integer, intent(out) :: mpi_comm_rows, mpi_comm_cols
++ 
++       call get_elpa_row_col_comms(mpi_comm_global, my_prow, my_pcol,
++      &                          mpi_comm_rows, mpi_comm_cols)
++ 
++       return
++       end subroutine            ! get_elpa_row_col_comms_wrapper
++ 
++ 
++ 
++       subroutine solve_evp_real_wrap(na, nev, a, lda, ev, q, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols)
++ 
++       use ELPA1, only : solve_evp_real
++ 
++       implicit none
++ 
++       include 'mpif.h'
++ 
++       integer, intent(in) :: na, nev, lda, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols
++       real*8 :: a(lda,*), ev(na), q(ldq,*)
++ 
++       call solve_evp_real(na, nev, a, lda, ev, q, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols)
++ 
++       return
++       end subroutine            ! solve_evp_real
++ 
+diff -crN elpa_lib-201305.orig/ELPA_2013.02.BETA/src/elpa2.f90 elpa_lib-201305/ELPA_2013.02.BETA/src/elpa2.f90
+*** elpa_lib-201305.orig/ELPA_2013.02.BETA/src/elpa2.f90	Tue May 21 14:44:19 2013
+--- elpa_lib-201305/ELPA_2013.02.BETA/src/elpa2.f90	Fri Aug  8 01:09:10 2014
+***************
+*** 2461,2467 ****
+        local_size = limits(my_prow+1) - limits(my_prow)
+        if(mod(n-1,np_cols) == my_pcol .and. local_size>0 .and. nx>1) then
+           num_chunks  = num_chunks+1
+!          call mpi_irecv(hh_trans_complex(1,num_hh_vecs+1), nb*local_size, MPI_COMPLEX16, nt, &
+                          10+n-block_limits(nt), mpi_comm, ireq_hhr(num_chunks), mpierr)
+           num_hh_vecs = num_hh_vecs + local_size
+        endif
+--- 2461,2467 ----
+        local_size = limits(my_prow+1) - limits(my_prow)
+        if(mod(n-1,np_cols) == my_pcol .and. local_size>0 .and. nx>1) then
+           num_chunks  = num_chunks+1
+!          call mpi_irecv(hh_trans_complex(1,num_hh_vecs+1), nb*local_size, MPI_DOUBLE_COMPLEX, nt, &
+                          10+n-block_limits(nt), mpi_comm, ireq_hhr(num_chunks), mpierr)
+           num_hh_vecs = num_hh_vecs + local_size
+        endif
+***************
+*** 2508,2514 ****
+        ! send first column to previous PE
+        ! Only the PE owning the diagonal does that (sending 1 element of the subdiagonal block also)
+        ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!       call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+     endif
+  
+     do istep=1,na-1
+--- 2508,2514 ----
+        ! send first column to previous PE
+        ! Only the PE owning the diagonal does that (sending 1 element of the subdiagonal block also)
+        ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!       call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+     endif
+  
+     do istep=1,na-1
+***************
+*** 2536,2542 ****
+        else
+           if(na>na_s) then
+              ! Receive Householder vector from previous task, from PE owning subdiagonal
+!             call mpi_recv(hv,nb,MPI_COMPLEX16,my_pe-1,2,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+              tau = hv(1)
+              hv(1) = 1.
+           endif
+--- 2536,2542 ----
+        else
+           if(na>na_s) then
+              ! Receive Householder vector from previous task, from PE owning subdiagonal
+!             call mpi_recv(hv,nb,MPI_DOUBLE_COMPLEX,my_pe-1,2,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+              tau = hv(1)
+              hv(1) = 1.
+           endif
+***************
+*** 2569,2575 ****
+              ! Copy vectors into send buffer
+              hh_send(:,1:hh_cnt(iblk),iblk) = hh_gath(:,1:hh_cnt(iblk),iblk)
+              ! Send to destination
+!             call mpi_isend(hh_send(1,1,iblk), nb*hh_cnt(iblk), MPI_COMPLEX16, &
+                             global_id(hh_dst(iblk),mod(iblk+block_limits(my_pe)-1,np_cols)), &
+                             10+iblk, mpi_comm, ireq_hhs(iblk), mpierr)
+              ! Reset counter and increase destination row
+--- 2569,2575 ----
+              ! Copy vectors into send buffer
+              hh_send(:,1:hh_cnt(iblk),iblk) = hh_gath(:,1:hh_cnt(iblk),iblk)
+              ! Send to destination
+!             call mpi_isend(hh_send(1,1,iblk), nb*hh_cnt(iblk), MPI_DOUBLE_COMPLEX, &
+                             global_id(hh_dst(iblk),mod(iblk+block_limits(my_pe)-1,np_cols)), &
+                             10+iblk, mpi_comm, ireq_hhs(iblk), mpierr)
+              ! Reset counter and increase destination row
+***************
+*** 2602,2608 ****
+              if(nr>0) call ZGEMV('N',nr,nb-1,tau,ab(nb+1,ns),2*nb-1,hv,1,(0.d0,0.d0),hs,1)
+  
+              ! ... then request last column ...
+!             call mpi_recv(ab(1,ne),nb+1,MPI_COMPLEX16,my_pe+1,1,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+  
+              ! ... and complete the result
+              hs(1:nr) = hs(1:nr) + ab(2:nr+1,ne)*tau*hv(nb)
+--- 2602,2608 ----
+              if(nr>0) call ZGEMV('N',nr,nb-1,tau,ab(nb+1,ns),2*nb-1,hv,1,(0.d0,0.d0),hs,1)
+  
+              ! ... then request last column ...
+!             call mpi_recv(ab(1,ne),nb+1,MPI_DOUBLE_COMPLEX,my_pe+1,1,mpi_comm,MPI_STATUS_IGNORE,mpierr)
+  
+              ! ... and complete the result
+              hs(1:nr) = hs(1:nr) + ab(2:nr+1,ne)*tau*hv(nb)
+***************
+*** 2643,2649 ****
+                 call mpi_wait(ireq_hv,MPI_STATUS_IGNORE,mpierr)
+                 hv_s(1) = tau_new
+                 hv_s(2:) = hv_new(2:)
+!                call mpi_isend(hv_s,nb,MPI_COMPLEX16,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+           endif
+--- 2643,2649 ----
+                 call mpi_wait(ireq_hv,MPI_STATUS_IGNORE,mpierr)
+                 hv_s(1) = tau_new
+                 hv_s(2:) = hv_new(2:)
+!                call mpi_isend(hv_s,nb,MPI_DOUBLE_COMPLEX,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+           endif
+***************
+*** 2664,2670 ****
+  
+              call mpi_wait(ireq_ab,MPI_STATUS_IGNORE,mpierr)
+              ab_s(1:nb+1) = ab(1:nb+1,ns)
+!             call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+  
+              ! ... and calculate remaining columns with rank-2 update
+              if(nc>1) call ZHER2('L',nc-1,(-1.d0,0.d0),hd(2),1,hv(2),1,ab(1,ns+1),2*nb-1)
+--- 2664,2670 ----
+  
+              call mpi_wait(ireq_ab,MPI_STATUS_IGNORE,mpierr)
+              ab_s(1:nb+1) = ab(1:nb+1,ns)
+!             call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+  
+              ! ... and calculate remaining columns with rank-2 update
+              if(nc>1) call ZHER2('L',nc-1,(-1.d0,0.d0),hd(2),1,hv(2),1,ab(1,ns+1),2*nb-1)
+***************
+*** 2855,2861 ****
+              do i=limits(ip)+1,limits(ip+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src < my_prow) then
+!                     call MPI_Recv(row, l_nev, MPI_COMPLEX16, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(ip))
+                  elseif(src==my_prow) then
+                      src_offset = src_offset+1
+--- 2855,2861 ----
+              do i=limits(ip)+1,limits(ip+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src < my_prow) then
+!                     call MPI_Recv(row, l_nev, MPI_DOUBLE_COMPLEX, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(ip))
+                  elseif(src==my_prow) then
+                      src_offset = src_offset+1
+***************
+*** 2870,2876 ****
+                  if(mod((i-1)/nblk, np_rows) == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_COMPLEX16, dst, 0, mpi_comm_rows, mpierr)
+                  endif
+                enddo
+              enddo
+--- 2870,2876 ----
+                  if(mod((i-1)/nblk, np_rows) == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_DOUBLE_COMPLEX, dst, 0, mpi_comm_rows, mpierr)
+                  endif
+                enddo
+              enddo
+***************
+*** 2882,2895 ****
+                  if(src == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_COMPLEX16, ip, 0, mpi_comm_rows, mpierr)
+                  endif
+              enddo
+              ! Receive all rows from PE ip
+              do i=limits(my_prow)+1,limits(my_prow+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src == ip) then
+!                     call MPI_Recv(row, l_nev, MPI_COMPLEX16, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(my_prow))
+                  endif
+              enddo
+--- 2882,2895 ----
+                  if(src == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_DOUBLE_COMPLEX, ip, 0, mpi_comm_rows, mpierr)
+                  endif
+              enddo
+              ! Receive all rows from PE ip
+              do i=limits(my_prow)+1,limits(my_prow+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src == ip) then
+!                     call MPI_Recv(row, l_nev, MPI_DOUBLE_COMPLEX, src, 0, mpi_comm_rows, MPI_STATUS_IGNORE, mpierr)
+                      call unpack_row(row,i-limits(my_prow))
+                  endif
+              enddo
+***************
+*** 2913,2919 ****
+  
+      if(my_prow > 0 .and. l_nev>0) then ! note: row 0 always sends
+          do j = 1, min(num_result_buffers, num_result_blocks)
+!             call MPI_Irecv(result_buffer(1,1,j), l_nev*nblk, MPI_COMPLEX16, 0, result_recv_tag, &
+                             mpi_comm_rows, result_recv_request(j), mpierr)
+          enddo
+      endif
+--- 2913,2919 ----
+  
+      if(my_prow > 0 .and. l_nev>0) then ! note: row 0 always sends
+          do j = 1, min(num_result_buffers, num_result_blocks)
+!             call MPI_Irecv(result_buffer(1,1,j), l_nev*nblk, MPI_DOUBLE_COMPLEX, 0, result_recv_tag, &
+                             mpi_comm_rows, result_recv_request(j), mpierr)
+          enddo
+      endif
+***************
+*** 2985,2991 ****
+  
+          if(sweep==0 .and. current_n_end < current_n .and. l_nev > 0) then
+              do i = 1, stripe_count
+!                 call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_COMPLEX16, my_prow+1, bottom_recv_tag, &
+                             mpi_comm_rows, bottom_recv_request(i), mpierr)
+              enddo
+          endif
+--- 2985,2991 ----
+  
+          if(sweep==0 .and. current_n_end < current_n .and. l_nev > 0) then
+              do i = 1, stripe_count
+!                 call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, bottom_recv_tag, &
+                             mpi_comm_rows, bottom_recv_request(i), mpierr)
+              enddo
+          endif
+***************
+*** 2995,3001 ****
+                  bcast_buffer(:,1:current_local_n) = hh_trans_complex(:,current_tv_off+1:current_tv_off+current_local_n)
+                  current_tv_off = current_tv_off + current_local_n
+              endif
+!             call mpi_bcast(bcast_buffer, nbw*current_local_n, MPI_COMPLEX16, mod(sweep,np_cols), mpi_comm_cols, mpierr)
+          else
+              ! for current_local_n == 1 the one and only HH vector is 0 and not stored in hh_trans_complex
+              bcast_buffer(:,1) = 0
+--- 2995,3001 ----
+                  bcast_buffer(:,1:current_local_n) = hh_trans_complex(:,current_tv_off+1:current_tv_off+current_local_n)
+                  current_tv_off = current_tv_off + current_local_n
+              endif
+!             call mpi_bcast(bcast_buffer, nbw*current_local_n, MPI_DOUBLE_COMPLEX, mod(sweep,np_cols), mpi_comm_cols, mpierr)
+          else
+              ! for current_local_n == 1 the one and only HH vector is 0 and not stored in hh_trans_complex
+              bcast_buffer(:,1) = 0
+***************
+*** 3013,3019 ****
+                  n_off = current_local_n+a_off
+                  a(:,n_off+1:n_off+nbw,i) = bottom_border_recv_buffer(:,1:nbw,i)
+                  if(next_n_end < next_n) then
+!                     call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_COMPLEX16, my_prow+1, bottom_recv_tag, &
+                                     mpi_comm_rows, bottom_recv_request(i), mpierr)
+                  endif
+              endif
+--- 3013,3019 ----
+                  n_off = current_local_n+a_off
+                  a(:,n_off+1:n_off+nbw,i) = bottom_border_recv_buffer(:,1:nbw,i)
+                  if(next_n_end < next_n) then
+!                     call MPI_Irecv(bottom_border_recv_buffer(1,1,i), nbw*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, bottom_recv_tag, &
+                                     mpi_comm_rows, bottom_recv_request(i), mpierr)
+                  endif
+              endif
+***************
+*** 3034,3040 ****
+                  if(bottom_msg_length>0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_COMPLEX16, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+--- 3034,3040 ----
+                  if(bottom_msg_length>0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+***************
+*** 3048,3054 ****
+                  if(bottom_msg_length > 0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_COMPLEX16, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+--- 3048,3054 ----
+                  if(bottom_msg_length > 0) then
+                      n_off = current_local_n+nbw-bottom_msg_length+a_off
+                      bottom_border_send_buffer(:,1:bottom_msg_length,i) = a(:,n_off+1:n_off+bottom_msg_length,i)
+!                     call MPI_Isend(bottom_border_send_buffer(1,1,i), bottom_msg_length*stripe_width, MPI_DOUBLE_COMPLEX, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+***************
+*** 3067,3073 ****
+  
+              if(next_top_msg_length > 0) then
+                  !request top_border data
+!                 call MPI_Irecv(top_border_recv_buffer(1,1,i), next_top_msg_length*stripe_width, MPI_COMPLEX16, my_prow-1, &
+                                 top_recv_tag, mpi_comm_rows, top_recv_request(i), mpierr)
+              endif
+  
+--- 3067,3073 ----
+  
+              if(next_top_msg_length > 0) then
+                  !request top_border data
+!                 call MPI_Irecv(top_border_recv_buffer(1,1,i), next_top_msg_length*stripe_width, MPI_DOUBLE_COMPLEX, my_prow-1, &
+                                 top_recv_tag, mpi_comm_rows, top_recv_request(i), mpierr)
+              endif
+  
+***************
+*** 3075,3081 ****
+              if(my_prow > 0) then
+                  call MPI_Wait(top_send_request(i), MPI_STATUS_IGNORE, mpierr)
+                  top_border_send_buffer(:,1:nbw,i) = a(:,a_off+1:a_off+nbw,i)
+!                 call MPI_Isend(top_border_send_buffer(1,1,i), nbw*stripe_width, MPI_COMPLEX16, my_prow-1, bottom_recv_tag, &
+                                 mpi_comm_rows, top_send_request(i), mpierr)
+              endif
+  
+--- 3075,3081 ----
+              if(my_prow > 0) then
+                  call MPI_Wait(top_send_request(i), MPI_STATUS_IGNORE, mpierr)
+                  top_border_send_buffer(:,1:nbw,i) = a(:,a_off+1:a_off+nbw,i)
+!                 call MPI_Isend(top_border_send_buffer(1,1,i), nbw*stripe_width, MPI_DOUBLE_COMPLEX, my_prow-1, bottom_recv_tag, &
+                                 mpi_comm_rows, top_send_request(i), mpierr)
+              endif
+  
+***************
+*** 3125,3131 ****
+                      do i = 1, nblk
+                          call pack_row(result_buffer(:,i,nbuf),j*nblk+i+a_off)
+                      enddo
+!                     call MPI_Isend(result_buffer(1,1,nbuf), l_nev*nblk, MPI_COMPLEX16, dst, &
+                                     result_recv_tag, mpi_comm_rows, result_send_request(nbuf), mpierr)
+                  endif
+              enddo
+--- 3125,3131 ----
+                      do i = 1, nblk
+                          call pack_row(result_buffer(:,i,nbuf),j*nblk+i+a_off)
+                      enddo
+!                     call MPI_Isend(result_buffer(1,1,nbuf), l_nev*nblk, MPI_DOUBLE_COMPLEX, dst, &
+                                     result_recv_tag, mpi_comm_rows, result_send_request(nbuf), mpierr)
+                  endif
+              enddo
+***************
+*** 3157,3163 ****
+  
+                  ! Queue result buffer again if there are outstanding blocks left
+                  if(j+num_result_buffers < num_result_blocks) &
+!                     call MPI_Irecv(result_buffer(1,1,nbuf), l_nev*nblk, MPI_COMPLEX16, 0, result_recv_tag, &
+                                     mpi_comm_rows, result_recv_request(nbuf), mpierr)
+  
+              enddo
+--- 3157,3163 ----
+  
+                  ! Queue result buffer again if there are outstanding blocks left
+                  if(j+num_result_buffers < num_result_blocks) &
+!                     call MPI_Irecv(result_buffer(1,1,nbuf), l_nev*nblk, MPI_DOUBLE_COMPLEX, 0, result_recv_tag, &
+                                     mpi_comm_rows, result_recv_request(nbuf), mpierr)
+  
+              enddo
+***************
+*** 3433,3439 ****
+     if(l_real) then
+        call MPI_Alltoallv(r_sbuf,ncnt_s,nstart_s,MPI_REAL8,r_rbuf,ncnt_r,nstart_r,MPI_REAL8,mpi_comm,mpierr)
+     else
+!       call MPI_Alltoallv(c_sbuf,ncnt_s,nstart_s,MPI_COMPLEX16,c_rbuf,ncnt_r,nstart_r,MPI_COMPLEX16,mpi_comm,mpierr)
+     endif
+  
+     ! set band from receive buffer
+--- 3433,3439 ----
+     if(l_real) then
+        call MPI_Alltoallv(r_sbuf,ncnt_s,nstart_s,MPI_REAL8,r_rbuf,ncnt_r,nstart_r,MPI_REAL8,mpi_comm,mpierr)
+     else
+!       call MPI_Alltoallv(c_sbuf,ncnt_s,nstart_s,MPI_DOUBLE_COMPLEX,c_rbuf,ncnt_r,nstart_r,MPI_DOUBLE_COMPLEX,mpi_comm,mpierr)
+     endif
+  
+     ! set band from receive buffer
+diff -crN elpa_lib-201305.orig/ELPA_2013.02.BETA/test/test_complex2.f90 elpa_lib-201305/ELPA_2013.02.BETA/test/test_complex2.f90
+*** elpa_lib-201305.orig/ELPA_2013.02.BETA/test/test_complex2.f90	Tue May 21 14:44:19 2013
+--- elpa_lib-201305/ELPA_2013.02.BETA/test/test_complex2.f90	Fri Aug  8 01:09:10 2014
+***************
+*** 58,63 ****
+--- 58,64 ----
+  
+     implicit none
+     include 'mpif.h'
++    integer :: iargc
+  
+     !-------------------------------------------------------------------------------
+     ! Please set system size parameters below!
+diff -crN elpa_lib-201305.orig/ELPA_2013.02.BETA/test/test_real2.f90 elpa_lib-201305/ELPA_2013.02.BETA/test/test_real2.f90
+*** elpa_lib-201305.orig/ELPA_2013.02.BETA/test/test_real2.f90	Tue May 21 14:44:19 2013
+--- elpa_lib-201305/ELPA_2013.02.BETA/test/test_real2.f90	Fri Aug  8 01:09:10 2014
+***************
+*** 59,64 ****
+--- 59,65 ----
+  
+     implicit none
+     include 'mpif.h'
++    integer :: iargc
+  
+     !-------------------------------------------------------------------------------
+     ! Please set system size parameters below!
+diff -crN elpa_lib-201305.orig/ELPA_development_version/CMakeLists.txt elpa_lib-201305/ELPA_development_version/CMakeLists.txt
+*** elpa_lib-201305.orig/ELPA_development_version/CMakeLists.txt	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/ELPA_development_version/CMakeLists.txt	Fri Aug  8 01:15:26 2014
+***************
+*** 0 ****
+--- 1,13 ----
++ include_directories(${MPI_Fortran_INCLUDE_PATH})
++ 
++ set(SOURCES src/elpa1.f90 src/elpa2.f90 src/elpa2_kernels/elpa2_kernels_complex.f90 src/elpa2_kernels/elpa2_kernels_real.f90 src/elpa_qr/elpa_pdgeqrf.f90 src/elpa_qr/elpa_pdlarfb.f90 src/elpa_qr/elpa_qrkernels.f90 src/elpa_qr/tum_utils.f90 src/elpa1_wrap.f)
++ add_library(elpa-develop ${SOURCES})
++ target_link_libraries(elpa-develop ${SCALAPACK_LIB} ${MPI_Fortran_LIBRARIES})
++ install(TARGETS elpa-develop ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
++ 
++ set(TARGETS read_real read_real_gen test_complex test_complex2 test_complex_gen test_real test_real2 test_real_gen)
++ foreach(t ${TARGETS})
++   add_executable(${t}-develop test/${t}.f90 test/read_test_parameters.f90)
++   set_target_properties(${t}-develop PROPERTIES OUTPUT_NAME ${t})
++   target_link_libraries(${t}-develop elpa-develop)
++ endforeach(t ${TARGETS})
+diff -crN elpa_lib-201305.orig/ELPA_development_version/src/elpa1_wrap.f elpa_lib-201305/ELPA_development_version/src/elpa1_wrap.f
+*** elpa_lib-201305.orig/ELPA_development_version/src/elpa1_wrap.f	Thu Jan  1 09:00:00 1970
+--- elpa_lib-201305/ELPA_development_version/src/elpa1_wrap.f	Fri Aug  8 01:09:10 2014
+***************
+*** 0 ****
+--- 1,39 ----
++       subroutine get_elpa_row_col_comms_wrap(mpi_comm_global, 
++      &my_prow, my_pcol, mpi_comm_rows, mpi_comm_cols)
++ 
++       use ELPA1, only : get_elpa_row_col_comms
++ 
++       implicit none
++ 
++       include 'mpif.h'
++ 
++       integer, intent(in)  :: mpi_comm_global, my_prow, my_pcol
++       integer, intent(out) :: mpi_comm_rows, mpi_comm_cols
++ 
++       call get_elpa_row_col_comms(mpi_comm_global, my_prow, my_pcol,
++      &                          mpi_comm_rows, mpi_comm_cols)
++ 
++       return
++       end subroutine            ! get_elpa_row_col_comms_wrapper
++ 
++ 
++ 
++       subroutine solve_evp_real_wrap(na, nev, a, lda, ev, q, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols)
++ 
++       use ELPA1, only : solve_evp_real
++ 
++       implicit none
++ 
++       include 'mpif.h'
++ 
++       integer, intent(in) :: na, nev, lda, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols
++       real*8 :: a(lda,*), ev(na), q(ldq,*)
++ 
++       call solve_evp_real(na, nev, a, lda, ev, q, ldq, nblk,
++      &mpi_comm_rows, mpi_comm_cols)
++ 
++       return
++       end subroutine            ! solve_evp_real
++ 
+diff -crN elpa_lib-201305.orig/ELPA_development_version/src/elpa2.f90 elpa_lib-201305/ELPA_development_version/src/elpa2.f90
+*** elpa_lib-201305.orig/ELPA_development_version/src/elpa2.f90	Tue May 21 14:44:19 2013
+--- elpa_lib-201305/ELPA_development_version/src/elpa2.f90	Fri Aug  8 01:09:10 2014
+***************
+*** 2814,2820 ****
+        local_size = limits(my_prow+1) - limits(my_prow)
+        if(mod(n-1,np_cols) == my_pcol .and. local_size>0 .and. nx>1) then
+          num_chunks  = num_chunks+1
+!         call mpi_irecv(hh_trans_complex(1,num_hh_vecs+1), nb*local_size, MPI_COMPLEX16, nt, &
+                         10+n-block_limits(nt), mpi_comm, ireq_hhr(num_chunks), mpierr)
+          num_hh_vecs = num_hh_vecs + local_size
+        endif
+--- 2814,2820 ----
+        local_size = limits(my_prow+1) - limits(my_prow)
+        if(mod(n-1,np_cols) == my_pcol .and. local_size>0 .and. nx>1) then
+          num_chunks  = num_chunks+1
+!         call mpi_irecv(hh_trans_complex(1,num_hh_vecs+1), nb*local_size, MPI_DOUBLE_COMPLEX, nt, &
+                         10+n-block_limits(nt), mpi_comm, ireq_hhr(num_chunks), mpierr)
+          num_hh_vecs = num_hh_vecs + local_size
+        endif
+***************
+*** 2879,2885 ****
+        ! send first column to previous PE
+        ! Only the PE owning the diagonal does that (sending 1 element of the subdiagonal block also)
+        ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!       call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+      endif
+  
+      do istep=1,na-1-block_limits(my_pe)*nb
+--- 2879,2885 ----
+        ! send first column to previous PE
+        ! Only the PE owning the diagonal does that (sending 1 element of the subdiagonal block also)
+        ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!       call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+      endif
+  
+      do istep=1,na-1-block_limits(my_pe)*nb
+***************
+*** 2907,2913 ****
+        else
+          if(na>na_s) then
+            ! Receive Householder vector from previous task, from PE owning subdiagonal
+!           call mpi_recv(hv,nb,MPI_COMPLEX16,my_pe-1,2,mpi_comm,mpi_status,mpierr)
+            tau = hv(1)
+            hv(1) = 1.
+          endif
+--- 2907,2913 ----
+        else
+          if(na>na_s) then
+            ! Receive Householder vector from previous task, from PE owning subdiagonal
+!           call mpi_recv(hv,nb,MPI_DOUBLE_COMPLEX,my_pe-1,2,mpi_comm,mpi_status,mpierr)
+            tau = hv(1)
+            hv(1) = 1.
+          endif
+***************
+*** 3045,3057 ****
+              if(my_pe>0 .and. na_s <= na) then
+                call mpi_wait(ireq_ab,mpi_status,mpierr)
+                ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!               call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+              endif
+  
+              ! Request last column from next PE
+              ne = na_s + nblocks*nb - (max_threads-1) - 1
+              if(istep>=max_threads .and. ne <= na) then
+!               call mpi_recv(ab(1,ne-n_off),nb+1,MPI_COMPLEX16,my_pe+1,1,mpi_comm,mpi_status,mpierr)
+              endif
+  
+            else
+--- 3045,3057 ----
+              if(my_pe>0 .and. na_s <= na) then
+                call mpi_wait(ireq_ab,mpi_status,mpierr)
+                ab_s(1:nb+1) = ab(1:nb+1,na_s-n_off)
+!               call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+              endif
+  
+              ! Request last column from next PE
+              ne = na_s + nblocks*nb - (max_threads-1) - 1
+              if(istep>=max_threads .and. ne <= na) then
+!               call mpi_recv(ab(1,ne-n_off),nb+1,MPI_DOUBLE_COMPLEX,my_pe+1,1,mpi_comm,mpi_status,mpierr)
+              endif
+  
+            else
+***************
+*** 3063,3069 ****
+                call mpi_wait(ireq_hv,mpi_status,mpierr)
+                hv_s(1) = tau_t(max_threads)
+                hv_s(2:) = hv_t(2:,max_threads)
+!               call mpi_isend(hv_s,nb,MPI_COMPLEX16,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+              ! "Send" HH vector and TAU to next OpenMP thread
+--- 3063,3069 ----
+                call mpi_wait(ireq_hv,mpi_status,mpierr)
+                hv_s(1) = tau_t(max_threads)
+                hv_s(2:) = hv_t(2:,max_threads)
+!               call mpi_isend(hv_s,nb,MPI_DOUBLE_COMPLEX,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+              ! "Send" HH vector and TAU to next OpenMP thread
+***************
+*** 3118,3124 ****
+              if(nr>0) call ZGEMV('N',nr,nb-1,tau,ab(nb+1,ns),2*nb-1,hv,1,(0.d0,0.d0),hs,1)
+  
+              ! ... then request last column ...
+!             call mpi_recv(ab(1,ne),nb+1,MPI_COMPLEX16,my_pe+1,1,mpi_comm,mpi_status,mpierr)
+  
+              ! ... and complete the result
+              hs(1:nr) = hs(1:nr) + ab(2:nr+1,ne)*tau*hv(nb)
+--- 3118,3124 ----
+              if(nr>0) call ZGEMV('N',nr,nb-1,tau,ab(nb+1,ns),2*nb-1,hv,1,(0.d0,0.d0),hs,1)
+  
+              ! ... then request last column ...
+!             call mpi_recv(ab(1,ne),nb+1,MPI_DOUBLE_COMPLEX,my_pe+1,1,mpi_comm,mpi_status,mpierr)
+  
+              ! ... and complete the result
+              hs(1:nr) = hs(1:nr) + ab(2:nr+1,ne)*tau*hv(nb)
+***************
+*** 3159,3165 ****
+                call mpi_wait(ireq_hv,mpi_status,mpierr)
+                hv_s(1) = tau_new
+                hv_s(2:) = hv_new(2:)
+!               call mpi_isend(hv_s,nb,MPI_COMPLEX16,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+            endif
+--- 3159,3165 ----
+                call mpi_wait(ireq_hv,mpi_status,mpierr)
+                hv_s(1) = tau_new
+                hv_s(2:) = hv_new(2:)
+!               call mpi_isend(hv_s,nb,MPI_DOUBLE_COMPLEX,my_pe+1,2,mpi_comm,ireq_hv,mpierr)
+              endif
+  
+            endif
+***************
+*** 3180,3186 ****
+  
+              call mpi_wait(ireq_ab,mpi_status,mpierr)
+              ab_s(1:nb+1) = ab(1:nb+1,ns)
+!             call mpi_isend(ab_s,nb+1,MPI_COMPLEX16,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+  
+              ! ... and calculate remaining columns with rank-2 update
+              if(nc>1) call ZHER2('L',nc-1,(-1.d0,0.d0),hd(2),1,hv(2),1,ab(1,ns+1),2*nb-1)
+--- 3180,3186 ----
+  
+              call mpi_wait(ireq_ab,mpi_status,mpierr)
+              ab_s(1:nb+1) = ab(1:nb+1,ns)
+!             call mpi_isend(ab_s,nb+1,MPI_DOUBLE_COMPLEX,my_pe-1,1,mpi_comm,ireq_ab,mpierr)
+  
+              ! ... and calculate remaining columns with rank-2 update
+              if(nc>1) call ZHER2('L',nc-1,(-1.d0,0.d0),hd(2),1,hv(2),1,ab(1,ns+1),2*nb-1)
+***************
+*** 3227,3233 ****
+            ! Copy vectors into send buffer
+            hh_send(:,1:hh_cnt(iblk),iblk) = hh_gath(:,1:hh_cnt(iblk),iblk)
+            ! Send to destination
+!           call mpi_isend(hh_send(1,1,iblk), nb*hh_cnt(iblk), MPI_COMPLEX16, &
+                           global_id(hh_dst(iblk),mod(iblk+block_limits(my_pe)-1,np_cols)), &
+                           10+iblk, mpi_comm, ireq_hhs(iblk), mpierr)
+            ! Reset counter and increase destination row
+--- 3227,3233 ----
+            ! Copy vectors into send buffer
+            hh_send(:,1:hh_cnt(iblk),iblk) = hh_gath(:,1:hh_cnt(iblk),iblk)
+            ! Send to destination
+!           call mpi_isend(hh_send(1,1,iblk), nb*hh_cnt(iblk), MPI_DOUBLE_COMPLEX, &
+                           global_id(hh_dst(iblk),mod(iblk+block_limits(my_pe)-1,np_cols)), &
+                           10+iblk, mpi_comm, ireq_hhs(iblk), mpierr)
+            ! Reset counter and increase destination row
+***************
+*** 3412,3418 ****
+              do i=limits(ip)+1,limits(ip+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src < my_prow) then
+!                     call MPI_Recv(row, l_nev, MPI_COMPLEX16, src, 0, mpi_comm_rows, mpi_status, mpierr)
+  !$omp parallel do private(my_thread), schedule(static, 1)
+                      do my_thread = 1, max_threads
+                          call unpack_row(row,i-limits(ip),my_thread)
+--- 3412,3418 ----
+              do i=limits(ip)+1,limits(ip+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src < my_prow) then
+!                     call MPI_Recv(row, l_nev, MPI_DOUBLE_COMPLEX, src, 0, mpi_comm_rows, mpi_status, mpierr)
+  !$omp parallel do private(my_thread), schedule(static, 1)
+                      do my_thread = 1, max_threads
+                          call unpack_row(row,i-limits(ip),my_thread)
+***************
+*** 3433,3439 ****
+                  if(mod((i-1)/nblk, np_rows) == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_COMPLEX16, dst, 0, mpi_comm_rows, mpierr)
+                  endif
+                enddo
+              enddo
+--- 3433,3439 ----
+                  if(mod((i-1)/nblk, np_rows) == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_DOUBLE_COMPLEX, dst, 0, mpi_comm_rows, mpierr)
+                  endif
+                enddo
+              enddo
+***************
+*** 3445,3458 ****
+                  if(src == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_COMPLEX16, ip, 0, mpi_comm_rows, mpierr)
+                  endif
+              enddo
+              ! Receive all rows from PE ip
+              do i=limits(my_prow)+1,limits(my_prow+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src == ip) then
+!                     call MPI_Recv(row, l_nev, MPI_COMPLEX16, src, 0, mpi_comm_rows, mpi_status, mpierr)
+  !$omp parallel do private(my_thread), schedule(static, 1)
+                      do my_thread = 1, max_threads
+                          call unpack_row(row,i-limits(my_prow),my_thread)
+--- 3445,3458 ----
+                  if(src == my_prow) then
+                      src_offset = src_offset+1
+                      row(:) = q(src_offset, 1:l_nev)
+!                     call MPI_Send(row, l_nev, MPI_DOUBLE_COMPLEX, ip, 0, mpi_comm_rows, mpierr)
+                  endif
+              enddo
+              ! Receive all rows from PE ip
+              do i=limits(my_prow)+1,limits(my_prow+1)
+                  src = mod((i-1)/nblk, np_rows)
+                  if(src == ip) then
+!                     call MPI_Recv(row, l_nev, MPI_DOUBLE_COMPLEX, src, 0, mpi_comm_rows, mpi_status, mpierr)
+  !$omp parallel do private(my_thread), schedule(static, 1)
+                      do my_thread = 1, max_threads
+                          call unpack_row(row,i-limits(my_prow),my_thread)
+***************
+*** 3479,3485 ****
+  
+      if(my_prow > 0 .and. l_nev>0) then ! note: row 0 always sends
+          do j = 1, min(num_result_buffers, num_result_blocks)
+!             call MPI_Irecv(result_buffer(1,1,j), l_nev*nblk, MPI_COMPLEX16, 0, result_recv_tag, &
+                             mpi_comm_rows, result_recv_request(j), mpierr)
+          enddo
+      endif
+--- 3479,3485 ----
+  
+      if(my_prow > 0 .and. l_nev>0) then ! note: row 0 always sends
+          do j = 1, min(num_result_buffers, num_result_blocks)
+!             call MPI_Irecv(result_buffer(1,1,j), l_nev*nblk, MPI_DOUBLE_COMPLEX, 0, result_recv_tag, &
+                             mpi_comm_rows, result_recv_request(j), mpierr)
+          enddo
+      endif
+***************
+*** 3553,3559 ****
+              do i = 1, stripe_count
+                  csw = min(stripe_width, thread_width-(i-1)*stripe_width) ! "current_stripe_width"
+                  b_len = csw*nbw*max_threads
+!                 call MPI_Irecv(bottom_border_recv_buffer(1,i), b_len, MPI_COMPLEX16, my_prow+1, bottom_recv_tag, &
+                             mpi_comm_rows, bottom_recv_request(i), mpierr)
+              enddo
+          endif
+--- 3553,3559 ----
+              do i = 1, stripe_count
+                  csw = min(stripe_width, thread_width-(i-1)*stripe_width) ! "current_stripe_width"
+                  b_len = csw*nbw*max_threads
+!                 call MPI_Irecv(bottom_border_recv_buffer(1,i), b_len, MPI_DOUBLE_COMPLEX, my_prow+1, bottom_recv_tag, &
+                             mpi_comm_rows, bottom_recv_request(i), mpierr)
+              enddo
+          endif
+***************
+*** 3563,3569 ****
+                  bcast_buffer(:,1:current_local_n) = hh_trans_complex(:,current_tv_off+1:current_tv_off+current_local_n)
+                  current_tv_off = current_tv_off + current_local_n
+              endif
+!             call mpi_bcast(bcast_buffer, nbw*current_local_n, MPI_COMPLEX16, mod(sweep,np_cols), mpi_comm_cols, mpierr)
+          else
+              ! for current_local_n == 1 the one and only HH vector is 0 and not stored in hh_trans_complex
+              bcast_buffer(:,1) = 0
+--- 3563,3569 ----
+                  bcast_buffer(:,1:current_local_n) = hh_trans_complex(:,current_tv_off+1:current_tv_off+current_local_n)
+                  current_tv_off = current_tv_off + current_local_n
+              endif
+!             call mpi_bcast(bcast_buffer, nbw*current_local_n, MPI_DOUBLE_COMPLEX, mod(sweep,np_cols), mpi_comm_cols, mpierr)
+          else
+              ! for current_local_n == 1 the one and only HH vector is 0 and not stored in hh_trans_complex
+              bcast_buffer(:,1) = 0
+***************
+*** 3595,3601 ****
+                  enddo
+                  if(next_n_end < next_n) then
+                      call MPI_Irecv(bottom_border_recv_buffer(1,i), csw*nbw*max_threads, &
+!                                    MPI_COMPLEX16, my_prow+1, bottom_recv_tag, &
+                                     mpi_comm_rows, bottom_recv_request(i), mpierr)
+                  endif
+              endif
+--- 3595,3601 ----
+                  enddo
+                  if(next_n_end < next_n) then
+                      call MPI_Irecv(bottom_border_recv_buffer(1,i), csw*nbw*max_threads, &
+!                                    MPI_DOUBLE_COMPLEX, my_prow+1, bottom_recv_tag, &
+                                     mpi_comm_rows, bottom_recv_request(i), mpierr)
+                  endif
+              endif
+***************
+*** 3626,3632 ****
+                      b_len = csw*bottom_msg_length*max_threads
+                      bottom_border_send_buffer(1:b_len,i) = &
+                          reshape(a(1:csw,n_off+1:n_off+bottom_msg_length,i,:), (/ b_len /))
+!                     call MPI_Isend(bottom_border_send_buffer(1,i), b_len, MPI_COMPLEX16, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+--- 3626,3632 ----
+                      b_len = csw*bottom_msg_length*max_threads
+                      bottom_border_send_buffer(1:b_len,i) = &
+                          reshape(a(1:csw,n_off+1:n_off+bottom_msg_length,i,:), (/ b_len /))
+!                     call MPI_Isend(bottom_border_send_buffer(1,i), b_len, MPI_DOUBLE_COMPLEX, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+***************
+*** 3645,3651 ****
+                      b_len = csw*bottom_msg_length*max_threads
+                      bottom_border_send_buffer(1:b_len,i) = &
+                        reshape(a(1:csw,n_off+1:n_off+bottom_msg_length,i,:), (/ b_len /))
+!                     call MPI_Isend(bottom_border_send_buffer(1,i), b_len, MPI_COMPLEX16, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+--- 3645,3651 ----
+                      b_len = csw*bottom_msg_length*max_threads
+                      bottom_border_send_buffer(1:b_len,i) = &
+                        reshape(a(1:csw,n_off+1:n_off+bottom_msg_length,i,:), (/ b_len /))
+!                     call MPI_Isend(bottom_border_send_buffer(1,i), b_len, MPI_DOUBLE_COMPLEX, my_prow+1, &
+                                     top_recv_tag, mpi_comm_rows, bottom_send_request(i), mpierr)
+                  endif
+  
+***************
+*** 3676,3682 ****
+              if(next_top_msg_length > 0) then
+                  !request top_border data
+                  b_len = csw*next_top_msg_length*max_threads
+!                 call MPI_Irecv(top_border_recv_buffer(1,i), b_len, MPI_COMPLEX16, my_prow-1, &
+                                 top_recv_tag, mpi_comm_rows, top_recv_request(i), mpierr)
+              endif
+  
+--- 3676,3682 ----
+              if(next_top_msg_length > 0) then
+                  !request top_border data
+                  b_len = csw*next_top_msg_length*max_threads
+!                 call MPI_Irecv(top_border_recv_buffer(1,i), b_len, MPI_DOUBLE_COMPLEX, my_prow-1, &
+                                 top_recv_tag, mpi_comm_rows, top_recv_request(i), mpierr)
+              endif
+  
+***************
+*** 3685,3691 ****
+                  call MPI_Wait(top_send_request(i), mpi_status, mpierr)
+                  b_len = csw*nbw*max_threads
+                  top_border_send_buffer(1:b_len,i) = reshape(a(1:csw,a_off+1:a_off+nbw,i,:), (/ b_len /))
+!                 call MPI_Isend(top_border_send_buffer(1,i), b_len, MPI_COMPLEX16, &
+                                 my_prow-1, bottom_recv_tag, &
+                                 mpi_comm_rows, top_send_request(i), mpierr)
+              endif
+--- 3685,3691 ----
+                  call MPI_Wait(top_send_request(i), mpi_status, mpierr)
+                  b_len = csw*nbw*max_threads
+                  top_border_send_buffer(1:b_len,i) = reshape(a(1:csw,a_off+1:a_off+nbw,i,:), (/ b_len /))
+!                 call MPI_Isend(top_border_send_buffer(1,i), b_len, MPI_DOUBLE_COMPLEX, &
+                                 my_prow-1, bottom_recv_tag, &
+                                 mpi_comm_rows, top_send_request(i), mpierr)
+              endif
+***************
+*** 3736,3742 ****
+                      do i = 1, nblk
+                          call pack_row(result_buffer(:,i,nbuf),j*nblk+i+a_off)
+                      enddo
+!                     call MPI_Isend(result_buffer(1,1,nbuf), l_nev*nblk, MPI_COMPLEX16, dst, &
+                                     result_recv_tag, mpi_comm_rows, result_send_request(nbuf), mpierr)
+                  endif
+              enddo
+--- 3736,3742 ----
+                      do i = 1, nblk
+                          call pack_row(result_buffer(:,i,nbuf),j*nblk+i+a_off)
+                      enddo
+!                     call MPI_Isend(result_buffer(1,1,nbuf), l_nev*nblk, MPI_DOUBLE_COMPLEX, dst, &
+                                     result_recv_tag, mpi_comm_rows, result_send_request(nbuf), mpierr)
+                  endif
+              enddo
+***************
+*** 3768,3774 ****
+  
+                  ! Queue result buffer again if there are outstanding blocks left
+                  if(j+num_result_buffers < num_result_blocks) &
+!                     call MPI_Irecv(result_buffer(1,1,nbuf), l_nev*nblk, MPI_COMPLEX16, 0, result_recv_tag, &
+                                     mpi_comm_rows, result_recv_request(nbuf), mpierr)
+  
+              enddo
+--- 3768,3774 ----
+  
+                  ! Queue result buffer again if there are outstanding blocks left
+                  if(j+num_result_buffers < num_result_blocks) &
+!                     call MPI_Irecv(result_buffer(1,1,nbuf), l_nev*nblk, MPI_DOUBLE_COMPLEX, 0, result_recv_tag, &
+                                     mpi_comm_rows, result_recv_request(nbuf), mpierr)
+  
+              enddo
+***************
+*** 4068,4074 ****
+     if(l_real) then
+        call MPI_Alltoallv(r_sbuf,ncnt_s,nstart_s,MPI_REAL8,r_rbuf,ncnt_r,nstart_r,MPI_REAL8,mpi_comm,mpierr)
+     else
+!       call MPI_Alltoallv(c_sbuf,ncnt_s,nstart_s,MPI_COMPLEX16,c_rbuf,ncnt_r,nstart_r,MPI_COMPLEX16,mpi_comm,mpierr)
+     endif
+  
+     ! set band from receive buffer
+--- 4068,4074 ----
+     if(l_real) then
+        call MPI_Alltoallv(r_sbuf,ncnt_s,nstart_s,MPI_REAL8,r_rbuf,ncnt_r,nstart_r,MPI_REAL8,mpi_comm,mpierr)
+     else
+!       call MPI_Alltoallv(c_sbuf,ncnt_s,nstart_s,MPI_DOUBLE_COMPLEX,c_rbuf,ncnt_r,nstart_r,MPI_DOUBLE_COMPLEX,mpi_comm,mpierr)
+     endif
+  
+     ! set band from receive buffer
+diff -crN elpa_lib-201305.orig/ELPA_development_version/test/test_complex2.f90 elpa_lib-201305/ELPA_development_version/test/test_complex2.f90
+*** elpa_lib-201305.orig/ELPA_development_version/test/test_complex2.f90	Tue May 21 14:44:19 2013
+--- elpa_lib-201305/ELPA_development_version/test/test_complex2.f90	Fri Aug  8 01:09:10 2014
+***************
+*** 58,63 ****
+--- 58,64 ----
+  
+     implicit none
+     include 'mpif.h'
++    integer :: iargc
+  
+     !-------------------------------------------------------------------------------
+     ! Please set system size parameters below!
