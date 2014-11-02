@@ -26,6 +26,8 @@ else
     else
       check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
     fi
+    cd alps-$ALPS_VERSION
+    patch -p1 < $SCRIPT_DIR/macosx-accelerate.patch
   fi
   rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION
 fi
