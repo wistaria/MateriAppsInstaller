@@ -1,83 +1,74 @@
 #!/bin/sh
 
 set_prefix() {
-  PREFIX_OPT_DEF="$HOME/opt"
-  PREFIX_ALPS_DEF="$HOME/alps"
-  SUDO=
+  PREFIX_DEF="$HOME/materiapps"
+  BUILD_DIR_DEF="$HOME/build"
+  SUDO_DEF="/usr/bin/sudo"
 
-  hostname -f > /dev/null 2>&1
-  if [ $? = 0 ]; then
-    HOSTNAME=$(hostname -f)
-  else
-    HOSTNAME=$(hostname)
+  if [ -f "$HOME/.mainstaller" ]; then
+    source $HOME/.mainstaller
   fi
-
-  if [ -d /opt/nano/alps ]; then
-    if [ -d /opt/local ]; then
-      PREFIX_OPT_DEF="/opt/local"
-      PREFIX_ALPS_DEF="/opt/nano/alps"
-      SUDO="sudo"
+  if [ -z "$PREFIX_TOOL" ]; then
+    if [ -z "$PREFIX" ]; then
+      PREFIX_TOOL="$PREFIX_DEF"
     else
-      PREFIX_OPT_DEF="/opt/nano/alps"
-      PREFIX_ALPS_DEF="/opt/nano/alps"
+      PREFIX_TOOL="$PREFIX"
     fi
   fi
-
-  # for Mac OS X
-  if [ $(uname) = Darwin ]; then
-    if [ -d /opt/alps ]; then
-      PREFIX_OPT_DEF="/opt/alps"
-      PREFIX_ALPS_DEF="/opt/alps"
+  if [ -z "$PREFIX_APPS" ]; then
+    if [ -z "$PREFIX" ]; then
+      PREFIX_APPS="$PREFIX_DEF"
+    else
+      PREFIX_APPS="$PREFIX"
     fi
   fi
-
-  # for camphor.kudpc.kyoto-u.ac.jp
-  if [ -d /LARGE0/hp120237 ]; then
-    PREFIX_OPT_DEF="/LARGE0/hp120237/opt"
-    PREFIX_ALPS_DEF="/LARGE0/hp120237/alps"
-  fi
-
-  # for k.aics.riken.jp
-  if [ -d /opt/spire/alps ]; then
-    PREFIX_OPT_DEF="/opt/spire/alps"
-    PREFIX_ALPS_DEF="/opt/spire/alps"
-  fi
-
-  # for kashiwa.issp.u-tokyo.ac.jp
-  if [ -d /home/issp/materiapps ]; then
-    PREFIX_OPT_DEF="/home/issp/materiapps/opt"
-    PREFIX_ALPS_DEF="/home/issp/materiapps/alps"
-  fi
-
-  # for maki.issp.u-tokyo.ac.jp
-  if [ -d /global/app/materiapps/opt ]; then
-    PREFIX_OPT_DEF="/global/app/materiapps/opt"
-    PREFIX_ALPS_DEF="/global/app/materiapps/alps"
-  fi
-
-  # for oakleaf-fx.cc.u-tokyo.ac.jp
-  if [[ ! -z `echo "$HOSTNAME" | egrep "^oakleaf-fx.*$"` ]]; then
-    PREFIX_OPT_DEF="/group/gc25/share/opt"
-    PREFIX_ALPS_DEF="/group/gc25/share/alps"
-  fi
-
-  if [ -z "$PREFIX_OPT" ]; then
-    PREFIX_OPT="$PREFIX_OPT_DEF"
-  fi
-  if [ -z "$PREFIX_ALPS" ]; then
-    PREFIX_ALPS="$PREFIX_ALPS_DEF"
-  fi
-  echo "PREFIX_OPT = $PREFIX_OPT"
-  echo "PREFIX_ALPS = $PREFIX_ALPS"
-  echo "SUDO = $SUDO"
-  return 0
-}
-
-set_build_dir() {
   if [ -z "$BUILD_DIR" ]; then
-    BUILD_DIR="$HOME/build"
+    BUILD_DIR="$BUILD_DIR_DEF"
   fi
-  mkdir -p "$BUILD_DIR"
+
+  echo "PREFIX_TOOL = $PREFIX_TOOL"
+  echo "PREFIX_APPS = $PREFIX_APPS"
+  if [ -d "$PREFIX_TOOL" ]; then :; else
+    echo "Fatal: target directory $PREFIX_TOOL does not exist!"
+    exit 127
+  fi
+  if [ -d "$PREFIX_APPS" ]; then :; else
+    echo "Fatal: target directory $PREFIX_APPS does not exist!"
+    exit 127
+  fi
+
+  if [ -z "$SUDO" ]; then
+    RES=$(touch $PREFIX_TOOL/.mainstaller.tmp > /dev/null 2>&1; echo $?; rm -f $PREFIX_TOOL/.mainstaller.tmp)
+    if [ $RES = 0 ]; then
+      SUDO_TOOL=
+    else
+      SUDO_TOOL="$SUDO_DEF"
+    fi
+    RES=$(touch $PREFIX_APPS/.mainstaller.tmp > /dev/null 2>&1; echo $?; rm -f $PREFIX_APPS/.mainstaller.tmp)
+    if [ $RES = 0 ]; then
+      SUDO_APPS=
+    else
+      SUDO_APPS="$SUDO_DEF"
+    fi
+  else
+    SUDO_TOOL="$SUDO"
+    SUDO_APPS="$SUDO"
+  fi
+  echo "SUDO for tool = $SUDO_TOOL"
+  echo "SUDO for apps = $SUDO_APPS"
+
+  echo "BUILD_DIR = $BUILD_DIR"
+  if [ -d "$BUILD_DIR" ]; then :; else
+    echo "Fatal: target directory $BUILD_DIR does not exist!"
+    exit 127
+  fi
+  RES=$(touch $BUILD_DIR/.mainstaller.tmp > /dev/null 2>&1; echo $?; rm -f $BUILD_DIR/.mainstaller.tmp)
+  if [ $RES = 0 ]; then :; else
+    echo "Fatal: have no permission to write in build directory $BUILD_DIR"
+    exit 127
+  fi
+
+  return 0
 }
 
 check() {

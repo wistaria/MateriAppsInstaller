@@ -3,19 +3,18 @@
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 set_prefix
-set_build_dir
 
 cat << EOF > $BUILD_DIR/env.csh
 module unload PrgEnv-cray PrgEnv-intel mkl
 module load PrgEnv-intel mkl
-setenv PATH $PREFIX_OPT/bin:\$PATH
-setenv LD_LIBRARY_PATH $PREFIX_OPT/lib:\$LD_LIBRARY_PATH
+setenv PATH $PREFIX_TOOL/bin:\$PATH
+setenv LD_LIBRARY_PATH $PREFIX_TOOL/lib:\$LD_LIBRARY_PATH
 EOF
 cat << EOF > $BUILD_DIR/env.sh
 eval \`modulecmd bash unload PrgEnv-cray PrgEnv-intel mkl\`
 eval \`modulecmd bash load PrgEnv-intel mkl\`
-PATH=$PREFIX_OPT/bin:\$PATH
-LD_LIBRARY_PATH=$PREFIX_OPT/lib:\$LD_LIBRARY_PATH
+PATH=$PREFIX_TOOL/bin:\$PATH
+LD_LIBRARY_PATH=$PREFIX_TOOL/lib:\$LD_LIBRARY_PATH
 EOF
-$SUDO mkdir -p $PREFIX_OPT
-$SUDO cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_OPT
+$SUDO mkdir -p $PREFIX_TOOL
+$SUDO cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_TOOL
