@@ -6,9 +6,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64"
-PREFIX_BACKEND="$PREFIX_TOOL/Linux-s64fx"
 CMAKE_VERSION_MAJOR=$(echo "$CMAKE_VERSION" | cut -d . -f 1,2)
+PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64/cmake/cmake-$CMAKE_VERSION"
+PREFIX_BACKEND="$PREFIX_TOOL/Linux-s64fx/cmake/cmake-$CMAKE_VERSION"
 
 cd $BUILD_DIR
 rm -rf cmake-$CMAKE_VERSION cmake-$CMAKE_VERSION-Linux-x86_64 cmake-$CMAKE_VERSION-Linux-s64fx
@@ -28,7 +28,7 @@ check mkdir -p cmake-$CMAKE_VERSION-Linux-x86_64
 check cd cmake-$CMAKE_VERSION-Linux-x86_64
 check $BUILD_DIR/cmake-$CMAKE_VERSION/bootstrap --prefix=$PREFIX_FRONTEND
 check make -j4
-$SUDO make install
+$SUDO_TOOL make install
 
 cd $BUILD_DIR
 check rm -rf cmake-$CMAKE_VERSION-Linux-s64fx
@@ -50,7 +50,7 @@ COMMAND=\$(basename \$0)
 PREFIX_TOOL=$PREFIX_TOOL
 \$PREFIX_TOOL/\$OS-\$ARCH/bin/\$COMMAND "\$@"
 EOF
-check $SUDO mkdir -p $PREFIX_TOOL/bin
-check $SUDO cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/cmake
-check $SUDO cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/ctest
-check $SUDO chmod +x $PREFIX_TOOL/bin/cmake $PREFIX_TOOL/bin/ctest
+$SUDO_TOOL mkdir -p $PREFIX_TOOL/bin
+$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/cmake
+$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/ctest
+$SUDO_TOOL chmod +x $PREFIX_TOOL/bin/cmake $PREFIX_TOOL/bin/ctest

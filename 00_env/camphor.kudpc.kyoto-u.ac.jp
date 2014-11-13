@@ -37,5 +37,5 @@ for i in $PREFIX_TOOL/env.d/*.sh ; do
 done
 unset i
 EOF
-$SUDO mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d
-$SUDO cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_TOOL
+$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d
+$SUDO_TOOL cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_TOOL
