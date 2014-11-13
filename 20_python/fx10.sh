@@ -4,10 +4,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
-set_build_dir
 
-. $PREFIX_OPT/env.sh
-PREFIX_FRONTEND="$PREFIX_OPT/Linux-x86_64"
+. $PREFIX_TOOL/env.sh
+PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64"
 
 cd $BUILD_DIR
 rm -rf Python-$PYTHON_VERSION

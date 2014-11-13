@@ -4,11 +4,10 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
-set_build_dir
 
-. $PREFIX_OPT/env.sh
-PREFIX_FRONTEND="$PREFIX_OPT/Linux-x86_64"
-PREFIX_BACKEND="$PREFIX_OPT/Linux-s64fx"
+. $PREFIX_TOOL/env.sh
+PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64"
+PREFIX_BACKEND="$PREFIX_TOOL/Linux-s64fx"
 CMAKE_VERSION_MAJOR=$(echo "$CMAKE_VERSION" | cut -d . -f 1,2)
 
 cd $BUILD_DIR
@@ -48,10 +47,10 @@ cat << EOF > $BUILD_DIR/cmake
 OS=\$(uname -s)
 ARCH=\$(uname -m)
 COMMAND=\$(basename \$0)
-PREFIX_OPT=$PREFIX_OPT
-\$PREFIX_OPT/\$OS-\$ARCH/bin/\$COMMAND "\$@"
+PREFIX_TOOL=$PREFIX_TOOL
+\$PREFIX_TOOL/\$OS-\$ARCH/bin/\$COMMAND "\$@"
 EOF
-check $SUDO mkdir -p $PREFIX_OPT/bin
-check $SUDO cp -f $BUILD_DIR/cmake $PREFIX_OPT/bin/cmake
-check $SUDO cp -f $BUILD_DIR/cmake $PREFIX_OPT/bin/ctest
-check $SUDO chmod +x $PREFIX_OPT/bin/cmake $PREFIX_OPT/bin/ctest
+check $SUDO mkdir -p $PREFIX_TOOL/bin
+check $SUDO cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/cmake
+check $SUDO cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/ctest
+check $SUDO chmod +x $PREFIX_TOOL/bin/cmake $PREFIX_TOOL/bin/ctest
