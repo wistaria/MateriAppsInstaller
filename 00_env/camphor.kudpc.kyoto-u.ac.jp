@@ -9,12 +9,33 @@ module unload PrgEnv-cray PrgEnv-intel mkl
 module load PrgEnv-intel mkl
 setenv PATH $PREFIX_TOOL/bin:\$PATH
 setenv LD_LIBRARY_PATH $PREFIX_TOOL/lib:\$LD_LIBRARY_PATH
+set nonomatch
+foreach i ( $PREFIX_TOOL/env.d/*.csh )
+  if ( -r "$i" ) then
+    if ($?prompt) then
+      source "$i"
+    else
+      source "$i" >&/dev/null
+    endif
+  endif
+end
+unset i nonomatch
 EOF
 cat << EOF > $BUILD_DIR/env.sh
 eval \`modulecmd bash unload PrgEnv-cray PrgEnv-intel mkl\`
 eval \`modulecmd bash load PrgEnv-intel mkl\`
 PATH=$PREFIX_TOOL/bin:\$PATH
 LD_LIBRARY_PATH=$PREFIX_TOOL/lib:\$LD_LIBRARY_PATH
+for i in $PREFIX_TOOL/env.d/*.sh ; do
+  if [ -r "\$i" ]; then
+    if [ "\${-#*i}" != "\$-" ]; then
+      . "\$i"
+    else
+      . "\$i" >/dev/null 2>&1
+    fi
+  fi
+done
+unset i
 EOF
-$SUDO mkdir -p $PREFIX_TOOL
+$SUDO mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d
 $SUDO cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_TOOL
