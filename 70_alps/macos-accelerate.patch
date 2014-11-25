@@ -63,3 +63,22 @@ diff -crN alps-20140623-r7482.orig/config/FindLapack.cmake alps-20140623-r7482/c
     ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   ENDIF(NOT LAPACK_LIBRARY_INIT)
   
+*** alps-20140623-r7482.orig/CMakeLists.txt	Tue Jun 24 14:02:24 2014
+--- alps-20140623-r7482/CMakeLists.txt	Sat Oct 18 02:12:07 2014
+***************
+*** 368,374 ****
+    ENDIF (REQUIRE_PTHREAD)
+  ENDIF(NOT WIN32)
+  if(MAC_VECLIB)
+!   set(LAPACK_LDFLAGS "-framework vecLib")
+  endif(MAC_VECLIB) 
+  set(LAPACK_LINKER_FLAGS ${LAPACK_LDFLAGS})
+  
+--- 368,374 ----
+    ENDIF (REQUIRE_PTHREAD)
+  ENDIF(NOT WIN32)
+  if(MAC_VECLIB)
+!   set(LAPACK_LDFLAGS "-framework ${BLAS_LAPACK_MAC_FRAMEWORK}")
+  endif(MAC_VECLIB) 
+  set(LAPACK_LINKER_FLAGS ${LAPACK_LDFLAGS})
+  
