@@ -20,6 +20,5 @@ cat << EOF > $BUILD_DIR/boostvars.sh
 export BOOST_ROOT=$PREFIX_TOOL/boost/boost_$BOOST_VERSION
 EOF
 BOOSTVARS_SH=$PREFIX_TOOL/boost/boostvars-$BOOST_VERSION.sh
-$SUDO_TOOL rm -f $BOOSTVARS_SH $PREFIX_TOOL/env.d/boostvars.sh
+$SUDO_TOOL rm -f $BOOSTVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/boostvars.sh $BOOSTVARS_SH
-$SUDO_TOOL ln -s $BOOSTVARS_SH $PREFIX_TOOL/env.d/boostvars.sh
