@@ -47,6 +47,4 @@ cat << EOF > $BUILD_DIR/alpsvars-$ALPS_VERSION.sh
 . $PREFIX_ALPS/alps-$ALPS_VERSION/bin/alpsvars.sh
 EOF
 $SUDO_APPS cp -f $BUILD_DIR/alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/
-$SUDO_APPS rm -f $PREFIX_ALPS/alpsvars.sh
-$SUDO_APPS ln -s alpsvars-$ALPS_VERSION.sh $PREFIX_ALPS/alpsvars.sh
 $SUDO_APPS cp -f $LOG $PREFIX_ALPS/
