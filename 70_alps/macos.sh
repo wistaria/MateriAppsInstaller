@@ -10,6 +10,11 @@ LOG=$BUILD_DIR/alps-$ALPS_VERSION.log
 
 PREFIX_ALPS="$PREFIX_APPS/alps"
 
+if [ -d $PREFIX_ALPS/alps-$ALPS_VERSION ]; then
+  echo "Error: $PREFIX_ALPS/alps-$ALPS_VERSION exists"
+  exit 127
+fi
+
 cd $BUILD_DIR
 if [ -d alps-$ALPS_VERSION ]; then :; else
   if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
