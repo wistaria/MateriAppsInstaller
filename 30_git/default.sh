@@ -6,6 +6,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
+PREFIX=$PREFIX_TOOL/git/git-$GIT_VERSION
 
 cd $BUILD_DIR
 rm -rf git-$GIT_VERSION
@@ -15,6 +16,14 @@ else
   check wget -O - http://git-core.googlecode.com/files/git-$GIT_VERSION.tar.gz | tar zxf -
 fi
 cd git-$GIT_VERSION
-check ./configure --prefix=$PREFIX_TOOL --with-python=$PREFIX_TOOL/bin/python2.7
+check ./configure --prefix=$PREFIX
 check make -j4
-$SUDO make install
+$SUDO_TOOL make install
+
+cat << EOF > $BUILD_DIR/gitvars.sh
+export PATH=$PREFIX/bin:\$PATH
+export LD_LIBRARY_PATH=$PREFIX/lib:\$LD_LIBRARY_PATH
+EOF
+GITVARS_SH=$PREFIX_TOOL/git/gitvars-$GIT_VERSION.sh
+$SUDO_TOOL rm -f $GITVARS_SH
+$SUDO_TOOL cp -f $BUILD_DIR/gitvars.sh $GITVARS_SH
