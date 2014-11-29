@@ -26,6 +26,5 @@ export PATH=$PREFIX/bin:\$PATH
 export LD_LIBRARY_PATH=$PREFIX/lib:\$LD_LIBRARY_PATH
 EOF
 CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION.sh
-$SUDO_TOOL rm -f $CMAKEVARS_SH $PREFIX_TOOL/env.d/cmakevars.sh
+$SUDO_TOOL rm -f $CMAKEVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/cmakevars.sh $CMAKEVARS_SH
-$SUDO_TOOL ln -s $CMAKEVARS_SH $PREFIX_TOOL/env.d/cmakevars.sh
