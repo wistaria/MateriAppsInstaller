@@ -7,7 +7,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-PREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION
+PREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION-$PYTHON_PATCH_VERSION
 
 # pexpect
 cd $BUILD_DIR

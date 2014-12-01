@@ -7,7 +7,7 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 CMAKE_VERSION_MAJOR=$(echo "$CMAKE_VERSION" | cut -d . -f 1,2)
-PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION
+PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION-$CMAKE_PATCH_VERSION
 
 cd $BUILD_DIR
 rm -rf cmake-$CMAKE_VERSION
@@ -22,9 +22,9 @@ check gmake -j4
 $SUDO_TOOL gmake install
 
 cat << EOF > $BUILD_DIR/cmakevars.sh
-export PATH=$PREFIX/bin:\$PATH
-export LD_LIBRARY_PATH=$PREFIX/lib:\$LD_LIBRARY_PATH
+export CMAKE_ROOT=$PREFIX
+export PATH=\$CMAKE_ROOT/bin:\$PATH
 EOF
-CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION.sh
+CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_PATCH_VERSION.sh
 $SUDO_TOOL rm -f $CMAKEVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/cmakevars.sh $CMAKEVARS_SH

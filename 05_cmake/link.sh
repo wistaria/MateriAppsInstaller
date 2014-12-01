@@ -7,6 +7,6 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
-CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION.sh
+CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_PATCH_VERSION.sh
 $SUDO_TOOL rm -f $PREFIX_TOOL/env.d/cmakevars.sh
 $SUDO_TOOL ln -s $CMAKEVARS_SH $PREFIX_TOOL/env.d/cmakevars.sh
