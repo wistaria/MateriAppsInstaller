@@ -7,6 +7,7 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 PREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION-$PYTHON_PATCH_VERSION
+export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 
 cd $BUILD_DIR
 rm -rf Python-$PYTHON_VERSION
@@ -23,13 +24,13 @@ $SUDO_TOOL make install
 cd $BUILD_DIR
 rm -rf nose-$NOSE_VERSION
 if [ -f $HOME/source/nose-$NOSE_VERSION.tar.gz ]; then
-  tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
+  check tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
 else
-  wget http://pypi.python.org/packages/source/n/nose/nose-$NOSE_VERSION.tar.gz | tar zxf -
+  check wget http://pypi.python.org/packages/source/n/nose/nose-$NOSE_VERSION.tar.gz | tar zxf -
 fi
 cd nose-$NOSE_VERSION
-LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH check $PREFIX/bin/python2.7 setup.py build
-$SUDO_TOOL LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
+check $PREFIX/bin/python2.7 setup.py build
+$SUDO_TOOL $PREFIX/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 $SUDO_TOOL rm -rf numpy-$NUMPY_VERSION
@@ -39,8 +40,8 @@ else
   check wget -O - http://sourceforge.net/projects/numpy/files/NumPy/$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz/download numpy-$NUMPY_VERSION.tar.gz | tar zxf -
 fi
 cd numpy-$NUMPY_VERSION
-LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH check $PREFIX/bin/python2.7 setup.py build
-$SUDO_TOOL LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
+$PREFIX/bin/python2.7 setup.py build
+$SUDO_TOOL $PREFIX/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 rm -rf scipy-$SCIPY_VERSION
@@ -50,8 +51,8 @@ else
   check wget -O - http://sourceforge.net/projects/scipy/files/scipy/$SCIPY_VERSION/scipy-$SCIPY_VERSION.tar.gz/download scipy-$SCIPY_VERSION.tar.gz | tar zxf -
 fi
 cd scipy-$SCIPY_VERSION
-LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH check $PREFIX/bin/python2.7 setup.py build
-$SUDO_TOOL LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
+check $PREFIX/bin/python2.7 setup.py build
+$SUDO_TOOL $PREFIX/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 rm -rf matplotlib-$MATPLOTLIB_VERSION
@@ -61,8 +62,8 @@ else
   check wget -O - http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-$MATPLOTLIB_VERSION/matplotlib-$MATPLOTLIB_VERSION.tar.gz/download matplotlib-$MATPLOTLIB_VERSION.tar.gz | tar zxf -
 fi
 cd matplotlib-$MATPLOTLIB_VERSION
-LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH check $PREFIX/bin/python2.7 setup.py build
-$SUDO_TOOL LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
+check $PREFIX/bin/python2.7 setup.py build
+$SUDO_TOOL $PREFIX/bin/python2.7 setup.py install
 
 cat << EOF > $BUILD_DIR/pythonvars.sh
 export PYTHON_ROOT=$PREFIX
