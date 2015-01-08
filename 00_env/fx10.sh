@@ -12,10 +12,8 @@ if [ -f /home/system/Env_base_$ENV_VERSION ]; then
 elif [ -f /work/system/Env_base_$ENV_VERSION ]; then
   . /work/system/Env_base_$ENV_VERSION
 fi
-export CMAKE_PATH=$PREFIX_TOOL/bin/cmake
-export CTEST_PATH=$PREFIX_TOOL/bin/ctest
-export PATH=$PREFIX_TOOL/bin:$PREFIX_TOOL/$(uname -s)-$(uname -m)/bin:/tool/local/gcc/bin:/tool/local/bin:\$PATH
-export LD_LIBRARY_PATH=$PREFIX_TOOL/lib:$PREFIX_TOOL/$(uname -s)-$(uname -m)/lib:/tool/local/gcc/lib64:/tool/local/lib:\$LD_LIBRARY_PATH
+export PATH=$PREFIX_TOOL/bin:/tool/local/gcc/bin:/tool/local/bin:\$PATH
+export LD_LIBRARY_PATH=$PREFIX_TOOL/lib:/tool/local/gcc/lib64:/tool/local/lib:\$LD_LIBRARY_PATH
 for i in $PREFIX_TOOL/env.d/*.sh ; do
   if [ -r "\$i" ]; then
     if [ "\${-#*i}" != "\$-" ]; then
@@ -27,5 +25,5 @@ for i in $PREFIX_TOOL/env.d/*.sh ; do
 done
 unset i
 EOF
-$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/Linux-x86_64 $PREFIX_TOOL/Linux-s64fx
+$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d
 $SUDO_TOOL cp -f $BUILD_DIR/env.sh $PREFIX_TOOL

@@ -7,7 +7,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-PREFIX=$PREFIX_TOOL/Linux-x86_64/python/python-$PYTHON_VERSION-$PYTHON_PATCH_VERSION
+PREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION-$PYTHON_PATCH_VERSION/Linux-x86_64
 
 # setuptools
 cd $BUILD_DIR

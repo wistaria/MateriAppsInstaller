@@ -6,8 +6,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64"
-PREFIX_BACKEND="$PREFIX_TOOL/Linux-s64fx"
+PREFIX=$PREFIX_TOOL/hdf5/hdf5-$HDF5_VERSION-$HDF5_PATCH_VERSION
+PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
+PREFIX_BACKEND="$PREFIX/Linux-s64fx"
 export LANG C
 
 # for frontend
@@ -22,7 +23,7 @@ fi
 cd hdf5-$HDF5_VERSION
 check ./configure --prefix=$PREFIX_FRONTEND --enable-threadsafe --with-pthread=yes
 check make -j4
-$SUDO make install
+$SUDO_TOOL make install
 
 # for backend
 
@@ -35,26 +36,37 @@ else
 fi
 cd hdf5-$HDF5_VERSION
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
-CC="fccpx -O2 -Xg" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
+check env CC="fccpx -O2 -Xg" ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
 cd src
 check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
 touch touch H5lib_settings.c H5Tinit.c
 cd ..
 check make -j4
-$SUDO make install
+$SUDO_TOOL make install
 
 make distclean
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
-CC="fccpx -O2 -Xg -KPIC" check ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
+check env CC="fccpx -O2 -Xg -KPIC" ./configure --cache-file=config.cache --prefix=$PREFIX_BACKEND --target=sparc-linux --host=x86
 cd src
 check make -j4 H5make_libsettings H5detect
 check pjsub --interact $SCRIPT_DIR/fx10-script.sh
 touch touch H5lib_settings.c H5Tinit.c
 check make -j4
 check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]*.o
-$SUDO cp -fp libhdf5.so $PREFIX_BACKEND/lib
+$SUDO_TOOL cp -fp libhdf5.so $PREFIX_BACKEND/lib
 cd ../hl/src
 check make -j4
-check fccpx -Xg -KPIC -shared -o libhdf5_hl.so  H5*.o
-$SUDO cp -fp libhdf5_hl.so $PREFIX_BACKEND/lib
+check fccpx -Xg -KPIC -shared -o libhdf5_hl.so H5*.o
+$SUDO_TOOL cp -fp libhdf5_hl.so $PREFIX_BACKEND/lib
+
+cat << EOF > $BUILD_DIR/hdf5vars.sh
+OS=\$(uname -s)
+ARCH=\$(uname -m)
+export HDF5_ROOT=$PREFIX
+export PATH=\$HDF5_ROOT/\$OS-\$ARCH/bin:\$PATH
+export LD_LIBRARY_PATH=\$HDF5_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
+EOF
+HDF5VARS_SH=$PREFIX_TOOL/hdf5/hdf5vars-$HDF5_VERSION-$HDF5_PATCH_VERSION.sh
+$SUDO_TOOL rm -f $HDF5VARS_SH
+$SUDO_TOOL cp -f $BUILD_DIR/hdf5vars.sh $HDF5VARS_SH

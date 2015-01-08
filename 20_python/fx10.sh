@@ -6,7 +6,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64"
+PREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION-$PYTHON_PATCH_VERSION
+PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
+export LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH
 
 cd $BUILD_DIR
 rm -rf Python-$PYTHON_VERSION
@@ -18,7 +20,7 @@ fi
 cd Python-$PYTHON_VERSION
 check ./configure --prefix=$PREFIX_FRONTEND --enable-shared
 check make -j4
-$SUDO make install
+$SUDO_TOOL make install
 
 cd $BUILD_DIR
 rm -rf nose-$NOSE_VERSION
@@ -29,19 +31,22 @@ else
 fi
 cd nose-$NOSE_VERSION
 check $PREFIX_FRONTEND/bin/python2.7 setup.py build
-$SUDO $PREFIX_FRONTEND/bin/python2.7 setup.py install
+$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
-$SUDO rm -rf numpy-$NUMPY_VERSION
+$SUDO_TOOL rm -rf numpy-$NUMPY_VERSION
 if [ -f$HOME/source/numpy-$NUMPY_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/numpy-$NUMPY_VERSION.tar.gz
 else
   check wget -O - http://sourceforge.net/projects/numpy/files/NumPy/$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz/download numpy-$NUMPY_VERSION.tar.gz | tar zxf -
 fi
 cd numpy-$NUMPY_VERSION
-touch site.cfg
+cat << EOF > site.cfg
+[DEFAULT]
+library_dirs = $LAPACK_ROOT/Linux-x86_64/lib
+EOF
 check $PREFIX_FRONTEND/bin/python2.7 setup.py build --fcompiler=gnu95
-$SUDO $PREFIX_FRONTEND/bin/python2.7 setup.py install
+$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 rm -rf scipy-$SCIPY_VERSION
@@ -52,7 +57,7 @@ else
 fi
 cd scipy-$SCIPY_VERSION
 check $PREFIX_FRONTEND/bin/python2.7 setup.py build --fcompiler=gnu95
-$SUDO $PREFIX_FRONTEND/bin/python2.7 setup.py install
+$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
 
 cd $BUILD_DIR
 rm -rf matplotlib-$MATPLOTLIB_VERSION
@@ -63,4 +68,15 @@ else
 fi
 cd matplotlib-$MATPLOTLIB_VERSION
 check $PREFIX_FRONTEND/bin/python2.7 setup.py build
-$SUDO $PREFIX_FRONTEND/bin/python2.7 setup.py install
+$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
+
+cat << EOF > $BUILD_DIR/pythonvars.sh
+OS=\$(uname -s)
+ARCH=\$(uname -m)
+export PYTHON_ROOT=$PREFIX
+export PATH=\$PYTHON_ROOT/\$OS-\$ARCH/bin:\$PATH
+export LD_LIBRARY_PATH=\$PYTHON_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
+EOF
+PYTHONVARS_SH=$PREFIX_TOOL/python/pythonvars-$PYTHON_VERSION-$PYTHON_PATCH_VERSION.sh
+$SUDO_TOOL rm -f $PYTHONVARS_SH
+$SUDO_TOOL cp -f $BUILD_DIR/pythonvars.sh $PYTHONVARS_SH

@@ -6,7 +6,8 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64"
+PREFIX=$PREFIX_TOOL/lapack/lapack-$LAPACK_VERSION-$LAPACK_PATCH_VERSION
+PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
 
 cd $BUILD_DIR
 rm -rf BLAS
@@ -18,10 +19,12 @@ fi
 
 cd $BUILD_DIR/BLAS
 check make FORTRAN=gfortran BLASLIB=libblas.a ARCH=ar ARCHFLAGS=cr -j4
-check cp -p libblas.a $PREFIX_FRONTEND/lib
+$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
+$SUDO_TOOL check cp -p libblas.a $PREFIX_FRONTEND/lib
 check make clean
 check make FORTRAN=gfortran OPTS="-O3 -fPIC" BLASLIB=libblas.so ARCH="gcc -shared" ARCHFLAGS=-o RANLIB=/bin/true -j4
-check cp -p libblas.so $PREFIX_FRONTEND/lib
+$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
+$SUDO_TOOL check cp -p libblas.so $PREFIX_FRONTEND/lib
 
 cd $BUILD_DIR
 rm -rf lapack-$LAPACK_VERSION
@@ -40,7 +43,19 @@ LOADOPTS =
 TIMER    = INT_ETIME
 EOF
 check make OPTS="-O3" NOOPT="-O0" ARCH="ar" ARCHFLAGS="cr" RANLIB=ranlib LAPACKLIB=liblapack.a lapacklib -j4
-cp -p liblapack.a $PREFIX_FRONTEND/lib
+$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
+$SUDO_TOOL check cp -p liblapack.a $PREFIX_FRONTEND/lib
 check make clean
 check make OPTS="-O3 -fPIC" NOOPT="-O0 -fPIC" ARCH="gcc -shared" ARCHFLAGS="-o" RANLIB=/bin/true LAPACKLIB=liblapack.so lapacklib -j4
-cp -p liblapack.so $PREFIX_FRONTEND/lib
+$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
+$SUDO_TOOL check cp -p liblapack.so $PREFIX_FRONTEND/lib
+
+cat << EOF > $BUILD_DIR/lapackvars.sh
+OS=\$(uname -s)
+ARCH=\$(uname -m)
+export LAPACK_ROOT=$PREFIX
+export LD_LIBRARY_PATH=\$LAPACK_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
+EOF
+LAPACKVARS_SH=$PREFIX_TOOL/lapack/lapackvars-$LAPACK_VERSION-$LAPACK_PATCH_VERSION.sh
+$SUDO_TOOL rm -f $LAPACKVARS_SH
+$SUDO_TOOL cp -f $BUILD_DIR/lapackvars.sh $LAPACKVARS_SH

@@ -7,8 +7,9 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 CMAKE_VERSION_MAJOR=$(echo "$CMAKE_VERSION" | cut -d . -f 1,2)
-PREFIX_FRONTEND="$PREFIX_TOOL/Linux-x86_64/cmake/cmake-$CMAKE_VERSION"
-PREFIX_BACKEND="$PREFIX_TOOL/Linux-s64fx/cmake/cmake-$CMAKE_VERSION"
+PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION-$CMAKE_PATCH_VERSION
+PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
+PREFIX_BACKEND="$PREFIX/Linux-s64fx"
 
 cd $BUILD_DIR
 rm -rf cmake-$CMAKE_VERSION cmake-$CMAKE_VERSION-Linux-x86_64 cmake-$CMAKE_VERSION-Linux-s64fx
@@ -47,10 +48,20 @@ cat << EOF > $BUILD_DIR/cmake
 OS=\$(uname -s)
 ARCH=\$(uname -m)
 COMMAND=\$(basename \$0)
-PREFIX_TOOL=$PREFIX_TOOL
-\$PREFIX_TOOL/\$OS-\$ARCH/bin/\$COMMAND "\$@"
+PREFIX=$PREFIX
+\$PREFIX/\$OS-\$ARCH/bin/\$COMMAND "\$@"
 EOF
-$SUDO_TOOL mkdir -p $PREFIX_TOOL/bin
-$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/cmake
-$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX_TOOL/bin/ctest
-$SUDO_TOOL chmod +x $PREFIX_TOOL/bin/cmake $PREFIX_TOOL/bin/ctest
+$SUDO_TOOL mkdir -p $PREFIX/bin
+$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX/bin/cmake
+$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX/bin/ctest
+$SUDO_TOOL chmod +x $PREFIX/bin/cmake $PREFIX/bin/ctest
+
+cat << EOF > $BUILD_DIR/cmakevars.sh
+export CMAKE_ROOT=$PREFIX
+export PATH=\$CMAKE_ROOT/bin:\$PATH
+export CMAKE_PATH=\$CMAKE_ROOT/bin/cmake
+export CTEST_PATH=\$CMAKE_ROOT/bin/ctest
+EOF
+CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_PATCH_VERSION.sh
+$SUDO_TOOL rm -f $CMAKEVARS_SH
+$SUDO_TOOL cp -f $BUILD_DIR/cmakevars.sh $CMAKEVARS_SH
