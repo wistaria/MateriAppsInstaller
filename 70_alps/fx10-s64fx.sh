@@ -52,8 +52,8 @@ echo "[make]" | tee -a $LOG
 check make -j2 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
-echo "[ctest]" | tee -a $LOG
-ctest | tee -a $LOG
+# echo "[ctest]" | tee -a $LOG
+# ctest | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/alpsvars-$BUILD_ARCH.sh
