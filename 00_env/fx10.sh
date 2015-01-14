@@ -4,7 +4,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 set_prefix
 
-ENV_VERSION="1.2.0-16-2"
+ENV_VERSION="1.2.0-16-3"
 
 cat << EOF > $BUILD_DIR/env.sh
 if [ -f /home/system/Env_base_$ENV_VERSION ]; then
