@@ -1,0 +1,173 @@
+diff -cr xtapp.orig/src/Makefile xtapp/src/Makefile
+*** xtapp.orig/src/Makefile	2015-01-15 01:38:46.066868433 +0900
+--- xtapp/src/Makefile	2015-01-15 01:54:53.808735872 +0900
+***************
+*** 52,67 ****
+  #--------------------------------
+  # for Intel Linux and Intel Fortran Compiler 11.0
+  #
+! #MDOBJ = mdunistd.o paraenv.o
+  #
+  # -DINCONSISTENT_THREAD_COMP
+  #    when thread computing is inconsistent, define this
+! #DEFINES = ${GDEFS} -DINCONSISTENT_THREAD_COMP
+  
+! #FFLAGS = -O3 -openmp -msse3 -fno-inline-functions -traceback ${DEFINES}
+! #F77FLAGS =
+! #F90FLAGS =
+! #FOPTNON = -O0
+  
+  # for NVIDIA CUDA
+  #LDFLAGS = -openmp -L /usr/local/cuda40/cuda/lib64 -lcutil_x86_64 -lcufft -lcuda
+--- 52,67 ----
+  #--------------------------------
+  # for Intel Linux and Intel Fortran Compiler 11.0
+  #
+! MDOBJ = mdunistd.o paraenv.o
+  #
+  # -DINCONSISTENT_THREAD_COMP
+  #    when thread computing is inconsistent, define this
+! DEFINES = ${GDEFS} -DINCONSISTENT_THREAD_COMP
+  
+! FFLAGS = -O3 -openmp -msse3 -fno-inline-functions -traceback ${DEFINES}
+! F77FLAGS =
+! F90FLAGS =
+! FOPTNON = -O0
+  
+  # for NVIDIA CUDA
+  #LDFLAGS = -openmp -L /usr/local/cuda40/cuda/lib64 -lcutil_x86_64 -lcufft -lcuda
+***************
+*** 78,86 ****
+  #CFLAGS = -openmp -O3 -fno-inline-functions
+  #
+  # for multi-thread
+! #LIBLAPACK = -lmkl_lapack95_lp64 # for composerxe-2011
+  #LIBLAPACK = -lmkl_lapack
+! #LIBBLAS = -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
+  #
+  # for single-thread
+  ##LIBLAPACK = -lmkl_lapack95_lp64 # for composerxe-2011
+--- 78,86 ----
+  #CFLAGS = -openmp -O3 -fno-inline-functions
+  #
+  # for multi-thread
+! LIBLAPACK = -lmkl_lapack95_lp64 # for composerxe-2011
+  #LIBLAPACK = -lmkl_lapack
+! LIBBLAS = -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
+  #
+  # for single-thread
+  ##LIBLAPACK = -lmkl_lapack95_lp64 # for composerxe-2011
+***************
+*** 100,121 ****
+  #	-lgdrdgemm-ovl -L $(GDRBASEDIR)/gdrtb3/singlibMC_tb4 \
+  #	-lsing -L $(GDRBASEDIR)/gdrtb3/hibutil -lhib
+  
+! #ARCH_OBJ = arch_dgemm.o
+  #ARCH_OBJ = arch_gdr.o
+  #ARCH_OBJ = arch_nehalem.o
+  #arch_nehalem.o: arch_nehalem.f90 timeprof.o
+  #	${FC} -O3 -openmp -msse3 -fno-inline-functions -unroll=0 -traceback ${DEFINES} -c $<
+  
+! #XMPI_OBJ = xmpi_univ.o
+  
+! #EIGSYSTM_OBJ = eigsystm-lapack.o
+  #EIGSYSTM_OBJ = eigsystm-scalapack.o
+  
+! #FFT3D_OBJ = fft3d_mkl.o
+! #mkl_dfti.o: mkl_dfti.f90
+! #mkl_dfti.f90:
+! #	cp ${MKLROOT}/include/mkl_dfti.f90 .
+! #FFTGRID_H_SRC = fftgrid-scl.h
+  
+  #FFT3D_OBJ = fft3d_fftw.o
+  #FFTGRID_H_SRC = fftgrid-scl-fftw.h
+--- 100,121 ----
+  #	-lgdrdgemm-ovl -L $(GDRBASEDIR)/gdrtb3/singlibMC_tb4 \
+  #	-lsing -L $(GDRBASEDIR)/gdrtb3/hibutil -lhib
+  
+! ARCH_OBJ = arch_dgemm.o
+  #ARCH_OBJ = arch_gdr.o
+  #ARCH_OBJ = arch_nehalem.o
+  #arch_nehalem.o: arch_nehalem.f90 timeprof.o
+  #	${FC} -O3 -openmp -msse3 -fno-inline-functions -unroll=0 -traceback ${DEFINES} -c $<
+  
+! XMPI_OBJ = xmpi_univ.o
+  
+! EIGSYSTM_OBJ = eigsystm-lapack.o
+  #EIGSYSTM_OBJ = eigsystm-scalapack.o
+  
+! FFT3D_OBJ = fft3d_mkl.o
+! mkl_dfti.o: mkl_dfti.f90
+! mkl_dfti.f90:
+! 	cp ${MKLROOT}/include/mkl_dfti.f90 .
+! FFTGRID_H_SRC = fftgrid-scl.h
+  
+  #FFT3D_OBJ = fft3d_fftw.o
+  #FFTGRID_H_SRC = fftgrid-scl-fftw.h
+***************
+*** 167,198 ****
+  #--------------------------------
+  #for x86_64 Debian Linux by S. Todo (2014.3)
+  #
+! ARCH_OBJ = arch_dgemm.o giounit_open.o giounit_util.o
+! MDOBJ = mdunistd.o paraenv.o
+! DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+  
+! FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/usr/include
+! F77FLAGS =
+! F90FLAGS = -ffree-line-length-none
+! FOPTNON = -O0
+  
+! LDFLAGS = -fopenmp
+! CFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+! CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+! 
+! LIBLAPACK = -lfftw3_threads -llapack
+! LIBBLAS = -lblas
+! EXTRALIBS = -lstdc++
+  
+! XMPI_OBJ = xmpi_univ.o
+! EIGSYSTM_OBJ = eigsystm-lapack.o
+! FFT3D_OBJ = fft3d_fftw.o
+! FFTGRID_H_SRC = fftgrid-scl-fftw.h
+  
+! CC = gcc
+! CXX = g++
+! FC_CIF = gfortran
+! FFLAG_CIF = 
+  #--------------------------------
+  # for K computer
+  #
+--- 167,198 ----
+  #--------------------------------
+  #for x86_64 Debian Linux by S. Todo (2014.3)
+  #
+! #ARCH_OBJ = arch_dgemm.o giounit_open.o giounit_util.o
+! #MDOBJ = mdunistd.o paraenv.o
+! #DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+  
+! #FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/usr/include
+! #F77FLAGS =
+! #F90FLAGS = -ffree-line-length-none
+! #FOPTNON = -O0
+  
+! #LDFLAGS = -fopenmp
+! #CFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+! #CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+  
+! #LIBLAPACK = -lfftw3_threads -llapack
+! #LIBBLAS = -lblas
+! #EXTRALIBS = -lstdc++
+! 
+! #XMPI_OBJ = xmpi_univ.o
+! #EIGSYSTM_OBJ = eigsystm-lapack.o
+! #FFT3D_OBJ = fft3d_fftw.o
+! #FFTGRID_H_SRC = fftgrid-scl-fftw.h
+  
+! #CC = gcc
+! #CXX = g++
+! #FC_CIF = gfortran
+! #FFLAG_CIF = 
+  #--------------------------------
+  # for K computer
+  #
