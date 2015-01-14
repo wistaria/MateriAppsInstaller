@@ -12,8 +12,8 @@ if [ -f /home/system/Env_base_$ENV_VERSION ]; then
 elif [ -f /work/system/Env_base_$ENV_VERSION ]; then
   . /work/system/Env_base_$ENV_VERSION
 fi
-export PATH=$PREFIX_TOOL/bin:/tool/local/gcc/bin:/tool/local/bin:\$PATH
-export LD_LIBRARY_PATH=$PREFIX_TOOL/lib:/tool/local/gcc/lib64:/tool/local/lib:\$LD_LIBRARY_PATH
+export PATH=$PREFIX_TOOL/bin:/opt/local/gcc/bin:/opt/local/bin:\$PATH
+export LD_LIBRARY_PATH=$PREFIX_TOOL/lib:/opt/local/gcc/lib64:/opt/local/lib:\$LD_LIBRARY_PATH
 for i in $PREFIX_TOOL/env.d/*.sh ; do
   if [ -r "\$i" ]; then
     if [ "\${-#*i}" != "\$-" ]; then
