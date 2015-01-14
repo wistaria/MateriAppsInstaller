@@ -1,0 +1,57 @@
+diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
+*** xtapp.orig/src/Makefile	Thu Jan 15 00:51:51 2015
+--- xtapp/src/Makefile	Thu Jan 15 00:53:03 2015
+***************
+*** 171,186 ****
+  MDOBJ = mdunistd.o paraenv.o
+  DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+  
+! FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/usr/include
+  F77FLAGS =
+  F90FLAGS = -ffree-line-length-none
+  FOPTNON = -O0
+  
+  LDFLAGS = -fopenmp
+! CFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+! CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+  
+! LIBLAPACK = -lfftw3_threads -llapack
+  LIBBLAS = -lblas
+  EXTRALIBS = -lstdc++
+  
+--- 171,186 ----
+  MDOBJ = mdunistd.o paraenv.o
+  DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+  
+! FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/opt/local/include
+  F77FLAGS =
+  F90FLAGS = -ffree-line-length-none
+  FOPTNON = -O0
+  
+  LDFLAGS = -fopenmp
+! CFLAGS = -fopenmp -O3 -fno-inline-functions -I/opt/local/include
+! CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/opt/local/include
+  
+! LIBLAPACK = -L/opt/local/lib -lfftw3_threads -llapack
+  LIBBLAS = -lblas
+  EXTRALIBS = -lstdc++
+  
+***************
+*** 535,542 ****
+  	${CPP} -P ${DEFINES} $< | sed '/^ *$$/d' > $*.f
+  
+  install: default
+! 	install -d $(DESTDIR)/usr/bin
+! 	install inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 535,542 ----
+  	${CPP} -P ${DEFINES} $< | sed '/^ *$$/d' > $*.f
+  
+  install: default
+! 	mkdir -p $(PREFIX)/bin
+! 	cp -rp inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***

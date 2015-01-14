@@ -71,6 +71,10 @@ set_prefix() {
   return 0
 }
 
+set_download_url() {
+   MALIVE_REPOSITORY="http://exa.phys.s.u-tokyo.ac.jp/archive/MateriApps/apt/pool"
+}
+
 check() {
   "$@"
   result=$?
