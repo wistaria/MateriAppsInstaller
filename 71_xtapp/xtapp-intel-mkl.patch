@@ -1,6 +1,6 @@
-diff -cr xtapp.orig/src/Makefile xtapp/src/Makefile
+diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
 *** xtapp.orig/src/Makefile	2015-01-15 01:38:46.066868433 +0900
---- xtapp/src/Makefile	2015-01-15 01:54:53.808735872 +0900
+--- xtapp/src/Makefile	2015-01-15 23:09:54.328933243 +0900
 ***************
 *** 52,67 ****
   #--------------------------------
@@ -171,3 +171,22 @@ diff -cr xtapp.orig/src/Makefile xtapp/src/Makefile
   #--------------------------------
   # for K computer
   #
+***************
+*** 535,542 ****
+  	${CPP} -P ${DEFINES} $< | sed '/^ *$$/d' > $*.f
+  
+  install: default
+! 	install -d $(DESTDIR)/usr/bin
+! 	install inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 535,542 ----
+  	${CPP} -P ${DEFINES} $< | sed '/^ *$$/d' > $*.f
+  
+  install: default
+! 	install -d $(PREFIX)/bin
+! 	install inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
