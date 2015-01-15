@@ -18,7 +18,7 @@ fi
 sh $SCRIPT_DIR/download.sh
 rm -rf $LOG
 cd $BUILD_DIR/openmx$OPENMX_VERSION_MAJOR
-patch -p1 < $SCRIPT_DIR/openmx-intel-mkl.patch
+patch -p1 < $SCRIPT_DIR/openmx-intel-mkl-openmpi.patch
 cd source
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
