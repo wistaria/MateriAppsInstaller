@@ -185,7 +185,7 @@ diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
   	${CPP} -P ${DEFINES} $< | sed '/^ *$$/d' > $*.f
   
   install: default
-! 	install -d $(PREFIX)/bin
+! 	mkdir -p $(PREFIX)/bin
 ! 	install inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(PREFIX)/bin
   
   # Local Variables: ***
