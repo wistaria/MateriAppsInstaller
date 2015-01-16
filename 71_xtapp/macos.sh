@@ -25,6 +25,8 @@ echo "[make]" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
+cd $BUILD_DIR/xtapp
+$SUDO_APPS cp -frp sample debian/check debian/opendx $(PREFIX)
 cd $BUILD_DIR/xtapp/xtapp-util
 echo "[make xtapp-util]" | tee -a $LOG
 check make | tee -a $LOG
