@@ -3,11 +3,14 @@
 set_prefix() {
   PREFIX_DEF="$HOME/materiapps"
   BUILD_DIR_DEF="$HOME/build"
+  SOURCE_DIR_DEF="$HOME/source"
   SUDO_DEF="/usr/bin/sudo"
+  MALIVE_REPOSITORY_DEF="http://exa.phys.s.u-tokyo.ac.jp/archive/MateriApps/apt/pool"
 
   if [ -f "$HOME/.mainstaller" ]; then
     source $HOME/.mainstaller
   fi
+
   if [ -z "$PREFIX_TOOL" ]; then
     if [ -z "$PREFIX" ]; then
       PREFIX_TOOL="$PREFIX_DEF"
@@ -22,12 +25,8 @@ set_prefix() {
       PREFIX_APPS="$PREFIX"
     fi
   fi
-  if [ -z "$BUILD_DIR" ]; then
-    BUILD_DIR="$BUILD_DIR_DEF"
-  fi
-
-  echo "PREFIX_TOOL = $PREFIX_TOOL"
-  echo "PREFIX_APPS = $PREFIX_APPS"
+  echo "PREFIX_TOOL=$PREFIX_TOOL"
+  echo "PREFIX_APPS=$PREFIX_APPS"
   if [ -d "$PREFIX_TOOL" ]; then :; else
     echo "Fatal: target directory $PREFIX_TOOL does not exist!"
     exit 127
@@ -54,10 +53,13 @@ set_prefix() {
     SUDO_TOOL="$SUDO"
     SUDO_APPS="$SUDO"
   fi
-  echo "SUDO for tool = $SUDO_TOOL"
-  echo "SUDO for apps = $SUDO_APPS"
+  echo "SUDO_TOOL=$SUDO_TOOL"
+  echo "SUDO_APPS=$SUDO_APPS"
 
-  echo "BUILD_DIR = $BUILD_DIR"
+  if [ -z "$BUILD_DIR" ]; then
+    BUILD_DIR="$BUILD_DIR_DEF"
+  fi
+  echo "BUILD_DIR=$BUILD_DIR"
   if [ -d "$BUILD_DIR" ]; then :; else
     echo "Fatal: target directory $BUILD_DIR does not exist!"
     exit 127
@@ -68,11 +70,17 @@ set_prefix() {
     exit 127
   fi
 
-  return 0
-}
+  if [ -z "$SOURCE_DIR" ]; then
+    SOURCE_DIR="$SOURCE_DIR_DEF"
+  fi
+  echo "SOURCE_DIR=$SOURCE_DIR"
 
-set_download_url() {
-   MALIVE_REPOSITORY="http://exa.phys.s.u-tokyo.ac.jp/archive/MateriApps/apt/pool"
+  if [ -z "$MALIVE_REPOSITORY" ]; then
+    MALIVE_REPOSITORY="$MALIVE_REPOSITORY_DEF"
+  fi
+  echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
+
+  return 0
 }
 
 check() {

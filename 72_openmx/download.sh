@@ -6,16 +6,22 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 cd $BUILD_DIR
-if [ -d openmx$OPENMX_VERSION ]; then :; else
-  if [ -f $HOME/source/openmx$OPENMX_VERSION_MAJOR.tar.gz ]; then
-    check tar zxf $HOME/source/openmx$OPENMX_VERSION_MAJOR.tar.gz
+if [ -d openmx-$OPENMX_VERSION ]; then :; else
+  if [ -f $SOURCE_DIR/openmx_$OPENMX_VERSION.orig.tar.gz ]; then
+    check tar zxf $SOURCE_DIR/openmx_$OPENMX_VERSION.orig.tar.gz
   else
-      check wget -O - "http://www.openmx-square.org/openmx$OPENMX_VERSION_MAJOR.tar.gz" | tar zxf -
+    check wget $MALIVE_REPOSITORY/main/o/openmx/openmx_$OPENMX_VERSION.orig.tar.gz
+    check tar zxf openmx_$OPENMX_VERSION.orig.tar.gz
   fi
-  cd openmx$OPENMX_VERSION_MAJOR/source
-  if [ -f $HOME/source/openmx-patch$OPENMX_VERSION.tar.gz ]; then
-    check tar zxf $HOME/source/openmx-patch$OPENMX_VERSION.tar.gz
+  cd openmx-$OPENMX_VERSION
+  if [ -f $SOURCE_DIR/openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz ]; then
+    tar zxf $SOURCE_DIR/openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz
   else
-    check wget -O - "http://www.openmx-square.org/bugfixed/$OPENMX_VERSION_DATE/patch$OPENMX_VERSION.tar.gz" | tar zxf -
+    check wget $MALIVE_REPOSITORY/main/o/openmx/openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz
+    check tar zxf openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz
   fi
+  PATCHES="fix_typos.patch"
+  for p in $PATCHES; do
+    patch -p1 < debian/patches/$p
+  done
 fi

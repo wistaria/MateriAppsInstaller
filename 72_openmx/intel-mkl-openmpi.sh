@@ -17,7 +17,7 @@ fi
 
 sh $SCRIPT_DIR/download.sh
 rm -rf $LOG
-cd $BUILD_DIR/openmx$OPENMX_VERSION_MAJOR
+cd $BUILD_DIR/openmx-$OPENMX_VERSION
 patch -p1 < $SCRIPT_DIR/openmx-intel-mkl-openmpi.patch
 cd source
 start_info | tee -a $LOG
@@ -26,8 +26,8 @@ check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS mkdir -p $PREFIX/bin
 $SUDO_APPS make install DESTDIR=$PREFIX/bin | tee -a $LOG
-cd $BUILD_DIR/openmx$OPENMX_VERSION_MAJOR
-$SUDO_APPS cp -rp openmx$OPENMX_VERSION_MAJOR.pdf DFT_DATA13 $PREFIX
+cd $BUILD_DIR/openmx-$OPENMX_VERSION
+$SUDO_APPS cp -rp openmx*.pdf DFT_DATA13 work $PREFIX
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/openmxvars.sh
