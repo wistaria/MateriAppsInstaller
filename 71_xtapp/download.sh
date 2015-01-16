@@ -24,9 +24,12 @@ if [ -d xtapp ]; then :; else
   for p in $PATCHES; do
     patch -p1 < debian/patches/$p
   done
+  cp -fp src/Makefile-dist src/Makefile
+  cp -rp src/config90.h-dist src/config90.h
+  cp -rp src/config.h-dist src/config.h
 fi
 
-cd $BUILD_DIR
+cd $BUILD_DIR/xtapp
 if [ -d xtapp-util ]; then :; else
   if [ -f $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION.orig.tar.gz ]; then
     check tar zxf $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION.orig.tar.gz
@@ -47,7 +50,7 @@ if [ -d xtapp-util ]; then :; else
   done
 fi
 
-cd $BUILD_DIR
+cd $BUILD_DIR/xtapp
 if [ -d xtapp-ps_$XTAPP_PS_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz ]; then
     check tar zxf $SOURCE_DIR/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz

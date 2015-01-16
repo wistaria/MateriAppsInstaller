@@ -1,6 +1,6 @@
 diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
-*** xtapp.orig/src/Makefile	Thu Jan 15 00:51:51 2015
---- xtapp/src/Makefile	Thu Jan 15 00:53:03 2015
+*** xtapp.orig/src/Makefile	Fri Jan 16 11:55:33 2015
+--- xtapp/src/Makefile	Fri Jan 16 12:00:43 2015
 ***************
 *** 171,186 ****
   MDOBJ = mdunistd.o paraenv.o
@@ -51,7 +51,117 @@ diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
   
   install: default
 ! 	mkdir -p $(PREFIX)/bin
-! 	cp -rp inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(PREFIX)/bin
+! 	cp -p inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+diff -crN xtapp.orig/xtapp-util/fldtool/Makefile xtapp/xtapp-util/fldtool/Makefile
+*** xtapp.orig/xtapp-util/fldtool/Makefile	Fri Jan 16 11:55:33 2015
+--- xtapp/xtapp-util/fldtool/Makefile	Fri Jan 16 12:00:34 2015
+***************
+*** 64,71 ****
+  	fftgrid.h
+  
+  install: tools
+! 	install -d $(DESTDIR)/usr/bin
+! 	install wfn2dx lpt2dx rho2dx rok2dx wfk2dx stm2dx rhomm lptmm wfn2ee $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 64,71 ----
+  	fftgrid.h
+  
+  install: tools
+! 	mkdir -p $(PREFIX)/bin
+! 	cp -p wfn2dx lpt2dx rho2dx rok2dx wfk2dx stm2dx rhomm lptmm wfn2ee $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+diff -crN xtapp.orig/xtapp-util/inputconv/Makefile xtapp/xtapp-util/inputconv/Makefile
+*** xtapp.orig/xtapp-util/inputconv/Makefile	Fri Jan 16 11:55:33 2015
+--- xtapp/xtapp-util/inputconv/Makefile	Fri Jan 16 12:01:35 2015
+***************
+*** 39,46 ****
+  	inputconv a.out
+  
+  install: tools
+! 	install -d $(DESTDIR)/usr/bin
+! 	install inputconv $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 39,46 ----
+  	inputconv a.out
+  
+  install: tools
+! 	mkdir -p $(PREFIX)/bin
+! 	cp -p inputconv $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+diff -crN xtapp.orig/xtapp-util/mdtool/Makefile xtapp/xtapp-util/mdtool/Makefile
+*** xtapp.orig/xtapp-util/mdtool/Makefile	Fri Jan 16 11:55:33 2015
+--- xtapp/xtapp-util/mdtool/Makefile	Fri Jan 16 12:02:05 2015
+***************
+*** 40,47 ****
+  	scanmdlog tailmdlog a.out
+  
+  install: tools
+! 	install -d $(DESTDIR)/usr/bin
+! 	install scanmdlog tailmdlog $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 40,47 ----
+  	scanmdlog tailmdlog a.out
+  
+  install: tools
+! 	mkdir -p $(PREFIX)/bin
+! 	cp -p scanmdlog tailmdlog $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+diff -crN xtapp.orig/xtapp-util/minmaxband/Makefile xtapp/xtapp-util/minmaxband/Makefile
+*** xtapp.orig/xtapp-util/minmaxband/Makefile	Fri Jan 16 11:55:33 2015
+--- xtapp/xtapp-util/minmaxband/Makefile	Fri Jan 16 12:02:42 2015
+***************
+*** 22,29 ****
+  	minmaxband a.out
+  
+  install: tools
+! 	install -d $(DESTDIR)/usr/bin
+! 	install minmaxband $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 22,29 ----
+  	minmaxband a.out
+  
+  install: tools
+! 	mkdir -p $(PREFIX)/bin
+! 	cp -p minmaxband $(PREFIX)/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+diff -crN xtapp.orig/xtapp-util/wfchg2pdos/Makefile xtapp/xtapp-util/wfchg2pdos/Makefile
+*** xtapp.orig/xtapp-util/wfchg2pdos/Makefile	Fri Jan 16 11:55:33 2015
+--- xtapp/xtapp-util/wfchg2pdos/Makefile	Fri Jan 16 12:03:10 2015
+***************
+*** 40,47 ****
+  	ltzpdos wfchg2pdos a.out
+  
+  install: tools
+! 	install -d $(DESTDIR)/usr/bin
+! 	install ltzpdos wfchg2pdos $(DESTDIR)/usr/bin
+  
+  # Local Variables: ***
+  # mode:Makefile ***
+--- 40,47 ----
+  	ltzpdos wfchg2pdos a.out
+  
+  install: tools
+! 	mkdir -p $(PREFIX)/bin
+! 	cp -p ltzpdos wfchg2pdos $(PREFIX)/bin
   
   # Local Variables: ***
   # mode:Makefile ***
