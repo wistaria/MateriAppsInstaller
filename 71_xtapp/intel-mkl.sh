@@ -17,16 +17,26 @@ fi
 
 sh $SCRIPT_DIR/download.sh
 rm -rf $LOG
-cd $BUILD_DIR/xtapp/src
-cp -fp Makefile-dist Makefile
-cp -rp config90.h-dist config90.h
-cp -rp config.h-dist config.h
-patch -p2 < $SCRIPT_DIR/xtapp-intel-mkl.patch
+cd $BUILD_DIR/xtapp
+patch -p1 < $SCRIPT_DIR/xtapp-intel-mkl.patch
 start_info | tee -a $LOG
+cd $BUILD_DIR/xtapp/src
 echo "[make]" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
+cd $BUILD_DIR/xtapp/xtapp-util
+echo "[make xtapp-util]" | tee -a $LOG
+check make | tee -a $LOG
+echo "[make install xtapp-util]" | tee -a $LOG
+$SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
+$SUDO_APPS cp -fp conv-tapp3/ppot2x vbpef2gp-lsda/vbpef2gp-lsda $PREFIX/bin
+cd $BUILD_DIR/xtapp/xtapp-ps_$XTAPP_PS_VERSION
+echo "[make install xtapp-ps]" | tee -a $LOG
+$SUDO_APPS mkdir -p $PREFIX/pseudo-potential/PBE $PREFIX/pseudo-potential/PBE-nc $PREFIX/pseudo-potential/PBE-CAPZ
+$SUDO_APPS cp -frp xTAPP-PS-PBE/* $PREFIX/pseudo-potential/PBE
+$SUDO_APPS cp -frp xTAPP-PS-PBE-nc/* $PREFIX/pseudo-potential/PBE-nc
+$SUDO_APPS cp -frp xTAPP-PS-CAPZ/* $PREFIX/pseudo-potential/PBE-CAPZ
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/xtappvars.sh
