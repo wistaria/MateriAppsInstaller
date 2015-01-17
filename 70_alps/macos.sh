@@ -6,7 +6,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/alps-$ALPS_VERSION.log
+LOG=$BUILD_DIR/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION.log
 
 PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION"
 
@@ -15,17 +15,7 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
-cd $BUILD_DIR
-if [ -d alps-$ALPS_VERSION ]; then :; else
-  if [ -f $HOME/source/alps-$ALPS_VERSION.tar.gz ]; then
-    check tar zxf $HOME/source/alps-$ALPS_VERSION.tar.gz
-  else
-    check wget -O - http://exa.phys.s.u-tokyo.ac.jp/archive/source/alps-$ALPS_VERSION.tar.gz | tar zxf -
-  fi
-  cd alps-$ALPS_VERSION
-  patch -p1 < $SCRIPT_DIR/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION.patch
-fi
-
+sh $SCRIPT_DIR/download.sh
 rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION $LOG
 mkdir -p $BUILD_DIR/alps-build-$ALPS_VERSION
 cd $BUILD_DIR/alps-build-$ALPS_VERSION
