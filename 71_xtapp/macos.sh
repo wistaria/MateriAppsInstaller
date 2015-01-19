@@ -57,7 +57,7 @@ $SUDO_APPS cp -rp sample $PREFIX/tapioca
 $SUDO_APPS cp -p src/defaults.*ml src/kpath.xml src/spacegroup.db $PREFIX/libexec
 cat << EOF > $BUILD_DIR/tapioca
 #!/bin/sh
-$PREFIX/libexec "$@"
+$PREFIX/libexec/tapioca "$@"
 exit $?
 EOF
 chmod +x $BUILD_DIR/tapioca 
