@@ -52,7 +52,7 @@ $SUDO_APPS cp -rp xTAPP-PS-CAPZ/* $PREFIX/pseudo-potential/PBE-CAPZ
 echo "[make install tapioca]" | tee -a $LOG
 cd $BUILD_DIR/xtapp/tapioca-$TAPIOCA_VERSION
 $SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/tapica
+$SUDO_APPS mkdir -p $PREFIX/tapioca
 $SUDO_APPS cp -rp sample $PREFIX/tapioca
 $SUDO_APPS cp -p src/defaults.*ml src/kpath.xml src/spacegroup.db $PREFIX/libexec
 cat << EOF > $BUILD_DIR/tapioca

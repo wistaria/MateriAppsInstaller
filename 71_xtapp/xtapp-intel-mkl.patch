@@ -243,8 +243,8 @@ diff -crN xtapp.orig/tapioca-1.4.2/src/Makefile.inc xtapp/tapioca-1.4.2/src/Make
 ! QT4    =  /usr/lib64/qt4
   CC     =  g++
   CFLAGS = -O3 -Wall
-! INCS   = -I$(QT4)/include -I/usr/X11R6/include
-! LIBS   = -L$(QT4)/lib64 -lQtCore -lQtGui -lQtOpenGL -lQtXml -llapack -lblas
+! INCS   = -I/usr/include
+! LIBS   = -L/usr/lib64 -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGL -lGLU -llapack -lblas
   ICON   = 
   
 + ### for Linux, debian 6
