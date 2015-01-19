@@ -1,6 +1,6 @@
 diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
-*** xtapp.orig/src/Makefile	2015-01-15 01:38:46.066868433 +0900
---- xtapp/src/Makefile	2015-01-15 23:09:54.328933243 +0900
+*** xtapp.orig/src/Makefile	Mon Jan 19 15:37:56 2015
+--- xtapp/src/Makefile	Mon Jan 19 15:38:42 2015
 ***************
 *** 52,67 ****
   #--------------------------------
@@ -190,8 +190,77 @@ diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
   
   # Local Variables: ***
   # mode:Makefile ***
-*** xtapp.orig/xtapp-util/fldtool/Makefile	Fri Jan 16 11:55:33 2015
---- xtapp/xtapp-util/fldtool/Makefile	Fri Jan 16 12:00:34 2015
+diff -crN xtapp.orig/tapioca-1.4.2/src/Makefile xtapp/tapioca-1.4.2/src/Makefile
+*** xtapp.orig/tapioca-1.4.2/src/Makefile	Mon Jan 19 15:37:59 2015
+--- xtapp/tapioca-1.4.2/src/Makefile	Mon Jan 19 15:39:49 2015
+***************
+*** 71,77 ****
+  test: $(TARGET)
+  
+  install: $(TARGET)
+! 	install -d $(DESTDIR)/usr/libexec/tapioca
+! 	install $(TARGET) $(DESTDIR)/usr/libexec/tapioca
+  
+  include Makefile.dep
+--- 71,77 ----
+  test: $(TARGET)
+  
+  install: $(TARGET)
+! 	mkdir -p $(PREFIX)/libexec
+! 	install $(TARGET) $(PREFIX)/libexec
+  
+  include Makefile.dep
+diff -crN xtapp.orig/tapioca-1.4.2/src/Makefile.inc xtapp/tapioca-1.4.2/src/Makefile.inc
+*** xtapp.orig/tapioca-1.4.2/src/Makefile.inc	Mon Jan 19 15:37:59 2015
+--- xtapp/tapioca-1.4.2/src/Makefile.inc	Mon Jan 19 15:40:57 2015
+***************
+*** 7,27 ****
+  #ICON   =  icon.o
+  
+  ### for Linux, SuSE
+! #QT4    =  /usr/lib64/qt4
+! #CC     =  g++
+! #CFLAGS = -O3 -Wall
+! #INCS   = -I$(QT4)/include -I/usr/X11R6/include
+! #LIBS   = -L$(QT4)/lib64 -lQtCore -lQtGui -lQtOpenGL -lQtXml -llapack -lblas
+! #ICON   = 
+! 
+! ### for Linux, debian 6
+! QT4    =  /usr
+  CC     =  g++
+  CFLAGS = -O3 -Wall
+! INCS   = -I/usr/include/qt4 -I/usr/X11R6/include
+! LIBS   = -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGLU -llapack -lblas
+  ICON   = 
+  
+  ### for Mac
+  #QT4    =  /usr/local/Trolltech/Qt-4.8.4
+  #CC     =  g++
+--- 7,27 ----
+  #ICON   =  icon.o
+  
+  ### for Linux, SuSE
+! QT4    =  /usr/lib64/qt4
+  CC     =  g++
+  CFLAGS = -O3 -Wall
+! INCS   = -I$(QT4)/include -I/usr/X11R6/include
+! LIBS   = -L$(QT4)/lib64 -lQtCore -lQtGui -lQtOpenGL -lQtXml -llapack -lblas
+  ICON   = 
+  
++ ### for Linux, debian 6
++ #QT4    =  /usr
++ #CC     =  g++
++ #CFLAGS = -O3 -Wall
++ #INCS   = -I/usr/include/qt4 -I/usr/X11R6/include
++ #LIBS   = -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGLU -llapack -lblas
++ #ICON   = 
++ 
+  ### for Mac
+  #QT4    =  /usr/local/Trolltech/Qt-4.8.4
+  #CC     =  g++
+diff -crN xtapp.orig/xtapp-util/fldtool/Makefile xtapp/xtapp-util/fldtool/Makefile
+*** xtapp.orig/xtapp-util/fldtool/Makefile	Mon Jan 19 15:37:56 2015
+--- xtapp/xtapp-util/fldtool/Makefile	Mon Jan 19 15:38:42 2015
 ***************
 *** 64,71 ****
   	fftgrid.h
@@ -212,8 +281,8 @@ diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
   # Local Variables: ***
   # mode:Makefile ***
 diff -crN xtapp.orig/xtapp-util/inputconv/Makefile xtapp/xtapp-util/inputconv/Makefile
-*** xtapp.orig/xtapp-util/inputconv/Makefile	Fri Jan 16 11:55:33 2015
---- xtapp/xtapp-util/inputconv/Makefile	Fri Jan 16 12:01:35 2015
+*** xtapp.orig/xtapp-util/inputconv/Makefile	Mon Jan 19 15:37:56 2015
+--- xtapp/xtapp-util/inputconv/Makefile	Mon Jan 19 15:38:42 2015
 ***************
 *** 39,46 ****
   	inputconv a.out
@@ -234,8 +303,8 @@ diff -crN xtapp.orig/xtapp-util/inputconv/Makefile xtapp/xtapp-util/inputconv/Ma
   # Local Variables: ***
   # mode:Makefile ***
 diff -crN xtapp.orig/xtapp-util/mdtool/Makefile xtapp/xtapp-util/mdtool/Makefile
-*** xtapp.orig/xtapp-util/mdtool/Makefile	Fri Jan 16 11:55:33 2015
---- xtapp/xtapp-util/mdtool/Makefile	Fri Jan 16 12:02:05 2015
+*** xtapp.orig/xtapp-util/mdtool/Makefile	Mon Jan 19 15:37:56 2015
+--- xtapp/xtapp-util/mdtool/Makefile	Mon Jan 19 15:38:42 2015
 ***************
 *** 40,47 ****
   	scanmdlog tailmdlog a.out
@@ -256,8 +325,8 @@ diff -crN xtapp.orig/xtapp-util/mdtool/Makefile xtapp/xtapp-util/mdtool/Makefile
   # Local Variables: ***
   # mode:Makefile ***
 diff -crN xtapp.orig/xtapp-util/minmaxband/Makefile xtapp/xtapp-util/minmaxband/Makefile
-*** xtapp.orig/xtapp-util/minmaxband/Makefile	Fri Jan 16 11:55:33 2015
---- xtapp/xtapp-util/minmaxband/Makefile	Fri Jan 16 12:02:42 2015
+*** xtapp.orig/xtapp-util/minmaxband/Makefile	Mon Jan 19 15:37:56 2015
+--- xtapp/xtapp-util/minmaxband/Makefile	Mon Jan 19 15:38:42 2015
 ***************
 *** 22,29 ****
   	minmaxband a.out
@@ -278,8 +347,8 @@ diff -crN xtapp.orig/xtapp-util/minmaxband/Makefile xtapp/xtapp-util/minmaxband/
   # Local Variables: ***
   # mode:Makefile ***
 diff -crN xtapp.orig/xtapp-util/wfchg2pdos/Makefile xtapp/xtapp-util/wfchg2pdos/Makefile
-*** xtapp.orig/xtapp-util/wfchg2pdos/Makefile	Fri Jan 16 11:55:33 2015
---- xtapp/xtapp-util/wfchg2pdos/Makefile	Fri Jan 16 12:03:10 2015
+*** xtapp.orig/xtapp-util/wfchg2pdos/Makefile	Mon Jan 19 15:37:56 2015
+--- xtapp/xtapp-util/wfchg2pdos/Makefile	Mon Jan 19 15:38:42 2015
 ***************
 *** 40,47 ****
   	ltzpdos wfchg2pdos a.out
