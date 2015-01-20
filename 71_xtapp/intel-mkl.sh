@@ -27,10 +27,6 @@ echo "[make xtapp-util]" | tee -a $LOG
 cd $BUILD_DIR/xtapp/xtapp-util
 check make | tee -a $LOG
 
-echo "[make tapioca]" | tee -a $LOG
-cd $BUILD_DIR/xtapp/tapioca-$TAPIOCA_VERSION
-check make | tee -a $LOG
-
 echo "[make install xtapp]" | tee -a $LOG
 cd $BUILD_DIR/xtapp/src
 $SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
@@ -48,20 +44,6 @@ $SUDO_APPS mkdir -p $PREFIX/pseudo-potential/PBE $PREFIX/pseudo-potential/PBE-nc
 $SUDO_APPS cp -rp xTAPP-PS-PBE/* $PREFIX/pseudo-potential/PBE
 $SUDO_APPS cp -rp xTAPP-PS-PBE-nc/* $PREFIX/pseudo-potential/PBE-nc
 $SUDO_APPS cp -rp xTAPP-PS-CAPZ/* $PREFIX/pseudo-potential/PBE-CAPZ
-
-echo "[make install tapioca]" | tee -a $LOG
-cd $BUILD_DIR/xtapp/tapioca-$TAPIOCA_VERSION
-$SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/tapioca
-$SUDO_APPS cp -rp sample $PREFIX/tapioca
-$SUDO_APPS cp -p src/defaults.*ml src/kpath.xml src/spacegroup.db $PREFIX/libexec
-cat << EOF > $BUILD_DIR/tapioca
-#!/bin/sh
-$PREFIX/libexec/tapioca "$@"
-exit $?
-EOF
-chmod +x $BUILD_DIR/tapioca 
-$SUDO_APPS cp -p $BUILD_DIR/tapioca $PREFIX/bin
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/xtappvars.sh
