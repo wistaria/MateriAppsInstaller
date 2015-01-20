@@ -48,11 +48,11 @@ diff -crN tapioca-1.4.2.orig/src/Makefile.inc tapioca-1.4.2/src/Makefile.inc
   #ICON   =  icon.o
   
   ### for Linux, SuSE
-! QT4    =  /usr/lib64/qt4
+! QT4    =  $(QT4_ROOT)
   CC     =  g++
   CFLAGS = -O3 -Wall
-! INCS   = -I/usr/include
-! LIBS   = -L/usr/lib64 -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGL -lGLU -llapack -lblas
+! INCS   = -I$(QT4_ROOT)/include
+! LIBS   = -L$(QT4_ROOT)/lib -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGL -lGLU -llapack -lblas
   ICON   = 
   
 + ### for Linux, debian 6
