@@ -20,7 +20,7 @@ rm -rf $LOG
 cd $BUILD_DIR/MODYLAS_$MODYLAS_VERSION/source
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
-check ./configure --prefix=$PREFIX FC=mpif90 FCFLAGS="-O3 -fopenmp -cpp -DMPIPARA" | tee -a $LOG
+check ./configure --prefix=$PREFIX FC=mpif90 FCFLAGS="-O3 -fopenmp -cpp -DMPIPARA -DCOMM_CUBE -DFJMPIDIR -DSYNC_COM -DHALFDIRE -DONEPROC_AXIS -DSEGSHAKE" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
