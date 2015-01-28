@@ -19,7 +19,7 @@ fi
 sh $SCRIPT_DIR/download.sh
 rm -rf $LOG
 cd $BUILD_DIR/tapioca-$TAPIOCA_VERSION
-if [ -n $QT4_ROOT ]; then
+if [ -n "$QT4_ROOT" ]; then
   patch -p1 < $SCRIPT_DIR/tapioca-intel-mkl-qt4.patch
 else
   patch -p1 < $SCRIPT_DIR/tapioca-intel-mkl.patch
