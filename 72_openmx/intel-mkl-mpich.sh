@@ -15,7 +15,7 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
-sh $SCRIPT_DIR/download.sh
+sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 cd $BUILD_DIR/openmx-$OPENMX_VERSION
 patch -p1 < $SCRIPT_DIR/openmx-intel-mkl-mpich.patch

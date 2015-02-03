@@ -16,7 +16,7 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
-sh $SCRIPT_DIR/download.sh
+sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 cd $BUILD_DIR/tapioca-$TAPIOCA_VERSION
 if [ -n "$QT4_ROOT" ]; then

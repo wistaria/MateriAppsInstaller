@@ -8,7 +8,7 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 PREFIX=$PREFIX_TOOL/qt4/qt4-$QT4_VERSION-$QT4_PATCH_VERSION
 
-sh $SCRIPT_DIR/download.sh
+sh $SCRIPT_DIR/setup.sh
 cd $BUILD_DIR/qt-everywhere-opensource-src-$QT4_VERSION
 check ./configure --prefix=$PREFIX --opensource --confirm-license=yes
 check make -j4

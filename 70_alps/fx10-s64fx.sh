@@ -19,7 +19,7 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
-sh $SCRIPT_DIR/download.sh
+sh $SCRIPT_DIR/setup.sh
 rm -rf $BUILD_DIR/alps-build-$BUILD_ARCH-$ALPS_VERSION $LOG
 mkdir -p $BUILD_DIR/alps-build-$BUILD_ARCH-$ALPS_VERSION
 cd $BUILD_DIR/alps-build-$BUILD_ARCH-$ALPS_VERSION
