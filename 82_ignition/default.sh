@@ -5,6 +5,8 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+LOG=$BUILD_DIR/ignition-$IGNITION_VERSION-$IGNITION_PATCH_VERSION.log
+
 PREFIX="$PREFIX_APPS/ignition/ignition-$IGNITION_VERSION-$IGNITION_PATCH_VERSION"
 
 if [ -d $PREFIX ]; then
