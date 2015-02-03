@@ -20,8 +20,8 @@ rm -rf $LOG
 cd $BUILD_DIR/xcrysden-$XCRYSDEN_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
-check ln -s system/Make.sys-shared Make.sys
-check make | tee -a $LOG
+check cp -fp system/Make.sys-shared Make.sys
+check make all | tee -a $LOG
 echo "[make install xcrysden]" | tee -a $LOG
 $SUDO_APPS make install prefix=$PREFIX | tee -a $LOG
 finish_info | tee -a $LOG
