@@ -24,4 +24,5 @@ if [ -d openmx-$OPENMX_VERSION ]; then :; else
   for p in $PATCHES; do
     patch -p1 < debian/patches/$p
   done
+  chmod -R a+r DFT_DATA13 openmx*.pdf work
 fi
