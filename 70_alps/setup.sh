@@ -14,6 +14,7 @@ if [ -d alps-$ALPS_VERSION ]; then :; else
     check wget $MALIVE_REPOSITORY/non-free/a/alps/alps_$ALPS_VERSION_ORIG.orig.tar.gz
     check tar zxf alps_$ALPS_VERSION_ORIG.orig.tar.gz | tar zxf -
   fi
+  mv alps_$ALPS_VERSION_ORIG alps-$ALPS_VERSION
   cd alps-$ALPS_VERSION
-  patch -p1 < $SCRIPT_DIR/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION.patch
+  # patch -p1 < $SCRIPT_DIR/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION.patch
 fi
