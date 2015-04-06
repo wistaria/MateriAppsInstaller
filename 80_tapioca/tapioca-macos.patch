@@ -1,6 +1,6 @@
-diff -crN tapioca-1.4.2.orig/src/Makefile tapioca-1.4.2/src/Makefile
-*** tapioca-1.4.2.orig/src/Makefile	Mon Jan 19 14:41:33 2015
---- tapioca-1.4.2/src/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN tapioca_1.5.0.orig/src/Makefile tapioca_1.5.0/src/Makefile
+*** tapioca_1.5.0.orig/src/Makefile	Mon Apr  6 17:41:22 2015
+--- tapioca_1.5.0/src/Makefile	Mon Apr  6 17:42:03 2015
 ***************
 *** 71,77 ****
   test: $(TARGET)
@@ -18,11 +18,11 @@ diff -crN tapioca-1.4.2.orig/src/Makefile tapioca-1.4.2/src/Makefile
 ! 	cp -p $(TARGET) $(PREFIX)/libexec
   
   include Makefile.dep
-diff -crN tapioca-1.4.2.orig/src/Makefile.inc tapioca-1.4.2/src/Makefile.inc
-*** tapioca-1.4.2.orig/src/Makefile.inc	Mon Jan 19 14:41:33 2015
---- tapioca-1.4.2/src/Makefile.inc	Mon Jan 19 14:44:05 2015
+diff -crN tapioca_1.5.0.orig/src/Makefile.inc tapioca_1.5.0/src/Makefile.inc
+*** tapioca_1.5.0.orig/src/Makefile.inc	Mon Apr  6 17:41:22 2015
+--- tapioca_1.5.0/src/Makefile.inc	Mon Apr  6 17:43:18 2015
 ***************
-*** 15,35 ****
+*** 37,56 ****
   #ICON   = 
   
   ### for Linux, debian 6
@@ -31,7 +31,7 @@ diff -crN tapioca-1.4.2.orig/src/Makefile.inc tapioca-1.4.2/src/Makefile.inc
 ! CFLAGS = -O3 -Wall
 ! INCS   = -I/usr/include/qt4 -I/usr/X11R6/include
 ! LIBS   = -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGLU -llapack -lblas
-! ICON   = 
+! ICON   =
 ! 
 ! ### for Mac
 ! #QT4    =  /usr/local/Trolltech/Qt-4.8.4
@@ -39,12 +39,11 @@ diff -crN tapioca-1.4.2.orig/src/Makefile.inc tapioca-1.4.2/src/Makefile.inc
   #CFLAGS = -O3 -Wall
 ! #INCS   = -I$(QT4)/include -I/usr/X11R6/include
 ! #LIBS   = -F$(QT4)/lib -L$(QT4)/lib -framework QtXml -framework QtOpenGL -framework QtGui -framework QtCore -framework OpenGL -llapack -lblas
-  #ICON   = 
+! #ICON   = 
   
   #########################################
   ### do not edit lines below
-  MOC    = $(QT4)/bin/moc
---- 15,35 ----
+--- 37,56 ----
   #ICON   = 
   
   ### for Linux, debian 6
@@ -53,16 +52,15 @@ diff -crN tapioca-1.4.2.orig/src/Makefile.inc tapioca-1.4.2/src/Makefile.inc
   #CFLAGS = -O3 -Wall
 ! #INCS   = -I/usr/include/qt4 -I/usr/X11R6/include
 ! #LIBS   = -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGLU -llapack -lblas
-  #ICON   = 
+! #ICON   =
+! 
+! ### for Mac
+! QT4    =  /opt/local
+! CC     =  g++
+! CFLAGS = -O3 -Wall
+! INCS   = -I$(QT4)/include
+! LIBS   = -F$(QT4)/Library/Frameworks -L$(QT4)/lib -framework QtXml -framework QtOpenGL -framework QtGui -framework QtCore -framework OpenGL -llapack -lblas
+! ICON   = 
   
-+ ### for Mac
-+ QT4    =  /opt/local
-+ CC     =  g++
-+ CFLAGS = -O3 -Wall
-+ INCS   = -I$(QT4)/include
-+ LIBS   = -F$(QT4)/Library/Frameworks -L$(QT4)/lib -framework QtXml -framework QtOpenGL -framework QtGui -framework QtCore -framework OpenGL -llapack -lblas
-+ ICON   = 
-+ 
   #########################################
   ### do not edit lines below
-  MOC    = $(QT4)/bin/moc

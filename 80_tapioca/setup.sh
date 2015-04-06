@@ -11,9 +11,9 @@ if [ -d tapioca_$TAPIOCA_VERSION ]; then :; else
     check tar zxf $SOURCE_DIR/tapioca_$TAPIOCA_VERSION.orig.tar.gz
   else
     check wget $MALIVE_REPOSITORY/main/t/tapioca/tapioca_$TAPIOCA_VERSION.orig.tar.gz
-    check tar zxf tapioca/tapioca_$TAPIOCA_VERSION.orig.tar.gz
+    check tar zxf tapioca_$TAPIOCA_VERSION.orig.tar.gz
   fi
-  cd tapioca-$TAPIOCA_VERSION
+  cd tapioca_$TAPIOCA_VERSION
   if [ -f $SOURCE_DIR/tapioca_$TAPIOCA_VERSION-$TAPIOCA_PATCH_VERSION.debian.tar.gz ]; then
     tar zxf $SOURCE_DIR/tapioca_$TAPIOCA_VERSION-$TAPIOCA_PATCH_VERSION.debian.tar.gz
   else
