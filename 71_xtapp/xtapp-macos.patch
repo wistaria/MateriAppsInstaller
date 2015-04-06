@@ -1,6 +1,6 @@
-diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
-*** xtapp.orig/src/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp/src/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_150401.orig/src/Makefile xtapp_150401/src/Makefile
+*** xtapp_150401.orig/src/Makefile	Mon Jan 19 14:41:30 2015
+--- xtapp_150401/src/Makefile	Mon Jan 19 14:42:21 2015
 ***************
 *** 171,186 ****
   MDOBJ = mdunistd.o paraenv.o
@@ -55,8 +55,8 @@ diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
   
   # Local Variables: ***
   # mode:Makefile ***
-*** xtapp.orig/xtapp-util/fldtool/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp/xtapp-util/fldtool/Makefile	Mon Jan 19 14:42:21 2015
+*** xtapp_150401.orig/xtapp-util_150401/fldtool/Makefile	Mon Jan 19 14:41:30 2015
+--- xtapp_150401/xtapp-util_150401/fldtool/Makefile	Mon Jan 19 14:42:21 2015
 ***************
 *** 64,71 ****
   	fftgrid.h
@@ -76,9 +76,9 @@ diff -crN xtapp.orig/src/Makefile xtapp/src/Makefile
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp.orig/xtapp-util/inputconv/Makefile xtapp/xtapp-util/inputconv/Makefile
-*** xtapp.orig/xtapp-util/inputconv/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp/xtapp-util/inputconv/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_150401.orig/xtapp-util_150401/inputconv/Makefile xtapp_150401/xtapp-util_150401/inputconv/Makefile
+*** xtapp_150401.orig/xtapp-util_150401/inputconv/Makefile	Mon Jan 19 14:41:30 2015
+--- xtapp_150401/xtapp-util_150401/inputconv/Makefile	Mon Jan 19 14:42:21 2015
 ***************
 *** 39,46 ****
   	inputconv a.out
@@ -98,9 +98,9 @@ diff -crN xtapp.orig/xtapp-util/inputconv/Makefile xtapp/xtapp-util/inputconv/Ma
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp.orig/xtapp-util/mdtool/Makefile xtapp/xtapp-util/mdtool/Makefile
-*** xtapp.orig/xtapp-util/mdtool/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp/xtapp-util/mdtool/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_150401.orig/xtapp-util_150401/mdtool/Makefile xtapp_150401/xtapp-util_150401/mdtool/Makefile
+*** xtapp_150401.orig/xtapp-util_150401/mdtool/Makefile	Mon Jan 19 14:41:30 2015
+--- xtapp_150401/xtapp-util_150401/mdtool/Makefile	Mon Jan 19 14:42:21 2015
 ***************
 *** 40,47 ****
   	scanmdlog tailmdlog a.out
@@ -120,9 +120,9 @@ diff -crN xtapp.orig/xtapp-util/mdtool/Makefile xtapp/xtapp-util/mdtool/Makefile
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp.orig/xtapp-util/minmaxband/Makefile xtapp/xtapp-util/minmaxband/Makefile
-*** xtapp.orig/xtapp-util/minmaxband/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp/xtapp-util/minmaxband/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_150401.orig/xtapp-util_150401/minmaxband/Makefile xtapp_150401/xtapp-util_150401/minmaxband/Makefile
+*** xtapp_150401.orig/xtapp-util_150401/minmaxband/Makefile	Mon Jan 19 14:41:30 2015
+--- xtapp_150401/xtapp-util_150401/minmaxband/Makefile	Mon Jan 19 14:42:21 2015
 ***************
 *** 22,29 ****
   	minmaxband a.out
@@ -142,9 +142,9 @@ diff -crN xtapp.orig/xtapp-util/minmaxband/Makefile xtapp/xtapp-util/minmaxband/
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp.orig/xtapp-util/wfchg2pdos/Makefile xtapp/xtapp-util/wfchg2pdos/Makefile
-*** xtapp.orig/xtapp-util/wfchg2pdos/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp/xtapp-util/wfchg2pdos/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_150401.orig/xtapp-util_150401/wfchg2pdos/Makefile xtapp_150401/xtapp-util_150401/wfchg2pdos/Makefile
+*** xtapp_150401.orig/xtapp-util_150401/wfchg2pdos/Makefile	Mon Jan 19 14:41:30 2015
+--- xtapp_150401/xtapp-util_150401/wfchg2pdos/Makefile	Mon Jan 19 14:42:21 2015
 ***************
 *** 40,47 ****
   	ltzpdos wfchg2pdos a.out
