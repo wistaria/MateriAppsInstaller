@@ -18,7 +18,7 @@ rm -rf hdf5-$HDF5_VERSION
 if [ -f $HOME/source/hdf5-$HDF5_VERSION.tar.bz2 ]; then
   check tar jxf $HOME/source/hdf5-$HDF5_VERSION.tar.bz2
 else
-  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2
+  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2 | tar xjf -
 fi
 cd hdf5-$HDF5_VERSION
 check ./configure --prefix=$PREFIX_FRONTEND --enable-threadsafe --with-pthread=yes
@@ -32,7 +32,7 @@ rm -rf hdf5-$HDF5_VERSION
 if [ -f $HOME/source/hdf5-$HDF5_VERSION.tar.bz2 ]; then
   check tar jxf $HOME/source/hdf5-$HDF5_VERSION.tar.bz2
 else
-  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2
+  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2 | tar xjf -
 fi
 cd hdf5-$HDF5_VERSION
 check cp $SCRIPT_DIR/fx10-config.cache config.cache
