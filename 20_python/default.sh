@@ -11,10 +11,10 @@ export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 
 cd $BUILD_DIR
 rm -rf Python-$PYTHON_VERSION
-if [ -f $HOME/source/Python-$PYTHON_VERSION.tar.bz2 ]; then
-  check tar jxf $HOME/source/Python-$PYTHON_VERSION.tar.bz2
+if [ -f $HOME/source/Python-$PYTHON_VERSION.tar.gz ]; then
+  check tar zxf $HOME/source/Python-$PYTHON_VERSION.tar.gz
 else
-  check wget -O - http://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.bz2 | tar jxf -
+  check wget -O - http://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.gz | tar zxf -
 fi
 cd Python-$PYTHON_VERSION
 check ./configure --prefix=$PREFIX --enable-shared
