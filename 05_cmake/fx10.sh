@@ -56,6 +56,7 @@ $SUDO_TOOL chmod +x $PREFIX/bin/cmake $PREFIX/bin/ctest
 cat << EOF > $BUILD_DIR/cmakevars.sh
 export CMAKE_ROOT=$PREFIX
 export CMAKE_VERSION=$CMAKE_VERSION
+export CMAKE_PATCH_VERSION=$CMAKE_PATCH_VERSION
 export PATH=\$CMAKE_ROOT/bin:\$PATH
 export CMAKE_PATH=\$CMAKE_ROOT/bin/cmake
 export CTEST_PATH=\$CMAKE_ROOT/bin/ctest
