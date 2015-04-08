@@ -23,6 +23,7 @@ $SUDO_TOOL gmake install
 
 cat << EOF > $BUILD_DIR/cmakevars.sh
 export CMAKE_ROOT=$PREFIX
+export CMAKE_VERSION=$CMAKE_VERSION
 export PATH=\$CMAKE_ROOT/bin:\$PATH
 EOF
 CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_PATCH_VERSION.sh
