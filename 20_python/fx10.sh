@@ -10,70 +10,39 @@ PREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION-$PYTHON_PATCH_VERSION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
 export LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH
 
-cd $BUILD_DIR
-rm -rf Python-$PYTHON_VERSION
-if [ -f $HOME/source/Python-$PYTHON_VERSION.tar.bz2 ]; then
-  check tar jxf $HOME/source/Python-$PYTHON_VERSION.tar.bz2
-else
-  check wget -O - http://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.bz2 | tar jxf -
-fi
-cd Python-$PYTHON_VERSION
+sh $SCRIPT_DIR/setup.sh
+
+cd $BUILD_DIR/Python-$PYTHON_VERSION
 check ./configure --prefix=$PREFIX_FRONTEND --enable-shared
 check make -j4
-$SUDO_TOOL make install
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH make install
 
-cd $BUILD_DIR
-rm -rf nose-$NOSE_VERSION
-if [ -f $HOME/source/nose-$NOSE_VERSION.tar.gz ]; then
-  tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
-else
-  wget http://pypi.python.org/packages/source/n/nose/nose-$NOSE_VERSION.tar.gz | tar zxf -
-fi
-cd nose-$NOSE_VERSION
-check $PREFIX_FRONTEND/bin/python2.7 setup.py build
-$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
+cd $BUILD_DIR/nose-$NOSE_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
 
-cd $BUILD_DIR
-$SUDO_TOOL rm -rf numpy-$NUMPY_VERSION
-if [ -f$HOME/source/numpy-$NUMPY_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/numpy-$NUMPY_VERSION.tar.gz
-else
-  check wget -O - http://sourceforge.net/projects/numpy/files/NumPy/$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz/download numpy-$NUMPY_VERSION.tar.gz | tar zxf -
-fi
-cd numpy-$NUMPY_VERSION
+cd $BUILD_DIR/numpy-$NUMPY_VERSION
 cat << EOF > site.cfg
 [DEFAULT]
 library_dirs = $LAPACK_ROOT/Linux-x86_64/lib
 EOF
-check $PREFIX_FRONTEND/bin/python2.7 setup.py build --fcompiler=gnu95
-$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
+check $PREFIX_FRONTEND/bin/python setup.py build --fcompiler=gnu95
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
 
-cd $BUILD_DIR
-rm -rf scipy-$SCIPY_VERSION
-if [ -f $HOME/source/scipy-$SCIPY_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/scipy-$SCIPY_VERSION.tar.gz
-else
-  check wget -O - http://sourceforge.net/projects/scipy/files/scipy/$SCIPY_VERSION/scipy-$SCIPY_VERSION.tar.gz/download scipy-$SCIPY_VERSION.tar.gz | tar zxf -
-fi
-cd scipy-$SCIPY_VERSION
-check $PREFIX_FRONTEND/bin/python2.7 setup.py build --fcompiler=gnu95
-$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
+cd $BUILD_DIR/scipy-$SCIPY_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build --fcompiler=gnu95
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
 
-cd $BUILD_DIR
-rm -rf matplotlib-$MATPLOTLIB_VERSION
-if [ -f $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz
-else
-  check wget -O - http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-$MATPLOTLIB_VERSION/matplotlib-$MATPLOTLIB_VERSION.tar.gz/download matplotlib-$MATPLOTLIB_VERSION.tar.gz | tar zxf -
-fi
-cd matplotlib-$MATPLOTLIB_VERSION
-check $PREFIX_FRONTEND/bin/python2.7 setup.py build
-$SUDO_TOOL $PREFIX_FRONTEND/bin/python2.7 setup.py install
+cd $BUILD_DIR/matplotlib-$MATPLOTLIB_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
 
 cat << EOF > $BUILD_DIR/pythonvars.sh
 OS=\$(uname -s)
 ARCH=\$(uname -m)
 export PYTHON_ROOT=$PREFIX
+export PYTHON_VERSION=$PYTHON_VERSION
+export PYTHON_PATCH_VERSION=$PYTHON_PATCH_VERSION
 export PATH=\$PYTHON_ROOT/\$OS-\$ARCH/bin:\$PATH
 export LD_LIBRARY_PATH=\$PYTHON_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
 EOF
