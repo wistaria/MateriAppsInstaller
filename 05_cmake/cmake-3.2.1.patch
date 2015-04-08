@@ -1,0 +1,27 @@
+diff -crN cmake-3.2.1.orig/Modules/CMakeParseImplicitLinkInfo.cmake cmake-3.2.1/Modules/CMakeParseImplicitLinkInfo.cmake
+*** cmake-3.2.1.orig/Modules/CMakeParseImplicitLinkInfo.cmake	2015-03-10 23:38:44.000000000 +0900
+--- cmake-3.2.1/Modules/CMakeParseImplicitLinkInfo.cmake	2015-04-08 15:18:27.000000000 +0900
+***************
+*** 26,36 ****
+    set(linker "CMAKE_LINKER-NOTFOUND")
+    if(CMAKE_LINKER)
+      get_filename_component(linker ${CMAKE_LINKER} NAME)
+-     string(REGEX REPLACE "([][+.*?()^$])" "\\\\\\1" linker "${linker}")
+    endif()
+    # Construct a regex to match linker lines.  It must match both the
+    # whole line and just the command (argv[0]).
+!   set(linker_regex "^( *|.*[/\\])(${linker}|([^/\\]+-)?ld|collect2)[^/\\]*( |$)")
+    set(linker_exclude_regex "collect2 version ")
+    set(log "${log}  link line regex: [${linker_regex}]\n")
+    string(REGEX REPLACE "\r?\n" ";" output_lines "${text}")
+--- 26,35 ----
+    set(linker "CMAKE_LINKER-NOTFOUND")
+    if(CMAKE_LINKER)
+      get_filename_component(linker ${CMAKE_LINKER} NAME)
+    endif()
+    # Construct a regex to match linker lines.  It must match both the
+    # whole line and just the command (argv[0]).
+!   set(linker_regex "^( *|.*[/\\])(${linker}|ld|collect2)[^/\\]*( |$)")
+    set(linker_exclude_regex "collect2 version ")
+    set(log "${log}  link line regex: [${linker_regex}]\n")
+    string(REGEX REPLACE "\r?\n" ";" output_lines "${text}")
