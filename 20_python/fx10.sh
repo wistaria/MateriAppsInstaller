@@ -21,6 +21,34 @@ cd $BUILD_DIR/nose-$NOSE_VERSION
 check $PREFIX_FRONTEND/bin/python setup.py build
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
 
+cd $BUILD_DIR/nose-$NOSE_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
+cd $BUILD_DIR/distribute-$DISTRIBUTE_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
+cd $BUILD_DIR/mock-$MOCK_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
+cd $BUILD_DIR/pyparsing-$PYPARSING_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
+cd $BUILD_DIR/pytz-$PYTZ_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
+cd $BUILD_DIR/python-dateutil-$PYTHON_DATEUTIL_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
+cd $BUILD_DIR/six-$SIX_VERSION
+check $PREFIX_FRONTEND/bin/python setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install
+
 cd $BUILD_DIR/numpy-$NUMPY_VERSION
 cat << EOF > site.cfg
 [DEFAULT]
