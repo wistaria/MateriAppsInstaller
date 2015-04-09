@@ -1,0 +1,40 @@
+diff -crN numpy-1.9.2.orig/numpy/distutils/fcompiler/__init__.py numpy-1.9.2/numpy/distutils/fcompiler/__init__.py
+*** numpy-1.9.2.orig/numpy/distutils/fcompiler/__init__.py	2014-10-26 23:36:14.000000000 +0900
+--- numpy-1.9.2/numpy/distutils/fcompiler/__init__.py	2015-04-10 02:39:22.000000000 +0900
+***************
+*** 431,437 ****
+          assert self._is_customised
+          version = CCompiler.get_version(self, force=force, ok_status=ok_status)
+          if version is None:
+!             raise CompilerNotFound()
+          return version
+  
+      ############################################################
+--- 431,437 ----
+          assert self._is_customised
+          version = CCompiler.get_version(self, force=force, ok_status=ok_status)
+          if version is None:
+!             return '13.0'
+          return version
+  
+      ############################################################
+diff -crN numpy-1.9.2.orig/numpy/distutils/intelccompiler.py numpy-1.9.2/numpy/distutils/intelccompiler.py
+*** numpy-1.9.2.orig/numpy/distutils/intelccompiler.py	2014-10-26 23:36:14.000000000 +0900
+--- numpy-1.9.2/numpy/distutils/intelccompiler.py	2015-04-10 02:40:02.000000000 +0900
+***************
+*** 11,17 ****
+  
+      def __init__ (self, verbose=0, dry_run=0, force=0):
+          UnixCCompiler.__init__ (self, verbose, dry_run, force)
+!         self.cc_exe = 'icc -fPIC'
+          compiler = self.cc_exe
+          self.set_executables(compiler=compiler,
+                               compiler_so=compiler,
+--- 11,17 ----
+  
+      def __init__ (self, verbose=0, dry_run=0, force=0):
+          UnixCCompiler.__init__ (self, verbose, dry_run, force)
+!         self.cc_exe = 'icc -O3 -openmp -fPIC'
+          compiler = self.cc_exe
+          self.set_executables(compiler=compiler,
+                               compiler_so=compiler,
