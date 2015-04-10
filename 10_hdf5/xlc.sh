@@ -29,7 +29,7 @@ rm -rf hdf5-$HDF5_VERSION
 if [ -f $HOME/source/hdf5-$HDF5_VERSION.tar.bz2 ]; then
   check tar jxf $HOME/source/hdf5-$HDF5_VERSION.tar.bz2
 else
-  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2
+  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2 | tar jxf -
 fi
 cd hdf5-$HDF5_VERSION
 CC=xlc CXX=xlC CFLAGS="-O2" CXXFLAGS="-O2" check ./configure --prefix=$PREFIX_TOOL --with-szlib=$PREFIX_TOOL

@@ -18,7 +18,8 @@ $SUDO_TOOL rm -rf boost_$BOOST_VERSION boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
 if [ -f $HOME/source/boost_$BOOST_VERSION.tar.bz2 ]; then
   $SUDO_TOOL tar jxf $HOME/source/boost_$BOOST_VERSION.tar.bz2 --no-same-owner --no-same-permissions
 else
-  check wget -O - http://sourceforge.net/projects/boost/files/boost/$BOOST_VERSION/boost_$BOOST_VERSION.tar.bz2/download | $SUDO_TOOL tar jxf - --no-same-owner --no-same-permissions
+  BOOST_VERSION_DOTTED=$(echo $BOOST_VERSION | tr _ .)
+  check wget -O - http://sourceforge.net/projects/boost/files/boost/$BOOST_VERSION_DOTTED/boost_$BOOST_VERSION.tar.bz2/download | $SUDO_TOOL tar jxf - --no-same-owner --no-same-permissions
 fi
 $SUDO_TOOL mv -f boost_$BOOST_VERSION boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
 cd boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
