@@ -14,7 +14,7 @@ rm -rf git-$GIT_VERSION
 if [ -f $HOME/source/git-$GIT_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/git-$GIT_VERSION.tar.gz
 else
-  check wget -O - http://git-core.googlecode.com/files/git-$GIT_VERSION.tar.gz | tar zxf -
+  check wget -O - http://www.kernel.org/pub/software/scm/git/git-$GIT_VERSION.tar.gz | tar zxf -
 fi
 cd git-$GIT_VERSION
 check ./configure --prefix=$PREFIX_FRONTEND --with-python=$PYTHON_ROOT/Linux-x86_64/bin/python2.7
