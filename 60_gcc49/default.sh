@@ -7,6 +7,8 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
+PREFIX=$PREFIX_TOOL/gcc
+
 cd $BUILD_DIR
 rm -rf gcc-$GCC_VERSION
 wget -O - http://ftp.gnu.org/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2 | bzip2 -dc | tar xf -
@@ -26,15 +28,15 @@ cd $BUILD_DIR
 rm -rf gcc-$GCC_VERSION-build
 mkdir gcc-$GCC_VERSION-build
 cd gcc-$GCC_VERSION-build
-check $BUILD_DIR/gcc-$GCC_VERSION/configure --enable-languages=c,c++,fortran --prefix=$PREFIX_TOOL/gcc-$GCC_VERSION --disable-multilib
+check $BUILD_DIR/gcc-$GCC_VERSION/configure --enable-languages=c,c++,fortran --prefix=$PREFIX/gcc-$GCC_VERSION --disable-multilib
 check make -j4
 $SUDO make install
-$SUDO rm -f $PREFIX/gcc-$GCC_VERSION_MAJOR
-$SUDO ln -s gcc-$GCC_VERSION $PREFIX/gcc-$GCC_VERSION_MAJOR
+$SUDO rm -f $PREFIX/gcc-$GCC_MAJOR_VERSION
+$SUDO ln -s $PREFIX/gcc-$GCC_VERSION $PREFIX/gcc-$GCC_MAJOR_VERSION
 cat << EOF > gcc-$GCC_VERSION.sh
-export PATH=$PREFIX_TOOL/gcc-$GCC_VERSION/bin:\$PATH
-export LD_LIBRARY_PATH=$PREFIX_TOOL/gcc-$GCC_VERSION/lib64:\$LD_LIBRARY_PATH
+export PATH=$PREFIX/gcc-$GCC_VERSION/bin:\$PATH
+export LD_LIBRARY_PATH=$PREFIX/gcc-$GCC_VERSION/lib64:\$LD_LIBRARY_PATH
 EOF
 $SUDO cp gcc-$GCC_VERSION.sh $PREFIX/gcc-$GCC_VERSION.sh
-$SUDO rm -f $PREFIX/gcc-$GCC_VERSION_MAJOR.sh
-$SUDO ln -s gcc-$GCC_VERSION.sh $PREFIX/gcc-$GCC_VERSION_MAJOR.sh
+$SUDO rm -f $PREFIX/gcc-$GCC_MAJOR_VERSION.sh
+$SUDO ln -s $PREFIX/gcc-$GCC_VERSION.sh $PREFIX/gcc-$GCC_MAJOR_VERSION.sh
