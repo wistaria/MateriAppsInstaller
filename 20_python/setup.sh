@@ -7,7 +7,7 @@ set_prefix
 
 cd $BUILD_DIR
 
-rm -rf Python-$PYTHON_VERSION
+$SUDO_TOOL rm -rf Python-$PYTHON_VERSION
 if [ -f $HOME/source/Python-$PYTHON_VERSION.tgz ]; then
   check tar zxf $HOME/source/Python-$PYTHON_VERSION.tgz
 else
@@ -15,7 +15,7 @@ else
   check tar zxf Python-$PYTHON_VERSION.tgz
 fi
 
-rm -rf nose-$NOSE_VERSION
+$SUDO_TOOL rm -rf nose-$NOSE_VERSION
 if [ -f $HOME/source/nose-$NOSE_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/nose-$NOSE_VERSION.tar.gz
 else
@@ -23,7 +23,7 @@ else
   check tar zxf nose-$NOSE_VERSION.tar.gz
 fi
 
-rm -rf distribute-$DISTRIBUTE_VERSION
+$SUDO_TOOL rm -rf distribute-$DISTRIBUTE_VERSION
 if [ -f $HOME/source/distribute-$DISTRIBUTE_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/distribute-$DISTRIBUTE_VERSION.tar.gz
 else
@@ -31,7 +31,7 @@ else
   check tar zxf distribute-$DISTRIBUTE_VERSION.tar.gz
 fi
 
-rm -rf mock-$MOCK_VERSION
+$SUDO_TOOL rm -rf mock-$MOCK_VERSION
 if [ -f $HOME/source/mock-$MOCK_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/mock-$MOCK_VERSION.tar.gz
 else
@@ -39,7 +39,7 @@ else
   check tar zxf mock-$MOCK_VERSION.tar.gz
 fi
 
-rm -rf pyparsing-$PYPARSING_VERSION
+$SUDO_TOOL rm -rf pyparsing-$PYPARSING_VERSION
 if [ -f $HOME/source/pyparsing-$PYPARSING_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/pyparsing-$PYPARSING_VERSION.tar.gz
 else
@@ -47,7 +47,7 @@ else
   check tar zxf pyparsing-$PYPARSING_VERSION.tar.gz
 fi
 
-rm -rf pytz-$PYTZ_VERSION
+$SUDO_TOOL rm -rf pytz-$PYTZ_VERSION
 if [ -f $HOME/source/pytz-$PYTZ_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/pytz-$PYTZ_VERSION.tar.gz
 else
@@ -55,7 +55,7 @@ else
   check tar zxf pytz-$PYTZ_VERSION.tar.gz
 fi
 
-rm -rf python-dateutil-$PYTHON_DATEUTIL_VERSION
+$SUDO_TOOL rm -rf python-dateutil-$PYTHON_DATEUTIL_VERSION
 if [ -f $HOME/source/python-dateutil-$PYTHON_DATEUTIL_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/python-dateutil-$PYTHON_DATEUTIL_VERSION.tar.gz
 else
@@ -63,7 +63,7 @@ else
   check tar zxf python-dateutil-$PYTHON_DATEUTIL_VERSION.tar.gz
 fi
 
-rm -rf six-$SIX_VERSION
+$SUDO_TOOL rm -rf six-$SIX_VERSION
 if [ -f $HOME/source/six-$SIX_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/six-$SIX_VERSION.tar.gz
 else
@@ -87,7 +87,7 @@ else
   check tar zxf scipy-$SCIPY_VERSION.tar.gz
 fi
 
-rm -rf matplotlib-$MATPLOTLIB_VERSION
+$SUDO_TOOL rm -rf matplotlib-$MATPLOTLIB_VERSION
 if [ -f $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz ]; then
   check tar zxf $HOME/source/matplotlib-$MATPLOTLIB_VERSION.tar.gz
 else
