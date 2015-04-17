@@ -14,6 +14,7 @@ sh $SCRIPT_DIR/setup.sh
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION/tools/build
 check sh bootstrap.sh -with-toolset=intel-linux
 $SUDO_TOOL ./b2 --prefix=$PREFIX install
+$SUDO_TOOL rm -rf tools/build
 
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
 echo "using mpi : $(which mpicxx) ;" > user-config.jam
