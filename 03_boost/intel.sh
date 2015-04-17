@@ -6,7 +6,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-BOOST_VERSION_DOTTED=$(echo $BOOST_VERSION | tr _ .)
 PREFIX=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION
 
 $SUDO_TOOL /bin/true
