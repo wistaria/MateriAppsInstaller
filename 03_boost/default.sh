@@ -18,8 +18,8 @@ $SUDO_TOOL rm -rf tools/build
 
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
 echo "using mpi : $(which mpicxx) ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX stage
-$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX install
+check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged stage
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged install
 
 cat << EOF > $BUILD_DIR/boostvars.sh
 export BOOST_ROOT=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION
