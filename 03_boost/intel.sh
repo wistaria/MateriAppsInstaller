@@ -17,7 +17,11 @@ $SUDO_TOOL ./b2 --prefix=$PREFIX install
 $SUDO_TOOL rm -rf tools/build
 
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
-echo "using mpi : $(which mpicxx) ;" > user-config.jam
+for m in mpiicpc mpicxx mpic++ mpiCC; do
+  mc=$(which $m 2> /dev/null)
+  test -n "$mc" && break
+done
+echo "using mpi : $mc ;" > user-config.jam
 check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX toolset=intel stage
 $SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX toolset=intel install
 
