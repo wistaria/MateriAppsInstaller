@@ -16,7 +16,7 @@ check sh bootstrap.sh
 $SUDO_TOOL ./b2 --prefix=$PREFIX install
 
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
-echo "using mpi ;" > user-config.jam
+echo "using mpi : $(which mpicxx) ;" > user-config.jam
 check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX stage
 $SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX install
 
