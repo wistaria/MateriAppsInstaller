@@ -6,28 +6,27 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
+PREFIX=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION
 
-if [ -d $PREFIX_TOOL/boost/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION ]; then
-  echo "Error: $PREFIX_TOOL/boost/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION exists"
-  exit 127
-fi
+$SUDO_TOOL /bin/true
+sh $SCRIPT_DIR/setup.sh
 
-$SUDO_TOOL mkdir -p $PREFIX_TOOL/boost
-cd $PREFIX_TOOL/boost
-$SUDO_TOOL rm -rf boost_$BOOST_VERSION boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
-if [ -f $HOME/source/boost_$BOOST_VERSION.tar.bz2 ]; then
-  $SUDO_TOOL tar jxf $HOME/source/boost_$BOOST_VERSION.tar.bz2 --no-same-owner --no-same-permissions
-else
-  BOOST_VERSION_DOTTED=$(echo $BOOST_VERSION | tr _ .)
-  check wget -O - http://sourceforge.net/projects/boost/files/boost/$BOOST_VERSION_DOTTED/boost_$BOOST_VERSION.tar.bz2/download | $SUDO_TOOL tar jxf - --no-same-owner --no-same-permissions
-fi
-$SUDO_TOOL mv -f boost_$BOOST_VERSION boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
-cd boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
-cat $SCRIPT_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION.patch | $SUDO_TOOL patch -p1
+check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION/tools/build
+check sh bootstrap.sh
+$SUDO_TOOL ./b2 --prefix=$PREFIX install
+
+check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
+echo "using mpi ;" > user-config.jam
+check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX stage
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX install
 
 cat << EOF > $BUILD_DIR/boostvars.sh
-export BOOST_ROOT=$PREFIX_TOOL/boost/boost_$BOOST_VERSION-$BOOST_PATCH_VERSION
+export BOOST_ROOT=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION
+export BOOST_VERSION=$BOOST_VERSION
+export BOOST_PATCH_VERSION=$BOOST_PATCH_VERSION
+export PATH=\$BOOST_ROOT/bin:\$PATH
+export LD_LIBRARY_PATH=\$BOOST_ROOT/lib:\$LD_LIBRARY_PATH
 EOF
-BOOSTVARS_SH=$PREFIX_TOOL/boost/boostvars-$BOOST_VERSION-$BOOST_PATCH_VERSION.sh
+BOOSTVARS_SH=$PREFIX_TOOL/boost/boostvars-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION.sh
 $SUDO_TOOL rm -f $BOOSTVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/boostvars.sh $BOOSTVARS_SH
