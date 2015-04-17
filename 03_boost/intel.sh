@@ -22,8 +22,8 @@ for m in mpiicpc mpicxx mpic++ mpiCC; do
   test -n "$mc" && break
 done
 echo "using mpi : $mc ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX toolset=intel stage
-$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX toolset=intel install
+check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged toolset=intel stage
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged toolset=intel install
 
 cat << EOF > $BUILD_DIR/boostvars.sh
 export BOOST_ROOT=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION
