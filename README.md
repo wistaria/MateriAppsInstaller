@@ -6,7 +6,7 @@ Install script collection for MateriApps Software
 MateriApps Installerの目標
 =====================================
 
-* 計算物質科学分野に共通するアプリ(cf. MateriApps http://ma.cms-initiative.jp)を国内(外)の主要なスパコン全てにインストールする
+* 計算物質科学分野に共通するアプリ(cf. MateriApps http://ma.cms-initiative.jp )を国内(外)の主要なスパコン全てにインストールする
 * 同様にCentOS (RedHat), Debian (Ubuntu)の標準的な環境、Mac OS X環境にもインストールできるスクリプトを整備
 
 MateriApps Installerの設計ポリシー
@@ -59,6 +59,8 @@ Setup
    * アプリ毎にスクリプトを使って環境変数(PATHなど)を設定する
    * 例) alpsの場合: source $PREFIX_APPL/alps/alpsvar.sh
 * インストールのテスト方法
+   * 整備中
+* サンプルバッチスクリプト
    * 整備中
    
 Status
