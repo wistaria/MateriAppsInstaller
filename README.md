@@ -3,10 +3,18 @@ MateriApps Installer
 
 Install script collection for MateriApps Software
 
+MateriApps Installerの目標
+=====================================
+
+* 計算物質科学分野に共通するアプリ(cf. MateriApps http://ma.cms-initiative.jp)を国内(外)の主要なスパコン全てにインストールする
+* 同様にCentOS (RedHat), Debian (Ubuntu)の標準的な環境、Mac OS X環境にもインストールできるスクリプトを整備
+
 MateriApps Installerの設計ポリシー
 =====================================
 
 * 特殊なツールに依存しない (shell, make, tarなどがあればOK)
+* スパコンはそれぞれ特殊なので、あまりユニバーサルなインストーラを作ることは目指しても仕方がない。例外には個別のスクリプトを作成することで対処
+* Linux (RPM, DEB)やMac OS X (MacPorts)において、すでにパッケージが用意されいる場合にはそちらを使う
 * 古いバージョンを残せるようにする
 * インストールとリンクの張替えを分ける (リンクの張替えを行うまでは、他に影響を与えない)
 * 一時的に違う場所にインストールしてテストできるように
