@@ -14,7 +14,8 @@ MateriApps Installerの設計ポリシー
 
 * 特殊なツールに依存しない (shell, make, tarなどがあればOK)
 * スパコンはそれぞれ特殊なので、あまりユニバーサルなインストーラを作ることは目指しても仕方がない。例外には個別のスクリプトを作成することで対処
-* Linux (RPM, DEB)やMac OS X (MacPorts)において、すでにパッケージが用意されいる場合にはそちらを使う
+* ツールは、Linux (RPM Package, Debian Package)やMac OS X (MacPorts)ですでにパッケージとして用意されている場合にはそちらを使う
+* アプリのバージョンは、MateriApps LIVE! http://cmsi.github.io/MateriAppsLive/release.html と揃える。必要なパッチもMateriApps LIVE!用のDebian Packageと共通とする
 * ツール・アプリ毎に別のフォルダを使う。その下にバージョン別のフォルダを準備
     * 例) $PREFIX_TOOL/cmake/cmake-3.2.1-1
 * それぞれのツール・アプリ、バージョン用の環境変数設定スクリプトを準備
