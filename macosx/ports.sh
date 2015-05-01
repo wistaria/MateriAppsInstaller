@@ -11,4 +11,5 @@ port install python27
 port select --set python python27
 port install py27-scipy py27-matplotlib
 port install py27-ipython py27-zmq py27-jinja2
+port install py27-mpi4py +gcc49 +openmpi
 port install git

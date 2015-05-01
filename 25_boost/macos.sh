@@ -21,7 +21,7 @@ echo "using mpi : $(which mpicxx) ;" > user-config.jam
 check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged stage
 $SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged install
 
-$SUDO_TOOL $SCRIPT_DIR/../fix_dyib.sh $PREFIX/lib
+$SUDO_TOOL sh $SCRIPT_DIR/../fix_dylib.sh $PREFIX/lib
 	  
 cat << EOF > $BUILD_DIR/boostvars.sh
 export BOOST_ROOT=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_PATCH_VERSION
