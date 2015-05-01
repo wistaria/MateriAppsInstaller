@@ -7,6 +7,8 @@ port install wget subversion scalapack +gcc49 +openmpi fftw-3 +gfortran
 port install cmake
 port install qt4-mac
 port install hdf5 +threadsafe
-port install python27 py27-scipy py27-matplotlib
-port install python27 py27-ipython py27-zmq py27-jinja2
+port install python27
+port select --set python python27
+port install py27-scipy py27-matplotlib
+port install py27-ipython py27-zmq py27-jinja2
 port install git
