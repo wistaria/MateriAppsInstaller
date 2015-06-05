@@ -24,7 +24,6 @@ echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DCMAKE_C_COMPILER="/opt/local/bin/gcc" -DCMAKE_CXX_COMPILER="/opt/local/bin/g++" -DCMAKE_Fortran_COMPILER="/opt/local/bin/gfortran" \
   -DPYTHON_INTERPRETER="/opt/local/bin/python2.7" \
-  -DBoost_ROOT_DIR=$BOOST_ROOT \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
   -DALPS_BUILD_FORTRAN=ON -DALPS_BUILD_TESTS=ON -DALPS_BUILD_PYTHON=ON \
   $BUILD_DIR/alps-$ALPS_VERSION | tee -a $LOG
