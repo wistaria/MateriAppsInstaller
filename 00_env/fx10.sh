@@ -2,15 +2,16 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/version.sh
 set_prefix
-
-ENV_VERSION="1.2.0-17-2"
+ENV_BASE="1.2.0-17-2"
 
 cat << EOF > $BUILD_DIR/env.sh
-if [ -f /home/system/Env_base_$ENV_VERSION ]; then
-  . /home/system/Env_base_$ENV_VERSION
-elif [ -f /work/system/Env_base_$ENV_VERSION ]; then
-  . /work/system/Env_base_$ENV_VERSION
+# env $(basename $0 .sh) $ENV_VERSION $ENV_MA_REVISION $(date +%Y%m%d-%H%M%S)
+if [ -f /home/system/Env_base_$ENV_BASE ]; then
+  . /home/system/Env_base_$ENV_BASE
+elif [ -f /work/system/Env_base_$ENV_BASE ]; then
+  . /work/system/Env_base_$ENV_BASE
 fi
 export MA_ROOT_TOOL=$PREFIX_TOOL
 export MA_ROOT_APPS=$PREFIX_APPS
@@ -29,5 +30,6 @@ unset i
 EOF
 $SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/bin
 $SUDO_TOOL cp -f $BUILD_DIR/env.sh $PREFIX_TOOL
+rm -f $BUILD_DIR/env.sh
 $SUDO_TOOL cp -f $SCRIPT_DIR/check_maversion $PREFIX_TOOL/bin
 $SUDO_TOOL chmod +x $PREFIX_TOOL/bin/check_maversion

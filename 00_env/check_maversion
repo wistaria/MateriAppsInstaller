@@ -1,28 +1,22 @@
 #!/bin/sh
 
+TOOL="lapack fftw tcltk qt4 hdf5 python ipython boost cmake git"
+APPS="alps xtapp openmx modylas feram gromacs ermod tapioca xcrysden iginition"
+
 if [ -n "$MA_ROOT_TOOL" ]; then
-  echo "MA_ROOT_TOOL=$MA_ROOT_TOOL"
-  echo "MA_ROOT_APPS=$MA_ROOT_APPS"
-
-  echo "BOOST_VERSION=$BOOST_VERSION-$BOOST_PATCH_VERSION"
-  echo "CMAKE_VERSION=$CMAKE_VERSION-$CMAKE_PATCH_VERSION"
-  echo "TCL_VERSION=$TCL_VERSION-$TCLTK_PATCH_VERSION"
-  echo "TK_VERSION=$TK_VERSION-$TCLTK_PATCH_VERSION"
-  echo "QT4_VERSION=$QT4_VERSION-$QT4_PATCH_VERSION"
-  echo "HDF5_VERSION=$HDF5_VERSION-$HDF5_PATCH_VERSION"
-  echo "LAPACK_VERSION=$LAPACK_VERSION-$LAPACK_PATCH_VERSION"
-  echo "PYTHON_VERSION=$PYTHON_VERSION-$PYTHON_PATCH_VERSION"
-  echo "IPYTHON_VERSION=$IPYTHON_VERSION-$IPYTHON_PATCH_VERSION"
-  echo "GIT_VERSION=$GIT_VERSION-$GIT_PATCH_VERSION"
-  echo "GCC_VERSION=$GCC_VERSION-$GCC_PATCH_VERSION"
-
-  echo "ALPS_VERSION=$ALPS_VERSION-$ALPS_PATCH_VERSION"
-  echo "XTAPP_VERSION=$XTAPP_VERSION-$XTAPP_PATCH_VERSION"
-  echo "OPENMX_VERSION=$OPENMX_VERSION-$OPENMX_PATCH_VERSION"
-  echo "MODYLAS_VERSION=$MODYLAS_VERSION-$MODYLAS_PATCH_VERSION"
-  echo "TAPIOCA_VERSION=$TAPIOCA_VERSION-$TAPIOCA_PATCH_VERSION"
-  echo "XCRYSDEN_VERSION=$XCRYSDEN_VERSION-$XCRYSDEN_PATCH_VERSION"
-  echo "IGNITION_VERSION=$IGNITION_VERSION-$IGNITION_PATCH_VERSION"
+  echo "MA_ROOT_TOOL: $MA_ROOT_TOOL"
+  echo "MA_ROOT_APPS: $MA_ROOT_APPS"
+  awk '$1=="#" && $2=="env" {print}' "$MA_ROOT_TOOL/env.sh"
+  for t in $TOOL; do
+    if [ -f "$MA_ROOT_APPS/$t/${t}vars.sh" ]; then
+      awk '$1=="#" && $2==t {print}' t="$t" "$MA_ROOT_TOOL/$t/${t}vars.sh"
+    fi
+  done
+  for p in $APPS; do
+    if [ -f "$MA_ROOT_APPS/$p/${p}vars.sh" ]; then
+      awk '$1=="#" && $2==p {print}' p="$p" "$MA_ROOT_APPS/$p/${p}vars.sh"
+    fi
+  done
 else
   echo "MateriApps Installation not found."
   exit 127
