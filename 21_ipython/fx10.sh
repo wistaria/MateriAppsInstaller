@@ -74,6 +74,32 @@ cd Pygments-$PYGMENTS_VERSION
 check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py build
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
 
+# sphinx_rtd_theme
+cd $BUILD_DIR
+$SUDO_TOOL rm -rf sphinx_rtd_theme-$SPHINX_RTD_THEME_VERSION
+if [ -f $HOME/source/sphinx_rtd_theme-$SPHINX_RTD_THEME_VERSION.tar.gz ]; then
+  check tar zxf $HOME/source/sphinx_rtd_theme-$SPHINX_RTD_THEME_VERSION.tar.gz
+else
+  check wget --no-check-certificate https://pypi.python.org/packages/source/s/sphinx_rtd_theme/sphinx_rtd_theme-$SPHINX_RTD_THEME_VERSION.tar.gz
+  check tar zxf sphinx_rtd_theme-$SPHINX_RTD_THEME_VERSION.tar.gz
+fi
+cd sphinx_rtd_theme-$SPHINX_RTD_THEME_VERSION
+check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
+
+# alabaster
+cd $BUILD_DIR
+$SUDO_TOOL rm -rf alabaster-$ALABASTER_VERSION
+if [ -f $HOME/source/alabaster-$ALABASTER_VERSION.tar.gz ]; then
+  check tar zxf $HOME/source/alabaster-$ALABASTER_VERSION.tar.gz
+else
+  check wget --no-check-certificate https://pypi.python.org/packages/source/a/alabaster/alabaster-$ALABASTER_VERSION.tar.gz
+  check tar zxf alabaster-$ALABASTER_VERSION.tar.gz
+fi
+cd alabaster-$ALABASTER_VERSION
+check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py build
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python2.7 setup.py install
+
 # sphinx
 cd $BUILD_DIR
 $SUDO_TOOL rm -rf Sphinx-$SPHINX_VERSION
