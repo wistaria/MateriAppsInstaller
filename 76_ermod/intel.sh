@@ -21,7 +21,11 @@ cd $BUILD_DIR/ermod_$ERMOD_VERSION
 cd source
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
-check ./configure --prefix=$PREFIX CC=icc FC=ifort
+if [ -n "$FFTW_ROOT" ]; then
+  check ./configure --prefix=$PREFIX CC=icc FC=ifort FCFLAGS=-I$FFTW_ROOT/include LDFLAGS=-L$FFTW_ROOT/lib
+else
+  check ./configure --prefix=$PREFIX CC=icc FC=ifort
+fi
 cd vmdplugins
 mkdir -p compile
 check make dcdplugin.so gromacsplugin.so CC=icc CCFLAGS='-O3 -g -fPIC' | tee -a $LOG
