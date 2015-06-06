@@ -21,7 +21,7 @@ mkdir -p $BUILD_DIR/gromacs-$GROMACS_VERSION-build
 cd $BUILD_DIR/gromacs-$GROMACS_VERSION-build
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
-if [ -n $FFTW_ROOT ]; then
+if [ -n "$FFTW_ROOT" ]; then
   check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DGMX_MPI=on -DFFTWF_INCLUDE_DIR="$FFTW_ROOT/include" -DFFTWF_LIBRARY="$FFTW_ROOT/lib/libfftw3f.so" $BUILD_DIR/gromacs-$GROMACS_VERSION | tee -a $LOG
 else
   check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DGMX_MPI=on $BUILD_DIR/gromacs-$GROMACS_VERSION | tee -a $LOG
