@@ -7,6 +7,6 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
-ERMODVARS_SH=$PREFIX_APPS/ermod/ermodvars-$ERMOD_VERSION-$ERMOD_PATCH_VERSION.sh
+ERMODVARS_SH=$PREFIX_APPS/ermod/ermodvars-$ERMOD_VERSION-$ERMOD_MA_REVISION.sh
 $SUDO_APPS rm -f $PREFIX_APPS/ermod/ermodvars.sh
 $SUDO_APPS ln -s $ERMODVARS_SH $PREFIX_APPS/ermod/ermodvars.sh

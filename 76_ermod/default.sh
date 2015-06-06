@@ -5,10 +5,10 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+$SUDO_APPS /bin/true
 . $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/ermod-$ERMOD_VERSION-$ERMOD_PATCH_VERSION.log
-
-PREFIX="$PREFIX_APPS/ermod/ermod-$ERMOD_VERSION-$ERMOD_PATCH_VERSION"
+LOG=$BUILD_DIR/ermod-$ERMOD_VERSION-$ERMOD_MA_REVISION.log
+PREFIX="$PREFIX_APPS/ermod/ermod-$ERMOD_VERSION-$ERMOD_MA_REVISION"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -29,19 +29,21 @@ check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
 echo "[install example]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/share/ermod/example
-$SUDO_APPS cp -fp $BUILD_DIR/ermod-example-gromacs/* $PREFIX/share/ermod/example
+$SUDO_APPS mkdir -p $PREFIX/share/ermod/example/gromacs
+$SUDO_APPS cp -fp $BUILD_DIR/ermod-example-gromacs/* $PREFIX/share/ermod/example/gromacs/
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/ermodvars.sh
-. $PREFIX_TOOL/env.sh
+# ermod $(basename $0 .sh) $ERMOD_VERSION $ERMOD_MA_REVISION $(date +%Y%m%d-%H%M%S)
+test -z "\$MA_ROOT_TOOL" && . $PREFIX_TOOL/env.sh
 export ERMOD_ROOT=$PREFIX
 export ERMOD_VERSION=$ERMOD_VERSION
+export ERMOD_MA_REVISION=$ERMOD_MA_REVISION
 export ERMOD_EXAMPLE_VERSION=$ERMOD_EXAMPLE_VERSION
-export ERMOD_PATCH_VERSION=$ERMOD_PATH_VERSION
 export PATH=\$ERMOD_ROOT/bin:\$PATH
 EOF
-ERMODVARS_SH=$PREFIX_APPS/ermod/ermodvars-$ERMOD_VERSION-$ERMOD_PATCH_VERSION.sh
+ERMODVARS_SH=$PREFIX_APPS/ermod/ermodvars-$ERMOD_VERSION-$ERMOD_MA_REVISION.sh
 $SUDO_APPS rm -f $ERMODVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/ermodvars.sh $ERMODVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/ermod
+rm -f $BUILD_DIR/ermodvars.sh
+$SUDO_APPS cp -f $LOG $PREFIX_APPS/ermod/

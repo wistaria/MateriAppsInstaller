@@ -14,11 +14,11 @@ if [ -d ermod_$ERMOD_VERSION ]; then :; else
     check tar zxf ermod_$ERMOD_VERSION.orig.tar.gz
   fi
   cd ermod_$ERMOD_VERSION
-  if [ -f $SOURCE_DIR/ermod_$ERMOD_VERSION-$ERMOD_PATCH_VERSION.debian.tar.gz ]; then
-    tar zxf $SOURCE_DIR/ermod_$ERMOD_VERSION-$ERMOD_PATCH_VERSION.debian.tar.gz
+  if [ -f $SOURCE_DIR/ermod_$ERMOD_VERSION-$ERMOD_MA_REVISION.debian.tar.gz ]; then
+    tar zxf $SOURCE_DIR/ermod_$ERMOD_VERSION-$ERMOD_MA_REVISION.debian.tar.gz
   else
-    check wget $MALIVE_REPOSITORY/main/e/ermod/ermod_$ERMOD_VERSION-$ERMOD_PATCH_VERSION.debian.tar.gz
-    check tar zxf ermod_$ERMOD_VERSION-$ERMOD_PATCH_VERSION.debian.tar.gz
+    check wget $MALIVE_REPOSITORY/main/e/ermod/ermod_$ERMOD_VERSION-$ERMOD_MA_REVISION.debian.tar.gz
+    check tar zxf ermod_$ERMOD_VERSION-$ERMOD_MA_REVISION.debian.tar.gz
   fi
   PATCHES="$(cat debian/patches/series)"
   for p in $PATCHES; do
