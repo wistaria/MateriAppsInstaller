@@ -21,10 +21,10 @@ cd $BUILD_DIR/ermod_$ERMOD_VERSION
 cd source
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
-check ./configure --prefix=$PREFIX CC=/opt/local/bin/gcc FC=/opt/local/bin/gfortran MPIFC=/opt/local/bin/mpif90 LDFLAGS=-L/opt/local/lib
+check ./configure --prefix=$PREFIX
 cd vmdplugins
 mkdir -p compile
-check make dcdplugin.so gromacsplugin.so CC=/opt/local/bin/gcc CCFLAGS='-O3 -g -fPIC' | tee -a $LOG
+check make dcdplugin.so gromacsplugin.so | tee -a $LOG
 cd ..
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG

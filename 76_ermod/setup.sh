@@ -6,7 +6,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 cd $BUILD_DIR
-if [ -d ermod-$ERMOD_VERSION ]; then :; else
+if [ -d ermod_$ERMOD_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/ermod_$ERMOD_VERSION.orig.tar.gz ]; then
     check tar zxf $SOURCE_DIR/ermod_$ERMOD_VERSION.orig.tar.gz
   else
@@ -24,4 +24,12 @@ if [ -d ermod-$ERMOD_VERSION ]; then :; else
   for p in $PATCHES; do
     patch -p1 < debian/patches/$p
   done
+fi
+if [ -d ermod-example-gromacs ]; then :; else
+  if [ -f $SOURCE_DIR/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz ]; then
+    check tar zxf $SOURCE_DIR/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz
+  else
+    check wget $MALIVE_REPOSITORY/main/e/ermod-example-gromacs/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz
+    check tar zxf ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz
+  fi
 fi

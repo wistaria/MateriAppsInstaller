@@ -33,11 +33,17 @@ cd ..
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
+echo "[install example]" | tee -a $LOG
+$SUDO_APPS mkdir -p $PREFIX/share/ermod/example
+$SUDO_APPS cp -fp $BUILD_DIR/ermod-example-gromacs/* $PREFIX/share/ermod/example
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/ermodvars.sh
 . $PREFIX_TOOL/env.sh
 export ERMOD_ROOT=$PREFIX
+export ERMOD_VERSION=$ERMOD_VERSION
+export ERMOD_EXAMPLE_VERSION=$ERMOD_EXAMPLE_VERSION
+export ERMOD_PATCH_VERSION=$ERMOD_PATH_VERSION
 export PATH=\$ERMOD_ROOT/bin:\$PATH
 EOF
 ERMODVARS_SH=$PREFIX_APPS/ermod/ermodvars-$ERMOD_VERSION-$ERMOD_PATCH_VERSION.sh
