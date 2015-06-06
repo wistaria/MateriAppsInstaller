@@ -25,6 +25,7 @@ if [ -d ermod_$ERMOD_VERSION ]; then :; else
     patch -p1 < debian/patches/$p
   done
 fi
+cd $BUILD_DIR
 if [ -d ermod-example-gromacs ]; then :; else
   if [ -f $SOURCE_DIR/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz ]; then
     check tar zxf $SOURCE_DIR/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz

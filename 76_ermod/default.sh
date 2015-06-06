@@ -18,7 +18,6 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 cd $BUILD_DIR/ermod_$ERMOD_VERSION
-cd source
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX
