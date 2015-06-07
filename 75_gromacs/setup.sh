@@ -7,10 +7,10 @@ set_prefix
 
 cd $BUILD_DIR
 if [ -d gromacs-$GROMACS_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/gromacs-$GROMACS_VERSION.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/gromacs-$GROMACS_VERSION.tar.gz
+  if [ -f $SOURCE_DIR/gromacs_$GROMACS_VERSION.orig.tar.gz ]; then
+    check tar zxf $SOURCE_DIR/gromacs_$GROMACS_VERSION.orig.tar.gz
   else
-    check wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-$GROMACS_VERSION.tar.gz
-    check tar zxf gromacs-$GROMACS_VERSION.tar.gz
+      check wget http://http.debian.net/debian/pool/main/g/gromacs/gromacs_$GROMACS_VERSION.orig.tar.gz
+    check tar zxf gromacs_$GROMACS_VERSION.orig.tar.gz
   fi
 fi
