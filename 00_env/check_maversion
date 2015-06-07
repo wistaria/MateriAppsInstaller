@@ -8,8 +8,8 @@ if [ -n "$MA_ROOT_TOOL" ]; then
   echo "MA_ROOT_APPS: $MA_ROOT_APPS"
   awk '$1=="#" && $2=="env" {print}' "$MA_ROOT_TOOL/env.sh"
   for t in $TOOL; do
-    if [ -f "$MA_ROOT_APPS/$t/${t}vars.sh" ]; then
-      awk '$1=="#" && $2==t {print}' t="$t" "$MA_ROOT_TOOL/$t/${t}vars.sh"
+    if [ -f "$MA_ROOT_TOOL/env.d/${t}vars.sh" ]; then
+      awk '$1=="#" && $2==t {print}' t="$t" "$MA_ROOT_TOOL/env.d/${t}vars.sh"
     fi
   done
   for p in $APPS; do
