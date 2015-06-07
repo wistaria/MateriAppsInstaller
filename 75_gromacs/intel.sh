@@ -21,9 +21,9 @@ cd $BUILD_DIR/gromacs-$GROMACS_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 if [ -n "$FFTW_ROOT" ]; then
-  check ./configure --prefix=$PREFIX CC=icc CXX=icpc CPPFLAGS="-I$FFTW_ROOT/include" LDFLAGS="-L$FFTW_ROOT/lib" | tee -a $LOG
+  check ./configure --prefix=$PREFIX CC=$(which icc) CXX=$(which icpc) CPPFLAGS="-I$FFTW_ROOT/include" LDFLAGS="-L$FFTW_ROOT/lib" | tee -a $LOG
 else
-  check ./configure --prefix=$PREFIX CC=icc CXX=icpc | tee -a $LOG
+  check ./configure --prefix=$PREFIX CC=$(which icc) CXX=$(which icpc) | tee -a $LOG
 fi
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
@@ -31,9 +31,9 @@ $SUDO_APPS make install | tee -a $LOG
 check make distclean | tee -a $LOG
 echo "[make mdrun_mpi]" | tee -a $LOG
 if [ -n "$FFTW_ROOT" ]; then
-  check ./configure --prefix=$PREFIX CC=icc CXX=icpc CPPFLAGS="-I$FFTW_ROOT/include" LDFLAGS="-L$FFTW_ROOT/lib" --enable-mpi --program-suffix=_mpi | tee -a $LOG
+  check ./configure --prefix=$PREFIX CC=$(which icc) CXX=$(which icpc) CPPFLAGS="-I$FFTW_ROOT/include" LDFLAGS="-L$FFTW_ROOT/lib" --enable-mpi --program-suffix=_mpi | tee -a $LOG
 else
-  check ./configure --prefix=$PREFIX CC=icc CXX=icpc | tee -a $LOG
+  check ./configure --prefix=$PREFIX CC=$(which icc) CXX=$(which icpc) --enable-mpi --program-suffix=_mpi | tee -a $LOG
 fi
 check make mdrun | tee -a $LOG
 $SUDO_APPS make install-mdrun | tee -a $LOG
