@@ -5,7 +5,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-$SUDO_APPS /bin/true
+$SUDO_APPS true
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/ermod-$ERMOD_VERSION-$ERMOD_MA_REVISION.log
 PREFIX="$PREFIX_APPS/ermod/ermod-$ERMOD_VERSION-$ERMOD_MA_REVISION"
@@ -17,7 +17,7 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/ermod_$ERMOD_VERSION
+cd $BUILD_DIR/ermod-$ERMOD_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX CC=/opt/local/bin/gcc FC=/opt/local/bin/gfortran MPIFC=/opt/local/bin/mpif90 LDFLAGS=-L/opt/local/lib
@@ -36,6 +36,7 @@ finish_info | tee -a $LOG
 cat << EOF > $BUILD_DIR/ermodvars.sh
 # ermod $(basename $0 .sh) $ERMOD_VERSION $ERMOD_MA_REVISION $(date +%Y%m%d-%H%M%S)
 test -z "\$MA_ROOT_TOOL" && . $PREFIX_TOOL/env.sh
+test -f $PREFIX_APPS/gromacs/gromacsvars.sh && . $PREFIX_APPS/gromacs/gromacsvars.sh
 export ERMOD_ROOT=$PREFIX
 export ERMOD_VERSION=$ERMOD_VERSION
 export ERMOD_MA_REVISION=$ERMOD_MA_REVISION
