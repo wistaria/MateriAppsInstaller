@@ -5,10 +5,10 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+$SUDO_APPS /bin/true
 . $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/gromacs-$GROMACS_VERSION-$GROMACS_PATCH_VERSION.log
-
-PREFIX="$PREFIX_APPS/gromacs/gromacs-$GROMACS_VERSION-$GROMACS_PATCH_VERSION"
+LOG=$BUILD_DIR/gromacs-$GROMACS_VERSION-$GROMACS_MA_REVISION.log
+PREFIX="$PREFIX_APPS/gromacs/gromacs-$GROMACS_VERSION-$GROMACS_MA_REVISION"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -32,13 +32,15 @@ $SUDO_APPS make install | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/gromacsvars.sh
-. $PREFIX_TOOL/env.sh
+# gromacs $(basename $0 .sh) $GROMACS_VERSION $GROMACS_MA_REVISION $(date +%Y%m%d-%H%M%S)
+test -z "\$MA_ROOT_TOOL" && . $PREFIX_TOOL/env.sh
 export GROMACS_ROOT=$PREFIX
 export GROMACS_VERSION=$GROMACS_VERSION
-export GROMACS_PATCH_VERSION=$GROMACS_PATCH_VERSION
+export GROMACS_MA_REVISION=$GROMACS_MA_REVISION
 export PATH=\$GROMACS_ROOT/bin:\$PATH
 EOF
-GROMACSVARS_SH=$PREFIX_APPS/gromacs/gromacsvars-$GROMACS_VERSION-$GROMACS_PATCH_VERSION.sh
+GROMACSVARS_SH=$PREFIX_APPS/gromacs/gromacsvars-$GROMACS_VERSION-$GROMACS_MA_REVISION.sh
 $SUDO_APPS rm -f $GROMACSVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/gromacsvars.sh $GROMACSVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/gromacs
+rm -f $BUILD_DIR/gromacsvars.sh
+$SUDO_APPS cp -f $LOG $PREFIX_APPS/gromacs/
