@@ -24,6 +24,9 @@ if [ -d ermod-$ERMOD_VERSION ]; then :; else
   for p in $PATCHES; do
     patch -p1 < debian/patches/$p
   done
+  if [ -f $SCRIPT_DIR/ermod-$ERMOD_VERSION.patch ]; then
+    patch -p1 < $SCRIPT_DIR/ermod-$ERMOD_VERSION.patch
+  fi
 fi
 cd $BUILD_DIR
 if [ -d ermod-example-gromacs ]; then :; else
