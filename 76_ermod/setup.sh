@@ -27,6 +27,7 @@ if [ -d ermod-$ERMOD_VERSION ]; then :; else
   if [ -f $SCRIPT_DIR/ermod-$ERMOD_VERSION.patch ]; then
     patch -p1 < $SCRIPT_DIR/ermod-$ERMOD_VERSION.patch
   fi
+  touch Makefile.in
 fi
 cd $BUILD_DIR
 if [ -d ermod-example-gromacs ]; then :; else
