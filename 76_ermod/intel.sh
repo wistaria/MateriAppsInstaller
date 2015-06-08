@@ -40,7 +40,7 @@ finish_info | tee -a $LOG
 cat << EOF > $BUILD_DIR/ermodvars.sh
 # ermod $(basename $0 .sh) $ERMOD_VERSION $ERMOD_MA_REVISION $(date +%Y%m%d-%H%M%S)
 test -z "\$MA_ROOT_TOOL" && . $PREFIX_TOOL/env.sh
-test -f $PREFIX_APPS/gromacs/gromacsvars.sh && . $PREFIX_APPS/gromacs/gromacsvars.sh
+test -f \$MA_ROOT_APPS/gromacs/gromacsvars.sh && . \$MA_ROOT_APPS/gromacs/gromacsvars.sh
 export ERMOD_ROOT=$PREFIX
 export ERMOD_VERSION=$ERMOD_VERSION
 export ERMOD_MA_REVISION=$ERMOD_MA_REVISION
