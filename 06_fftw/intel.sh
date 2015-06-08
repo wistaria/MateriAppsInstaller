@@ -20,13 +20,13 @@ rm -rf $LOG
 
 cd $BUILD_DIR/fftw-$FFTW_VERSION
 echo "[make]" | tee -a $LOG
-check ./configure CC=icc F77=ifort --prefix=$PREFIX -enable-shared --enable-threads --enable-avx | tee -a $LOG
+check ./configure CC=$(which icc) F77=$(which ifort) --prefix=$PREFIX -enable-shared --enable-threads --enable-avx | tee -a $LOG
 check make -j4 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_TOOL make install | tee -a $LOG
 check make clean | tee -a $LOG
 echo "[make float version]" | tee -a $LOG
-check ./configure CC=icc F77=ifort --prefix=$PREFIX -enable-shared --enable-threads --enable-avx --enable-float | tee -a $LOG
+check ./configure CC=$(which icc) F77=$(which ifort) --prefix=$PREFIX -enable-shared --enable-threads --enable-avx --enable-float | tee -a $LOG
 check make -j4 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_TOOL make install | tee -a $LOG
