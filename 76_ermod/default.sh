@@ -29,10 +29,11 @@ check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
 echo "[install example]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/share/ermod/example/amber $PREFIX/share/ermod/example/namd $PREFIX/share/ermod/example/gromacs
-$SUDO_APPS cp -f $BUILD_DIR/ermod_AMBER_example/* $PREFIX/share/ermod/example/amber/
-$SUDO_APPS cp -f $BUILD_DIR/ermod_NAMD_example/* $PREFIX/share/ermod/example/namd/
+$SUDO_APPS mkdir -p $PREFIX/share/ermod/example/AMBER $PREFIX/share/ermod/example/NAMD $PREFIX/share/ermod/example/gromacs
+$SUDO_APPS cp -f $BUILD_DIR/ermod_AMBER_example/* $PREFIX/share/ermod/example/AMBER/
+$SUDO_APPS cp -f $BUILD_DIR/ermod_NAMD_example/* $PREFIX/share/ermod/example/NAMD/
 $SUDO_APPS cp -f $BUILD_DIR/ermod_GROMACS_example/* $PREFIX/share/ermod/example/gromacs/
+$SUDO_APPS chmod 644 $PREFIX/share/ermod/example/AMBER/* $PREFIX/share/ermod/example/NAMD/* $PREFIX/share/ermod/example/gromacs/*
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/ermodvars.sh
