@@ -30,11 +30,27 @@ if [ -d ermod-$ERMOD_VERSION ]; then :; else
   touch Makefile.in
 fi
 cd $BUILD_DIR
-if [ -d ermod-example-gromacs ]; then :; else
-  if [ -f $SOURCE_DIR/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz
+if [ -d ermod_AMBER_example ]; then :; else
+  if [ -f $SOURCE_DIR/ermod_AMBER_example.tar ]; then
+    check tar xf $SOURCE_DIR/ermod_AMBER_example.tar
   else
-    check wget $MALIVE_REPOSITORY/main/e/ermod-example-gromacs/ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz
-    check tar zxf ermod-example-gromacs_$ERMOD_EXAMPLE_VERSION.orig.tar.gz
+    check wget http://sourceforge.net/projects/ermod/files/data_example/ermod_AMBER_example.tar
+    check tar xf ermod_AMBER_example.tar
+  fi
+fi
+if [ -d ermod_NAMD_example ]; then :; else
+  if [ -f $SOURCE_DIR/ermod_NAMD_example.tar ]; then
+    check tar xf $SOURCE_DIR/ermod_NAMD_example.tar
+  else
+    check wget http://sourceforge.net/projects/ermod/files/data_example/ermod_NAMD_example.tar
+    check tar xf ermod_NAMD_example.tar
+  fi
+fi
+if [ -d ermod_GROMACS_example ]; then :; else
+  if [ -f $SOURCE_DIR/ermod_GROMACS_example.tar ]; then
+    check tar xf $SOURCE_DIR/ermod_GROMACS_example.tar
+  else
+    check wget http://sourceforge.net/projects/ermod/files/data_example/ermod_GROMACS_example.tar
+    check tar xf ermod_GROMACS_example.tar
   fi
 fi
