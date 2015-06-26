@@ -7,6 +7,6 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
-PYTHONVARS_SH=$PREFIX_TOOL/python/pythonvars-$PYTHON_VERSION-$PYTHON_PATCH_VERSION.sh
+PYTHONVARS_SH=$PREFIX_TOOL/python/pythonvars-$PYTHON_VERSION-$PYTHON_MA_REVISION.sh
 $SUDO_TOOL rm -f $PREFIX_TOOL/env.d/pythonvars.sh
 $SUDO_TOOL ln -s $PYTHONVARS_SH $PREFIX_TOOL/env.d/pythonvars.sh
