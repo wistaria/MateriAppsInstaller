@@ -5,26 +5,35 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+$SUDO_TOOL /bin/true
 . $PREFIX_TOOL/env.sh
-PREFIX=$PREFIX_TOOL/hdf5/hdf5-$HDF5_VERSION-$HDF5_PATCH_VERSION
+LOG=$BUILD_DIR/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION.log
+PREFIX=$PREFIX_TOOL/hdf5/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION
 
-cd $BUILD_DIR
-rm -rf hdf5-$HDF5_VERSION
-if [ -f $HOME/source/hdf5-$HDF5_VERSION.tar.bz2 ]; then
-  check tar jxf $HOME/source/hdf5-$HDF5_VERSION.tar.bz2
-else
-  check wget -O - http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2 | tar jxf -
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
 fi
-cd hdf5-$HDF5_VERSION
-check ./configure --prefix=$PREFIX --enable-threadsafe --with-pthread=yes
-check make -j4
-$SUDO_TOOL make install
+
+sh $SCRIPT_DIR/setup.sh
+rm -rf $LOG
+
+cd $BUILD_DIR/hdf5-$HDF5_VERSION
+echo "[make]" | tee -a $LOG
+check ./configure --prefix=$PREFIX --enable-threadsafe --with-pthread=yes | tee -a $LOG
+echo "[make install]" | tee -a $LOG
+$SUDO_TOOL make install | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/hdf5vars.sh
+# hdf5 $(basename $0 .sh) $HDF5_VERSION $HDF5_MA_REVISION $(date +%Y%m%d-%H%M%S)
 export HDF5_ROOT=$PREFIX
+export HDF5_VERSION=$HDF5_VERSION
+export HDF5_MA_REVISION=$HDF5_MA_REVISION
 export PATH=\$HDF5_ROOT/bin:\$PATH
 export LD_LIBRARY_PATH=\$HDF5_ROOT:\$LD_LIBRARY_PATH
 EOF
-HDF5VARS_SH=$PREFIX_TOOL/hdf5/hdf5vars-$HDF5_VERSION-$HDF5_PATCH_VERSION.sh
+HDF5VARS_SH=$PREFIX_TOOL/hdf5/hdf5vars-$HDF5_VERSION-$HDF5_MA_REVISION.sh
 $SUDO_TOOL rm -f $HDF5VARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/hdf5vars.sh $HDF5VARS_SH
+rm -f $BUILD_DIR/hdf5vars.sh
+$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/hdf5/

@@ -16,7 +16,6 @@ if [ -d $PREFIX ]; then
 fi
 
 sh $SCRIPT_DIR/setup.sh
-rm -rf $BUILD_DIR/alps-build-$ALPS_VERSION $LOG
 mkdir -p $BUILD_DIR/alps-build-$ALPS_VERSION
 cd $BUILD_DIR/alps-build-$ALPS_VERSION
 start_info | tee -a $LOG
