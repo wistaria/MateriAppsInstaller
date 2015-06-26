@@ -2,11 +2,11 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-. $SCRIPT_DIR/version.sh
 set_prefix
+. $PREFIX_TOOL/env.sh
+. $SCRIPT_DIR/version.sh
 
 $SUDO_TOOL /bin/true
-. $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/lapack-$LAPACK_VERSION-$LAPACK_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/lapack/lapack-$LAPACK_VERSION-$LAPACK_MA_REVISION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"

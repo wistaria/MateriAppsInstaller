@@ -2,10 +2,10 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-. $SCRIPT_DIR/version.sh
 set_prefix
-
 . $PREFIX_TOOL/env.sh
+. $SCRIPT_DIR/version.sh
+
 PREFIX=$PREFIX_TOOL/qt4/qt4-$QT4_VERSION-$QT4_PATCH_VERSION
 
 sh $SCRIPT_DIR/setup.sh

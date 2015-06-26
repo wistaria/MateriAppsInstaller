@@ -2,11 +2,11 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-. $SCRIPT_DIR/version.sh
 set_prefix
+. $PREFIX_TOOL/env.sh
+. $SCRIPT_DIR/version.sh
 
 $SUDO_TOOL /bin/true
-. $PREFIX_TOOL/env.sh
 PREFIX=$PREFIX_TOOL/hdf5/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
 PREFIX_BACKEND="$PREFIX/Linux-s64fx"
