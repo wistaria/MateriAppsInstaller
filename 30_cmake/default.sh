@@ -2,31 +2,39 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-. $SCRIPT_DIR/version.sh
 set_prefix
-
 . $PREFIX_TOOL/env.sh
-CMAKE_VERSION_MAJOR=$(echo "$CMAKE_VERSION" | cut -d . -f 1,2)
-PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION-$CMAKE_PATCH_VERSION
+. $SCRIPT_DIR/version.sh
+. $SCRIPT_DIR/version.sh
 
-cd $BUILD_DIR
-rm -rf cmake-$CMAKE_VERSION
-if [ -f $HOME/source/cmake-$CMAKE_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/cmake-$CMAKE_VERSION.tar.gz
-else
-  check wget -O - http://www.cmake.org/files/v$CMAKE_VERSION_MAJOR/cmake-$CMAKE_VERSION.tar.gz | tar zxf -
+$SUDO_TOOL /bin/true
+LOG=$BUILD_DIR/cmake-$CMAKE_VERSION-$CMAKE_MA_REVISION.log
+PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION-$CMAKE_MA_REVISION
+
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
 fi
-cd cmake-$CMAKE_VERSION
-check ./bootstrap --prefix=$PREFIX
-check gmake -j4
-$SUDO_TOOL gmake install
+
+sh $SCRIPT_DIR/setup.sh
+rm -rf $LOG
+
+cd $BUILD_DIR/cmake-$CMAKE_VERSION
+echo "[make]" | tee -a $LOG
+check ./bootstrap --prefix=$PREFIX | tee -a $LOG
+check gmake -j4 | tee -a $LOG
+echo "[make install]" | tee -a $LOG
+$SUDO_TOOL gmake install | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/cmakevars.sh
+# cmake $(basename $0 .sh) $CMAKE_VERSION $CMAKE_MA_REVISION $(date +%Y%m%d-%H%M%S)
 export CMAKE_ROOT=$PREFIX
 export CMAKE_VERSION=$CMAKE_VERSION
-export CMAKE_PATCH_VERSION=$CMAKE_PATCH_VERSION
+export CMAKE_MA_REVISION=$CMAKE_MA_REVISION
 export PATH=\$CMAKE_ROOT/bin:\$PATH
 EOF
-CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_PATCH_VERSION.sh
+CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_MA_REVISION.sh
 $SUDO_TOOL rm -f $CMAKEVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/cmakevars.sh $CMAKEVARS_SH
+rm -f $BUILD_DIR/cmakevars.sh
+$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/cmake/
