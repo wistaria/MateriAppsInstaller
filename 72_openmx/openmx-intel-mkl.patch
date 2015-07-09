@@ -1,0 +1,25 @@
+Binary files openmx3.7.orig/source/elpa1.mod and openmx3.7/source/elpa1.mod differ
+diff -crN openmx3.7.orig/source/makefile openmx3.7/source/makefile
+*** openmx3.7.orig/source/makefile	2013-05-23 00:01:36.000000000 +0900
+--- openmx3.7/source/makefile	2015-01-16 01:30:03.285444539 +0900
+***************
+*** 94,102 ****
+  #
+  
+  
+! CC    = mpicc -openmp -O3 -I/usr/local/include
+! FC    = mpif90 -openmp -O3 -I/usr/local/include
+! LIB   = -L/usr/local/lib -lfftw3 -llapack -lblas -lg2c -static
+  
+  
+  
+--- 94,102 ----
+  #
+  
+  
+! CC    = mpicc -openmp -O3 -I$(MKLROOT)/include/fftw
+! FC    = mpif90 -openmp -O3 -I$(MKLROOT)/include/fftw
+! LIB   = -mkl=parallel -lifcore
+  
+  
+  
