@@ -56,6 +56,6 @@ if [ -d xtapp-ps_$XTAPP_PS_VERSION ]; then :; else
     check tar zxf $SOURCE_DIR/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
   else
     check wget $MALIVE_REPOSITORY/main/x/xtapp-ps/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
-    check tar zxf xtapp-ps/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
+    check tar zxf xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
   fi
 fi
