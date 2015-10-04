@@ -8,7 +8,7 @@ set_prefix() {
   MALIVE_REPOSITORY_DEF="http://exa.phys.s.u-tokyo.ac.jp/archive/MateriApps/apt/pool"
 
   if [ -f "$HOME/.mainstaller" ]; then
-    source $HOME/.mainstaller
+    . $HOME/.mainstaller
   fi
 
   if [ -z "$PREFIX_TOOL" ]; then
