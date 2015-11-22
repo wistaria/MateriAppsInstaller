@@ -31,6 +31,11 @@ echo "WORM_HOME=$PREFIX" > wv.sh
 awk '$0 !~ /^WORM_HOME/ {print}' bin/wormvars.sh >> wv.sh
 mv wv.sh bin/wormvars.sh
 
+awk '$0 !~ /^ODIR=/ {print} $0 ~ /^ODIR=/ {print "ODIR=\$OD"}' bin/inpgene >> inpgene
+mv inpgene bin/inpgene
+chmod +x bin/inpgene
+
+
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS mkdir -p $PREFIX
 $SUDO_APPS cp -r bin $PREFIX
