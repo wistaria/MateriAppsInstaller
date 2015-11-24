@@ -6,9 +6,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/dsqss-$DSQSS_VERSION-$DSQSS_PATCH_VERSION.log
+LOG=$BUILD_DIR/dsqss-$DSQSS_VERSION-$DSQSS_MA_VERSION.log
 
-PREFIX="$PREFIX_APPS/dsqss/dsqss-$DSQSS_VERSION-$DSQSS_PATCH_VERSION"
+PREFIX="$PREFIX_APPS/dsqss/dsqss-$DSQSS_VERSION-$DSQSS_MA_VERSION"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -45,9 +45,10 @@ $SUDO_APPS cp -r samples $PREFIX
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/dsqssvars.sh
+# dsqss $(basename $0 .sh) $DSQSS_VERSION $DSQSS_MA_REVISION $(date +%Y%m%d-%H%M%S)
 . $PREFIX/bin/wormvars.sh
 EOF
-DSQSSVARS_SH=$PREFIX_APPS/dsqss/dsqssvars-$DSQSS_VERSION-$DSQSS_PATCH_VERSION.sh
+DSQSSVARS_SH=$PREFIX_APPS/dsqss/dsqssvars-$DSQSS_VERSION-$DSQSS_MA_VERSION.sh
 $SUDO_APPS rm -f $DSQSSVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/dsqssvars.sh $DSQSSVARS_SH
 $SUDO_APPS cp -f $LOG $PREFIX_APPS/dsqss
