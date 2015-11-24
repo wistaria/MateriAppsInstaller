@@ -1,0 +1,14 @@
+diff -urN dsqss-1.1.17+pv1.1.2.orig/runConfigure.sh dsqss-1.1.17+pv1.1.2/runConfigure.sh
+--- dsqss-1.1.17+pv1.1.2.orig/runConfigure.sh	2015-11-06 12:58:48.000000000 +0900
++++ dsqss-1.1.17+pv1.1.2/runConfigure.sh	2015-11-24 18:42:32.000000000 +0900
+@@ -18,8 +18,8 @@
+     
+     case $PARALLEL in
+         YES)
+-        CXX=mpic++
+-        CC=mpic++
++        CXX=mpicxx
++        CC=mpicxx
+         MULTI=-DMULTI;;
+         NO)
+         CXX=g++
