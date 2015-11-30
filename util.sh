@@ -5,7 +5,7 @@ set_prefix() {
   BUILD_DIR_DEF="$HOME/build"
   SOURCE_DIR_DEF="$HOME/source"
   SUDO_DEF="/usr/bin/sudo"
-  MALIVE_REPOSITORY_DEF="http://exa.phys.s.u-tokyo.ac.jp/archive/MateriApps/apt/pool"
+  MALIVE_REPOSITORY_DEF="http://download.sourceforge.net/project/materiappslive/Debian/archive/wheezy"
 
   if [ -f "$HOME/.mainstaller" ]; then
     . $HOME/.mainstaller
