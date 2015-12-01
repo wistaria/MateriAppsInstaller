@@ -20,7 +20,11 @@ rm -rf $LOG
 cd $BUILD_DIR/feram-$FERAM_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
-check ./configure --prefix=$PREFIX --with-fft=fftw3_threads | tee -a $LOG
+if [ -n "$FFTW_ROOT" ]; then
+  check ./configure --prefix=$PREFIX CPPFLAGS="-I$FFTW_ROOT/include" LDFLAGS="-L$FFTW_ROOT/lib" | tee -a $LOG
+else
+  check ./configure --prefix=$PREFIX --with-fft=fftw3_threads | tee -a $LOG
+fi
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
