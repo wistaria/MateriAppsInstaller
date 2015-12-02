@@ -10,7 +10,7 @@ if [ -d gromacs-$GROMACS_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/gromacs_$GROMACS_VERSION.orig.tar.gz ]; then
     check tar zxf $SOURCE_DIR/gromacs_$GROMACS_VERSION.orig.tar.gz
   else
-      check wget http://http.debian.net/debian/pool/main/g/gromacs/gromacs_$GROMACS_VERSION.orig.tar.gz
+      check wget $WGET_OPTION http://http.debian.net/debian/pool/main/g/gromacs/gromacs_$GROMACS_VERSION.orig.tar.gz
     check tar zxf gromacs_$GROMACS_VERSION.orig.tar.gz
   fi
 fi
