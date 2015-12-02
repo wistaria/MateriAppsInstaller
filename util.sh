@@ -80,6 +80,8 @@ set_prefix() {
   fi
   echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
 
+  echo "WGET_OPTION=$WGET_OPTION"
+
   return 0
 }
 

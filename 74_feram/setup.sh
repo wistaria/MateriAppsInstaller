@@ -11,7 +11,7 @@ if [ -d feram-$FERAM_VERSION ]; then :; else
     check tar zxf $SOURCE_DIR/feram_$FERAM_VERSION.orig.tar.gz
   else
     if [ -f feram_$FERAM_VERSION.orig.tar.gz ]; then :; else
-      check wget $MALIVE_REPOSITORY/feram_$FERAM_VERSION.orig.tar.gz
+      check wget $WGET_OPTION $MALIVE_REPOSITORY/feram_$FERAM_VERSION.orig.tar.gz
     fi
     check tar zxf feram_$FERAM_VERSION.orig.tar.gz | tar zxf -
   fi
