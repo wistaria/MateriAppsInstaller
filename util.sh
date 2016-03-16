@@ -1,14 +1,23 @@
 #!/bin/sh
 
 set_prefix() {
+  MAINSTALLER_CONFIG_DEF="$HOME/.mainstaller"
   PREFIX_DEF="$HOME/materiapps"
   BUILD_DIR_DEF="$HOME/build"
   SOURCE_DIR_DEF="$HOME/source"
   SUDO_DEF="/usr/bin/sudo"
   MALIVE_REPOSITORY_DEF="http://download.sourceforge.net/project/materiappslive/Debian/archive/wheezy"
 
-  if [ -f "$HOME/.mainstaller" ]; then
-    . $HOME/.mainstaller
+  if [ -n "$MAINSTALLER_CONFIG" ]; then
+    if [ -f "$MAINSTALLER_CONFIG" ]; then
+      . "$MAINSTALLER_CONFIG"
+    else
+      echo "Warning: configuration file ($MAINSTALLER_CONFIG) not found. Skipped."
+    fi
+  else
+     if [ -f "$MAINSTALLER_CONFIG_DEF" ]; then
+       . "$MAINSTALLER_CONFIG_DEF"
+     fi
   fi
 
   if [ -z "$PREFIX_TOOL" ]; then
