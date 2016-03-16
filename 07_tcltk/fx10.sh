@@ -6,44 +6,47 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
-PREFIX=$PREFIX_TOOL/tcltk/tcltk-$TCL_VERSION-$TCLTK_PATCH_VERSION
+$SUDO_TOOL /bin/true
+LOG=$BUILD_DIR/tcltk-$TCLTK_VERSION-$TCLTK_MA_REVISION.log
+PREFIX=$PREFIX_TOOL/tcltk/tcltk-$TCLTK_VERSION-$TCLTK_MA_REVISION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
 
-# TCL
-
-cd $BUILD_DIR
-rm -rf tcl$TCL_VERSION
-if [ -f $HOME/source/tcl$TCL_VERSION-src.tar.gz ]; then
-  check tar zxf $HOME/source/tcl$TCL_VERSION-src.tar.gz
-else
-  check wget -O - http://prdownloads.sourceforge.net/tcl/tcl$TCL_VERSION-src.tar.gz | tar zxf -
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
 fi
-cd tcl$TCL_VERSION/unix
-check ./configure --prefix=$PREFIX_FRONTEND
-check make -j4
-$SUDO make install
 
-# TK
+sh $SCRIPT_DIR/setup.sh
+rm -rf $LOG
 
-cd $BUILD_DIR
-rm -rf tk$TK_VERSION
-if [ -f $HOME/source/tk$TK_VERSION-src.tar.gz ]; then
-  check tar zxf $HOME/source/tk$TK_VERSION-src.tar.gz
-else
-  check wget -O - http://prdownloads.sourceforge.net/tcl/tk$TK_VERSION-src.tar.gz | tar zxf -
-fi
-cd tk$TK_VERSION/unix
-check ./configure --prefix=$PREFIX_FRONTEND
-check make -j4
-$SUDO make install
+start_info | tee -a $LOG
+cd $BUILD_DIR/tcl$TCLTK_VERSION/unix
+echo "[TCL configure]" | tee -a $LOG
+check ./configure --prefix=$PREFIX_FRONTEND | tee -a $LOG
+echo "[TCL make]" | tee -a $LOG
+check make -j4 | tee -a $LOG
+echo "[TCL make install]" | tee -a $LOG
+$SUDO make install | tee -a $LOG
+
+cd $BUILD_DIR/tk$TCLTK_VERSION/unix
+echo "[TK configure]" | tee -a $LOG
+check ./configure --prefix=$PREFIX_FRONTEND | tee -a $LOG
+echo "[TK make]" | tee -a $LOG
+check make -j4 | tee -a $LOG
+echo "[TK make install]" | tee -a $LOG
+$SUDO make install | tee -a $LOG
+finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/tcltkvars.sh
+# tcltk $(basename $0 .sh) $TCLTK_VERSION $TCLTK_MA_REVISION $(date +%Y%m%d-%H%M%S)
 OS=\$(uname -s)
 ARCH=\$(uname -m)
 export TCLTK_ROOT=$PREFIX
 export PATH=\$TCLTK_ROOT/\$OS-\$ARCH/bin:\$PATH
-export LD_LIBRARY_PATH=\$TCKTK_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=\$TCLTK_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
 EOF
-TCLTKVARS_SH=$PREFIX_TOOL/tcltk/tcltkvars-$TCL_VERSION-$TCLTK_PATCH_VERSION.sh
+TCLTKVARS_SH=$PREFIX_TOOL/tcltk/tcltkvars-$TCLTK_VERSION-$TCLTK_MA_REVISION.sh
 $SUDO_TOOL rm -f $TCLTKVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/tcltkvars.sh $TCLTKVARS_SH
+rm -f $BUILD_DIR/tcltkvars.sh
+$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/tcltk/
