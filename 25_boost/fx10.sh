@@ -25,17 +25,16 @@ start_info | tee -a $LOG
 echo "[boost build]" | tee -a $LOG
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION/tools/build
 check sh bootstrap.sh | tee -a $LOG
-$SUDO_TOOL ./b2 --prefix=$PREFIX_FRONTEND install | tee -a $LOG
+$SUDO_TOOL ./b2 --prefix=$PREFIX_FRONTEND toolset=gcc install | tee -a $LOG
 $SUDO_TOOL rm -rf tools/build
 
-echo "[boost x86_64] | tee -a $LOG
+echo "[boost x86_64]" | tee -a $LOG
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION
-echo "using mpi : $(which mpicxx) ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_FRONTEND --layout=tagged stage | tee -a $LOG
-$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_FRONTEND --layout=tagged install | tee -a $LOG
+check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_FRONTEND --layout=tagged --without-graph_parallel --without-mpi toolset=gcc stage | tee -a $LOG
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_FRONTEND --layout=tagged --without-graph_parallel --without-mpi toolset=gcc install | tee -a $LOG
 check rm -rf bin.v2 stage
 
-echo "[boost s64fx] | tee -a $LOG
+echo "[boost s64fx]" | tee -a $LOG
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION
 echo "using mpi : $(which mpiFCCpx) ;" > user-config.jam
 check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-atomic --without-context --without-coroutine --without-log --without-math --without-python --without-thread --without-wave toolset=fccx stage | tee -a $LOG
