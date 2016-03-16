@@ -17,8 +17,8 @@ if [ -d boost_$BOOST_VERSION-$BOOST_MA_REVISION ]; then :; else
     check tar jxf boost_$BOOST_VERSION.tar.bz2
   fi
   check mv -f boost_$BOOST_VERSION boost_$BOOST_VERSION-$BOOST_MA_REVISION
-  if [ -f $SCRIPT_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION.patch ]; then
+  if [ -f $SCRIPT_DIR/boost_$BOOST_VERSION.patch ]; then
     cd boost_$BOOST_VERSION-$BOOST_MA_REVISION
-    cat $SCRIPT_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION.patch | patch -p1
+    cat $SCRIPT_DIR/boost_$BOOST_VERSION.patch | patch -p1
   fi
 fi
