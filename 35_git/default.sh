@@ -1,29 +1,41 @@
-#!/bin/bash
+#!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-. $SCRIPT_DIR/version.sh
 set_prefix
-
 . $PREFIX_TOOL/env.sh
-PREFIX=$PREFIX_TOOL/git/git-$GIT_VERSION-$GIT_PATCH_VERSION
+. $SCRIPT_DIR/version.sh
 
-cd $BUILD_DIR
-rm -rf git-$GIT_VERSION
-if [ -f $HOME/source/git-$GIT_VERSION.tar.gz ]; then
-  check tar zxf $HOME/source/git-$GIT_VERSION.tar.gz
-else
-  check wget -O - http://www.kernel.org/pub/software/scm/git/git-$GIT_VERSION.tar.gz | tar zxf -
+$SUDO_TOOL /bin/true
+LOG=$BUILD_DIR/git-$GIT_VERSION-$GIT_MA_REVISION.log
+PREFIX=$PREFIX_TOOL/git/git-$GIT_VERSION-$GIT_MA_REVISION
+
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
 fi
-cd git-$GIT_VERSION
-check ./configure --prefix=$PREFIX --with-python=$PYTHON_ROOT/bin/python2.7
-check make -j4
-$SUDO_TOOL env LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH make install
+
+sh $SCRIPT_DIR/setup.sh
+rm -rf $LOG
+
+start_info | tee -a $LOG
+
+cd $BUILD_DIR/git-$GIT_VERSION
+echo "[configure]" | tee -a $LOG
+check ./configure --prefix=$PREFIX --with-python=$PYTHON_ROOT/bin/python2.7 | tee -a $LOG
+echo "[make]" | tee -a $LOG
+check make -j4 | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH make install | tee -a $LOG
+
+finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/gitvars.sh
+# git $(basename $0 .sh) $GIT_VERSION $GIT_MA_REVISION $(date +%Y%m%d-%H%M%S)
 export GIT_ROOT=$PREFIX
 export PATH=\$GIT_ROOT/bin:\$PATH
 EOF
-GITVARS_SH=$PREFIX_TOOL/git/gitvars-$GIT_VERSION-$GIT_PATCH_VERSION.sh
+GITVARS_SH=$PREFIX_TOOL/git/gitvars-$GIT_VERSION-$GIT_MA_REVISION.sh
 $SUDO_TOOL rm -f $GITVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/gitvars.sh $GITVARS_SH
+rm -f $BUILD_DIR/gitvars.sh
+$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/git/
