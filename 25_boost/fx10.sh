@@ -37,8 +37,8 @@ check rm -rf bin.v2 stage
 echo "[boost s64fx]" | tee -a $LOG
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION
 echo "using mpi : $(which mpiFCCpx) ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-atomic --without-context --without-coroutine --without-log --without-math --without-python --without-thread --without-wave toolset=fccx stage | tee -a $LOG
-$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-atomic --without-context --without-coroutine --without-log --without-math --without-python --without-thread --without-wave toolset=fccx install | tee -a $LOG
+check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-context --without-coroutine --without-python toolset=fccx stage | tee -a $LOG
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-context --without-coroutine --without-python toolset=fccx install | tee -a $LOG
 check rm -rf bin.v2 stage
 
 finish_info | tee -a $LOG

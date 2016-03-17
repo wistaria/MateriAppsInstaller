@@ -41,6 +41,19 @@ index 570f7ea..4ead71f 100644
 +       // && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
  
  #endif // BOOST_ASIO_DETAIL_GCC_SYNC_FENCED_BLOCK_HPP
+diff --git boost_1_58_0/boost/atomic/detail/platform.hpp boost_1_58_0/boost/atomic/detail/platform.hpp
+index 76ad4eb..95fff57 100644
+--- boost_1_58_0/boost/atomic/detail/platform.hpp
++++ boost_1_58_0/boost/atomic/detail/platform.hpp
+@@ -59,7 +59,7 @@
+ 
+ #define BOOST_ATOMIC_DETAIL_PLATFORM gcc_arm
+ 
+-#elif defined(__GNUC__) && defined(__sparc_v9__)
++#elif defined(__GNUC__) && defined(__sparc_v9__) && !defined(__FCC_VERSION)
+ 
+ #define BOOST_ATOMIC_DETAIL_PLATFORM gcc_sparc
+ 
 diff --git boost_1_58_0/boost/config/stdlib/stlport.hpp boost_1_58_0/boost/config/stdlib/stlport.hpp
 index fd5d3a5..3850873 100644
 --- boost_1_58_0/boost/config/stdlib/stlport.hpp
@@ -63,6 +76,19 @@ index 3fd0e18..e1cd851 100644
  #error "FUSION_MAX_VECTOR_SIZE out of bounds for preprocessed headers"
  #endif
 -
+diff --git boost_1_58_0/boost/log/detail/config.hpp boost_1_58_0/boost/log/detail/config.hpp
+index c5a7367..7104fa2 100644
+--- boost_1_58_0/boost/log/detail/config.hpp
++++ boost_1_58_0/boost/log/detail/config.hpp
+@@ -86,7 +86,7 @@
+ #   endif
+ #endif
+ 
+-#if defined(BOOST_INTEL) || defined(__SUNPRO_CC)
++#if defined(BOOST_INTEL) || defined(__SUNPRO_CC) || defined(__FCC_VERSION)
+     // Intel compiler and Sun Studio 12.3 have problems with friend declarations for nested class templates
+ #   define BOOST_LOG_NO_MEMBER_TEMPLATE_FRIENDS
+ #endif
 diff --git boost_1_58_0/boost/math/special_functions/lanczos.hpp boost_1_58_0/boost/math/special_functions/lanczos.hpp
 index 0db21d3..05ffcf3 100644
 --- boost_1_58_0/boost/math/special_functions/lanczos.hpp
