@@ -11,9 +11,9 @@ if [ -d HPhi-$HPHI_VERSION ]; then :; else
     check tar zxf $SOURCE_DIR/HPhi_$HPHI_VERSION.tar.gz
   else
     if [ -f HPhi-release-$HPhi_VERSION.tar.gz ]; then :; else
-      check wget https://github.com/QLMS/HPhi/releases/download/v${HPHI_VERSION}/HPhi-release-${HPHI_VERSION}.tar.gz
+      check wget https://github.com/QLMS/HPhi/releases/download/v${HPHI_VERSION}/HPhi-release-${HPHI_VERSION}.tar.gz -O HPhi-release-${HPHI_VERSION}.tar.gz
     fi
-    check tar zxf HPhi-release-${HPHI_VERSION}.tar.gz | tar zxf -
+    check tar zxf HPhi-release-${HPHI_VERSION}.tar.gz
   fi
   cd HPhi-release-${HPHI_VERSION}
   cp doc/userguide_jp.pdf .
