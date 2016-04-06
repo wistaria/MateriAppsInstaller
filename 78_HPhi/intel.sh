@@ -23,7 +23,7 @@ echo "[make]" | tee -a $LOG
 if [ -e makefile ]; then
     check make veryclean | tee -a $LOG
 fi
-check sh ./HPhiConfig.sh intel
+check sh ./HPhiconfig.sh intel
 check make HPhi | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 

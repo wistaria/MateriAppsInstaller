@@ -23,7 +23,7 @@ echo "[make]" | tee -a $LOG
 if [ -e makefile ]; then
     check make veryclean | tee -a $LOG
 fi
-check sh ./HPhiConfig.sh gcc-mac | tee -a $LOG
+check sh ./HPhiconfig.sh gcc-mac | tee -a $LOG
 check awk '$1 !~ /CC/ && $1 !~ /^FLAGS/ {print}
            $1 ~ /CC/ { print "CC = cc"} 
            $1 ~ /^FLAGS/ {print "FLAGS = "}
