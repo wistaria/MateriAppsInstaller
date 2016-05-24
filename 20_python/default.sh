@@ -19,6 +19,11 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 
+if [ -d $SOURCE_DIR/python ]; then
+  export PIP_NO_INDEX=true
+  export PIP_FIND_LINKS=$SOURCE_DIR/python
+fi
+
 echo "[python]" | tee -a $LOG
 cd $BUILD_DIR/Python-$PYTHON_VERSION
 check ./configure --prefix=$PREFIX --enable-shared | tee -a $LOG

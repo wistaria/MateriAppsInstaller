@@ -20,6 +20,11 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 
+if [ -d $SOURCE_DIR/python ]; then
+  export PIP_NO_INDEX=true
+  export PIP_FIND_LINKS=$SOURCE_DIR/python
+fi
+
 echo "[python]" | tee -a $LOG
 cd $BUILD_DIR/Python-$PYTHON_VERSION
 check ./configure --prefix=$PREFIX_FRONTEND --enable-shared | tee -a $LOG
@@ -28,7 +33,7 @@ $SUDO_TOOL make install
 
 echo "[pip]" | tee -a $LOG
 cd $BUILD_DIR
-$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python get-pip.py | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python get-pip.py | tee -a $LOG
 
 echo "[numpy]" | tee -a $LOG
 cd $BUILD_DIR/numpy-$NUMPY_VERSION
@@ -46,15 +51,15 @@ $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRO
 
 echo "[matplotlib]" | tee -a $LOG
 cd $BUILD_DIR
-$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install matplotlib | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install matplotlib | tee -a $LOG
 
 echo "[ipython]" | tee -a $LOG
 cd $BUILD_DIR
-$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install sphinx pyzmq tornado ipython | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install sphinx pyzmq tornado ipython | tee -a $LOG
 
 echo "[mock]" | tee -a $LOG
 cd $BUILD_DIR
-$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install mock | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install mock | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/pythonvars.sh
 # python $(basename $0 .sh) $PYTHON_VERSION $PYTHON_MA_REVISION $(date +%Y%m%d-%H%M%S)
