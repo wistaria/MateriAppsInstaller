@@ -10,4 +10,4 @@ wget $WGET_OPTION -O Python-$PYTHON_VERSION.tgz http://www.python.org/ftp/python
 wget $WGET_OPTION -O get-pip.py https://bootstrap.pypa.io/get-pip.py
 wget $WGET_OPTION -O scipy-$SCIPY_VERSION.tar.gz http://pypi.python.org/packages/source/s/scipy/scipy-$SCIPY_VERSION.tar.gz
 wget $WGET_OPTION -O numpy-$NUMPY_VERSION.tar.gz http://pypi.python.org/packages/source/n/numpy/numpy-$NUMPY_VERSION.tar.gz
-pip --no-cache-dir download pip wheel matplotlib ipython mock
+pip --no-cache-dir download pip wheel matplotlib ipython sphinx pyzmq tornado mock
