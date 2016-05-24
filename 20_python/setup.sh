@@ -19,7 +19,7 @@ fi
 
 if [ -f get-pip.py ]; then :; else
   if [ -f $SOURCE_DIR/python/get-pip.py ]; then
-    check cp $SOURCE_DIR/python/get-pip.py
+    check cp $SOURCE_DIR/python/get-pip.py .
   else
     check wget $WGET_OPTION https://bootstrap.pypa.io/get-pip.py
   fi
