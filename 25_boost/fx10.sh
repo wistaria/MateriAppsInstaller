@@ -30,15 +30,27 @@ $SUDO_TOOL rm -rf tools/build
 
 echo "[boost x86_64]" | tee -a $LOG
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION
-check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_FRONTEND --layout=tagged --without-graph_parallel --without-mpi toolset=gcc stage | tee -a $LOG
-$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_FRONTEND --layout=tagged --without-graph_parallel --without-mpi toolset=gcc install | tee -a $LOG
+check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 -j4 -d2 --prefix=$PREFIX_FRONTEND --layout=tagged --without-graph_parallel --without-mpi toolset=gcc threading=multi variant=release stage | tee -a $LOG
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 -j4 -d2 --prefix=$PREFIX_FRONTEND --layout=tagged --without-graph_parallel --without-mpi toolset=gcc threading=multi variant=release install | tee -a $LOG
 check rm -rf bin.v2 stage
 
 echo "[boost s64fx]" | tee -a $LOG
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION
 echo "using mpi : $(which mpiFCCpx) ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-context --without-coroutine --without-python toolset=fccx stage | tee -a $LOG
-$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 --prefix=$PREFIX_BACKEND --layout=tagged --without-context --without-coroutine --without-python toolset=fccx install | tee -a $LOG
+check env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 -j4 -d2 --prefix=$PREFIX_BACKEND --layout=tagged --without-context --without-coroutine --without-python toolset=fccx threading=multi variant=release stage | tee build-stage.log
+cat build-stage.log >> $LOG
+DIRS=$(cd bin.v2/libs && ls)
+echo "(grep FCCpx build-stage.log | grep '\-shared' | \\" > fix-stage.sh
+for d in $DIRS; do
+  echo "sed 's#bin.v2/libs/$d/build/fccx/release/threading-multi/libboost#libboost#' | \\" >> fix-stage.sh
+done
+echo "sed 's#bin.v2/libs/log/build/fccx/release/build-no/log-api-unix/threading-multi/libboost#libboost#' | \\" >> fix-stage.sh
+echo "sh -x)" >> fix-stage.sh
+echo "Fixing shared library search path..." | tee -a $LOG
+sh fix-stage.sh | tee -a $LOG
+mv -f libboost_* stage/lib/
+grep '^    cp' build-stage.log  | grep 'release/threading-multi' | awk '{print $1,$3,$2}' | sh -x | tee -a $LOG
+$SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX_FRONTEND/bin/b2 -j4 -d2 --prefix=$PREFIX_BACKEND --layout=tagged --without-context --without-coroutine --without-python toolset=fccx threading=multi variant=release install | tee -a $LOG
 check rm -rf bin.v2 stage
 
 finish_info | tee -a $LOG

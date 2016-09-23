@@ -117,7 +117,7 @@ index 16de21d..94d2a9a 100644
  
 diff --git boost_1_58_0/tools/build/src/tools/fccx.jam boost_1_58_0/tools/build/src/tools/fccx.jam
 new file mode 100644
-index 0000000..f2e5054
+index 0000000..e684ddc
 --- /dev/null
 +++ boost_1_58_0/tools/build/src/tools/fccx.jam
 @@ -0,0 +1,83 @@
@@ -170,12 +170,12 @@ index 0000000..f2e5054
 +
 +actions compile.c
 +{
-+    "$(CONFIG_C_COMMAND)" -w -mt $(OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -o "$(<)" "$(>)"
++    "$(CONFIG_C_COMMAND)" -w -Xg -mt -Kfast,ocl,ilfunc -Nnoline --alternative_tokens $(OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -o "$(<)" "$(>)"
 +}
 +
 +actions compile.c++
 +{
-+    "$(CONFIG_COMMAND)" -w -Xg -mt $(OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -o "$(<)" "$(>)"
++    "$(CONFIG_COMMAND)" -w -Xg -mt -Kfast,ocl,ilfunc -Nnoline --alternative_tokens $(OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -o "$(<)" "$(>)"
 +}
 +
 +rule link ( targets * : sources * : properties * )
