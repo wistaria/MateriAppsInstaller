@@ -18,5 +18,7 @@ if [ -d alps-$ALPS_VERSION ]; then :; else
   fi
   mv alps_$ALPS_VERSION_ORIG alps-$ALPS_VERSION
   cd alps-$ALPS_VERSION
-  # patch -p1 < $SCRIPT_DIR/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION.patch
+  if [ -f $SCRIPT_DIR/alps-$ALPS_VERSION.patch ]; then
+    patch -p1 < $SCRIPT_DIR/alps-$ALPS_VERSION.patch
+  fi
 fi

@@ -37,7 +37,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   $BUILD_DIR/alps-$ALPS_VERSION | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
-check make -j2 | tee -a $LOG
+check make -j2 VERBOSE=1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
 echo "[ctest]" | tee -a $LOG
@@ -76,20 +76,20 @@ cd $BUILD_DIR/alps-build-$BUILD_ARCH-$ALPS_VERSION
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
-  -DCMAKE_CXX_COMPILER=mpiFCCpx -DCMAKE_CXX_FLAGS_RELEASE="-w -Xg -Kfast,ocl,ilfunc -KPIC -Nnoline --alternative_tokens" -DCMAKE_C_COMPILER=mpifccpx -DCMAKE_C_FLAGS_RELEASE="-w -Xg -Kfast,ocl,ilfunc -KPIC -Nnoline -Dmain=MAIN__" -DCMAKE_Fortran_COMPILER=mpifrtpx -DCMAKE_Fortran_FLAGS_RELEASE="-w -Kfast -KPIC" \
-  -DCMAKE_EXE_LINKER_FLAGS="-SSL2 --linkfortran" -DCMAKE_SHARED_LINKER_FLAGS="-SSL2" \
+  -DCMAKE_CXX_COMPILER=mpiFCCpx -DCMAKE_CXX_FLAGS_RELEASE="-w -Xg -Kfast,ocl,ilfunc -KPIC -Nnoline --alternative_tokens" -DCMAKE_C_COMPILER=mpifccpx -DCMAKE_C_FLAGS_RELEASE="-w -Xg -Kfast,ocl,ilfunc -KPIC -Nnoline" -DCMAKE_Fortran_COMPILER=mpifrtpx -DCMAKE_Fortran_FLAGS_RELEASE="-w -Kfast -KPIC" \
+  -DCMAKE_EXE_LINKER_FLAGS="-SSL2 --linkfortran -lbz2" -DCMAKE_SHARED_LINKER_FLAGS="-SSL2" \
   -DCMAKE_COMMAND=$CMAKE_PATH -DCMAKE_CTEST_COMMAND=$CTEST_PATH \
-  -DMPI_COMPILE_FLAGS="-lmpi" -DMPI_INCLUDE_PATH=$MPI_HOME/include/mpi/fujitsu -DMPI_LIBRARY=$MPI_HOME/lib64/libmpi.so \
+  -DMPI_COMPILE_FLAGS="-lmpi" -DMPI_INCLUDE_PATH=$MPI_HOME/include/mpi/fujitsu -DMPI_LIBRARY=$MPI_HOME/lib64/libmpi.so -DMPI_EXTRA_LIBRARY=$MPI_HOME/lib64/libmpi.so \
   -DHdf5_INCLUDE_DIRS=$HDF5_ROOT/$BUILD_ARCH/include -DHdf5_LIBRARY_DIRS=$HDF5_ROOT/$BUILD_ARCH/lib \
   -DLAPACK_FOUND=TRUE \
-  -DBoost_ROOT_DIR=$BOOST_ROOT \
+  -DBOOST_ROOT=$BOOST_ROOT/$BUILD_ARCH \
   -DOpenMP_CXX_FLAGS=-Kopenmp -DOpenMP_C_FLAGS=-Kopenmp \
   -DALPS_ENABLE_OPENMP=ON -DALPS_ENABLE_OPENMP_WORKER=ON \
   -DALPS_BUILD_FORTRAN=ON -DALPS_BUILD_TESTS=ON -DALPS_BUILD_PYTHON=OFF \
   $BUILD_DIR/alps-$ALPS_VERSION | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
-check make -j2 | tee -a $LOG
+check make -j2 VERBOSE=1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_APPS make install | tee -a $LOG
 # echo "[ctest]" | tee -a $LOG
