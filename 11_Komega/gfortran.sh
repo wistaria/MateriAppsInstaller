@@ -89,6 +89,12 @@ echo "$SUDO_TOOLS cp -r app/sample $PREFIX/sample/ShiftK" | tee -a $LOG
 $SUDO_TOOLS cp -r app/sample $PREFIX/sample/ShiftK | tee -a $LOG
 echo "$SUDO_TOOLS cp -r test $PREFIX/sample/Komega" | tee -a $LOG
 $SUDO_TOOLS cp -r test $PREFIX/sample/Komega | tee -a $LOG
+cat << END > $PREFIX/sample/Komega/makefile
+F90 = ifort
+FFLAGS = -mkl
+KOMEGA_ROOT = $PREFIX
+END
+cat $SCRIPT_DIR/makefile.sample >> $PREFIX/sample/Komega/makefile
 
 finish_info | tee -a $LOG
 

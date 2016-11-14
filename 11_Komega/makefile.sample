@@ -1,0 +1,31 @@
+.SUFFIXES :
+.SUFFIXES : .o .f90
+
+LIB = -L$(KOMEGA_ROOT)/lib -lkomega mathlib.o
+INCLUDE = -I$(KOMEGA_ROOT)/include/serial/static
+
+all:solve_rr.x solve_cr.x solve_rc.x solve_cc.x
+
+solve_cr.x:solve_cr.o
+	$(F90) $< -o $@ $(FFLAGS) $(LIB)
+
+solve_rr.x:solve_rr.o
+	$(F90) $< -o $@ $(FFLAGS) $(LIB)
+
+solve_rc.x:solve_rc.o
+	$(F90) $< -o $@ $(FFLAGS) $(LIB)
+
+solve_cc.x:solve_cc.o
+	$(F90) $< -o $@ $(FFLAGS) $(LIB)
+
+.f90.o:
+	$(F90) -c $< $(FFLAGS) $(INCLUDE)
+
+clean:
+	rm -f *.o *.x *.mod
+
+solve_cr.o:mathlib.o
+solve_rr.o:mathlib.o
+solve_rc.o:mathlib.o
+solve_cc.o:mathlib.o
+
