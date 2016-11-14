@@ -18,19 +18,27 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
+cp MAKE/OPTIONS/Makefile.icc_serial MAKE
+cd STUBS
+make clean
+make CC=icc
+cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check make mpi | tee -a $LOG
-check make serial | tee -a $LOG
+check make icc_serial | tee -a $LOG
 check make mpi mode=lib | tee -a $LOG
 check make mpi mode=shlib | tee -a $LOG
-check make serial mode=lib | tee -a $LOG
-check make serial mode=shlib | tee -a $LOG
+check make icc_serial mode=lib | tee -a $LOG
+check make icc_serial mode=shlib | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib
-$SUDO_APPS cp -p lmp_mpi lmp_serial $PREFIX/bin
+$SUDO_APPS mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib $PREFIX/examples
+$SUDO_APPS cp -p lmp_icc_serial $PREFIX/bin/lmp_serial
+$SUDO_APPS cp -p lmp_mpi $PREFIX/bin
 $SUDO_APPS cp -p lammps.h $PREFIX/include
 $SUDO_APPS cp -p liblammps_* $PREFIX/lib
+$SUDO_APPS cp -r $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
+
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/lammpsvars.sh
