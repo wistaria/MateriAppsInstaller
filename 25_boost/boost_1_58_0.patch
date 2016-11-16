@@ -204,3 +204,38 @@ index 0000000..e684ddc
 +{
 +    ar -rc$(ARFLAGS:E=) "$(<)" "$(>)"
 +}
+diff --git boost_1_58_0/tools/build/src/tools/mpi.jam boost_1_58_0/tools/build/src/tools/mpi.jam
+index a161101..85251d8 100644
+--- boost_1_58_0/tools/build/src/tools/mpi.jam
++++ boost_1_58_0/tools/build/src/tools/mpi.jam
+@@ -334,7 +334,8 @@ rule init ( mpicxx ? : options * : mpirun-with-options * )
+       result = [ SHELL "$(command) -showme" ] ;
+     }
+     # Look for MPICH
+-    else if [ safe-shell-command "$(command) -show" ]
++    else if [ safe-shell-command "$(command) -show" ] &&
++              [ safe-shell-command "$(command) -compile_info" ]
+     {
+       if $(.debug-configuration)
+       {
+@@ -343,6 +344,20 @@ rule init ( mpicxx ? : options * : mpirun-with-options * )
+       compile_flags = [ SHELL "$(command) -compile_info" ] ;
+       link_flags = [ SHELL "$(command) -link_info" ] ;
+     }
++    # Look for MPT
++    else if [ safe-shell-command "$(command) -show" ]
++    {
++      if $(.debug-configuration)
++      {
++        ECHO "Found MPT wrapper compiler: $(command)" ;
++      }
++
++      # 
++      compile_flags = [ SHELL "$(command) -show -c -v 2>/dev/null" ] ;
++      compile_flags = [ MATCH "-v(.*)" :  $(compile_flags) ] ;
++      link_flags = [ SHELL "$(command) -show -v 2>/dev/null" ] ;
++      link_flags = [ MATCH "-v(.*)" :  $(link_flags) ] ;
++    }
+     # Sun HPC and Ibm POE
+     else if [ SHELL "$(command) -v 2>/dev/null" ]
+     {
