@@ -24,7 +24,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx \
   -DCMAKE_BUILD_TYPE=Release \
   $BUILD_DIR/alpscore-$ALPSCORE_VERSION \
-  -DCMAKE_INSTALL_PREFIX=$PREFIX_TOOL/alpscore | tee -a $LOG
+  -DCMAKE_INSTALL_PREFIX=$PREFIX | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
 check make -j4 | tee -a $LOG
@@ -37,6 +37,7 @@ finish_info | tee -a $LOG
 cat << EOF > $BUILD_DIR/alpscorevars.sh
 . $PREFIX_TOOL/env.sh
 export ALPSCORE_ROOT=$PREFIX
+export ALPSCore_DIR=$PREFIX
 export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
 EOF
 ALPSCOREVARS_SH=$PREFIX_TOOL/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.sh
