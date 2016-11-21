@@ -22,9 +22,9 @@ start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx \
+  -DCMAKE_CXX_FLAGS="-DGTEST_HAS_TR1_TUPLE=0" \
   -DCMAKE_BUILD_TYPE=Release \
-  $BUILD_DIR/alpscore-$ALPSCORE_VERSION \
-  -DCMAKE_INSTALL_PREFIX=$PREFIX | tee -a $LOG
+  $BUILD_DIR/alpscore-$ALPSCORE_VERSION | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
 check make -j4 | tee -a $LOG
@@ -35,7 +35,7 @@ ctest | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/alpscorevars.sh
-. $PREFIX_TOOL/env.sh
+# alpscore $(basename $0 .sh) $ALPSCORE_VERSION $ALPSCORE_MA_REVISION $(date +%Y%m%d-%H%M%S)
 export ALPSCORE_ROOT=$PREFIX
 export ALPSCore_DIR=$PREFIX
 export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
@@ -43,5 +43,4 @@ EOF
 ALPSCOREVARS_SH=$PREFIX_TOOL/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.sh
 $SUDO_TOOL rm -f $ALPSCOREVARS_SH
 $SUDO_TOOL cp -f $BUILD_DIR/alpscorevars.sh $ALPSCOREVARS_SH
-rm -f $BUILD_DIR/alpscorevars.sh
 $SUDO_TOOL cp -f $LOG $PREFIX_TOOL/alpscore/

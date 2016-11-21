@@ -7,15 +7,6 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
-ALPSCOREVARS_SH=$PREFIX_APPS/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/alpscore/alpscorevars.sh
-$SUDO_APPS ln -s $ALPSCOREVARS_SH $PREFIX_APPS/alpscore/alpscorevars.sh
-
-BUILD_ARCH="Linux-x86_64 Linux-s64fx"
-for arch in $BUILD_ARCH; do
-  ALPSCOREVARS_SH=$PREFIX_APPS/alpscore/alpscorevars-$arch-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.sh
-  if [ -f $ALPSCOREVARS_SH ]; then
-    $SUDO_APPS rm -f $PREFIX_APPS/alpscore/alpscorevars-$arch.sh
-    $SUDO_APPS ln -s $ALPSCOREVARS_SH $PREFIX_APPS/alpscore/alpscorevars-$arch.sh
-  fi
-done
+ALPSCOREVARS_SH=$PREFIX_TOOL/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.sh
+$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/alpscorevars.sh
+$SUDO_TOOL ln -s $ALPSCOREVARS_SH $PREFIX_TOOL/env.d/alpscorevars.sh
