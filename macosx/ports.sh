@@ -3,7 +3,7 @@ port install gcc49
 port select --set gcc mp-gcc49
 port install openmpi-gcc49
 port select --set mpi openmpi-gcc49-fortran
-port install wget subversion scalapack +gcc49 +openmpi fftw-3 +gfortran fftw-3-single +gfortran
+port install wget subversion scalapack +gcc49 +openmpi fftw-3 +gfortran fftw-3-single +gfortran gsl +gcc49
 port install cmake
 port install qt4-mac
 port install hdf5 +threadsafe
