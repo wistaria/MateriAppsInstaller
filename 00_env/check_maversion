@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOOL="lapack fftw tcltk qt4 hdf5 wxWidgets python wxPython boost cmake git"
+TOOL="lapack fftw tcltk qt4 gsl hdf5 wxWidgets python wxPython boost cmake git"
 APPS="alps xtapp openmx modylas feram gromacs lammps ermod dsqss tapioca xcrysden iginition"
 
 if [ -n "$MA_ROOT_TOOL" ]; then
