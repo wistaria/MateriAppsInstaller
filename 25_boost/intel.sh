@@ -23,8 +23,8 @@ for m in mpiicpc mpicxx mpic++ mpiCC; do
   mc=$(which $m 2> /dev/null)
   test -n "$mc" && break
 done
-echo "using mpi : $mc : <find-shared-library> ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged toolset=intel stage | tee -a $LOG
+echo "using mpi : $mc ;" > user-config.jam
+check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --debug-configuration --prefix=$PREFIX --layout=tagged toolset=intel stage | tee -a $LOG
 $SUDO_TOOL env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged toolset=intel install | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/boostvars.sh
