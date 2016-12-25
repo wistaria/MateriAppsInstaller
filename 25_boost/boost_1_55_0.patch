@@ -1,0 +1,409 @@
+diff --git boost_1_55_0/boost/asio/detail/fenced_block.hpp boost_1_55_0/boost/asio/detail/fenced_block.hpp
+index 18a8ca1..c5e8698 100644
+--- boost_1_55_0/boost/asio/detail/fenced_block.hpp
++++ boost_1_55_0/boost/asio/detail/fenced_block.hpp
+@@ -34,7 +34,7 @@
+ #elif defined(__GNUC__) \
+   && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+   && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ # include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+ #elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+ # include <boost/asio/detail/win_fenced_block.hpp>
+@@ -63,7 +63,7 @@ typedef gcc_x86_fenced_block fenced_block;
+ #elif defined(__GNUC__) \
+   && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+   && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ typedef gcc_sync_fenced_block fenced_block;
+ #elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+ typedef win_fenced_block fenced_block;
+diff --git boost_1_55_0/boost/asio/detail/gcc_sync_fenced_block.hpp boost_1_55_0/boost/asio/detail/gcc_sync_fenced_block.hpp
+index dd31089..9efc2ce 100644
+--- boost_1_55_0/boost/asio/detail/gcc_sync_fenced_block.hpp
++++ boost_1_55_0/boost/asio/detail/gcc_sync_fenced_block.hpp
+@@ -20,7 +20,7 @@
+ #if defined(__GNUC__) \
+   && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+   && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ 
+ #include <boost/asio/detail/push_options.hpp>
+ 
+@@ -60,6 +60,6 @@ private:
+ #endif // defined(__GNUC__)
+        // && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4))
+        // && !defined(__INTEL_COMPILER) && !defined(__ICL)
+-       // && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
++       // && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__) && !defined(__FCC_VERSION)
+ 
+ #endif // BOOST_ASIO_DETAIL_GCC_SYNC_FENCED_BLOCK_HPP
+diff --git boost_1_55_0/boost/atomic/detail/platform.hpp boost_1_55_0/boost/atomic/detail/platform.hpp
+index 3dfb73d..625adc5 100644
+--- boost_1_55_0/boost/atomic/detail/platform.hpp
++++ boost_1_55_0/boost/atomic/detail/platform.hpp
+@@ -49,7 +49,7 @@
+ 
+     #include <boost/atomic/detail/linux-arm.hpp>
+ 
+-#elif defined(__GNUC__) && defined(__sparc_v9__)
++#elif defined(__GNUC__) && defined(__sparc_v9__) && !defined(__FCC_VERSION)
+ 
+     #include <boost/atomic/detail/gcc-sparcv9.hpp>
+ 
+diff --git boost_1_55_0/boost/config/stdlib/stlport.hpp boost_1_55_0/boost/config/stdlib/stlport.hpp
+index bcc30b9..b66f697 100644
+--- boost_1_55_0/boost/config/stdlib/stlport.hpp
++++ boost_1_55_0/boost/config/stdlib/stlport.hpp
+@@ -128,7 +128,7 @@
+ // BCB6 does cause problems. If we detect C++ Builder, then don't define 
+ // BOOST_NO_STDC_NAMESPACE
+ //
+-#if !defined(__BORLANDC__) && !defined(__DMC__)
++#if !defined(__BORLANDC__) && !defined(__DMC__) && !defined(__FCC_VERSION)
+ //
+ // If STLport is using it's own namespace, and the real names are in
+ // the global namespace, then we duplicate STLport's using declarations
+diff --git boost_1_55_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp boost_1_55_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp
+index 8f9b94a..e1cd851 100644
+--- boost_1_55_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp
++++ boost_1_55_0/boost/fusion/tuple/detail/preprocessed/tuple.hpp
+@@ -18,4 +18,4 @@
+ #include <boost/fusion/tuple/detail/preprocessed/tuple50.hpp>
+ #else
+ #error "FUSION_MAX_VECTOR_SIZE out of bounds for preprocessed headers"
+-#endif
+\ No newline at end of file
++#endif
+diff --git boost_1_55_0/boost/lexical_cast.hpp boost_1_55_0/boost/lexical_cast.hpp
+index ed2291d..101d808 100644
+--- boost_1_55_0/boost/lexical_cast.hpp
++++ boost_1_55_0/boost/lexical_cast.hpp
+@@ -146,7 +146,7 @@ namespace boost
+     }
+ } // namespace boost
+ 
+-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC) && !defined(__PGIC__)
++#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC) && !defined(__PGIC__) && !defined(__FCC_VERSION)
+ 
+ #include <cmath>
+ #include <istream>
+diff --git boost_1_55_0/boost/log/detail/config.hpp boost_1_55_0/boost/log/detail/config.hpp
+index 1955897..341d790 100644
+--- boost_1_55_0/boost/log/detail/config.hpp
++++ boost_1_55_0/boost/log/detail/config.hpp
+@@ -78,7 +78,7 @@
+ #   endif
+ #endif
+ 
+-#if defined(BOOST_INTEL) || defined(__SUNPRO_CC)
++#if defined(BOOST_INTEL) || defined(__SUNPRO_CC) || defined(__FCC_VERSION)
+     // Intel compiler and Sun Studio 12.3 have problems with friend declarations for nested class templates
+ #   define BOOST_LOG_NO_MEMBER_TEMPLATE_FRIENDS
+ #endif
+diff --git boost_1_55_0/boost/math/special_functions/lanczos.hpp boost_1_55_0/boost/math/special_functions/lanczos.hpp
+index ed89154..e8e4de6 100644
+--- boost_1_55_0/boost/math/special_functions/lanczos.hpp
++++ boost_1_55_0/boost/math/special_functions/lanczos.hpp
+@@ -1283,7 +1283,7 @@ struct lanczos
+ } // namespace math
+ } // namespace boost
+ 
+-#if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
++#if !defined(_CRAYC) && !defined(__CUDACC__) && !defined(__FCC_VERSION) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
+ #if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
+ #include <boost/math/special_functions/detail/lanczos_sse2.hpp>
+ #endif
+diff --git boost_1_55_0/boost/regex/v4/perl_matcher_common.hpp boost_1_55_0/boost/regex/v4/perl_matcher_common.hpp
+index 9a80e50..a6cdb82 100644
+--- boost_1_55_0/boost/regex/v4/perl_matcher_common.hpp
++++ boost_1_55_0/boost/regex/v4/perl_matcher_common.hpp
+@@ -154,7 +154,7 @@ void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(std
+ }
+ 
+ template <class BidiIterator, class Allocator, class traits>
+-inline void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(void*)
++void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(void*)
+ {
+    // we don't know how long the sequence is:
+    max_state_count = BOOST_REGEX_MAX_STATE_COUNT;
+@@ -162,7 +162,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_co
+ 
+ #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+ template <class BidiIterator, class Allocator, class traits>
+-inline bool perl_matcher<BidiIterator, Allocator, traits>::protected_call(
++bool perl_matcher<BidiIterator, Allocator, traits>::protected_call(
+    protected_proc_type proc)
+ {
+    ::boost::re_detail::concrete_protected_call
+@@ -174,7 +174,7 @@ inline bool perl_matcher<BidiIterator, Allocator, traits>::protected_call(
+ #endif
+ 
+ template <class BidiIterator, class Allocator, class traits>
+-inline bool perl_matcher<BidiIterator, Allocator, traits>::match()
++bool perl_matcher<BidiIterator, Allocator, traits>::match()
+ {
+ #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+    return protected_call(&perl_matcher<BidiIterator, Allocator, traits>::match_imp);
+@@ -224,7 +224,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_imp()
+ }
+ 
+ template <class BidiIterator, class Allocator, class traits>
+-inline bool perl_matcher<BidiIterator, Allocator, traits>::find()
++bool perl_matcher<BidiIterator, Allocator, traits>::find()
+ {
+ #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+    return protected_call(&perl_matcher<BidiIterator, Allocator, traits>::find_imp);
+@@ -730,7 +730,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_backstep()
+ }
+ 
+ template <class BidiIterator, class Allocator, class traits>
+-inline bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref()
++bool perl_matcher<BidiIterator, Allocator, traits>::match_assert_backref()
+ {
+    // return true if marked sub-expression N has been matched:
+    int index = static_cast<const re_brace*>(pstate)->index;
+diff --git boost_1_55_0/boost/smart_ptr/detail/sp_has_sync.hpp boost_1_55_0/boost/smart_ptr/detail/sp_has_sync.hpp
+index 16de21d..94d2a9a 100644
+--- boost_1_55_0/boost/smart_ptr/detail/sp_has_sync.hpp
++++ boost_1_55_0/boost/smart_ptr/detail/sp_has_sync.hpp
+@@ -30,7 +30,7 @@
+ 
+ # define BOOST_SP_HAS_SYNC
+ 
+-#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 )
++#elif defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined(__FCC_VERSION)
+ 
+ #define BOOST_SP_HAS_SYNC
+ 
+diff --git boost_1_55_0/tools/build/v2/tools/fccx.jam boost_1_55_0/tools/build/v2/tools/fccx.jam
+new file mode 100644
+index 0000000..e684ddc
+--- /dev/null
++++ boost_1_55_0/tools/build/v2/tools/fccx.jam
+@@ -0,0 +1,83 @@
++#  Copyright (C) Synge Todo 2015. Permission to copy, use,
++#  modify, sell and distribute this software is granted provided this
++#  copyright notice appears in all copies. This software is provided
++#  "as is" without express or implied warranty, and with no claim as
++#  to its suitability for any purpose.
++
++# Boost.Build V2 toolset for Fujitsu FCC (cross copiler)
++
++import property ;
++import generators ;
++import os ;
++import toolset : flags ;
++import feature ;
++import type ;
++import common ;
++
++feature.extend toolset : fccx ;
++toolset.inherit  fccx : unix ;
++generators.override fccx.prebuilt : builtin.prebuilt ;
++generators.override fccx.searched-lib-generator : searched-lib-generator ;
++
++rule init ( version ? : command * : options * ) 
++{
++    local condition = [ 
++      common.check-init-parameters fccx : version $(version) ] ;
++    
++    command = [ common.get-invocation-command fccx : FCCpx
++        : $(command) : "FCCpx" ] ;
++
++    common.handle-options fccx : $(condition) : $(command) : $(options) ;
++    
++    command_c = $(command[1--2]) $(command[-1]:B=fccpx) ;
++
++    toolset.flags fccx CONFIG_C_COMMAND $(condition) : $(command_c) ;
++}
++
++# Declare generators
++generators.register-c-compiler fccx.compile.c : C : OBJ : <toolset>fccx ;
++generators.register-c-compiler fccx.compile.c++ : CPP : OBJ : <toolset>fccx ;
++
++flags fccx OPTIONS <link>shared : -KPIC ;
++
++flags fccx.compile OPTIONS <cflags> ;
++flags fccx.compile.c++ OPTIONS <cxxflags> ;
++flags fccx.compile DEFINES <define> ;
++flags fccx.compile INCLUDES <include> ;
++
++actions compile.c
++{
++    "$(CONFIG_C_COMMAND)" -w -Xg -mt -Kfast,ocl,ilfunc -Nnoline --alternative_tokens $(OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -o "$(<)" "$(>)"
++}
++
++actions compile.c++
++{
++    "$(CONFIG_COMMAND)" -w -Xg -mt -Kfast,ocl,ilfunc -Nnoline --alternative_tokens $(OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -o "$(<)" "$(>)"
++}
++
++rule link ( targets * : sources * : properties * )
++{
++    SPACE on $(targets) = " " ;
++}
++
++actions link bind LIBRARIES
++{
++    "$(CONFIG_COMMAND)" -w -Xg -mt $(OPTIONS) -L"$(LINKPATH)" -R"$(RPATH)" -o "$(<)" "$(>)" "$(LIBRARIES)" -l$(FINDLIBS-SA) -l$(FINDLIBS-ST)
++}
++
++# Slight mods for dlls
++rule link.dll ( targets * : sources * : properties * )
++{
++    SPACE on $(targets) = " " ;
++}
++
++actions link.dll bind LIBRARIES
++{
++    "$(CONFIG_COMMAND)" -w -Xg -mt $(OPTIONS) -L"$(LINKPATH)" -R"$(RPATH)" -o "$(<)" "$(>)" "$(LIBRARIES)" -shared -l$(FINDLIBS-SA) -l$(FINDLIBS-ST)
++}
++
++# Declare action for creating static libraries
++actions piecemeal archive
++{
++    ar -rc$(ARFLAGS:E=) "$(<)" "$(>)"
++}
+diff --git boost_1_55_0/tools/build/v2/tools/mpi.jam boost_1_55_0/tools/build/v2/tools/mpi.jam
+index 0fe490b..03c2352 100644
+--- boost_1_55_0/tools/build/v2/tools/mpi.jam
++++ boost_1_55_0/tools/build/v2/tools/mpi.jam
+@@ -328,7 +328,8 @@ rule init ( mpicxx ? : options * : mpirun-with-options * )
+       result = [ SHELL "$(command) -showme" ] ;
+     }
+     # Look for MPICH
+-    else if [ safe-shell-command "$(command) -show" ]
++    else if [ safe-shell-command "$(command) -show" ] &&
++              [ safe-shell-command "$(command) -compile_info" ]
+     {
+       if $(.debug-configuration)
+       {
+@@ -337,6 +338,27 @@ rule init ( mpicxx ? : options * : mpirun-with-options * )
+       compile_flags = [ SHELL "$(command) -compile_info" ] ;
+       link_flags = [ SHELL "$(command) -link_info" ] ;
+     }
++    # Look for MPT
++    else if [ safe-shell-command "$(command) -show" ]
++    {
++      if $(.debug-configuration)
++      {
++        ECHO "Found MPT wrapper compiler: $(command)" ;
++      }
++
++      # 
++      compile_flags = [ SHELL "$(command) -show -c -v 2>/dev/null" ] ;
++      local front = [ MATCH "(.*)-v" :  $(compile_flags) ] ;
++      local back = [ MATCH "-v(.*)" :  $(compile_flags) ] ;
++      compile_flags = "$(front) $(back)" ;
++      front = [ MATCH "(.*)-c" :  $(compile_flags) ] ;
++      back = [ MATCH "-c(.*)" :  $(compile_flags) ] ;
++      compile_flags = "$(front) $(back)" ;
++      link_flags = [ SHELL "$(command) -show -v 2>/dev/null" ] ;
++      front = [ MATCH "(.*)-v" :  $(link_flags) ] ;
++      back = [ MATCH "-v(.*)" :  $(link_flags) ] ;
++      link_flags = "$(front) $(back)" ;
++    }
+     # Sun HPC and Ibm POE
+     else if [ SHELL "$(command) -v 2>/dev/null" ]
+     {
+diff --git boost_1_55_0/tools/build/v2/user-config.jam boost_1_55_0/tools/build/v2/user-config.jam
+index fbbf13f..e69de29 100644
+--- boost_1_55_0/tools/build/v2/user-config.jam
++++ boost_1_55_0/tools/build/v2/user-config.jam
+@@ -1,92 +0,0 @@
+-# Copyright 2003, 2005 Douglas Gregor
+-# Copyright 2004 John Maddock
+-# Copyright 2002, 2003, 2004, 2007 Vladimir Prus
+-# Distributed under the Boost Software License, Version 1.0.
+-# (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
+-
+-#   This file is used to configure your Boost.Build installation. You can modify
+-# this file in place, or you can place it in a permanent location so that it
+-# does not get overwritten should you get a new version of Boost.Build. See:
+-#
+-#   http://www.boost.org/boost-build2/doc/html/bbv2/overview/configuration.html
+-#
+-# for documentation about possible permanent locations.
+-
+-#   This file specifies which toolsets (C++ compilers), libraries, and other
+-# tools are available. Often, you should be able to just uncomment existing
+-# example lines and adjust them to taste. The complete list of supported tools,
+-# and configuration instructions can be found at:
+-#
+-#   http://boost.org/boost-build2/doc/html/bbv2/reference/tools.html
+-#
+-
+-#   This file uses Jam language syntax to describe available tools. Mostly,
+-# there are 'using' lines, that contain the name of the used tools, and
+-# parameters to pass to those tools -- where paremeters are separated by
+-# semicolons. Important syntax notes:
+-#
+-#   - Both ':' and ';' must be separated from other tokens by whitespace
+-#   - The '\' symbol is a quote character, so when specifying Windows paths you
+-#     should use '/' or '\\' instead.
+-#
+-# More details about the syntax can be found at:
+-#
+-#   http://boost.org/boost-build2/doc/html/bbv2/advanced.html#bbv2.advanced.jam_language
+-#
+-
+-# ------------------
+-# GCC configuration.
+-# ------------------
+-
+-# Configure gcc (default version).
+-# using gcc ;
+-
+-# Configure specific gcc version, giving alternative name to use.
+-# using gcc : 3.2 : g++-3.2 ;
+-
+-
+-# -------------------
+-# MSVC configuration.
+-# -------------------
+-
+-# Configure msvc (default version, searched for in standard locations and PATH).
+-# using msvc ;
+-
+-# Configure specific msvc version (searched for in standard locations and PATH).
+-# using msvc : 8.0 ;
+-
+-
+-# ----------------------
+-# Borland configuration.
+-# ----------------------
+-# using borland ;
+-
+-
+-# ----------------------
+-# STLPort configuration.
+-# ----------------------
+-
+-#   Configure specifying location of STLPort headers. Libraries must be either
+-# not needed or available to the compiler by default.
+-# using stlport : : /usr/include/stlport ;
+-
+-# Configure specifying location of both headers and libraries explicitly.
+-# using stlport : : /usr/include/stlport /usr/lib ;
+-
+-
+-# -----------------
+-# QT configuration.
+-# -----------------
+-
+-# Configure assuming QTDIR gives the installation prefix.
+-# using qt ;
+-
+-# Configure with an explicit installation prefix.
+-# using qt : /usr/opt/qt ;
+-
+-# ---------------------
+-# Python configuration.
+-# ---------------------
+-
+-# Configure specific Python version.
+-# using python : 3.1 : /usr/bin/python3 : /usr/include/python3.1 : /usr/lib ;
