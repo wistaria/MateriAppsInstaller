@@ -16,6 +16,4 @@ if [ -d Komega-$KOMEGA_VERSION ]; then :; else
     check tar zxf Komega-${KOMEGA_VERSION}.tar.gz
   fi
   cd Komega-${KOMEGA_VERSION}
-  cp doc/komega.pdf .
-  cp doc/ShiftKSoft.pdf .
 fi

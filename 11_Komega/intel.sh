@@ -20,6 +20,11 @@ rm -rf $LOG
 cd $BUILD_DIR/Komega-$KOMEGA_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
+cat << END_OF_MAKE_SYS > make.sys
+F90 = ifort
+MPIF90 = mpif90
+FFLAGS = -fopenmp -fpp -g -traceback -mkl -xHost -O3
+END_OF_MAKE_SYS
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 
@@ -59,14 +64,6 @@ echo "$SUDO_TOOLS mkdir -p $PREFIX/include/mpi/shared" | tee -a $LOG
 $SUDO_TOOLS mkdir -p $PREFIX/include/mpi/shared | tee -a $LOG
 echo "$SUDO_TOOLS cp src/shared_mpi/*.mod $PREFIX/include/mpi/shared" | tee -a $LOG
 $SUDO_TOOLS cp src/shared_mpi/*.mod $PREFIX/include/mpi/shared | tee -a $LOG
-
-# copy documents
-echo "$SUDO_TOOLS mkdir -p ${PREFIX}/doc" | tee -a $LOG
-$SUDO_TOOLS mkdir -p $PREFIX/doc | tee -a $LOG
-echo "$SUDO_TOOLS cp komega.pdf ${PREFIX}/doc" | tee -a $LOG
-$SUDO_TOOLS cp komega.pdf ${PREFIX}/doc/ | tee -a $LOG
-echo "$SUDO_TOOLS cp ShiftKSoft.pdf ${PREFIX}/doc" | tee -a $LOG
-$SUDO_TOOLS cp ShiftKSoft.pdf ${PREFIX}/doc/ | tee -a $LOG
 
 # copy shiftk
 echo "$SUDO_TOOLS mkdir -p ${PREFIX}/bin" | tee -a $LOG

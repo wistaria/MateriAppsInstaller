@@ -19,12 +19,12 @@ sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 cd $BUILD_DIR/Komega-$KOMEGA_VERSION
 start_info | tee -a $LOG
-cat << END > make.sys
-MPIF90 = mpif90
-F90=gfortran
-FFLAGS=-fopenmp -cpp -g -lblas -llapack
-END
 echo "[make]" | tee -a $LOG
+cat << END_OF_MAKE_SYS > make.sys
+F90 = ifort
+MPIF90 = mpif90
+FFLAGS = -mkl=parallel -fpp -O3 -xCORE-AVX2
+END_OF_MAKE_SYS
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 
@@ -74,7 +74,7 @@ echo "$SUDO_TOOLS cp app/src/mpi/ShiftK.out $PREFIX/bin/pShiftK" | tee -a $LOG
 $SUDO_TOOLS cp app/src/mpi/ShiftK.out $PREFIX/bin/pShiftK | tee -a $LOG
 
 # copy samples
-(cp test; make clean)
+(cd test; make clean)
 echo "$SUDO_TOOLS mkdir -p ${PREFIX}/sample" | tee -a $LOG
 $SUDO_TOOLS mkdir -p $PREFIX/sample | tee -a $LOG
 echo "$SUDO_TOOLS cp -r app/sample $PREFIX/sample/ShiftK" | tee -a $LOG
