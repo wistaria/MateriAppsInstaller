@@ -4,7 +4,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
-ENV_BASE="1.2.0-19"
+ENV_BASE="1.2.0-21"
 
 cat << EOF > $BUILD_DIR/env.sh
 # env $(basename $0 .sh) $ENV_VERSION $ENV_MA_REVISION $(date +%Y%m%d-%H%M%S)
