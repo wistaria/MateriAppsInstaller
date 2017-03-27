@@ -34,6 +34,8 @@ echo "$SUDO_APPS cp src/vmc.out ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp src/vmc.out ${PREFIX}/bin
 echo "$SUDO_APPS cp src/vmcdry.out ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp src/vmcdry.out ${PREFIX}/bin
+echo "$SUDO_APPS cp src/ComplexUHF/src/UHF ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp src/ComplexUHF/src/UHF ${PREFIX}/bin
 
 echo "$SUDO_APPS cp -r sample ${PREFIX}" | tee -a $LOG
 $SUDO_APPS cp -r sample ${PREFIX}
