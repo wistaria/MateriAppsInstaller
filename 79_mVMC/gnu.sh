@@ -1,5 +1,3 @@
-#!/bin/sh
-
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
@@ -17,13 +15,13 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/mVMC-release-$MVMC_VERSION
+cd $BUILD_DIR/mVMC-$MVMC_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 if [ -e makefile ]; then
     check make veryclean | tee -a $LOG
 fi
-check sh ./config.sh gnu
+check sh ./mVMCconfig.sh gnu
 check make mvmc | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 
@@ -36,6 +34,10 @@ echo "$SUDO_APPS cp src/vmcdry.out ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp src/vmcdry.out ${PREFIX}/bin
 echo "$SUDO_APPS cp src/ComplexUHF/src/UHF ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp src/ComplexUHF/src/UHF ${PREFIX}/bin
+echo "$SUDO_APPS cp tool/fourier ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp tool/fourier ${PREFIX}/bin
+echo "$SUDO_APPS cp tool/corplot ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp tool/corplot ${PREFIX}/bin
 
 echo "$SUDO_APPS cp -r sample ${PREFIX}" | tee -a $LOG
 $SUDO_APPS cp -r sample ${PREFIX}
