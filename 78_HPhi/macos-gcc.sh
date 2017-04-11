@@ -1,4 +1,3 @@
-#!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
@@ -17,13 +16,13 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/HPhi-release-$HPHI_VERSION
+cd $BUILD_DIR/HPhi-$HPHI_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 if [ -e makefile ]; then
     check make veryclean | tee -a $LOG
 fi
-check sh ./HPhiconfig.sh gcc-mac
+check sh ./HPhiconfig.sh macos-gcc
 check make HPhi | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 
@@ -32,6 +31,10 @@ $SUDO_APPS mkdir -p $PREFIX/bin | tee -a $LOG
 
 echo "$SUDO_APPS cp src/HPhi ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp src/HPhi ${PREFIX}/bin
+echo "$SUDO_APPS cp tool/fourier ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp tool/fourier ${PREFIX}/bin
+echo "$SUDO_APPS cp tool/corplot ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp tool/corplot ${PREFIX}/bin
 
 echo "$SUDO_APPS cp -r samples ${PREFIX}" | tee -a $LOG
 $SUDO_APPS cp -r samples ${PREFIX}
@@ -54,3 +57,4 @@ HPHIVARS_SH=$PREFIX_APPS/HPhi/HPhivars-$HPHI_VERSION-$HPHI_PATCH_VERSION.sh
 $SUDO_APPS rm -f $HPHIVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/HPhivars.sh $HPHIVARS_SH
 $SUDO_APPS cp -f $LOG $PREFIX_APPS/HPhi
+
