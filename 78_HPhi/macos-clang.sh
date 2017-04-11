@@ -17,7 +17,7 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/HPhi-release-$HPHI_VERSION
+cd $BUILD_DIR/HPhi-$HPHI_VERSION
 start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 if [ -e makefile ]; then
@@ -37,6 +37,10 @@ $SUDO_APPS mkdir -p $PREFIX/bin | tee -a $LOG
 
 echo "$SUDO_APPS cp src/HPhi ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp src/HPhi ${PREFIX}/bin
+echo "$SUDO_APPS cp tool/corplot ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp tool/corplot ${PREFIX}/bin
+echo "$SUDO_APPS cp tool/fourier ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp tool/fourier ${PREFIX}/bin
 
 echo "$SUDO_APPS cp -r samples ${PREFIX}" | tee -a $LOG
 $SUDO_APPS cp -r samples ${PREFIX}
