@@ -28,12 +28,12 @@ echo "[make install]" | tee -a $LOG
 echo "$SUDO_APPS mkdir -p $PREFIX/bin" | tee -a $LOG
 $SUDO_APPS mkdir -p $PREFIX/bin | tee -a $LOG
 
-echo "$SUDO_APPS cp src/vmc.out ${PREFIX}/bin" | tee -a $LOG
-$SUDO_APPS cp src/vmc.out ${PREFIX}/bin
-echo "$SUDO_APPS cp src/vmcdry.out ${PREFIX}/bin" | tee -a $LOG
-$SUDO_APPS cp src/vmcdry.out ${PREFIX}/bin
-echo "$SUDO_APPS cp src/ComplexUHF/src/UHF ${PREFIX}/bin" | tee -a $LOG
-$SUDO_APPS cp src/ComplexUHF/src/UHF ${PREFIX}/bin
+echo "$SUDO_APPS cp src/mVMC/vmc.out ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp src/mVMC/vmc.out ${PREFIX}/bin
+echo "$SUDO_APPS cp src/mVMC/vmcdry.out ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp src/mVMC/vmcdry.out ${PREFIX}/bin
+echo "$SUDO_APPS cp src/ComplexUHF/UHF ${PREFIX}/bin" | tee -a $LOG
+$SUDO_APPS cp src/ComplexUHF/UHF ${PREFIX}/bin
 echo "$SUDO_APPS cp tool/fourier ${PREFIX}/bin" | tee -a $LOG
 $SUDO_APPS cp tool/fourier ${PREFIX}/bin
 echo "$SUDO_APPS cp tool/corplot ${PREFIX}/bin" | tee -a $LOG
