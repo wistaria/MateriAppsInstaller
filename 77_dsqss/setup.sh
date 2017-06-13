@@ -6,6 +6,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 DSQSS_VERSION_ORIG=$(echo $DSQSS_VERSION | sed 's/+/-/g')
+DSQSS_VERSION_SHORT=$(echo $DSQSS_VERSION | cut -d + -f 1)
 
 cd $BUILD_DIR
 if [ -d dsqss-$DSQSS_VERSION ]; then :; else
@@ -22,5 +23,5 @@ if [ -d dsqss-$DSQSS_VERSION ]; then :; else
     check wget $MALIVE_REPOSITORY/dsqss_$DSQSS_VERSION-$DSQSS_MA_REVISION.diff.gz
     check gzip -dc dsqss_$DSQSS_VERSION-$DSQSS_MA_REVISION.diff.gz | patch -p1
   fi
-  chmod +x dsqss/dsqss-1.1.17/install-sh
+  chmod +x dsqss/dsqss-$DSQSS_VERSION_SHORT/install-sh
 fi

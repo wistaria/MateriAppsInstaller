@@ -16,7 +16,7 @@ if [ -d $PREFIX ]; then
 fi
 
 sh $SCRIPT_DIR/setup.sh
-rm -rf LOG
+rm -rf $LOG
 cd $BUILD_DIR/dsqss-$DSQSS_VERSION
 start_info | tee -a $LOG
 echo "[runConfigure]" | tee -a $LOG
