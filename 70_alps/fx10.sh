@@ -13,8 +13,8 @@ sh $SCRIPT_DIR/setup.sh
 #
 
 BUILD_ARCH=Linux-x86_64
-LOG=$BUILD_DIR/alps-$BUILD_ARCH-$ALPS_VERSION-$ALPS_PATCH_VERSION.log
-PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION/$BUILD_ARCH"
+LOG=$BUILD_DIR/alps-$BUILD_ARCH-$ALPS_VERSION-$ALPS_MA_REVISION.log
+PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_MA_REVISION/$BUILD_ARCH"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -45,10 +45,11 @@ ctest | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/alpsvars-$BUILD_ARCH.sh
+# alps $(basename $0 .sh) $ALPS_VERSION $ALPS_MA_REVISION $(date +%Y%m%d-%H%M%S)
 . $PREFIX_TOOL/env.sh
 . $PREFIX/bin/alpsvars.sh
 EOF
-ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$BUILD_ARCH-$ALPS_VERSION-$ALPS_PATCH_VERSION.sh
+ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$BUILD_ARCH-$ALPS_VERSION-$ALPS_MA_REVISION.sh
 $SUDO_APPS rm -f $ALPSVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/alpsvars-$BUILD_ARCH.sh $ALPSVARS_SH
 $SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
@@ -58,8 +59,8 @@ $SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
 #
 
 BUILD_ARCH=Linux-s64fx
-LOG=$BUILD_DIR/alps-$BUILD_ARCH-$ALPS_VERSION-$ALPS_PATCH_VERSION.log
-PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION/$BUILD_ARCH"
+LOG=$BUILD_DIR/alps-$BUILD_ARCH-$ALPS_VERSION-$ALPS_MA_REVISION.log
+PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_MA_REVISION/$BUILD_ARCH"
 if [ -z "$MPI_HOME" ]; then
   MPI_HOME=$(dirname $(dirname $(which FCCpx)))
 fi
@@ -97,10 +98,11 @@ $SUDO_APPS make install | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/alpsvars-$BUILD_ARCH.sh
+# alps $(basename $0 .sh) $ALPS_VERSION $ALPS_MA_REVISION $(date +%Y%m%d-%H%M%S)
 . $PREFIX_TOOL/env.sh
 . $PREFIX/bin/alpsvars.sh
 EOF
-ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$BUILD_ARCH-$ALPS_VERSION-$ALPS_PATCH_VERSION.sh
+ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$BUILD_ARCH-$ALPS_VERSION-$ALPS_MA_REVISION.sh
 $SUDO_APPS rm -f $ALPSVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/alpsvars-$BUILD_ARCH.sh $ALPSVARS_SH
 $SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
@@ -110,8 +112,9 @@ $SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
 #
 
 cat << EOF > $BUILD_DIR/alpsvars.sh
-. $PREFIX_APPS/alps/alpsvars-\$(uname -s)-\$(uname -m)-$ALPS_VERSION-$ALPS_PATCH_VERSION.sh
+# alps $(basename $0 .sh) $ALPS_VERSION $ALPS_MA_REVISION $(date +%Y%m%d-%H%M%S)
+. $PREFIX_APPS/alps/alpsvars-\$(uname -s)-\$(uname -m)-$ALPS_VERSION-$ALPS_MA_REVISION.sh
 EOF
-ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$ALPS_VERSION-$ALPS_PATCH_VERSION.sh
+ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$ALPS_VERSION-$ALPS_MA_REVISION.sh
 $SUDO_APPS rm -f $ALPSVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/alpsvars.sh $ALPSVARS_SH

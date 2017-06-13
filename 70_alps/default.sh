@@ -5,10 +5,10 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+$SUDO_APPL /bin/true
 . $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION.log
-
-PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_PATCH_VERSION"
+LOG=$BUILD_DIR/alps-$ALPS_VERSION-$ALPS_MA_REVISION.log
+PREFIX="$PREFIX_APPS/alps/alps-$ALPS_VERSION-$ALPS_MA_REVISION"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -38,10 +38,11 @@ ctest | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/alpsvars.sh
+# alps $(basename $0 .sh) $ALPS_VERSION $ALPS_MA_REVISION $(date +%Y%m%d-%H%M%S)
 . $PREFIX_TOOL/env.sh
 . $PREFIX/bin/alpsvars.sh
 EOF
-ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$ALPS_VERSION-$ALPS_PATCH_VERSION.sh
+ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$ALPS_VERSION-$ALPS_MA_REVISION.sh
 $SUDO_APPS rm -f $ALPSVARS_SH
 $SUDO_APPS cp -f $BUILD_DIR/alpsvars.sh $ALPSVARS_SH
 $SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
