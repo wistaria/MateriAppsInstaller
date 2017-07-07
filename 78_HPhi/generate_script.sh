@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for target in sekirei fujitsu sr intel intel-openmpi intel-mpich intel-intelmpi gcc gcc-openmpi gcc-mpich gcc-mac
+for target in sekirei fujitsu gcc intel
 do
 
 cat << EOF_TEMPLATE > ${target}.sh
@@ -24,26 +24,20 @@ sh \$SCRIPT_DIR/setup.sh
 rm -rf \$LOG
 cd \$BUILD_DIR/HPhi-\$HPHI_VERSION
 start_info | tee -a \$LOG
+
+echo "sed -i -e 's/key2lower key2lower.c/key2lower STATIC key2lower.c/' tool/CMakeLists.txt" >> \$LOG
+sed -i -e 's/key2lower key2lower.c/key2lower STATIC key2lower.c/' tool/CMakeLists.txt
+
+rm -rf build
+mkdir build
+cd build
+echo "cmake -DCONFIG=$target -DCMAKE_INSTALL_PREFIX=\$PREFIX" | tee -a \$LOG
+check cmake -DCONFIG=$target -DCMAKE_INSTALL_PREFIX=\$PREFIX ../ | tee -a \$LOG
 echo "[make]" | tee -a \$LOG
-if [ -e makefile ]; then
-    check make veryclean | tee -a \$LOG
-fi
-check sh ./HPhiconfig.sh ${target}
-check make HPhi | tee -a \$LOG
+check make | tee -a \$LOG
 echo "[make install]" | tee -a \$LOG
-
-echo "\$SUDO_APPS mkdir -p \$PREFIX/bin" | tee -a \$LOG
-\$SUDO_APPS mkdir -p \$PREFIX/bin | tee -a \$LOG
-
-echo "\$SUDO_APPS cp src/HPhi \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp src/HPhi \${PREFIX}/bin
-echo "\$SUDO_APPS cp tool/fourier \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp tool/fourier \${PREFIX}/bin
-echo "\$SUDO_APPS cp tool/corplot \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp tool/corplot \${PREFIX}/bin
-
-echo "\$SUDO_APPS cp -r samples \${PREFIX}" | tee -a \$LOG
-\$SUDO_APPS cp -r samples \${PREFIX}
+check make install | tee -a \$LOG
+cd ../
 
 echo "\$SUDO_APPS mkdir -p \${PREFIX}/doc" | tee -a \$LOG
 \$SUDO_APPS mkdir -p \$PREFIX/doc | tee -a \$LOG
