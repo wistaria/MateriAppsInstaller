@@ -23,9 +23,9 @@ mkdir -p $BUILD_DIR/gcc-$GCC_VERSION-build
 cd $BUILD_DIR/gcc-$GCC_VERSION-build
 check $BUILD_DIR/gcc-$GCC_VERSION/configure --enable-languages=c,c++,fortran --prefix=$PREFIX --disable-multilib | tee $LOG
 check make -j4 | tee -a $LOG
-$SUDO make install | tee -a $LOG
+$SUDO_TOOL make install | tee -a $LOG
 
-cat << EOF > gccvars.sh
+cat << EOF > $BUILD_DIR/gccvars.sh
 # gcc $(basename $0 .sh) $GCC_VERSION $GCC_MA_REVISION $(date +%Y%m%d-%H%M%S)
 export GCC_ROOT=$PREFIX
 export GCC_VERSION=$GCC_VERSION
