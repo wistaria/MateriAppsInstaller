@@ -21,6 +21,8 @@ rm -rf $LOG
 cd $BUILD_DIR/hdf5-$HDF5_VERSION
 echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX --enable-threadsafe --with-pthread=yes | tee -a $LOG
+echo "[make]" | tee -a $LOG
+make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 $SUDO_TOOL make install | tee -a $LOG
 
