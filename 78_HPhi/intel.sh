@@ -19,9 +19,6 @@ rm -rf $LOG
 cd $BUILD_DIR/HPhi-$HPHI_VERSION
 start_info | tee -a $LOG
 
-echo "sed -i -e 's/key2lower key2lower.c/key2lower STATIC key2lower.c/' tool/CMakeLists.txt" >> $LOG
-sed -i -e 's/key2lower key2lower.c/key2lower STATIC key2lower.c/' tool/CMakeLists.txt
-
 rm -rf build
 mkdir build
 cd build
