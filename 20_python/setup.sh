@@ -29,7 +29,7 @@ if [ -d numpy-$NUMPY_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/python/numpy-$NUMPY_VERSION.tar.gz ]; then
     check tar zxf $SOURCE_DIR/python/numpy-$NUMPY_VERSION.tar.gz
   else
-    check wget $WGET_OPTION http://pypi.python.org/packages/source/n/numpy/numpy-$NUMPY_VERSION.tar.gz
+    check wget $WGET_OPTION https://pypi.python.org/packages/source/n/numpy/numpy-$NUMPY_VERSION.tar.gz
     check tar zxf numpy-$NUMPY_VERSION.tar.gz
   fi
 fi
@@ -38,7 +38,7 @@ if [ -d scipy-$SCIPY_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/python/scipy-$SCIPY_VERSION.tar.gz ]; then
     check tar zxf $SOURCE_DIR/python/scipy-$SCIPY_VERSION.tar.gz
   else
-    check wget $WGET_OPTION http://pypi.python.org/packages/source/s/scipy/scipy-$SCIPY_VERSION.tar.gz
+    check wget $WGET_OPTION https://pypi.python.org/packages/source/s/scipy/scipy-$SCIPY_VERSION.tar.gz
     check tar zxf scipy-$SCIPY_VERSION.tar.gz
   fi
 fi
