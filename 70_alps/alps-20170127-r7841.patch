@@ -1,6 +1,50 @@
+diff -urN alps-20170127-r7841.orig/applications/dmrg/dmrg/dmtk/system.h alps-20170127-r7841/applications/dmrg/dmrg/dmtk/system.h
+--- alps-20170127-r7841.orig/applications/dmrg/dmrg/dmtk/system.h	2014-03-14 09:10:21.000000000 +0900
++++ alps-20170127-r7841/applications/dmrg/dmrg/dmtk/system.h	2018-02-05 01:37:32.000000000 +0900
+@@ -558,8 +558,11 @@
+       inputfile.read((char *)&_numsweeps, sizeof(size_t));
+       _sweeps.resize(2,_numsweeps+1);
+       for(int i = 1; i <= _numsweeps; i++){
+-        inputfile.read((char *)&_sweeps(0,i), sizeof(int));
+-        inputfile.read((char *)&_sweeps(1,i), sizeof(int));
++        int l;
++        inputfile.read((char *)&l, sizeof(int));
++        _sweeps(0,i) = l;
++        inputfile.read((char *)&l, sizeof(int));
++        _sweeps(1,i) = l;
+       }
+       inputfile.read((char *)&_in_warmup, sizeof(bool));
+       inputfile.read((char *)&_sweep, sizeof(int));
+@@ -577,8 +580,10 @@
+     {
+       s.write((const char *)&_numsweeps, sizeof(size_t));
+       for(int i = 1; i <= _numsweeps; i++){
+-        s.write((const char *)&_sweeps(0,i), sizeof(double));
+-        s.write((const char *)&_sweeps(1,i), sizeof(double));
++        int l = _sweeps(0,i);
++        s.write((const char *)&l, sizeof(int));
++        l = _sweeps(1,i);
++        s.write((const char *)&l, sizeof(int));
+       }
+       s.write((const char *)&_in_warmup, sizeof(bool));
+       s.write((const char *)&_sweep, sizeof(int));
+@@ -608,8 +613,11 @@
+       s.read((char *)&_numsweeps, sizeof(size_t));
+       _sweeps.resize(2,_numsweeps+1);
+       for(int i = 1; i <= _numsweeps; i++){
+-        s.read((char *)&_sweeps(0,i), sizeof(double));
+-        s.read((char *)&_sweeps(1,i), sizeof(double));
++        int l;
++        s.read((char *)&l, sizeof(int));
++        _sweeps(0,i) = l;
++        s.read((char *)&l, sizeof(int));
++        _sweeps(1,i) = l;
+       }
+       s.read((char *)&_in_warmup, sizeof(bool));
+       s.read((char *)&_sweep, sizeof(int));
 diff -urN alps-20170127-r7841.orig/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp alps-20170127-r7841/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp
 --- alps-20170127-r7841.orig/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp	2014-01-10 00:13:16.000000000 +0900
-+++ alps-20170127-r7841/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp	2018-02-04 22:52:27.000000000 +0900
++++ alps-20170127-r7841/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp	2018-02-04 23:54:43.000000000 +0900
 @@ -210,6 +210,7 @@
  template<class Matrix, class SymmGroup>
  void TwoSiteTensor<Matrix, SymmGroup>::swap_with(TwoSiteTensor<Matrix, SymmGroup> & b)
