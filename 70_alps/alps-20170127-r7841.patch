@@ -1,0 +1,11 @@
+diff -urN alps-20170127-r7841.orig/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp alps-20170127-r7841/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp
+--- alps-20170127-r7841.orig/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp	2014-01-10 00:13:16.000000000 +0900
++++ alps-20170127-r7841/applications/dmrg/mps/framework/dmrg/mp_tensors/twositetensor.hpp	2018-02-04 22:52:27.000000000 +0900
+@@ -210,6 +210,7 @@
+ template<class Matrix, class SymmGroup>
+ void TwoSiteTensor<Matrix, SymmGroup>::swap_with(TwoSiteTensor<Matrix, SymmGroup> & b)
+ {
++    using std::swap;
+     swap(this->phys_i, b.phys_i);
+     swap(this->phys_i_left, b.phys_i_left);
+     swap(this->phys_i_right, b.phys_i_right);
