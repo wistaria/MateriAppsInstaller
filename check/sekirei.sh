@@ -11,12 +11,14 @@ mkdir -p $PREFIX $BUILD_DIR
 cat << EOF > $MAINSTALLER_CONFIG
 PREFIX=$PREFIX
 BUILD_DIR=$BUILD_DIR
+WGET_OPTION="--no-proxy"
 EOF
 
 ###
 
 export MAINSTALLER_CONFIG
 sh $SCRIPT_DIR/../00_env/default.sh
+sh $SCRIPT_DIR/../00_wget/default.sh && sh $SCRIPT_DIR/../00_wget/link.sh
 sh $SCRIPT_DIR/../06_fftw/intel.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
 sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
 sh $SCRIPT_DIR/../20_python/intel-mkl.sh && sh $SCRIPT_DIR/../20_python/link.sh
