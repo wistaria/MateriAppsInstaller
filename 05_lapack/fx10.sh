@@ -19,35 +19,27 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 
-cd $BUILD_DIR/BLAS
-start_info | tee -a $LOG
-echo "[make BLAS static library]" | tee -a $LOG
-check make FORTRAN=gfortran BLASLIB=libblas.a ARCH=ar ARCHFLAGS=cr -j4 | tee -a $LOG
-$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
-$SUDO_TOOL check cp -p libblas.a $PREFIX_FRONTEND/lib
-check make clean
-echo "[make BLAS dynamic library]" | tee -a $LOG
-check make FORTRAN=gfortran OPTS="-O3 -fPIC" BLASLIB=libblas.so ARCH="gcc -shared" ARCHFLAGS=-o RANLIB=/bin/true -j4
-$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
-$SUDO_TOOL check cp -p libblas.so $PREFIX_FRONTEND/lib
-
 cd $BUILD_DIR/lapack-$LAPACK_VERSION
 cat << EOF > make.inc
 FORTRAN  = gfortran
+OPTS     = -O3 \$(PIC)
+NOOPT    = -O0 \$(PIC)
 DRVOPTS  = \$(OPTS)
 LOADER   = gfortran
 LOADOPTS =
 TIMER    = INT_ETIME
+BLASLIB  = ../../libblas.\$(LIBSFX)
+LAPACKLIB= liblapack.\$(LIBSFX)
+TMGLIB= libtmg.\$(LIBSFX)
 EOF
-echo "[make LAPACK static library]" | tee -a $LOG
-check make OPTS="-O3" NOOPT="-O0" ARCH="ar" ARCHFLAGS="cr" RANLIB=ranlib LAPACKLIB=liblapack.a lapacklib -j4 | tee -a $LOG
+echo "[make static libraries]" | tee -a $LOG
+check make ARCH="ar" ARCHFLAGS="cr" RANLIB=ranlib LIBSFX=a blaslib lapacklib -j4 | tee -a $LOG
+check make ARCH="ar" ARCHFLAGS="cr" RANLIB=ranlib LIBSFX=a blas_testing lapack_testing -j4 | tee -a $LOG
+check make clean | tee -a $LOG
+echo "[make dynamic libraries]" | tee -a $LOG
+check make PIC=-fPIC ARCH="gcc -shared" ARCHFLAGS="-o" RANLIB=/bin/true LIBSFX=so blaslib lapacklib -j4 | tee -a $LOG
 $SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
-$SUDO_TOOL check cp -p liblapack.a $PREFIX_FRONTEND/lib
-check make clean
-echo "[make LAPACK dynamic library]" | tee -a $LOG
-check make OPTS="-O3 -fPIC" NOOPT="-O0 -fPIC" ARCH="gcc -shared" ARCHFLAGS="-o" RANLIB=/bin/true LAPACKLIB=liblapack.so lapacklib -j4
-$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
-$SUDO_TOOL check cp -p liblapack.so $PREFIX_FRONTEND/lib
+$SUDO_TOOL check cp -p libblas.* liblapack.* $PREFIX_FRONTEND/lib
 
 cat << EOF > $BUILD_DIR/lapackvars.sh
 # lapack $(basename $0 .sh) $LAPACK_VERSION $LAPACK_MA_REVISION $(date +%Y%m%d-%H%M%S)
