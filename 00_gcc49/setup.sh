@@ -7,9 +7,10 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 cd $BUILD_DIR
-rm -rf gcc-$GCC_VERSION
-wget -O - https://ftp.gnu.org/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2 | bzip2 -dc | tar xf -
-cd gcc-$GCC_VERSION
+rm -rf gcc-$GCC49_VERSION
+wget -O - https://ftp.gnu.org/gnu/gcc/gcc-$GCC49_VERSION/gcc-$GCC49_VERSION.tar.bz2 | bzip2 -dc | tar xf -
+mv gcc-$GCC49_VERSION gcc49-$GCC49_VERSION
+cd gcc49-$GCC49_VERSION
 wget -O - https://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2 | bzip2 -dc | tar xf -
 mv gmp-$GMP_VERSION gmp
 wget -O - https://ftp.gnu.org/gnu/mpfr/mpfr-$MPFR_VERSION.tar.bz2 | bzip2 -dc | tar xf -
