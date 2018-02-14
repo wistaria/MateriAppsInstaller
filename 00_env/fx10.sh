@@ -6,6 +6,8 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 ENV_BASE="1.2.0-21"
 
+sh $SCRIPT_DIR/install_cm.sh
+
 cat << EOF > $BUILD_DIR/env.sh
 # env $(basename $0 .sh) $ENV_VERSION $ENV_MA_REVISION $(date +%Y%m%d-%H%M%S)
 if [ -f /home/system/Env_base_$ENV_BASE ]; then
@@ -28,8 +30,6 @@ for i in $PREFIX_TOOL/env.d/*.sh ; do
 done
 unset i
 EOF
-$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/bin
-$SUDO_TOOL cp -f $BUILD_DIR/env.sh $PREFIX_TOOL
+$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/lib
+$SUDO_TOOL cp -f $BUILD_DIR/env.sh $PREFIX_TOOL/
 rm -f $BUILD_DIR/env.sh
-$SUDO_TOOL cp -f $SCRIPT_DIR/check_maversion $PREFIX_TOOL/bin
-$SUDO_TOOL chmod +x $PREFIX_TOOL/bin/check_maversion
