@@ -27,7 +27,7 @@ check make -j4 | tee -a $LOG
 $SUDO_TOOL make install
 
 echo "[numpy]" | tee -a $LOG
-cd $BUILD_DIR/numpy-$NUMPY_VERSION
+cd $BUILD_DIR/Python-$PYTHON3_VERSION/numpy-$NUMPY_VERSION
 cat << EOF > site.cfg
 [DEFAULT]
 library_dirs = $LAPACK_ROOT/Linux-x86_64/lib
@@ -36,24 +36,17 @@ check env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python3 setup.py install | tee -a $LOG
 
 echo "[scipy]" | tee -a $LOG
-cd $BUILD_DIR/scipy-$SCIPY_VERSION
+cd $BUILD_DIR/Python-$PYTHON3_VERSION/scipy-$SCIPY_VERSION
 check env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python3 setup.py build --fcompiler=gnu95 | tee -a $LOG
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python3 setup.py install | tee -a $LOG
 
 echo "[matplotlib]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip3 install matplotlib | tee -a $LOG
 
 echo "[jupyter]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip3 install sphinx jupyter | tee -a $LOG
 
-echo "[virtualenv]" | tee -a $LOG
-cd $BUILD_DIR
-$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip3 install virtualenv | tee -a $LOG
-
 echo "[mock]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip3 install mock | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/python3vars.sh

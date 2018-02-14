@@ -7,7 +7,6 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 cd $BUILD_DIR
-
 if [ -d Python-$PYTHON3_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/python/Python-$PYTHON3_VERSION.tgz ]; then
     check tar zxf $SOURCE_DIR/python/Python-$PYTHON3_VERSION.tgz
@@ -17,6 +16,7 @@ if [ -d Python-$PYTHON3_VERSION ]; then :; else
   fi
 fi
 
+cd $BUILD_DIR/Python-$PYTHON3_VERSION
 if [ -d numpy-$NUMPY_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/python/numpy-$NUMPY_VERSION.tar.gz ]; then
     check tar zxf $SOURCE_DIR/python/numpy-$NUMPY_VERSION.tar.gz
@@ -26,6 +26,7 @@ if [ -d numpy-$NUMPY_VERSION ]; then :; else
   fi
 fi
 
+cd $BUILD_DIR/Python-$PYTHON3_VERSION
 if [ -d scipy-$SCIPY_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/python/scipy-$SCIPY_VERSION.tar.gz ]; then
     check tar zxf $SOURCE_DIR/python/scipy-$SCIPY_VERSION.tar.gz

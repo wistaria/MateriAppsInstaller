@@ -31,12 +31,12 @@ check make -j4 | tee -a $LOG
 $SUDO_TOOL make install
 
 echo "[pip]" | tee -a $LOG
-cd $BUILD_DIR
+cd $BUILD_DIR/Python-$PYTHON_VERSION
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python get-pip.py | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install --upgrade pip
 
 echo "[numpy]" | tee -a $LOG
-cd $BUILD_DIR/numpy-$NUMPY_VERSION
-check patch -p1 < $SCRIPT_DIR/numpy-$NUMPY_VERSION.patch
+cd $BUILD_DIR/Python-$PYTHON_VERSION/numpy-$NUMPY_VERSION
 cat << EOF > site.cfg
 [mkl]
 library_dirs = $(echo $MKLROOT | cut -d : -f 1)/lib/intel64
@@ -44,24 +44,24 @@ include_dirs = $(echo $MKLROOT | cut -d : -f 1)/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python setup.py config --compiler=intel build_clib --compiler=intel build_ext --compiler=intel | tee -a $LOG
+check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python setup.py config --compiler=intelem build_clib --compiler=intelem build_ext --compiler=intelem | tee -a $LOG
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python setup.py install | tee -a $LOG
 
 echo "[scipy]" | tee -a $LOG
-cd $BUILD_DIR/scipy-$SCIPY_VERSION
-check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python setup.py config --compiler=intel --fcompiler=intel build_clib --compiler=intel --fcompiler=intel build_ext --compiler=intel --fcompiler=intel | tee -a $LOG
+cd $BUILD_DIR/Python-$PYTHON_VERSION/scipy-$SCIPY_VERSION
+check env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python setup.py config --compiler=intelem --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem | tee -a $LOG
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/python setup.py install | tee -a $LOG
 
 echo "[matplotlib]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install matplotlib | tee -a $LOG
 
 echo "[ipython]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install sphinx pyzmq tornado ipython | tee -a $LOG
 
+echo "[virtualenv]" | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install virtualenv | tee -a $LOG
+
 echo "[mock]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install mock | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/pythonvars.sh

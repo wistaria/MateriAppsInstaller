@@ -32,11 +32,12 @@ check make -j4 | tee -a $LOG
 $SUDO_TOOL make install
 
 echo "[pip]" | tee -a $LOG
-cd $BUILD_DIR
+cd $BUILD_DIR/Python-$PYTHON_VERSION
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python get-pip.py | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install --upgrade pip
 
 echo "[numpy]" | tee -a $LOG
-cd $BUILD_DIR/numpy-$NUMPY_VERSION
+cd $BUILD_DIR/Python-$PYTHON_VERSION/numpy-$NUMPY_VERSION
 cat << EOF > site.cfg
 [DEFAULT]
 library_dirs = $LAPACK_ROOT/Linux-x86_64/lib
@@ -45,20 +46,20 @@ check env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install | tee -a $LOG
 
 echo "[scipy]" | tee -a $LOG
-cd $BUILD_DIR/scipy-$SCIPY_VERSION
+cd $BUILD_DIR/Python-$PYTHON_VERSION/scipy-$SCIPY_VERSION
 check env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py build --fcompiler=gnu95 | tee -a $LOG
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/python setup.py install | tee -a $LOG
 
 echo "[matplotlib]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install matplotlib | tee -a $LOG
 
 echo "[ipython]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install sphinx pyzmq tornado ipython | tee -a $LOG
 
+echo "[virtualenv]" | tee -a $LOG
+$SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install virtualenv | tee -a $LOG
+
 echo "[mock]" | tee -a $LOG
-cd $BUILD_DIR
 $SUDO_TOOL env LD_LIBRARY_PATH=$PREFIX_FRONTEND/lib:$LD_LIBRARY_PATH $PREFIX_FRONTEND/bin/pip install mock | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/pythonvars.sh

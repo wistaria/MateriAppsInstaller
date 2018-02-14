@@ -20,6 +20,7 @@ sh $SCRIPT_DIR/../00_env/fx10.sh
 sh $SCRIPT_DIR/../05_lapack/fx10.sh && sh $SCRIPT_DIR/../05_lapack/link.sh
 sh $SCRIPT_DIR/../10_hdf5/fx10.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
 sh $SCRIPT_DIR/../20_python/fx10.sh && sh $SCRIPT_DIR/../20_python/link.sh
+sh $SCRIPT_DIR/../21_python/fx10.sh && sh $SCRIPT_DIR/../21_python/link.sh
 sh $SCRIPT_DIR/../25_boost/fx10.sh && sh $SCRIPT_DIR/../25_boost/link-fx10.sh
 sh $SCRIPT_DIR/../30_cmake/fx10.sh && sh $SCRIPT_DIR/../30_cmake/link.sh
 sh $SCRIPT_DIR/../35_git/fx10.sh && sh $SCRIPT_DIR/../35_git/link.sh
