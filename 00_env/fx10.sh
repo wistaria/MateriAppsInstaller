@@ -4,7 +4,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
-ENV_BASE="1.2.0-21"
+ENV_BASE="1.2.0-23"
 
 sh $SCRIPT_DIR/install_cm.sh
 

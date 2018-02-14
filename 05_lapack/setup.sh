@@ -7,14 +7,6 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 cd $BUILD_DIR
-if [ -d BLAS ]; then :; else
-  if [ -f $HOME/source/blas.tgz ]; then
-    check tar zxf $HOME/source/blas.tgz
-  else
-    check wget http://www.netlib.org/blas/blas.tgz
-    check tar zxf blas.tgz
-  fi
-fi
 cd $BUILD_DIR
 if [ -d lapack-$LAPACK_VERSION ]; then :; else
   if [ -f $HOME/source/lapack-$LAPACK_VERSION.tgz ]; then
@@ -22,5 +14,9 @@ if [ -d lapack-$LAPACK_VERSION ]; then :; else
   else
     check wget http://www.netlib.org/lapack/lapack-$LAPACK_VERSION.tgz
     check tar zxf lapack-$LAPACK_VERSION.tgz
+  fi
+  if [ -f $SCRIPT_DIR/lapack-$LAPACK_VERSION.patch ]; then
+    cd lapack-$LAPACK_VERSION
+    patch -p1 < $SCRIPT_DIR/lapack-$LAPACK_VERSION.patch
   fi
 fi
