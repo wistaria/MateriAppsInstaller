@@ -1,18 +1,31 @@
 port selfupdate         
-port install gcc49
-port select --set gcc mp-gcc49
-port install openmpi-gcc49
-port select --set mpi openmpi-gcc49-fortran
-port install wget subversion scalapack +gcc49 +openmpi fftw-3 +gfortran fftw-3-single +gfortran gsl +gcc49
-port install cmake
-port install qt4-mac
-port install hdf5 +threadsafe
-port install python27
-port install py27-pip
-port install py27-scipy py27-matplotlib
-port install py27-ipython py27-zmq py27-jinja2 py27-notebook py27-widgetsnbextension
-port install py27-mpi4py +gcc49 +openmpi
-port install py27-wxpython-2.8 py27-opengl
+port -N install ld64 +ld64_xcode
+port -N install gcc7 openmpi-gcc7
+port select --set gcc mp-gcc7
+port select --set mpi openmpi-gcc7-fortran
+port -N install wget subversion scalapack +gcc7 +openmpi fftw-3 +gfortran fftw-3-single +gfortran gsl +gcc7
+port -N install qt4-mac
+port -N install hdf5 +threadsafe
+port -N install gnuplot
+
+port -N install python27 py27-pip py27-scipy py27-matplotlib
 port select --set python python27
+port select --set python2 python27
+rm -f /opt/local/bin/pip /opt/local/bin/pip2
+ln -s pip-2.7 /opt/local/bin/pip2
+ln -s pip2 /opt/local/bin/pip
+port -N install py27-virtualenv
+port select --set virtualenv virtualenv27
+port -N install py27-jupyter
 port select --set ipython py27-ipython
-port install git
+port select --set ipython2 py27-ipython
+port -N install py27-wxpython-2.8 py27-opengl
+
+port -N install python36 py36-pip py36-scipy py36-matplotlib
+port select --set python3 python36
+rm -f /opt/local/bin/pip3
+ln -s pip-3.6 /opt/local/bin/pip3
+port -N install py36-jupyter
+port select --set ipython3 py36-ipython
+rm -f /opt/local/bin/jupyter
+ln -s jupyter-3.6 /opt/local/bin/jupyter
