@@ -17,7 +17,7 @@ EOF
 
 export MAINSTALLER_CONFIG
 sh $SCRIPT_DIR/../00_env/default.sh
-sh $SCRIPT_DIR/../00_gcc49/default.sh && sh $SCRIPT_DIR/../00_gcc49/link.sh
+sh $SCRIPT_DIR/../00_gcc7/default.sh && sh $SCRIPT_DIR/../00_gcc7/link.sh
 sh $SCRIPT_DIR/../06_fftw/default.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
 sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
 sh $SCRIPT_DIR/../20_python/default.sh && sh $SCRIPT_DIR/../20_python/link.sh
