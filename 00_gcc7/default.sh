@@ -24,8 +24,8 @@ cd $BUILD_DIR/gcc7-$GCC7_VERSION-build
 check $BUILD_DIR/gcc7-$GCC7_VERSION/configure --enable-languages=c,c++,fortran --prefix=$PREFIX --disable-multilib | tee $LOG
 check make -j4 | tee -a $LOG
 $SUDO_TOOL make install | tee -a $LOG
-$SUDO_TOOL ln -s gcc7 $PREFIX/cc
-$SUDO_TOOL ln -s gfortran $PREFIX/f95
+$SUDO_TOOL ln -s gcc $PREFIX/bin/cc
+$SUDO_TOOL ln -s gfortran $PREFIX/bin/f95
 
 cat << EOF > $BUILD_DIR/gcc7vars.sh
 # gcc7 $(basename $0 .sh) $GCC7_VERSION $GCC7_MA_REVISION $(date +%Y%m%d-%H%M%S)
