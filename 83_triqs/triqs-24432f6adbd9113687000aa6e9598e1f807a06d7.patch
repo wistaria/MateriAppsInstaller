@@ -1,0 +1,12 @@
+diff -uprN triqs-24432f6adbd9113687000aa6e9598e1f807a06d7-0/CMakeLists.txt triqs-24432f6adbd9113687000aa6e9598e1f807a06d7-0-fixed/CMakeLists.txt
+--- triqs-24432f6adbd9113687000aa6e9598e1f807a06d7-0/CMakeLists.txt	2016-11-18 01:58:40.000000000 +0900
++++ triqs-24432f6adbd9113687000aa6e9598e1f807a06d7-0-fixed/CMakeLists.txt	2016-12-01 14:55:55.000000000 +0900
+@@ -314,7 +314,7 @@ string(REGEX MATCHALL "[0-9]+.[0-9]+.[0-
+ message(STATUS "hdf5 version: ${HDF5_VERSION}")
+ if (PythonSupport)
+ if (NOT "${PYTHON_H5PY_HDF5VERSION}" STREQUAL "${HDF5_VERSION}")
+- message(FATAL_ERROR "The HDF5 version of the h5py (${PYTHON_H5PY_HDF5VERSION}) is different from the hdf5 library found for C++ (${HDF5_VERSION}). You MUST have the same version.")
++ message("The HDF5 version of the h5py (${PYTHON_H5PY_HDF5VERSION}) is different from the hdf5 library found for C++ (${HDF5_VERSION}). You MUST have the same version.")
+ endif()
+ endif()
+ 

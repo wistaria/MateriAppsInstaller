@@ -23,6 +23,8 @@ echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx \
   -DCMAKE_CXX_FLAGS="-DGTEST_HAS_TR1_TUPLE=0" \
+  -DALPS_CXX_STD=custom \
+  -DCMAKE_CXX_FLAGS="-std=c++1y" \
   $BUILD_DIR/alpscore-$ALPSCORE_VERSION | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
