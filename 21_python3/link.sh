@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 PYTHON3VARS_SH=$PREFIX_TOOL/python3/python3vars-$PYTHON3_VERSION-$PYTHON3_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/python3vars.sh
-$SUDO_TOOL ln -s $PYTHON3VARS_SH $PREFIX_TOOL/env.d/python3vars.sh
+rm -f $PREFIX_TOOL/env.d/python3vars.sh
+ln -s $PYTHON3VARS_SH $PREFIX_TOOL/env.d/python3vars.sh

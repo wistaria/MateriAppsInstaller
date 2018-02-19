@@ -30,29 +30,29 @@ check sh ./mVMCconfig.sh $target
 check make mvmc | tee -a \$LOG
 echo "[make install]" | tee -a \$LOG
 
-echo "\$SUDO_APPS mkdir -p \$PREFIX/bin" | tee -a \$LOG
-\$SUDO_APPS mkdir -p \$PREFIX/bin | tee -a \$LOG
+echo "mkdir -p \$PREFIX/bin" | tee -a \$LOG
+mkdir -p \$PREFIX/bin | tee -a \$LOG
 
-echo "\$SUDO_APPS cp src/mVMC/vmc.out \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp src/mVMC/vmc.out \${PREFIX}/bin
-echo "\$SUDO_APPS cp src/mVMC/vmcdry.out \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp src/mVMC/vmcdry.out \${PREFIX}/bin
-echo "\$SUDO_APPS cp src/ComplexUHF/UHF \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp src/ComplexUHF/UHF \${PREFIX}/bin
-echo "\$SUDO_APPS cp tool/fourier \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp tool/fourier \${PREFIX}/bin
-echo "\$SUDO_APPS cp tool/corplot \${PREFIX}/bin" | tee -a \$LOG
-\$SUDO_APPS cp tool/corplot \${PREFIX}/bin
+echo "cp src/mVMC/vmc.out \${PREFIX}/bin" | tee -a \$LOG
+cp src/mVMC/vmc.out \${PREFIX}/bin
+echo "cp src/mVMC/vmcdry.out \${PREFIX}/bin" | tee -a \$LOG
+cp src/mVMC/vmcdry.out \${PREFIX}/bin
+echo "cp src/ComplexUHF/UHF \${PREFIX}/bin" | tee -a \$LOG
+cp src/ComplexUHF/UHF \${PREFIX}/bin
+echo "cp tool/fourier \${PREFIX}/bin" | tee -a \$LOG
+cp tool/fourier \${PREFIX}/bin
+echo "cp tool/corplot \${PREFIX}/bin" | tee -a \$LOG
+cp tool/corplot \${PREFIX}/bin
 
-echo "\$SUDO_APPS cp -r sample \${PREFIX}" | tee -a \$LOG
-\$SUDO_APPS cp -r sample \${PREFIX}
+echo "cp -r sample \${PREFIX}" | tee -a \$LOG
+cp -r sample \${PREFIX}
 
-echo "\$SUDO_APPS mkdir -p \${PREFIX}/doc" | tee -a \$LOG
-\$SUDO_APPS mkdir -p \$PREFIX/doc | tee -a \$LOG
-echo "\$SUDO_APPS cp userguide_jp.pdf \${PREFIX}/doc" | tee -a \$LOG
-\$SUDO_APPS cp userguide_jp.pdf \${PREFIX}/doc/ | tee -a \$LOG
-echo "\$SUDO_APPS cp userguide_en.pdf \${PREFIX}/doc" | tee -a \$LOG
-\$SUDO_APPS cp userguide_en.pdf \${PREFIX}/doc/ | tee -a \$LOG
+echo "mkdir -p \${PREFIX}/doc" | tee -a \$LOG
+mkdir -p \$PREFIX/doc | tee -a \$LOG
+echo "cp userguide_jp.pdf \${PREFIX}/doc" | tee -a \$LOG
+cp userguide_jp.pdf \${PREFIX}/doc/ | tee -a \$LOG
+echo "cp userguide_en.pdf \${PREFIX}/doc" | tee -a \$LOG
+cp userguide_en.pdf \${PREFIX}/doc/ | tee -a \$LOG
 
 finish_info | tee -a \$LOG
 
@@ -62,9 +62,9 @@ export MVMC_ROOT=\$PREFIX
 export PATH=\\\$MVMC_ROOT/bin:\\\$PATH
 EOF
 MVMCVARS_SH=\$PREFIX_APPS/mVMC/mVMCvars-\$MVMC_VERSION-\$MVMC_PATCH_VERSION.sh
-\$SUDO_APPS rm -f \$MVMCVARS_SH
-\$SUDO_APPS cp -f \$BUILD_DIR/mVMCvars.sh \$MVMCVARS_SH
-\$SUDO_APPS cp -f \$LOG \$PREFIX_APPS/mVMC
+rm -f \$MVMCVARS_SH
+cp -f \$BUILD_DIR/mVMCvars.sh \$MVMCVARS_SH
+cp -f \$LOG \$PREFIX_APPS/mVMC
 EOF_TEMPLATE
 
 done

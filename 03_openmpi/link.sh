@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 OPENMPIVARS_SH=$PREFIX_TOOL/openmpi/openmpivars-$OPENMPI_VERSION-$OPENMPI_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/openmpivars.sh
-$SUDO_TOOL ln -s $OPENMPIVARS_SH $PREFIX_TOOL/env.d/openmpivars.sh
+rm -f $PREFIX_TOOL/env.d/openmpivars.sh
+ln -s $OPENMPIVARS_SH $PREFIX_TOOL/env.d/openmpivars.sh

@@ -23,7 +23,7 @@ echo "[make]" | tee -a $LOG
 check cp -fp system/Make.sys-shared Make.sys
 check make all | tee -a $LOG
 echo "[make install xcrysden]" | tee -a $LOG
-$SUDO_APPS make install prefix=$PREFIX | tee -a $LOG
+make install prefix=$PREFIX | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/xcrysdenvars.sh
@@ -32,6 +32,6 @@ export XCRYSDEN_ROOT=$PREFIX
 export PATH=\$XCRYSDEN_ROOT/bin:\$PATH
 EOF
 XCRYSDENVARS_SH=$PREFIX_APPS/xcrysden/xcrysdenvars-$XCRYSDEN_VERSION-$XCRYSDEN_PATCH_VERSION.sh
-$SUDO_APPS rm -f $XCRYSDENVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/xcrysdenvars.sh $XCRYSDENVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/xcrysden
+rm -f $XCRYSDENVARS_SH
+cp -f $BUILD_DIR/xcrysdenvars.sh $XCRYSDENVARS_SH
+cp -f $LOG $PREFIX_APPS/xcrysden

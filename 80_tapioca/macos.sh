@@ -24,17 +24,17 @@ patch -p1 < $SCRIPT_DIR/tapioca-macos.patch
 echo "[make tapioca]" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install tapioca]" | tee -a $LOG
-$SUDO_APPS make install PREFIX=$PREFIX | tee -a $LOG
-$SUDO_APPS cp -r sample $PREFIX
-$SUDO_APPS cp -f src/defaults.*ml src/kpath.xml src/spacegroup.db $PREFIX/libexec
+make install PREFIX=$PREFIX | tee -a $LOG
+cp -r sample $PREFIX
+cp -f src/defaults.*ml src/kpath.xml src/spacegroup.db $PREFIX/libexec
 cat << EOF > $BUILD_DIR/tapioca
 #!/bin/sh
 $PREFIX/libexec/tapioca "$@"
 exit $?
 EOF
-$SUDO_APPS mkdir -p $PREFIX/bin
-$SUDO_APPS cp -f $BUILD_DIR/tapioca $PREFIX/bin
-$SUDO_APPS chmod +x $PREFIX/bin/tapioca
+mkdir -p $PREFIX/bin
+cp -f $BUILD_DIR/tapioca $PREFIX/bin
+chmod +x $PREFIX/bin/tapioca
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/tapiocavars.sh
@@ -44,6 +44,6 @@ export TAPIOCA_ROOT=$PREFIX
 export PATH=\$XTAPP_ROOT/bin:\$TAPIOCA_ROOT/bin:\$PATH
 EOF
 TAPIOCAVARS_SH=$PREFIX_APPS/tapioca/tapiocavars-$TAPIOCA_VERSION-$TAPIOCA_PATCH_VERSION.sh
-$SUDO_APPS rm -f $TAPIOCAVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/tapiocavars.sh $TAPIOCAVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/tapioca
+rm -f $TAPIOCAVARS_SH
+cp -f $BUILD_DIR/tapiocavars.sh $TAPIOCAVARS_SH
+cp -f $LOG $PREFIX_APPS/tapioca

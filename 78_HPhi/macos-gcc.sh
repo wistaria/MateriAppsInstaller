@@ -26,25 +26,25 @@ check sh ./HPhiconfig.sh macos-gcc
 check make HPhi | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 
-echo "$SUDO_APPS mkdir -p $PREFIX/bin" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/bin | tee -a $LOG
+echo "mkdir -p $PREFIX/bin" | tee -a $LOG
+mkdir -p $PREFIX/bin | tee -a $LOG
 
-echo "$SUDO_APPS cp src/HPhi ${PREFIX}/bin" | tee -a $LOG
-$SUDO_APPS cp src/HPhi ${PREFIX}/bin
-echo "$SUDO_APPS cp tool/fourier ${PREFIX}/bin" | tee -a $LOG
-$SUDO_APPS cp tool/fourier ${PREFIX}/bin
-echo "$SUDO_APPS cp tool/corplot ${PREFIX}/bin" | tee -a $LOG
-$SUDO_APPS cp tool/corplot ${PREFIX}/bin
+echo "cp src/HPhi ${PREFIX}/bin" | tee -a $LOG
+cp src/HPhi ${PREFIX}/bin
+echo "cp tool/fourier ${PREFIX}/bin" | tee -a $LOG
+cp tool/fourier ${PREFIX}/bin
+echo "cp tool/corplot ${PREFIX}/bin" | tee -a $LOG
+cp tool/corplot ${PREFIX}/bin
 
-echo "$SUDO_APPS cp -r samples ${PREFIX}" | tee -a $LOG
-$SUDO_APPS cp -r samples ${PREFIX}
+echo "cp -r samples ${PREFIX}" | tee -a $LOG
+cp -r samples ${PREFIX}
 
-echo "$SUDO_APPS mkdir -p ${PREFIX}/doc" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/doc | tee -a $LOG
-echo "$SUDO_APPS cp userguide_jp.pdf ${PREFIX}/doc" | tee -a $LOG
-$SUDO_APPS cp userguide_jp.pdf ${PREFIX}/doc/ | tee -a $LOG
-echo "$SUDO_APPS cp userguide_en.pdf ${PREFIX}/doc" | tee -a $LOG
-$SUDO_APPS cp userguide_en.pdf ${PREFIX}/doc/ | tee -a $LOG
+echo "mkdir -p ${PREFIX}/doc" | tee -a $LOG
+mkdir -p $PREFIX/doc | tee -a $LOG
+echo "cp userguide_jp.pdf ${PREFIX}/doc" | tee -a $LOG
+cp userguide_jp.pdf ${PREFIX}/doc/ | tee -a $LOG
+echo "cp userguide_en.pdf ${PREFIX}/doc" | tee -a $LOG
+cp userguide_en.pdf ${PREFIX}/doc/ | tee -a $LOG
 
 finish_info | tee -a $LOG
 
@@ -54,7 +54,7 @@ export HPHI_ROOT=$PREFIX
 export PATH=\$HPHI_ROOT/bin:\$PATH
 EOF
 HPHIVARS_SH=$PREFIX_APPS/HPhi/HPhivars-$HPHI_VERSION-$HPHI_PATCH_VERSION.sh
-$SUDO_APPS rm -f $HPHIVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/HPhivars.sh $HPHIVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/HPhi
+rm -f $HPHIVARS_SH
+cp -f $BUILD_DIR/HPhivars.sh $HPHIVARS_SH
+cp -f $LOG $PREFIX_APPS/HPhi
 

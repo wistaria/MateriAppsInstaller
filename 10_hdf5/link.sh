@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 HDF5VARS_SH=$PREFIX_TOOL/hdf5/hdf5vars-$HDF5_VERSION-$HDF5_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/hdf5vars.sh
-$SUDO_TOOL ln -s $HDF5VARS_SH $PREFIX_TOOL/env.d/hdf5vars.sh
+rm -f $PREFIX_TOOL/env.d/hdf5vars.sh
+ln -s $HDF5VARS_SH $PREFIX_TOOL/env.d/hdf5vars.sh

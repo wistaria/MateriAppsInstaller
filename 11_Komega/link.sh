@@ -8,6 +8,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 KOMEGAVARS_SH=$PREFIX_TOOL/Komega/Komegavars-$KOMEGA_VERSION-$KOMEGA_PATCH_VERSION.sh
-$SUDO_APPS rm -f $PREFIX_TOOL/Komega/Komegavars.sh
-$SUDO_APPS ln -s $KOMEGAVARS_SH $PREFIX_TOOL/Komega/Komegavars.sh
+rm -f $PREFIX_TOOL/Komega/Komegavars.sh
+ln -s $KOMEGAVARS_SH $PREFIX_TOOL/Komega/Komegavars.sh
 

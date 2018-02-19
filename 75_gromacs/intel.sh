@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-$SUDO_APPS true
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/gromacs-$GROMACS_VERSION-$GROMACS_MA_REVISION.log
 PREFIX="$PREFIX_APPS/gromacs/gromacs-$GROMACS_VERSION-$GROMACS_MA_REVISION"
@@ -27,7 +26,7 @@ else
 fi
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS make install | tee -a $LOG
+make install | tee -a $LOG
 check make distclean | tee -a $LOG
 echo "[make mdrun_mpi]" | tee -a $LOG
 if [ -n "$FFTW_ROOT" ]; then
@@ -36,7 +35,7 @@ else
   check ./configure --prefix=$PREFIX CC=$(which icc) CXX=$(which icpc) --enable-mpi --program-suffix=_mpi | tee -a $LOG
 fi
 check make mdrun | tee -a $LOG
-$SUDO_APPS make install-mdrun | tee -a $LOG
+make install-mdrun | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/gromacsvars.sh
@@ -48,7 +47,7 @@ export GROMACS_MA_REVISION=$GROMACS_MA_REVISION
 . \$GROMACS_ROOT/bin/GMXRC.bash
 EOF
 GROMACSVARS_SH=$PREFIX_APPS/gromacs/gromacsvars-$GROMACS_VERSION-$GROMACS_MA_REVISION.sh
-$SUDO_APPS rm -f $GROMACSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/gromacsvars.sh $GROMACSVARS_SH
+rm -f $GROMACSVARS_SH
+cp -f $BUILD_DIR/gromacsvars.sh $GROMACSVARS_SH
 rm -f $BUILD_DIR/gromacsvars.sh
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/gromacs/
+cp -f $LOG $PREFIX_APPS/gromacs/

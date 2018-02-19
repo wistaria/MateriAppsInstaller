@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-$SUDO_APPS true
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/feram-$FERAM_VERSION-$FERAM_MA_REVISION.log
 PREFIX="$PREFIX_APPS/feram/feram-$FERAM_VERSION-$FERAM_MA_REVISION"
@@ -23,9 +22,9 @@ echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX --with-fft=fftw3_threads CPPFLAGS="-I/opt/local/include" LDFLAGS="-L/opt/local/lib" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS make install | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/share/feram/example
-$SUDO_APPS cp -rp src/[0-9]* $PREFIX/share/feram/example
+make install | tee -a $LOG
+mkdir -p $PREFIX/share/feram/example
+cp -rp src/[0-9]* $PREFIX/share/feram/example
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/feramvars.sh
@@ -37,7 +36,7 @@ export FERAM_MA_REVISION=$FERAM_MA_REVISION
 export PATH=\$FERAM_ROOT/bin:\$PATH
 EOF
 FERAMVARS_SH=$PREFIX_APPS/feram/feramvars-$FERAM_VERSION-$FERAM_MA_REVISION.sh
-$SUDO_APPS rm -f $FERAMVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/feramvars.sh $FERAMVARS_SH
+rm -f $FERAMVARS_SH
+cp -f $BUILD_DIR/feramvars.sh $FERAMVARS_SH
 rm -f $BUILD_DIR/feramvars.sh
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/feram/
+cp -f $LOG $PREFIX_APPS/feram/

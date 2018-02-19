@@ -24,10 +24,10 @@ start_info | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/bin
-$SUDO_APPS make install DESTDIR=$PREFIX/bin | tee -a $LOG
+mkdir -p $PREFIX/bin
+make install DESTDIR=$PREFIX/bin | tee -a $LOG
 cd $BUILD_DIR/openmx-$OPENMX_VERSION
-$SUDO_APPS cp -rp openmx*.pdf DFT_DATA13 work $PREFIX
+cp -rp openmx*.pdf DFT_DATA13 work $PREFIX
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/openmxvars.sh
@@ -36,6 +36,6 @@ export OPENMX_ROOT=$PREFIX
 export PATH=\$OPENMX_ROOT/bin:\$PATH
 EOF
 OPENMXVARS_SH=$PREFIX_APPS/openmx/openmxvars-$OPENMX_VERSION-$OPENMX_PATCH_VERSION.sh
-$SUDO_APPS rm -f $OPENMXVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/openmxvars.sh $OPENMXVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/openmx
+rm -f $OPENMXVARS_SH
+cp -f $BUILD_DIR/openmxvars.sh $OPENMXVARS_SH
+cp -f $LOG $PREFIX_APPS/openmx

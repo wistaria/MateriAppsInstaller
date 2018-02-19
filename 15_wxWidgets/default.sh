@@ -6,7 +6,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/wxWidgets-$WXWIDGETS_VERSION-$WXWIDGETS_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/wxWidgets/wxWidgets-$WXWIDGETS_VERSION-$WXWIDGETS_MA_REVISION
 
@@ -22,7 +21,7 @@ cd $BUILD_DIR/wxWidgets-$WXWIDGETS_VERSION
 echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX --with-gtk | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_TOOL make install | tee -a $LOG
+make install | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/wxWidgetsvars.sh
 # hdf5 $(basename $0 .sh) $WXWIDGETS_VERSION $WXWIDGETS_MA_REVISION $(date +%Y%m%d-%H%M%S)
@@ -33,7 +32,7 @@ export PATH=\$WXWIDGETS_ROOT/bin:\$PATH
 export LD_LIBRARY_PATH=\$WXWIDGETS_ROOT/lib:\$LD_LIBRARY_PATH
 EOF
 WXWIDGETSVARS_SH=$PREFIX_TOOL/wxWidgets/wxWidgetsvars-$WXWIDGETS_VERSION-$WXWIDGETS_MA_REVISION.sh
-$SUDO_TOOL rm -f $WXWIDGETSVARS_SH
-$SUDO_TOOL cp -f $BUILD_DIR/wxWidgetsvars.sh $WXWIDGETSVARS_SH
+rm -f $WXWIDGETSVARS_SH
+cp -f $BUILD_DIR/wxWidgetsvars.sh $WXWIDGETSVARS_SH
 rm -f $BUILD_DIR/wxWidgetsvars.sh
-$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/wxWidgets/
+cp -f $LOG $PREFIX_TOOL/wxWidgets/

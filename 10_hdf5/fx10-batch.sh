@@ -6,7 +6,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/hdf5/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
@@ -27,7 +26,7 @@ cd $BUILD_DIR/hdf5-$HDF5_VERSION
 echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX_FRONTEND --enable-threadsafe --with-pthread=yes | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_TOOL make install | tee -a $LOG
+make install | tee -a $LOG
 check make distclean | tee -a $LOG
 
 # for backend
@@ -43,7 +42,7 @@ touch H5lib_settings.c H5Tinit.c
 cd ..
 check make -j4 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_TOOL make install | tee -a $LOG
+make install | tee -a $LOG
 check make distclean | tee -a $LOG
 
 echo "[make and make install]" | tee -a $LOG
@@ -55,11 +54,11 @@ check pjsub --interact $SCRIPT_DIR/fx10-script.sh | tee -a $LOG
 touch H5lib_settings.c H5Tinit.c
 check make -j4 | tee -a $LOG
 check fccpx -Xg -KPIC -shared -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]*.o
-$SUDO_TOOL cp -fp libhdf5.so $PREFIX_BACKEND/lib
+cp -fp libhdf5.so $PREFIX_BACKEND/lib
 cd ../hl/src
 check make -j4 | tee -a $LOG
 check fccpx -Xg -KPIC -shared -o libhdf5_hl.so H5*.o
-$SUDO_TOOL cp -fp libhdf5_hl.so $PREFIX_BACKEND/lib
+cp -fp libhdf5_hl.so $PREFIX_BACKEND/lib
 
 cat << EOF > $BUILD_DIR/hdf5vars.sh
 # hdf5 $(basename $0 .sh) $HDF5_VERSION $HDF5_MA_REVISION $(date +%Y%m%d-%H%M%S)
@@ -72,7 +71,7 @@ export PATH=\$HDF5_ROOT/\$OS-\$ARCH/bin:\$PATH
 export LD_LIBRARY_PATH=\$HDF5_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
 EOF
 HDF5VARS_SH=$PREFIX_TOOL/hdf5/hdf5vars-$HDF5_VERSION-$HDF5_MA_REVISION.sh
-$SUDO_TOOL rm -f $HDF5VARS_SH
-$SUDO_TOOL cp -f $BUILD_DIR/hdf5vars.sh $HDF5VARS_SH
+rm -f $HDF5VARS_SH
+cp -f $BUILD_DIR/hdf5vars.sh $HDF5VARS_SH
 rm -f $BUILD_DIR/hdf5vars.sh
-$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/hdf5/
+cp -f $LOG $PREFIX_TOOL/hdf5/

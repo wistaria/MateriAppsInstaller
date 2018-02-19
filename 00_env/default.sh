@@ -45,8 +45,8 @@ done
 unset i
 EOF
 
-$SUDO_TOOL mkdir -p $PREFIX_TOOL/env.d $PREFIX_TOOL/lib
-$SUDO_TOOL cp -f $BUILD_DIR/env-cxx03.sh $BUILD_DIR/env-cxx1y.sh $PREFIX_TOOL/
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.sh
-$SUDO_TOOL ln -s env-cxx03.sh $PREFIX_TOOL/env.sh
+mkdir -p $PREFIX_TOOL/env.d $PREFIX_TOOL/lib
+cp -f $BUILD_DIR/env-cxx03.sh $BUILD_DIR/env-cxx1y.sh $PREFIX_TOOL/
+rm -f $PREFIX_TOOL/env.sh
+ln -s env-cxx03.sh $PREFIX_TOOL/env.sh
 rm -f $BUILD_DIR/env-cxx03.sh $BUILD_DIR/env-cxx1y.sh

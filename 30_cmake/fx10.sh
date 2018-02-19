@@ -7,7 +7,6 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 . $SCRIPT_DIR/version.sh
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/cmake-$CMAKE_VERSION-$CMAKE_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION-$CMAKE_MA_REVISION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
@@ -28,7 +27,7 @@ echo "[make Linux-x86_64]" | tee -a $LOG
 check $BUILD_DIR/cmake-$CMAKE_VERSION/bootstrap --prefix=$PREFIX_FRONTEND | tee -a $LOG
 check make -j4 | tee -a $LOG
 echo "[make instsall Linux-x86_64]" | tee -a $LOG
-$SUDO_TOOL make install | tee -a $LOG
+make install | tee -a $LOG
 
 cd $BUILD_DIR
 check mkdir -p cmake-$CMAKE_VERSION-Linux-s64fx
@@ -48,10 +47,10 @@ COMMAND=\$(basename \$0)
 PREFIX=$PREFIX
 \$PREFIX/\$OS-\$ARCH/bin/\$COMMAND "\$@"
 EOF
-$SUDO_TOOL mkdir -p $PREFIX/bin
-$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX/bin/cmake
-$SUDO_TOOL cp -f $BUILD_DIR/cmake $PREFIX/bin/ctest
-$SUDO_TOOL chmod +x $PREFIX/bin/cmake $PREFIX/bin/ctest
+mkdir -p $PREFIX/bin
+cp -f $BUILD_DIR/cmake $PREFIX/bin/cmake
+cp -f $BUILD_DIR/cmake $PREFIX/bin/ctest
+chmod +x $PREFIX/bin/cmake $PREFIX/bin/ctest
 
 cat << EOF > $BUILD_DIR/cmakevars.sh
 # cmake $(basename $0 .sh) $CMAKE_VERSION $CMAKE_MA_REVISION $(date +%Y%m%d-%H%M%S)
@@ -63,7 +62,7 @@ export CMAKE_PATH=\$CMAKE_ROOT/bin/cmake
 export CTEST_PATH=\$CMAKE_ROOT/bin/ctest
 EOF
 CMAKEVARS_SH=$PREFIX_TOOL/cmake/cmakevars-$CMAKE_VERSION-$CMAKE_MA_REVISION.sh
-$SUDO_TOOL rm -f $CMAKEVARS_SH
-$SUDO_TOOL cp -f $BUILD_DIR/cmakevars.sh $CMAKEVARS_SH
+rm -f $CMAKEVARS_SH
+cp -f $BUILD_DIR/cmakevars.sh $CMAKEVARS_SH
 rm -f $BUILD_DIR/cmakevars.sh
-$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/cmake/
+cp -f $LOG $PREFIX_TOOL/cmake/

@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 LAPACKVARS_SH=$PREFIX_TOOL/lapack/lapackvars-$LAPACK_VERSION-$LAPACK_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/lapackvars.sh
-$SUDO_TOOL ln -s $LAPACKVARS_SH $PREFIX_TOOL/env.d/lapackvars.sh
+rm -f $PREFIX_TOOL/env.d/lapackvars.sh
+ln -s $LAPACKVARS_SH $PREFIX_TOOL/env.d/lapackvars.sh

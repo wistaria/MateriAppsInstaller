@@ -23,9 +23,9 @@ echo "[make]" | tee -a $LOG
 check ./configure --prefix=$PREFIX FC=mpif90 FCFLAGS="-O3 -fopenmp -cpp -DMPIPARA -DCOMM_CUBE -DFJMPIDIR -DSYNC_COM -DHALFDIRE -DONEPROC_AXIS -DSEGSHAKE" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS make install | tee -a $LOG
+make install | tee -a $LOG
 cd $BUILD_DIR/MODYLAS_$MODYLAS_VERSION
-$SUDO_APPS cp -r LICENSE.pdf document sample $PREFIX
+cp -r LICENSE.pdf document sample $PREFIX
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/modylasvars.sh
@@ -34,6 +34,6 @@ export MODYLAS_ROOT=$PREFIX
 export PATH=\$MODYLAS_ROOT/bin:\$PATH
 EOF
 MODYLASVARS_SH=$PREFIX_APPS/modylas/modylasvars-$MODYLAS_VERSION-$MODYLAS_PATCH_VERSION.sh
-$SUDO_APPS rm -f $MODYLASVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/modylasvars.sh $MODYLASVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/modylas
+rm -f $MODYLASVARS_SH
+cp -f $BUILD_DIR/modylasvars.sh $MODYLASVARS_SH
+cp -f $LOG $PREFIX_APPS/modylas

@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 TCLTKVARS_SH=$PREFIX_TOOL/tcltk/tcltkvars-$TCLTK_VERSION-$TCLTK_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/tcltkvars.sh
-$SUDO_TOOL ln -s $TCLTKVARS_SH $PREFIX_TOOL/env.d/tcltkvars.sh
+rm -f $PREFIX_TOOL/env.d/tcltkvars.sh
+ln -s $TCLTKVARS_SH $PREFIX_TOOL/env.d/tcltkvars.sh

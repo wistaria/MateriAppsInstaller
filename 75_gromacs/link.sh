@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 GROMACSVARS_SH=$PREFIX_APPS/gromacs/gromacsvars-$GROMACS_VERSION-$GROMACS_MA_REVISION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/gromacs/gromacsvars.sh
-$SUDO_APPS ln -s $GROMACSVARS_SH $PREFIX_APPS/gromacs/gromacsvars.sh
+rm -f $PREFIX_APPS/gromacs/gromacsvars.sh
+ln -s $GROMACSVARS_SH $PREFIX_APPS/gromacs/gromacsvars.sh

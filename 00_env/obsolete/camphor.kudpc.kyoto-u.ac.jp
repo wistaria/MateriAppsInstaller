@@ -44,8 +44,8 @@ for i in $PREFIX_TOOL/env.d/*.sh ; do
 done
 unset i
 EOF
-$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/bin
-$SUDO_TOOL cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_TOOL
+mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/bin
+cp -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh $PREFIX_TOOL
 rm -f $BUILD_DIR/env.sh $BUILD_DIR/env.csh
-$SUDO_TOOL cp -f $SCRIPT_DIR/check_maversion $PREFIX_TOOL/bin
-$SUDO_TOOL chmod +x $PREFIX_TOOL/bin/check_maversion
+cp -f $SCRIPT_DIR/check_maversion $PREFIX_TOOL/bin
+chmod +x $PREFIX_TOOL/bin/check_maversion

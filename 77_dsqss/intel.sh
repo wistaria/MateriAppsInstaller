@@ -37,10 +37,10 @@ chmod +x bin/inpgene
 
 
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX
-$SUDO_APPS cp -r bin $PREFIX
-$SUDO_APPS cp -r tool $PREFIX
-$SUDO_APPS cp -r samples $PREFIX
+mkdir -p $PREFIX
+cp -r bin $PREFIX
+cp -r tool $PREFIX
+cp -r samples $PREFIX
 
 finish_info | tee -a $LOG
 
@@ -49,6 +49,6 @@ cat << EOF > $BUILD_DIR/dsqssvars.sh
 . $PREFIX/bin/wormvars.sh
 EOF
 DSQSSVARS_SH=$PREFIX_APPS/dsqss/dsqssvars-$DSQSS_VERSION-$DSQSS_MA_REVISION.sh
-$SUDO_APPS rm -f $DSQSSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/dsqssvars.sh $DSQSSVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/dsqss
+rm -f $DSQSSVARS_SH
+cp -f $BUILD_DIR/dsqssvars.sh $DSQSSVARS_SH
+cp -f $LOG $PREFIX_APPS/dsqss

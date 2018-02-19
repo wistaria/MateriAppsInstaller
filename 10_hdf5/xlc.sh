@@ -16,12 +16,12 @@ set_prefix
 # cd szip-$SZIP_VERSION
 # CC=xlc CXX=xlC CFLAGS="-O2" CXXFLAGS="-O2" check ./configure --prefix=$PREFIX_TOOL
 # check gmake -j2
-# $SUDO gmake install
+# gmake install
 # check gmake distclean
 # CC=xlc CXX=xlC CFLAGS="-O2 -qpic" CXXFLAGS="-O2 -qpic" check ./configure --prefix=$PREFIX_TOOL
 # check gmake -j2
 # check xlc -G -o libsz.so src/rice.o src/sz_api.o src/encoding.o
-# $SUDO cp -fp libsz.so $PREFIX_TOOL/lib
+# cp -fp libsz.so $PREFIX_TOOL/lib
 
 cd $BUILD_DIR
 rm -rf hdf5-$HDF5_VERSION
@@ -33,14 +33,14 @@ fi
 cd hdf5-$HDF5_VERSION
 CC=xlc CXX=xlC CFLAGS="-O2" CXXFLAGS="-O2" check ./configure --prefix=$PREFIX_TOOL --with-szlib=$PREFIX_TOOL
 check gmake -j2
-$SUDO gmake install
+gmake install
 gmake distclean
 CC=xlc CXX=xlC CFLAGS="-O2 -qpic" CXXFLAGS="-O2 -qpic" check ./configure --prefix=$PREFIX_TOOL --with-szlib=$PREFIX_TOOL
 cd src
 gmake -j2
 xlc -G -o libhdf5.so H5.o H5checksum.o H5dbg.o H5lib_settings.o H5system.o H5timer.o H5trace.o H5[A-Z]*.o
-$SUDO cp -fp libhdf5.so $PREFIX_TOOL/lib
+cp -fp libhdf5.so $PREFIX_TOOL/lib
 cd ../hl/src
 make -j2
 xlc -G -o libhdf5_hl.so H5*.o
-$SUDO cp -fp libhdf5_hl.so $PREFIX_TOOL/lib
+cp -fp libhdf5_hl.so $PREFIX_TOOL/lib

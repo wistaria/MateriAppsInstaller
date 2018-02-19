@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 LAMMPSVARS_SH=$PREFIX_APPS/lammps/lammpsvars-$LAMMPS_VERSION-$LAMMPS_MA_REVISION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/lammps/lammpsvars.sh
-$SUDO_APPS ln -s $LAMMPSVARS_SH $PREFIX_APPS/lammps/lammpsvars.sh
+rm -f $PREFIX_APPS/lammps/lammpsvars.sh
+ln -s $LAMMPSVARS_SH $PREFIX_APPS/lammps/lammpsvars.sh

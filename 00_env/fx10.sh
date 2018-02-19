@@ -30,6 +30,6 @@ for i in $PREFIX_TOOL/env.d/*.sh ; do
 done
 unset i
 EOF
-$SUDO_TOOL mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/lib
-$SUDO_TOOL cp -f $BUILD_DIR/env.sh $PREFIX_TOOL/
+mkdir -p $PREFIX_TOOL $PREFIX_TOOL/env.d $PREFIX_TOOL/lib
+cp -f $BUILD_DIR/env.sh $PREFIX_TOOL/
 rm -f $BUILD_DIR/env.sh

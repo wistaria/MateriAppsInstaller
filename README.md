@@ -34,7 +34,6 @@ Setup
       * PREFIX=...      # ツールとアプリを同じ場所にインストールする場合
       * PREFIX_TOOL=... # ツールのインストール場所
       * PREFIX_APPS=... # アプリケーションのインストール場所
-      * SUDO=/usr/bin/sudo # インストールに root 権限が必要な場合
       * BUILD_DIR=...      # build を行う場所 (デフォルト $HOME/build)
       * SOURCE_DIR=...     # source tarball 置き場 (デフォルト $HOME/source)
 

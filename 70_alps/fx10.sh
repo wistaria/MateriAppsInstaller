@@ -39,7 +39,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 echo "[make]" | tee -a $LOG
 check make -j2 VERBOSE=1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS make install | tee -a $LOG
+make install | tee -a $LOG
 echo "[ctest]" | tee -a $LOG
 ctest | tee -a $LOG
 finish_info | tee -a $LOG
@@ -50,9 +50,9 @@ cat << EOF > $BUILD_DIR/alpsvars-$BUILD_ARCH.sh
 . $PREFIX/bin/alpsvars.sh
 EOF
 ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$BUILD_ARCH-$ALPS_VERSION-$ALPS_MA_REVISION.sh
-$SUDO_APPS rm -f $ALPSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/alpsvars-$BUILD_ARCH.sh $ALPSVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
+rm -f $ALPSVARS_SH
+cp -f $BUILD_DIR/alpsvars-$BUILD_ARCH.sh $ALPSVARS_SH
+cp -f $LOG $PREFIX_APPS/alps
 
 #
 # for Linux-s64fx
@@ -92,7 +92,7 @@ check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 echo "[make]" | tee -a $LOG
 check make -j2 VERBOSE=1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS make install | tee -a $LOG
+make install | tee -a $LOG
 # echo "[ctest]" | tee -a $LOG
 # ctest | tee -a $LOG
 finish_info | tee -a $LOG
@@ -103,9 +103,9 @@ cat << EOF > $BUILD_DIR/alpsvars-$BUILD_ARCH.sh
 . $PREFIX/bin/alpsvars.sh
 EOF
 ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$BUILD_ARCH-$ALPS_VERSION-$ALPS_MA_REVISION.sh
-$SUDO_APPS rm -f $ALPSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/alpsvars-$BUILD_ARCH.sh $ALPSVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/alps
+rm -f $ALPSVARS_SH
+cp -f $BUILD_DIR/alpsvars-$BUILD_ARCH.sh $ALPSVARS_SH
+cp -f $LOG $PREFIX_APPS/alps
 
 #
 # common alpsvars.sh
@@ -116,5 +116,5 @@ cat << EOF > $BUILD_DIR/alpsvars.sh
 . $PREFIX_APPS/alps/alpsvars-\$(uname -s)-\$(uname -m)-$ALPS_VERSION-$ALPS_MA_REVISION.sh
 EOF
 ALPSVARS_SH=$PREFIX_APPS/alps/alpsvars-$ALPS_VERSION-$ALPS_MA_REVISION.sh
-$SUDO_APPS rm -f $ALPSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/alpsvars.sh $ALPSVARS_SH
+rm -f $ALPSVARS_SH
+cp -f $BUILD_DIR/alpsvars.sh $ALPSVARS_SH

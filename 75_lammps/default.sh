@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-$SUDO_APPS true
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/lammps-$LAMMPS_VERSION-$LAMMPS_MA_REVISION.log
 PREFIX="$PREFIX_APPS/lammps/lammps-$LAMMPS_VERSION-$LAMMPS_MA_REVISION"
@@ -27,10 +26,10 @@ check make mpi mode=shlib | tee -a $LOG
 check make serial mode=lib | tee -a $LOG
 check make serial mode=shlib | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib
-$SUDO_APPS cp -p lmp_mpi lmp_serial $PREFIX/bin
-$SUDO_APPS cp -p lammps.h $PREFIX/include
-$SUDO_APPS cp -p liblammps_* $PREFIX/lib
+mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib
+cp -p lmp_mpi lmp_serial $PREFIX/bin
+cp -p lammps.h $PREFIX/include
+cp -p liblammps_* $PREFIX/lib
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/lammpsvars.sh
@@ -43,7 +42,7 @@ export PATH=\$LAMMPS_ROOT/bin:\$PATH
 export LD_LIBRARY_PATH=\$LAMMPS_ROOT/lib:\$LD_LIBRARY_PATH
 EOF
 LAMMPSVARS_SH=$PREFIX_APPS/lammps/lammpsvars-$LAMMPS_VERSION-$LAMMPS_MA_REVISION.sh
-$SUDO_APPS rm -f $LAMMPSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/lammpsvars.sh $LAMMPSVARS_SH
+rm -f $LAMMPSVARS_SH
+cp -f $BUILD_DIR/lammpsvars.sh $LAMMPSVARS_SH
 rm -f $BUILD_DIR/lammpsvars.sh
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/lammps/
+cp -f $LOG $PREFIX_APPS/lammps/

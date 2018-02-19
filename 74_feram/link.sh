@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 FERAMVARS_SH=$PREFIX_APPS/feram/feramvars-$FERAM_VERSION-$FERAM_MA_REVISION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/feram/feramvars.sh
-$SUDO_APPS ln -s $FERAMVARS_SH $PREFIX_APPS/feram/feramvars.sh
+rm -f $PREFIX_APPS/feram/feramvars.sh
+ln -s $FERAMVARS_SH $PREFIX_APPS/feram/feramvars.sh

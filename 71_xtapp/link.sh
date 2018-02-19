@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 XTAPPVARS_SH=$PREFIX_APPS/xtapp/xtappvars-$XTAPP_VERSION-$XTAPP_PATCH_VERSION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/xtapp/xtappvars.sh
-$SUDO_APPS ln -s $XTAPPVARS_SH $PREFIX_APPS/xtapp/xtappvars.sh
+rm -f $PREFIX_APPS/xtapp/xtappvars.sh
+ln -s $XTAPPVARS_SH $PREFIX_APPS/xtapp/xtappvars.sh

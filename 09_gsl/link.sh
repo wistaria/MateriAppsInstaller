@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 GSLVARS_SH=$PREFIX_TOOL/gsl/gslvars-$GSL_VERSION-$GSL_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/gslvars.sh
-$SUDO_TOOL ln -s $GSLVARS_SH $PREFIX_TOOL/env.d/gslvars.sh
+rm -f $PREFIX_TOOL/env.d/gslvars.sh
+ln -s $GSLVARS_SH $PREFIX_TOOL/env.d/gslvars.sh

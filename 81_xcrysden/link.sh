@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 XCRYSDENVARS_SH=$PREFIX_APPS/xcrysden/xcrysdenvars-$XCRYSDEN_VERSION-$XCRYSDEN_PATCH_VERSION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/xcrysden/xcrysdenvars.sh
-$SUDO_APPS ln -s $XCRYSDENVARS_SH $PREFIX_APPS/xcrysden/xcrysdenvars.sh
+rm -f $PREFIX_APPS/xcrysden/xcrysdenvars.sh
+ln -s $XCRYSDENVARS_SH $PREFIX_APPS/xcrysden/xcrysdenvars.sh

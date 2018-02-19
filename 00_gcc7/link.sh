@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 GCC7VARS_SH=$PREFIX_TOOL/gcc7/gcc7vars-$GCC7_VERSION-$GCC7_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/gcc7vars.sh
-$SUDO_TOOL ln -s $GCC7VARS_SH $PREFIX_TOOL/env.d/gcc7vars.sh
+rm -f $PREFIX_TOOL/env.d/gcc7vars.sh
+ln -s $GCC7VARS_SH $PREFIX_TOOL/env.d/gcc7vars.sh

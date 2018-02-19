@@ -7,7 +7,6 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/wxpython-$PYTHON_VERSION-$PYTHON_MA_REVISION.log
 PYPREFIX=$PREFIX_TOOL/python/python-$PYTHON_VERSION-$PYTHON_MA_REVISION
 export LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH
@@ -18,9 +17,9 @@ rm -rf $LOG
 echo "[wxPython]" | tee -a $LOG
 cd $BUILD_DIR/wxPython-src-$WX_VERSION/wxPython
 check env LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH $PYPREFIX/bin/python setup.py build WXPORT="gtk2" | tee -a $LOG
-$SUDO_TOOL env LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH $PYPREFIX/bin/python setup.py install WXPORT="gtk2" | tee -a $LOG
+env LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH $PYPREFIX/bin/python setup.py install WXPORT="gtk2" | tee -a $LOG
 
 echo "[PyOpenGL]" | tee -a $LOG
 cd $BUILD_DIR/PyOpenGL-$PYOPENGL_VERSION
 check env LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH $PYPREFIX/bin/python setup.py build | tee -a $LOG
-$SUDO_TOOL env LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH $PYPREFIX/bin/python setup.py install | tee -a $LOG
+env LD_LIBRARY_PATH=$PYPREFIX/lib:$LD_LIBRARY_PATH $PYPREFIX/bin/python setup.py install | tee -a $LOG

@@ -7,5 +7,5 @@ set_prefix
 . $SCRIPT_DIR/version.sh
 
 WGETVARS_SH=$PREFIX_TOOL/wget/wgetvars-$WGET_VERSION-$WGET_MA_REVISION.sh
-$SUDO_TOOL rm -f $PREFIX_TOOL/env.d/wgetvars.sh
-$SUDO_TOOL ln -s $WGETVARS_SH $PREFIX_TOOL/env.d/wgetvars.sh
+rm -f $PREFIX_TOOL/env.d/wgetvars.sh
+ln -s $WGETVARS_SH $PREFIX_TOOL/env.d/wgetvars.sh

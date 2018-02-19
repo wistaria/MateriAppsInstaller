@@ -6,7 +6,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/git-$GIT_VERSION-$GIT_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/git/git-$GIT_VERSION-$GIT_MA_REVISION
 
@@ -25,7 +24,7 @@ echo "[configure]" | tee -a $LOG
 check ./configure --prefix=$PREFIX --with-python=$PYTHON_ROOT/bin/python2.7 | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check make -j4 | tee -a $LOG
-$SUDO_TOOL env LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH make install | tee -a $LOG
+env LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH make install | tee -a $LOG
 
 finish_info | tee -a $LOG
 
@@ -35,7 +34,7 @@ export GIT_ROOT=$PREFIX
 export PATH=\$GIT_ROOT/bin:\$PATH
 EOF
 GITVARS_SH=$PREFIX_TOOL/git/gitvars-$GIT_VERSION-$GIT_MA_REVISION.sh
-$SUDO_TOOL rm -f $GITVARS_SH
-$SUDO_TOOL cp -f $BUILD_DIR/gitvars.sh $GITVARS_SH
+rm -f $GITVARS_SH
+cp -f $BUILD_DIR/gitvars.sh $GITVARS_SH
 rm -f $BUILD_DIR/gitvars.sh
-$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/git/
+cp -f $LOG $PREFIX_TOOL/git/

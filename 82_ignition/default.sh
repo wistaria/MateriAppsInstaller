@@ -23,7 +23,7 @@ check ./configure --prefix=$PREFIX
 echo "[make]" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS make install | tee -a $LOG
+make install | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/ignitionvars.sh
@@ -32,6 +32,6 @@ export IGNITION_ROOT=$PREFIX
 export PATH=\$IGNITION_ROOT/bin:\$PATH
 EOF
 IGNITIONVARS_SH=$PREFIX_APPS/ignition/ignitionvars-$IGNITION_VERSION-$IGNITION_PATCH_VERSION.sh
-$SUDO_APPS rm -f $IGNITIONVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/ignitionvars.sh $IGNITIONVARS_SH
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/ignition
+rm -f $IGNITIONVARS_SH
+cp -f $BUILD_DIR/ignitionvars.sh $IGNITIONVARS_SH
+cp -f $LOG $PREFIX_APPS/ignition

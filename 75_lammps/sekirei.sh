@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-$SUDO_APPS true
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/lammps-$LAMMPS_VERSION-$LAMMPS_MA_REVISION.log
 PREFIX="$PREFIX_APPS/lammps/lammps-$LAMMPS_VERSION-$LAMMPS_MA_REVISION"
@@ -132,12 +131,12 @@ check make $JMAKE gpu | tee -a $LOG
 check make $JMAKE gpu mode=lib | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
-$SUDO_APPS mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib $PREFIX/examples
-$SUDO_APPS cp -p lmp_mpi $PREFIX/bin
-$SUDO_APPS cp -p lmp_gpu $PREFIX/bin
-$SUDO_APPS cp -p lammps.h $PREFIX/include
-$SUDO_APPS cp -p liblammps_* $PREFIX/lib
-$SUDO_APPS cp -r $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
+mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib $PREFIX/examples
+cp -p lmp_mpi $PREFIX/bin
+cp -p lmp_gpu $PREFIX/bin
+cp -p lammps.h $PREFIX/include
+cp -p liblammps_* $PREFIX/lib
+cp -r $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
 
 finish_info | tee -a $LOG
 
@@ -152,7 +151,7 @@ export PATH=\$LAMMPS_ROOT/bin:\$PATH
 export LD_LIBRARY_PATH=\$LAMMPS_ROOT/lib:\$TBBROOT/lib/intel64/gcc4.4:\$LD_LIBRARY_PATH
 EOF
 LAMMPSVARS_SH=$PREFIX_APPS/lammps/lammpsvars-$LAMMPS_VERSION-$LAMMPS_MA_REVISION.sh
-$SUDO_APPS rm -f $LAMMPSVARS_SH
-$SUDO_APPS cp -f $BUILD_DIR/lammpsvars.sh $LAMMPSVARS_SH
+rm -f $LAMMPSVARS_SH
+cp -f $BUILD_DIR/lammpsvars.sh $LAMMPSVARS_SH
 rm -f $BUILD_DIR/lammpsvars.sh
-$SUDO_APPS cp -f $LOG $PREFIX_APPS/lammps/
+cp -f $LOG $PREFIX_APPS/lammps/

@@ -34,7 +34,7 @@ else
 fi
 EOF
 
-$SUDO_TOOL mkdir -p $PREFIX_TOOL/bin
-$SUDO_TOOL cp -f $BUILD_DIR/check_maversion $PREFIX_TOOL/bin/
-$SUDO_TOOL chmod +x $PREFIX_TOOL/bin/check_maversion
+mkdir -p $PREFIX_TOOL/bin
+cp -f $BUILD_DIR/check_maversion $PREFIX_TOOL/bin/
+chmod +x $PREFIX_TOOL/bin/check_maversion
 rm -f $BUILD_DIR/check_maversion

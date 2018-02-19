@@ -6,7 +6,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/lapack-$LAPACK_VERSION-$LAPACK_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/lapack/lapack-$LAPACK_VERSION-$LAPACK_MA_REVISION
 PREFIX_FRONTEND="$PREFIX/Linux-x86_64"
@@ -38,8 +37,8 @@ check make ARCH="ar" ARCHFLAGS="cr" RANLIB=ranlib LIBSFX=a blas_testing lapack_t
 check make clean | tee -a $LOG
 echo "[make dynamic libraries]" | tee -a $LOG
 check make PIC=-fPIC ARCH="gcc -shared" ARCHFLAGS="-o" RANLIB=/bin/true LIBSFX=so blaslib lapacklib -j4 | tee -a $LOG
-$SUDO_TOOL check mkdir -p $PREFIX_FRONTEND/lib
-$SUDO_TOOL check cp -p libblas.* liblapack.* $PREFIX_FRONTEND/lib
+check mkdir -p $PREFIX_FRONTEND/lib
+check cp -p libblas.* liblapack.* $PREFIX_FRONTEND/lib
 
 cat << EOF > $BUILD_DIR/lapackvars.sh
 # lapack $(basename $0 .sh) $LAPACK_VERSION $LAPACK_MA_REVISION $(date +%Y%m%d-%H%M%S)
@@ -51,7 +50,7 @@ export LAPACK_MA_REVISION=$LAPACK_MA_REVISION
 export LD_LIBRARY_PATH=\$LAPACK_ROOT/\$OS-\$ARCH/lib:\$LD_LIBRARY_PATH
 EOF
 LAPACKVARS_SH=$PREFIX_TOOL/lapack/lapackvars-$LAPACK_VERSION-$LAPACK_MA_REVISION.sh
-$SUDO_TOOL rm -f $LAPACKVARS_SH
-$SUDO_TOOL cp -f $BUILD_DIR/lapackvars.sh $LAPACKVARS_SH
+rm -f $LAPACKVARS_SH
+cp -f $BUILD_DIR/lapackvars.sh $LAPACKVARS_SH
 rm -f $BUILD_DIR/lapackvars.sh
-$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/lapack/
+cp -f $LOG $PREFIX_TOOL/lapack/

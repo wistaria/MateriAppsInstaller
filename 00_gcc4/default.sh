@@ -6,7 +6,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
-$SUDO_TOOL /bin/true
 LOG=$BUILD_DIR/gcc4-$GCC4_VERSION-$GCC4_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/gcc4/gcc4-$GCC4_VERSION-$GCC4_MA_REVISION
 
@@ -23,9 +22,9 @@ mkdir -p $BUILD_DIR/gcc4-$GCC4_VERSION-build
 cd $BUILD_DIR/gcc4-$GCC4_VERSION-build
 check $BUILD_DIR/gcc4-$GCC4_VERSION/configure --enable-languages=c,c++,fortran --prefix=$PREFIX --disable-multilib | tee $LOG
 check make -j4 | tee -a $LOG
-$SUDO_TOOL make install | tee -a $LOG
-$SUDO_TOOL ln -s gcc $PREFIX/bin/cc
-$SUDO_TOOL ln -s gfortran $PREFIX/bin/f95
+make install | tee -a $LOG
+ln -s gcc $PREFIX/bin/cc
+ln -s gfortran $PREFIX/bin/f95
 
 cat << EOF > $BUILD_DIR/gcc4vars.sh
 # gcc4 $(basename $0 .sh) $GCC4_VERSION $GCC4_MA_REVISION $(date +%Y%m%d-%H%M%S)
@@ -36,7 +35,7 @@ export PATH=\$GCC4_ROOT/bin:\$PATH
 export LD_LIBRARY_PATH=\$GCC4_ROOT/lib64:\$LD_LIBRARY_PATH
 EOF
 GCC4VARS_SH=$PREFIX_TOOL/gcc4/gcc4vars-$GCC4_VERSION-$GCC4_MA_REVISION.sh
-$SUDO_TOOL rm -f $GCC4VARS_SH
-$SUDO_TOOL cp -f $BUILD_DIR/gcc4vars.sh $GCC4VARS_SH
+rm -f $GCC4VARS_SH
+cp -f $BUILD_DIR/gcc4vars.sh $GCC4VARS_SH
 rm -f $BUILD_DIR/gcc4vars.sh
-$SUDO_TOOL cp -f $LOG $PREFIX_TOOL/gcc4/
+cp -f $LOG $PREFIX_TOOL/gcc4/

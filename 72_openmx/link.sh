@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 OPENMXVARS_SH=$PREFIX_APPS/openmx/openmxvars-$OPENMX_VERSION-$OPENMX_PATCH_VERSION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/openmx/openmxvars.sh
-$SUDO_APPS ln -s $OPENMXVARS_SH $PREFIX_APPS/openmx/openmxvars.sh
+rm -f $PREFIX_APPS/openmx/openmxvars.sh
+ln -s $OPENMXVARS_SH $PREFIX_APPS/openmx/openmxvars.sh

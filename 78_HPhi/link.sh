@@ -8,6 +8,6 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 HPHIVARS_SH=$PREFIX_APPS/HPhi/HPhivars-$HPHI_VERSION-$HPHI_PATCH_VERSION.sh
-$SUDO_APPS rm -f $PREFIX_APPS/HPhi/HPhivars.sh
-$SUDO_APPS ln -s $HPHIVARS_SH $PREFIX_APPS/HPhi/HPhivars.sh
+rm -f $PREFIX_APPS/HPhi/HPhivars.sh
+ln -s $HPHIVARS_SH $PREFIX_APPS/HPhi/HPhivars.sh
 
