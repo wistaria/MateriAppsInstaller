@@ -14,6 +14,7 @@ export MA_ROOT_APPS=$PREFIX_APPS
 export MA_CXX_STANDARD=cxx03
 export PATH=$PREFIX_TOOL/bin:\$PATH
 export LD_LIBRARY_PATH=$PREFIX_TOOL/lib:\$LD_LIBRARY_PATH
+unset i
 for i in $PREFIX_TOOL/env.d/*.sh ; do
   if [ -r "\$i" ]; then
     if [ "\${-#*i}" != "\$-" ]; then
