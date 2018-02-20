@@ -20,6 +20,7 @@ sh $SCRIPT_DIR/../00_env/default.sh
 sh $SCRIPT_DIR/../01_gcc7/default.sh && sh $SCRIPT_DIR/../01_gcc7/link.sh
 sh $SCRIPT_DIR/../06_fftw/default.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
 sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
+sh $SCRIPT_DIR/../11_eigen3/default.sh && sh $SCRIPT_DIR/../11_eigen3/link.sh
 sh $SCRIPT_DIR/../20_python/default.sh && sh $SCRIPT_DIR/../20_python/link.sh
 sh $SCRIPT_DIR/../21_python3/default.sh && sh $SCRIPT_DIR/../21_python3/link.sh
 sh $SCRIPT_DIR/../25_boost/default.sh && sh $SCRIPT_DIR/../25_boost/link.sh

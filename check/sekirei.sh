@@ -21,6 +21,7 @@ sh $SCRIPT_DIR/../00_env/default.sh
 sh $SCRIPT_DIR/../00_wget/default.sh && sh $SCRIPT_DIR/../00_wget/link.sh
 sh $SCRIPT_DIR/../06_fftw/intel.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
 sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
+sh $SCRIPT_DIR/../11_eigen3/default.sh && sh $SCRIPT_DIR/../11_eigen3/link.sh
 sh $SCRIPT_DIR/../20_python/intel-mkl.sh && sh $SCRIPT_DIR/../20_python/link.sh
 sh $SCRIPT_DIR/../25_boost/intel.sh && sh $SCRIPT_DIR/../25_boost/link.sh
 sh $SCRIPT_DIR/../30_cmake/default.sh && sh $SCRIPT_DIR/../30_cmake/link.sh

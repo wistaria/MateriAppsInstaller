@@ -17,6 +17,7 @@ EOF
 
 export MAINSTALLER_CONFIG
 sh $SCRIPT_DIR/../00_env/default.sh
+sh $SCRIPT_DIR/../11_eigen3/default.sh && sh $SCRIPT_DIR/../11_eigen3/link.sh
 sh $SCRIPT_DIR/../25_boost/macos.sh && sh $SCRIPT_DIR/../25_boost/link.sh
 sh $SCRIPT_DIR/../70_alps/macos.sh && sh $SCRIPT_DIR/../70_alps/link.sh
 
