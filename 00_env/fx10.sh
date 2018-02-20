@@ -19,6 +19,7 @@ export MA_ROOT_TOOL=$PREFIX_TOOL
 export MA_ROOT_APPS=$PREFIX_APPS
 export PATH=$PREFIX_TOOL/bin:/opt/local/gcc/bin:/opt/local/bin:\$PATH
 export LD_LIBRARY_PATH=$PREFIX_TOOL/lib:/opt/local/gcc/lib64:/opt/local/lib:\$LD_LIBRARY_PATH
+unset i
 for i in $PREFIX_TOOL/env.d/*.sh ; do
   if [ -r "\$i" ]; then
     if [ "\${-#*i}" != "\$-" ]; then
