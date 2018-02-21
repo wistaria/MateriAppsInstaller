@@ -18,6 +18,11 @@ EOF
 
 export MAINSTALLER_CONFIG
 sh $SCRIPT_DIR/../00_env/default.sh
+cat << EOF > $PREFIX/env.d/00_local.sh
+eval \`/usr/bin/modulecmd bash remove intel gnu\`
+eval \`/usr/bin/modulecmd bash load intel/18.0.1.163 gnu/7.2.0\`
+eval \`/usr/bin/modulecmd bash list\`
+EOF
 sh $SCRIPT_DIR/../00_wget/default.sh && sh $SCRIPT_DIR/../00_wget/link.sh
 sh $SCRIPT_DIR/../06_fftw/intel.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
 sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
