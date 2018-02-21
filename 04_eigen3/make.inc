@@ -1,0 +1,10 @@
+FORTRAN  = gfortran
+OPTS     = -O3 $(PIC)
+NOOPT    = -O0 $(PIC)
+DRVOPTS  = $(OPTS)
+LOADER   = gfortran
+LOADOPTS =
+TIMER    = INT_ETIME
+BLASLIB  = ../../libblas.$(LIBSFX)
+EIGEN3LIB= libeigen3.$(LIBSFX)
+TMGLIB= libtmg.$(LIBSFX)
