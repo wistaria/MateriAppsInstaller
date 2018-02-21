@@ -1,3 +1,4 @@
+#!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
@@ -37,6 +38,7 @@ cp ../userguide_en.pdf ${PREFIX}/doc/ | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > ${BUILD_DIR}/HPhivars.sh
+# HPhi $(basename $0 .sh) ${HPHI_VERSION} ${HPHI_MA_REVISION} $(date +%Y%m%d-%H%M%S)
 . ${PREFIX_TOOL}/env.sh
 export HPHI_ROOT=$PREFIX
 export PATH=\${HPHI_ROOT}/bin:\$PATH
@@ -45,4 +47,3 @@ HPHIVARS_SH=${PREFIX_APPS}/HPhi/HPhivars-${HPHI_VERSION}-${HPHI_MA_REVISION}.sh
 rm -f $HPHIVARS_SH
 cp -f ${BUILD_DIR}/HPhivars.sh $HPHIVARS_SH
 cp -f $LOG ${PREFIX_APPS}/HPhi/
-
