@@ -25,6 +25,7 @@ sh $SCRIPT_DIR/../25_boost/fx10.sh && sh $SCRIPT_DIR/../25_boost/link-fx10.sh
 sh $SCRIPT_DIR/../30_cmake/fx10.sh && sh $SCRIPT_DIR/../30_cmake/link.sh
 sh $SCRIPT_DIR/../35_git/fx10.sh && sh $SCRIPT_DIR/../35_git/link.sh
 sh $SCRIPT_DIR/../70_alps/fx10.sh && sh $SCRIPT_DIR/../70_alps/link.sh
+sh $SCRIPT_DIR/../78_hphi/fx10.sh && sh $SCRIPT_DIR/../78_hphi/link.sh
 
 ###
 

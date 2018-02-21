@@ -32,6 +32,7 @@ sh $SCRIPT_DIR/../25_boost/intel.sh && sh $SCRIPT_DIR/../25_boost/link.sh
 sh $SCRIPT_DIR/../30_cmake/default.sh && sh $SCRIPT_DIR/../30_cmake/link.sh
 sh $SCRIPT_DIR/../35_git/default.sh && sh $SCRIPT_DIR/../35_git/link.sh
 sh $SCRIPT_DIR/../70_alps/intel-mkl.sh && sh $SCRIPT_DIR/../70_alps/link.sh
+sh $SCRIPT_DIR/../78_hphi/sekirei.sh && sh $SCRIPT_DIR/../78_hphi/link.sh
 
 ###
 
