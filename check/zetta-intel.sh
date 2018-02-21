@@ -17,6 +17,7 @@ EOF
 
 export MAINSTALLER_CONFIG
 sh $SCRIPT_DIR/../00_env/default.sh
+sh $SCRIPT_DIR/../03_openmpi/intel.sh && sh $SCRIPT_DIR/../03_openmpi/link.sh
 sh $SCRIPT_DIR/../06_fftw/intel.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
 sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
 sh $SCRIPT_DIR/../11_eigen3/default.sh && sh $SCRIPT_DIR/../11_eigen3/link.sh
