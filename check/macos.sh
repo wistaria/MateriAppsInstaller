@@ -20,7 +20,7 @@ sh $SCRIPT_DIR/../00_env/default.sh
 sh $SCRIPT_DIR/../11_eigen3/default.sh && sh $SCRIPT_DIR/../11_eigen3/link.sh
 sh $SCRIPT_DIR/../25_boost/macos.sh && sh $SCRIPT_DIR/../25_boost/link.sh
 sh $SCRIPT_DIR/../70_alps/macos.sh && sh $SCRIPT_DIR/../70_alps/link.sh
-sh $SCRIPT_DIR/../78_hphi/default.sh && sh $SCRIPT_DIR/../78_hphi/link.sh
+sh $SCRIPT_DIR/../78_hphi/macos.sh && sh $SCRIPT_DIR/../78_hphi/link.sh
 
 ###
 
