@@ -2,18 +2,18 @@
 
 ENV_CONF="default"
 TOOL_SET="
-03_openmpi/intel
-04_cmake/default
-06_fftw/intel
-10_hdf5/default
-11_eigen3/default
-20_python/intel-mkl
-21_python3/intel-mkl
-25_boost/intel
-35_git/default
-40_alpscore/intel_cxx1y
-70_alps/intel-mkl
-78_hphi/intel
+03_openmpi:intel
+04_cmake:default
+06_fftw:intel
+10_hdf5:default
+11_eigen3:default
+20_python:intel-mkl
+21_python3:intel-mkl
+25_boost:intel
+35_git:default
+40_alpscore:intel_cxx1y
+70_alps:intel-mkl
+78_hphi:intel
 "
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
