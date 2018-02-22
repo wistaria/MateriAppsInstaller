@@ -17,8 +17,8 @@ TOOL_SET="
 "
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-MAINSTALLER_CONFIG=$HOME/.mainstaller-check
-PREFIX=$HOME/materiapps-check
+MAINSTALLER_CONFIG=$HOME/.mainstaller-check-intel
+PREFIX=$HOME/materiapps-check-intel
 BUILD_DIR=$PREFIX/build
 
 mkdir -p $PREFIX $BUILD_DIR
