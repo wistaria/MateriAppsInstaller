@@ -17,11 +17,15 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 
-cd $BUILD_DIR/eigen3-$EIGEN3_VERSION
+mkdir $BUILD_DIR/eigen3-build-$EIGEN3_VERSION
+cd $BUILD_DIR/eigen3-build-$EIGEN3_VERSION
 start_info | tee -a $LOG
-echo "[install]" | tee -a $LOG
-mkdir -p $PREFIX/include
-cp -rpv Eigen $PREFIX/include | tee -a $LOG
+echo "[cmake]" | tee -a $LOG
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
+  -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ \
+  $BUILD_DIR/eigen3-$EIGEN3_VERSION | tee -a $LOG
+echo "[make install]" | tee -a $LOG
+make install | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/eigen3vars.sh
