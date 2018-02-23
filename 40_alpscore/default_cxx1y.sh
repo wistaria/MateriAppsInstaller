@@ -10,6 +10,7 @@ LOG=$BUILD_DIR/alpscore-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.log
 
 PREFIX="$PREFIX_TOOL/alpscore/alpscore-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION"
 PREFIX_CXX03="$PREFIX/cxx03"
+PREFIX_CXX1Y="$PREFIX/cxx1y"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -34,10 +35,30 @@ echo "[ctest cxx03]" | tee -a $LOG
 ctest | tee -a $LOG
 finish_info | tee -a $LOG
 
+mkdir -p $BUILD_DIR/alpscore-build-$ALPSCORE_VERSION-cxx1y
+cd $BUILD_DIR/alpscore-build-$ALPSCORE_VERSION-cxx1y
+start_info | tee -a $LOG
+echo "[cmake cxx1y]" | tee -a $LOG
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_CXX1Y \
+  -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ \
+  -DCMAKE_CXX_FLAGS="-DGTEST_HAS_TR1_TUPLE=0" \
+  -DALPS_CXX_STD=custom \
+  -DCMAKE_CXX_FLAGS="-std=c++1y" \
+  $BUILD_DIR/alpscore-$ALPSCORE_VERSION | tee -a $LOG
+echo "[make cxx1y]" | tee -a $LOG
+check make -j4 | tee -a $LOG
+echo "[make install cxx1y]" | tee -a $LOG
+make install | tee -a $LOG
+echo "[ctest cxx1y]" | tee -a $LOG
+ctest | tee -a $LOG
+finish_info | tee -a $LOG
+
 cat << EOF > $BUILD_DIR/alpscorevars.sh
 # alpscore $(basename $0 .sh) $ALPSCORE_VERSION $ALPSCORE_MA_REVISION $(date +%Y%m%d-%H%M%S)
 if [ "\$MA_CXX_STANDARD" = "cxx1y" ]; then
-  echo "Warning: alpscore is installed without cxx1y support"
+  export ALPSCORE_ROOT=$PREFIX_CXX1Y
+  export ALPSCore_DIR=\$ALPSCORE_ROOT
+  export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
 else
   export ALPSCORE_ROOT=$PREFIX_CXX03
   export ALPSCore_DIR=\$ALPSCORE_ROOT

@@ -8,15 +8,15 @@ set_prefix
 
 cd $BUILD_DIR
 if [ -d eigen3-$EIGEN3_VERSION ]; then :; else
-  mkdir $BUILD_DIR/eigen3-$EIGEN3_VERSION
-  if [ -f $HOME/source/eigen3-$EIGEN3_VERSION.tar.gz ]; then
-    check tar zxf $HOME/source/eigen3-$EIGEN3_VERSION.tar.gz -C $BUILD_DIR/eigen3-$EIGEN3_VERSION --strip-components=1
-  elif [ -f eigen3-$EIGEN3_VERSION.tar.gz ]; then
-      check tar zxf eigen3-$EIGEN3_VERSION.tar.gz -C $BUILD_DIR/eigen3-$EIGEN3_VERSION --strip-components=1
-  else
-    check wget -O eigen3-$EIGEN3_VERSION.tar.gz  http://bitbucket.org/eigen/eigen/get/$EIGEN3_VERSION.tar.gz
-    check tar zxf eigen3-$EIGEN3_VERSION.tar.gz -C $BUILD_DIR/eigen3-$EIGEN3_VERSION --strip-components=1
+  if [ -f eigen3-$EIGEN3_VERSION.tar.gz ]; then :; else
+    if [ -f $HOME/source/eigen3-$EIGEN3_VERSION.tar.gz ]; then
+      cp $HOME/source/eigen3-$EIGEN3_VERSION.tar.gz .
+    else
+      check wget -O eigen3-$EIGEN3_VERSION.tar.gz http://bitbucket.org/eigen/eigen/get/$EIGEN3_VERSION.tar.gz
+    fi
   fi
+  mkdir -p $BUILD_DIR/eigen3-$EIGEN3_VERSION
+  check tar zxf $HOME/source/eigen3-$EIGEN3_VERSION.tar.gz -C $BUILD_DIR/eigen3-$EIGEN3_VERSION --strip-components=1
   if [ -f $SCRIPT_DIR/eigen3-$EIGEN3_VERSION.patch ]; then
     cd eigen3-$EIGEN3_VERSION
     patch -p1 < $SCRIPT_DIR/eigen3-$EIGEN3_VERSION.patch

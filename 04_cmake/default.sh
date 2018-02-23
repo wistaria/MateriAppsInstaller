@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
-. $SCRIPT_DIR/version.sh
 
 LOG=$BUILD_DIR/cmake-$CMAKE_VERSION-$CMAKE_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/cmake/cmake-$CMAKE_VERSION-$CMAKE_MA_REVISION

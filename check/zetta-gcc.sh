@@ -1,13 +1,28 @@
 #!/bin/sh
 
+ENV_CONF="default"
+TOOL_SET="
+01_gcc7:default
+03_openmpi:default
+04_cmake:default
+06_fftw:default
+10_hdf5:default
+11_eigen3:default
+20_python:default
+21_python3:default
+25_boost:default
+35_git:default
+40_alpscore:default_cxx1y
+70_alps:default
+78_hphi:default
+"
+
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 MAINSTALLER_CONFIG=$HOME/.mainstaller-check-gcc
 PREFIX=$HOME/materiapps-check-gcc
 BUILD_DIR=$PREFIX/build
 
-rm -rf $MAINSTALLER_CONFIG $PREFIX $BUILD_DIR
 mkdir -p $PREFIX $BUILD_DIR
-
 cat << EOF > $MAINSTALLER_CONFIG
 PREFIX=$PREFIX
 BUILD_DIR=$BUILD_DIR
@@ -16,19 +31,16 @@ EOF
 ###
 
 export MAINSTALLER_CONFIG
-sh $SCRIPT_DIR/../00_env/default.sh
-sh $SCRIPT_DIR/../01_gcc7/default.sh && sh $SCRIPT_DIR/../01_gcc7/link.sh
-sh $SCRIPT_DIR/../03_openmpi/default.sh && sh $SCRIPT_DIR/../03_openmpi/link.sh
-sh $SCRIPT_DIR/../06_fftw/default.sh && sh $SCRIPT_DIR/../06_fftw/link.sh
-sh $SCRIPT_DIR/../10_hdf5/default.sh && sh $SCRIPT_DIR/../10_hdf5/link.sh
-sh $SCRIPT_DIR/../11_eigen3/default.sh && sh $SCRIPT_DIR/../11_eigen3/link.sh
-sh $SCRIPT_DIR/../20_python/default.sh && sh $SCRIPT_DIR/../20_python/link.sh
-sh $SCRIPT_DIR/../21_python3/default.sh && sh $SCRIPT_DIR/../21_python3/link.sh
-sh $SCRIPT_DIR/../25_boost/default.sh && sh $SCRIPT_DIR/../25_boost/link.sh
-sh $SCRIPT_DIR/../30_cmake/default.sh && sh $SCRIPT_DIR/../30_cmake/link.sh
-sh $SCRIPT_DIR/../35_git/default.sh && sh $SCRIPT_DIR/../35_git/link.sh
-sh $SCRIPT_DIR/../70_alps/default.sh && sh $SCRIPT_DIR/../70_alps/link.sh
-sh $SCRIPT_DIR/../78_hphi/default.sh && sh $SCRIPT_DIR/../78_hphi/link.sh
+sh $SCRIPT_DIR/../00_env/$ENV_CONF.sh
+for s in $TOOL_SET; do
+  dirc=$(echo $s | cut -d: -f1)
+  tool=$(echo $dirc | sed 's/^[0-9][0-9]_//')
+  conf=$(echo $s | cut -d: -f2)
+  if [ -d $PREFIX/$tool ]; then :; else
+    echo "[$dirc, $tool, $conf]"
+    sh $SCRIPT_DIR/../$dirc/$conf.sh && sh $SCRIPT_DIR/../$dirc/link.sh
+  fi
+done
 
 ###
 
