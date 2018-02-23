@@ -7,6 +7,6 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
-ALPSCOREVARS_SH=$PREFIX_TOOL/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_PATCH_VERSION.sh
+ALPSCOREVARS_SH=$PREFIX_TOOL/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_MA_REVISION.sh
 rm -f $PREFIX_TOOL/env.d/alpscorevars.sh
 ln -s $ALPSCOREVARS_SH $PREFIX_TOOL/env.d/alpscorevars.sh
