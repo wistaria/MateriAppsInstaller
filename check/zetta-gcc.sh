@@ -8,6 +8,7 @@ TOOL_SET="
 06_fftw:default
 10_hdf5:default
 11_eigen3:default
+11_komega:default
 20_python:default
 21_python3:default
 25_boost:default
