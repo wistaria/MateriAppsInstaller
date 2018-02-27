@@ -14,6 +14,7 @@ TOOL_SET="
 40_alpscore:intel_cxx1y
 70_alps:intel-mkl
 78_hphi:intel
+83_triqs:intel_cxx1y
 "
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)

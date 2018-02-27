@@ -16,6 +16,7 @@ TOOL_SET="
 40_alpscore:default_cxx1y
 70_alps:default
 78_hphi:default
+83_triqs:default_cxx1y
 "
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
