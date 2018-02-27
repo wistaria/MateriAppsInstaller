@@ -8,5 +8,5 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 
 TRIQSVARS_SH=$PREFIX_APPS/triqs/triqsvars-$TRIQS_VERSION-$TRIQS_MA_REVISION.sh
-rm -f $PREFIX_APPS/env.d/triqsvars.sh
-ln -s $TRIQSVARS_SH $PREFIX_APPS/env.d/triqsvars.sh
+rm -f $PREFIX_APPS/triqs/triqsvars.sh
+ln -s $TRIQSVARS_SH $PREFIX_APPS/triqs/triqsvars.sh
