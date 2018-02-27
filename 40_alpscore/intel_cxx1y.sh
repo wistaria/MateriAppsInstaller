@@ -55,14 +55,24 @@ finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/alpscorevars.sh
 # alpscore $(basename $0 .sh) $ALPSCORE_VERSION $ALPSCORE_MA_REVISION $(date +%Y%m%d-%H%M%S)
+unset ALPSCORE_ROOT
+unset ALPSCore_DIR
 if [ "\$MA_CXX_STANDARD" = "cxx1y" ]; then
-  export ALPSCORE_ROOT=$PREFIX_CXX1Y
-  export ALPSCore_DIR=\$ALPSCORE_ROOT
-  export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
+  if [ -d "$PREFIX_CXX1Y" ]; then
+    export ALPSCORE_ROOT=$PREFIX_CXX1Y
+    export ALPSCore_DIR=\$ALPSCORE_ROOT
+    export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
+  else
+    echo "Warning: alpscore with cxx1y support not found"
+  fi
 else
-  export ALPSCORE_ROOT=$PREFIX_CXX03
-  export ALPSCore_DIR=\$ALPSCORE_ROOT
-  export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
+  if [ -d "$PREFIX_CXX03" ]; then
+    export ALPSCORE_ROOT=$PREFIX_CXX03
+    export ALPSCore_DIR=\$ALPSCORE_ROOT
+    export LD_LIBRARY_PATH=\$ALPSCORE_ROOT/lib:\$LD_LIBRARY_PATH
+  else
+    echo "Warning: alpscore with cxx03 support not found"
+  fi
 fi
 EOF
 ALPSCOREVARS_SH=$PREFIX_TOOL/alpscore/alpscorevars-$ALPSCORE_VERSION-$ALPSCORE_MA_REVISION.sh
