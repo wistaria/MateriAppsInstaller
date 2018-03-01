@@ -131,13 +131,13 @@ check make $JMAKE gpu | tee -a $LOG
 check make $JMAKE gpu mode=lib | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
-mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib $PREFIX/examples
+mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib
 cp -p lmp_mpi $PREFIX/bin
 cp -p lmp_gpu $PREFIX/bin
 cp -p lammps.h $PREFIX/include
 cp -p liblammps_* $PREFIX/lib
-cp -r $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
-
+cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
+cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/potentials $PREFIX
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/lammpsvars.sh
