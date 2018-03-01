@@ -23,6 +23,7 @@ check make yes-all | tee -a $LOG
 check make no-gpu | tee -a $LOG
 check make no-kim | tee -a $LOG
 check make no-kokkos | tee -a $LOG
+check make no-mscg | tee -a $LOG
 check make no-voronoi | tee -a $LOG
 check make no-user-molfile | tee -a $LOG
 check make no-user-quip | tee -a $LOG
@@ -34,31 +35,31 @@ make | tee -a $LOG
 
 echo "[lib/awpmd]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/awpmd
-check make -j4 -f Makefile.mpicc | tee -a $LOG
+check make -f Makefile.mpicc | tee -a $LOG
 echo "[lib/atc]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/atc
-check make -j4 -f Makefile.mpic++ | tee -a $LOG
+check make -f Makefile.mpic++ | tee -a $LOG
 echo "[lib/colvars]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/colvars
-check make -j4 -f Makefile.g++ | tee -a $LOG
+check make -f Makefile.g++ | tee -a $LOG
 echo "[lib/h5md]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/h5md
-check make -j4 | tee -a $LOG
+check make | tee -a $LOG
 echo "h5md_SYSINC = -I$HDF5_ROOT/include" >> Makefile.lammps
 echo "h5md_SYSLIB = -lhdf5" >> Makefile.lammps
 echo "h5md_SYSPATH = -L$HDF5_ROOT/lib" >> Makefile.lammps
 echo "[lib/meam]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/meam
-check make -j4 -f Makefile.gfortran | tee -a $LOG
+check make -f Makefile.gfortran | tee -a $LOG
 echo "[lib/poems]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/poems
-check make -j4 -f Makefile.g++ | tee -a $LOG
+check make -f Makefile.g++ | tee -a $LOG
 echo "[lib/qmmm]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/qmmm
-check make -j4 -f Makefile.gfortran | tee -a $LOG
+check make -f Makefile.gfortran | tee -a $LOG
 echo "[lib/reax]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/reax
-check make -j4 -f Makefile.gfortran | tee -a $LOG
+check make -f Makefile.gfortran | tee -a $LOG
 echo "[lib/python]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/python
 check echo "python_SYSLIB = $(python-config --ldflags)" >> Makefile.lammps
@@ -69,21 +70,21 @@ check echo "user-smd_SYSINC = -I$EIGEN3_ROOT/include/eigen3" >> Makefile.lammps
 
 echo "[make mpi]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
-check make -j4 mpi | tee -a $LOG
-check make -j4 mpi mode=lib | tee -a $LOG
-check make -j4 mpi mode=shlib | tee -a $LOG
+check make mpi | tee -a $LOG
+check make mpi mode=lib | tee -a $LOG
+check make mpi mode=shlib | tee -a $LOG
 
 echo "[lib/atc serial]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/atc
 check make -f Makefile.serial clean | tee -a $LOG
-check make -j4 -f Makefile.serial EXTRAMAKE=Makefile.lammps.installed | tee -a $LOG
+check make -f Makefile.serial EXTRAMAKE=Makefile.lammps.installed | tee -a $LOG
 
 echo "[make serial]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
 check make no-mpiio no-user-lb
-check make -j4 serial | tee -a $LOG
-check make -j4 serial mode=lib | tee -a $LOG
-check make -j4 serial mode=shlib | tee -a $LOG
+check make serial | tee -a $LOG
+check make serial mode=lib | tee -a $LOG
+check make serial mode=shlib | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
