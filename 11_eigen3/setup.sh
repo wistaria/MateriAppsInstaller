@@ -16,7 +16,7 @@ if [ -d eigen3-$EIGEN3_VERSION ]; then :; else
     fi
   fi
   mkdir -p $BUILD_DIR/eigen3-$EIGEN3_VERSION
-  check tar zxf $HOME/source/eigen3-$EIGEN3_VERSION.tar.gz -C $BUILD_DIR/eigen3-$EIGEN3_VERSION --strip-components=1
+  check tar zxf eigen3-$EIGEN3_VERSION.tar.gz -C $BUILD_DIR/eigen3-$EIGEN3_VERSION --strip-components=1
   if [ -f $SCRIPT_DIR/eigen3-$EIGEN3_VERSION.patch ]; then
     cd eigen3-$EIGEN3_VERSION
     patch -p1 < $SCRIPT_DIR/eigen3-$EIGEN3_VERSION.patch
