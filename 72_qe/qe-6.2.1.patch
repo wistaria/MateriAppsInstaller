@@ -1,0 +1,15 @@
+diff -urN qe-6.2.1.orig/dft-d3/Makefile qe-6.2.1/dft-d3/Makefile
+--- qe-6.2.1.orig/dft-d3/Makefile	2017-12-12 01:51:07.000000000 +0900
++++ qe-6.2.1/dft-d3/Makefile	2018-03-01 19:32:21.000000000 +0900
+@@ -35,9 +35,9 @@
+ 	$(AR) $(ARFLAGS) $@ $(DFTD3OBJ)        
+ 	$(RANLIB) $@    
+ 
+-test.x : $(TESTOBJ) $(TESTMODS) $(QEMODS)
++test.x : $(TESTOBJ) $(TESTMODS) $(QEMODS) $(LIBOBJS)
+ 	$(LD) $(LDFLAGS) $(MODFLAGS) -o $@ \
+-        $(TESTOBJ) $(TESTMODS) $(QEMODS) $(LIBS)	
++        $(TESTOBJ) $(TESTMODS) $(QEMODS) $(LIBOBJS) $(LIBS)	
+       
+ 
+ tldeps :
