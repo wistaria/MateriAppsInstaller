@@ -1,0 +1,13 @@
+diff -urN lammps-stable_17Nov2016.orig/src/USER-INTEL/pair_tersoff_intel.cpp lammps-stable_17Nov2016/src/USER-INTEL/pair_tersoff_intel.cpp
+--- lammps-stable_17Nov2016.orig/src/USER-INTEL/pair_tersoff_intel.cpp	2016-11-18 08:51:35.000000000 +0900
++++ lammps-stable_17Nov2016/src/USER-INTEL/pair_tersoff_intel.cpp	2018-03-01 16:48:36.156596100 +0900
+@@ -16,6 +16,9 @@
+ ------------------------------------------------------------------------- */
+ 
+ #include <math.h>
++#ifdef __INTEL_COMPILER
++# include <mathimf.h>
++#endif
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
