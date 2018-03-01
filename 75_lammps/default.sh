@@ -30,6 +30,8 @@ mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib
 cp -p lmp_mpi lmp_serial $PREFIX/bin
 cp -p lammps.h $PREFIX/include
 cp -p liblammps_* $PREFIX/lib
+cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
+cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/potentials $PREFIX
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/lammpsvars.sh
