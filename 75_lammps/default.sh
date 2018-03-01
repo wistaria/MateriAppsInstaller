@@ -38,7 +38,7 @@ cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/awpmd
 check make -f Makefile.mpicc | tee -a $LOG
 echo "[lib/atc]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/atc
-check make -f Makefile.mpic++ | tee -a $LOG
+check make -f Makefile.mpi EXTRAMAKE=Makefile.lammps.installed | tee -a $LOG
 echo "[lib/colvars]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/colvars
 check make -f Makefile.g++ | tee -a $LOG

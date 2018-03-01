@@ -39,7 +39,8 @@ check make -f Makefile.mpicc | tee -a $LOG
 check echo "user-awpmd_SYSLIB = -mkl" >> Makefile.lammps
 echo "[lib/atc]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/atc
-check make -f Makefile.mpic++ | tee -a $LOG
+check make -f Makefile.mpi EXTRAMAKE=Makefile.lammps.installed | tee -a $LOG
+check echo "user-atc_SYSLIB = -mkl" >> Makefile.lammps
 echo "[lib/colvars]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/colvars
 check make -f Makefile.g++ CXX=icpc | tee -a $LOG
@@ -52,7 +53,7 @@ check echo "h5md_SYSPATH = -L$HDF5_ROOT/lib" >> Makefile.lammps
 echo "[lib/meam]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/meam
 check make -f Makefile.ifort | tee -a $LOG
-check echo "meam_SYSLIB = -lifcore -lsvml -liompstub5 -limf" >> Makefile.lammps
+check echo "meam_SYSLIB = -lifcore -lsvml -liompstubs5 -limf" >> Makefile.lammps
 check echo "meam_SYSPATH = -L$(dirname $(which ifort))/../../compiler/lib/intel64" >> Makefile.lammps
 echo "[lib/poems]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/poems
@@ -74,7 +75,7 @@ check echo "user-smd_SYSINC = -I$EIGEN3_ROOT/include/eigen3" >> Makefile.lammps
 echo "[make mpi]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
 cp MAKE/OPTIONS/Makefile.icc_openmpi MAKE
-check make icc_openmpi | tee -a $LOG
+check make icc_openmpi LMP_INC="-DLAMMPS_GZIP -DLMP_INTEL_NO_TBB" | tee -a $LOG
 check make icc_openmpi mode=lib | tee -a $LOG
 check make icc_openmpi mode=shlib | tee -a $LOG
 
@@ -82,12 +83,13 @@ echo "[lib/atc serial]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/atc
 check make -f Makefile.serial clean | tee -a $LOG
 check make -f Makefile.serial CC=icpc EXTRAMAKE=Makefile.lammps.installed | tee -a $LOG
+check echo "user-atc_SYSLIB = -mkl" >> Makefile.lammps
 
 echo "[make serial]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
 check make no-mpiio no-user-lb
 cp MAKE/OPTIONS/Makefile.icc_serial MAKE
-check make icc_serial | tee -a $LOG
+check make icc_serial LMP_INC="-DLAMMPS_GZIP -DLMP_INTEL_NO_TBB" | tee -a $LOG
 check make icc_serial mode=lib | tee -a $LOG
 check make icc_serial mode=shlib | tee -a $LOG
 
