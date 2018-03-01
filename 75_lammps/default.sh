@@ -44,7 +44,7 @@ cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/colvars
 check make -f Makefile.g++ | tee -a $LOG
 echo "[lib/h5md]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/h5md
-check make | tee -a $LOG
+check make -f Makefile.h5cc | tee -a $LOG
 echo "h5md_SYSINC = -I$HDF5_ROOT/include" >> Makefile.lammps
 echo "h5md_SYSLIB = -lhdf5" >> Makefile.lammps
 echo "h5md_SYSPATH = -L$HDF5_ROOT/lib" >> Makefile.lammps
