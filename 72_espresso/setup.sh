@@ -11,7 +11,7 @@ if [ -d espresso-$ESPRESSO_VERSION ]; then :; else
     if [ -f $SOURCE_DIR/espresso-$ESPRESSO_VERSION.tar.gz ]; then
       cp $SOURCE_DIR/espresso_$ESPRESSO_VERSION.tar.gz .
     else
-      check wget -O espresso-$ESPRESSO_VERSION.tar.gz $WGET_OPTION http://espresso-forge.org/gf/download/frsrelease/$ESPRESSO_DOWNLOAD_DIR/espresso-$ESPRESSO_VERSION.tar.gz
+      check wget -O espresso-$ESPRESSO_VERSION.tar.gz $WGET_OPTION http://qe-forge.org/gf/download/frsrelease/$ESPRESSO_DOWNLOAD_DIR/qe-$ESPRESSO_VERSION.tar.gz
     fi
   fi
   check mkdir -p espresso-$ESPRESSO_VERSION

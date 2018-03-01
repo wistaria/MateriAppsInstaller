@@ -21,7 +21,7 @@ cd $BUILD_DIR/espresso-$ESPRESSO_VERSION
 echo "[configure]" | tee -a $LOG
 check ./configure --prefix=$PREFIX | tee -a $LOG
 echo "[make]" | tee -a $LOG
-check make pw pp | tee -a $LOG
+check make all | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
 finish_info | tee -a $LOG
