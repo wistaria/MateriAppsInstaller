@@ -44,6 +44,9 @@ $PREFIX/bin/pip install matplotlib | tee -a $LOG
 echo "[jupyter]" | tee -a $LOG
 $PREFIX/bin/pip install sphinx jupyter | tee -a $LOG
 
+echo "[virtualenv]" | tee -a $LOG
+$PREFIX/bin/pip install virtualenv | tee -a $LOG
+
 echo "[mock]" | tee -a $LOG
 $PREFIX/bin/pip install mock | tee -a $LOG
 
