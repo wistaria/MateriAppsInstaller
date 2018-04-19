@@ -72,7 +72,8 @@ echo "[jupyter]" | tee -a $LOG
 $PREFIX/bin/pip install sphinx jupyter | tee -a $LOG
 
 echo "[virtualenv]" | tee -a $LOG
-env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install virtualenv | tee -a $LOG
+$PREFIX/bin/pip install virtualenv | tee -a $LOG
+
 
 echo "[mock]" | tee -a $LOG
 env LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH $PREFIX/bin/pip install mock | tee -a $LOG
