@@ -20,7 +20,7 @@ rm -rf $LOG
 
 echo "[python3]" | tee -a $LOG
 cd $BUILD_DIR/Python-$PYTHON3_VERSION
-check env CFLAGS="-I/opt/suse/include -I/usr/include/ncurses" ./configure --prefix=$PREFIX --with-libs='/opt/suse/lib64/libssl.so' --enable-shared --with-icc | tee -a $LOG
+check env CFLAGS="-I/opt/suse/include -I/usr/include/ncurses" env LDFLAGS="-L/opt/suse/lib64" ./configure --prefix=$PREFIX --with-libs='-lssl' --enable-shared --with-icc | tee -a $LOG
 check make | tee -a $LOG
 make install
 

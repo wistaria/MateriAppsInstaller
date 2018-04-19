@@ -25,7 +25,7 @@ fi
 
 echo "[python]" | tee -a $LOG
 cd $BUILD_DIR/Python-$PYTHON_VERSION
-check env CFLAGS="-I/opt/suse/include -I/usr/include/ncurses" ./configure --prefix=$PREFIX --enable-shared --with-libs='/opt/suse/lib64/libssl.so' | tee -a $LOG
+check env CFLAGS="-I/opt/suse/include -I/usr/include/ncurses" env LDFLAGS="-L/opt/suse/lib64" ./configure --prefix=$PREFIX --enable-shared --with-libs='-lssl' | tee -a $LOG
 check make | tee -a $LOG
 make install
 
