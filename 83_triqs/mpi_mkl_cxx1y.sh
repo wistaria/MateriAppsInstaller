@@ -8,13 +8,13 @@ set_prefix
 . $PREFIX_TOOL/env-cxx1y.sh
 LOG=$BUILD_DIR/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION.log
 
-CC=icc
-CXX=icpc
-FC=ifort
-
 PREFIX="$PREFIX_APPS/triqs/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION"
 PREFIX_CXX03="$PREFIX/cxx03"
 PREFIX_CXX1Y="$PREFIX/cxx1y"
+
+CC=mpicc
+CXX=mpicxx
+FC=mpif90
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"

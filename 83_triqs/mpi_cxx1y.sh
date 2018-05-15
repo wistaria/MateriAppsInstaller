@@ -8,9 +8,9 @@ set_prefix
 . $PREFIX_TOOL/env-cxx1y.sh
 LOG=$BUILD_DIR/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION.log
 
-CC=icc
-CXX=icpc
-FC=ifort
+CC=mpicc
+CXX=mpicxx
+FC=mpif90
 
 PREFIX="$PREFIX_APPS/triqs/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION"
 PREFIX_CXX03="$PREFIX/cxx03"
@@ -98,7 +98,6 @@ check cmake \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DTRIQS_PATH=$PREFIX_CXX1Y \
   $BUILD_DIR/triqs-hubbardI-$TRIQS_HUBBARDI_VERSION | tee -a $LOG
-sed -i 's/-llapack/-L${MKLROOT}\/lib\/intel64 -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl/' fortran/temp_script.py 
 echo "[make TRIQS-HubbardI]" | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install TRIQS-HubbardI]" | tee -a $LOG
