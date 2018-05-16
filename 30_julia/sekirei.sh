@@ -6,6 +6,10 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
 
+. /etc/profile.d/modules.sh
+module unload cmake
+module load cmake/3.10.2
+
 LOG=$BUILD_DIR/julia-$JULIA_VERSION-$JULIA_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/julia/julia-$JULIA_VERSION-$JULIA_MA_REVISION
 
