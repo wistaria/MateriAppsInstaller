@@ -1,5 +1,8 @@
 #!/bin/sh
 
+MODULE_GCC_VERSION=5.1.0
+MODULE_INTEL_VERSION=17.0.4.196
+
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
@@ -22,12 +25,18 @@ fi
 rm -f $LOG
 sh $SCRIPT_DIR/setup.sh | tee -a $LOG
 
+source /etc/profile.d/modules.sh
+module unload gnu intel intel-mkl
+module load gnu/${MODULE_GCC_VERSION}
+module load intel/${MODULE_INTEL_VERSION}
+
 echo "[install mako]" | tee -a $LOG
 check pip install mako | tee -a $LOG
 echo "[install h5py]" | tee -a $LOG
 check pip install --global-option=build_ext --global-option="-I$HDF5_ROOT/include" --global-option="-L$HDF5_ROOT/lib" h5py | tee -a $LOG
 echo "[install mpi4py]" | tee -a $LOG
 check pip install mpi4py | tee -a $LOG
+
 
 ## TRIQS
 rm -rf $BUILD_DIR/triqs-build-$TRIQS_VERSION-cxx1y
@@ -36,7 +45,7 @@ cd $BUILD_DIR/triqs-build-$TRIQS_VERSION-cxx1y
 start_info | tee -a $LOG
 echo "[cmake TRIQS]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_CXX1Y \
-  -DCMAKE_CXX_COMPILER=$CXX \
+  -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   $BUILD_DIR/triqs-$TRIQS_VERSION | tee -a $LOG
 echo "[make TRIQS]" | tee -a $LOG
@@ -114,6 +123,13 @@ unset TRIQS_ROOT
 if [ "\$MA_CXX_STANDARD" = "cxx1y" ]; then
   export TRIQS_ROOT=$PREFIX_CXX1Y
   export PATH=\$TRIQS_ROOT/bin:\$PATH
+  export LD_PRELOAD=/home/app/intel/compilers_and_libraries_2016.4.258/linux/mkl/lib/intel64/libmkl_core.so:\$LD_PRELOAD
+  export LD_PRELOAD=/home/app/intel/compilers_and_libraries_2016.4.258/linux/mkl/lib/intel64/libmkl_sequential.so:\$LD_PRELOAD
+
+  source /etc/profile.d/modules.sh
+  module unload gnu intel intel-mkl
+  module load gnu/${MODULE_GCC_VERSION}
+  module load intel/${MODULE_INTEL_VERSION}
 else
   echo "Error: triqs is compiled only with cxx1y support"
 fi

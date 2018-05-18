@@ -26,19 +26,9 @@ fi
 
 ## TRIQS_DFTTools
 if [ -d triqs-dfttools-$TRIQS_DFTTOOLS_VERSION ]; then :; else
-  if [ -f triqs-dfttools-$TRIQS_DFTTOOLS_VERSION.tar.gz ]; then :; else
-    if [ -f $SOURCE_DIR/triqs-dfttools-$TRIQS_DFTTOOLS_VERSION.tar.gz ]; then
-      cp $SOURCE_DIR/triqs-dfttools-$TRIQS_DFTTOOLS_VERSION.tar.gz .
-    else
-      check wget -O triqs-dfttools-$TRIQS_DFTTOOLS_VERSION.tar.gz https://github.com/TRIQS/dft_tools/archive/$TRIQS_DFTTOOLS_VERSION.tar.gz
-    fi
-  fi
-  check mkdir -p triqs-dfttools-$TRIQS_DFTTOOLS_VERSION
-  check tar zxf triqs-dfttools-$TRIQS_DFTTOOLS_VERSION.tar.gz -C triqs-dfttools-$TRIQS_DFTTOOLS_VERSION --strip-components=1
-  if [ -f $SCRIPT_DIR/triqs-$TRIQS_DFTTOOLS_VERSION.patch ]; then
-    cd triqs-dfttools-$TRIQS_DFTTOOLS_VERSION
-    patch -p1 < $SCRIPT_DIR/triqs-dfttools-$TRIQS_DFTTOOLS_VERSION.patch
-  fi
+  git clone https://github.com/TRIQS/dft_tools triqs-dfttools-$TRIQS_DFTTOOLS_VERSION
+  cd triqs-dfttools-$TRIQS_DFTTOOLS_VERSION
+  git checkout $TRIQS_DFTTOOLS_VERSION
 fi
 
 ## TRIQS-CTHYB

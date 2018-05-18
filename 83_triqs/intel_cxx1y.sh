@@ -8,9 +8,7 @@ set_prefix
 . $PREFIX_TOOL/env-cxx1y.sh
 LOG=$BUILD_DIR/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION.log
 
-CC=icc
 CXX=icpc
-FC=ifort
 
 PREFIX="$PREFIX_APPS/triqs/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION"
 PREFIX_CXX03="$PREFIX/cxx03"
@@ -38,7 +36,7 @@ cd $BUILD_DIR/triqs-build-$TRIQS_VERSION-cxx1y
 start_info | tee -a $LOG
 echo "[cmake TRIQS]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_CXX1Y \
-  -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
+  -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   $BUILD_DIR/triqs-$TRIQS_VERSION | tee -a $LOG
 echo "[make TRIQS]" | tee -a $LOG
@@ -49,12 +47,13 @@ echo "[ctest TRIQS]" | tee -a $LOG
 ctest | tee -a $LOG
 
 ## TRIQS-CTHyb
+rm -rf $BUILD_DIR/triqs-cthyb-build-$TRIQS_CTHYB_VERSION-cxx1y
 mkdir -p $BUILD_DIR/triqs-cthyb-build-$TRIQS_CTHYB_VERSION-cxx1y
 cd $BUILD_DIR/triqs-cthyb-build-$TRIQS_CTHYB_VERSION-cxx1y
 start_info | tee -a $LOG
 echo "[cmake TRIQS-CTHyb]" | tee -a $LOG
 check cmake \
-  -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
+  -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DTRIQS_PATH=$PREFIX_CXX1Y \
@@ -69,12 +68,13 @@ echo "[ctest TRIQS-CTHyb]" | tee -a $LOG
 ctest | tee -a $LOG
 
 ## TRIQS-DFTTools
+rm -rf $BUILD_DIR/triqs-dfttools-build-$TRIQS_DFTTOOLS_VERSION-cxx1y
 mkdir -p $BUILD_DIR/triqs-dfttools-build-$TRIQS_DFTTOOLS_VERSION-cxx1y
 cd $BUILD_DIR/triqs-dfttools-build-$TRIQS_DFTTOOLS_VERSION-cxx1y
 start_info | tee -a $LOG
 echo "[cmake TRIQS-DFTTools]" | tee -a $LOG
 check cmake \
-  -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
+  -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DTRIQS_PATH=$PREFIX_CXX1Y \
@@ -93,7 +93,7 @@ cd $BUILD_DIR/triqs-hubbardI-build-$TRIQS_HUBBARDI_VERSION-cxx1y
 start_info | tee -a $LOG
 echo "[cmake TRIQS-HubbardI]" | tee -a $LOG
 check cmake \
-  -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
+  -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DTRIQS_PATH=$PREFIX_CXX1Y \
