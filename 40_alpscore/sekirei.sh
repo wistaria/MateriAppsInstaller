@@ -1,5 +1,8 @@
 #!/bin/sh
 
+MODULE_GCC_VERSION=5.1.0
+MODULE_INTEL_VERSION=17.0.4.196
+
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
@@ -16,6 +19,11 @@ if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+
+source /etc/profile.d/modules.sh
+module unload gnu intel intel-mkl
+module load gnu/${MODULE_GCC_VERSION}
+module load intel/${MODULE_INTEL_VERSION}
 
 sh $SCRIPT_DIR/setup.sh
 
