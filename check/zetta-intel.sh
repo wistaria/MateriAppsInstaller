@@ -2,6 +2,7 @@
 
 ENV_CONF="default"
 TOOL_SET="
+01_gcc7:default
 03_openmpi:intel
 04_cmake:default
 06_fftw:intel
