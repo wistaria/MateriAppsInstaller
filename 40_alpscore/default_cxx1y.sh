@@ -26,6 +26,7 @@ echo "[cmake cxx03]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_CXX03 \
   -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ \
   -DCMAKE_CXX_FLAGS="-DGTEST_HAS_TR1_TUPLE=0" \
+  -DDocumentation=OFF \
   $BUILD_DIR/alpscore-$ALPSCORE_VERSION | tee -a $LOG
 echo "[make cxx03]" | tee -a $LOG
 check make -j4 | tee -a $LOG
@@ -42,6 +43,7 @@ echo "[cmake cxx1y]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX_CXX1Y \
   -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ \
   -DCMAKE_CXX_FLAGS="-DGTEST_HAS_TR1_TUPLE=0" \
+  -DDocumentation=OFF \
   -DALPS_CXX_STD=custom \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   $BUILD_DIR/alpscore-$ALPSCORE_VERSION | tee -a $LOG
