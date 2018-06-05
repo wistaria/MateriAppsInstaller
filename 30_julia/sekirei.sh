@@ -33,11 +33,11 @@ USEIFC=1
 USE_INTEL_MKL=1
 USE_INTEL_MKL_FFT=1
 USE_INTEL_MKL_LIBM=1
-MARCH=core-avx2
+MARCH=haswell
 CERTFILE=/etc/mft/ca-bundle.crt
 prefix=$PREFIX
 EOF
-check make | tee -a $LOG
+check env GOMAXPROCS=1 make | tee -a $LOG
 make install | tee -a $LOG
 
 # cd $PREFIX/share/julia/site/v$JULIA_MAJOR_VERSION/
