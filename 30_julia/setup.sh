@@ -20,9 +20,5 @@ if [ -d julia-$JULIA_VERSION ]; then :; else
   if [ "$TOPDIR" != "julia-$JULIA_VERSION" ]; then
     mv $TOPDIR julia-$JULIA_VERSION
   fi
-  if [ -f $SCRIPT_DIR/julia_$JULIA_VERSION.patch ]; then
-    cd $BUILD_DIR/julia-$JULIA_VERSION
-    cat $SCRIPT_DIR/julia_$JULIA_VERSION.patch | patch -p1
-  fi
 fi
 
