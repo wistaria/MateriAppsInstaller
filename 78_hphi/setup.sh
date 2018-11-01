@@ -9,14 +9,11 @@ cd $BUILD_DIR
 if [ -d hphi-$HPHI_VERSION ]; then :; else
   check mkdir -p hphi-$HPHI_VERSION
   if [ -f $SOURCE_DIR/hphi-$HPHI_VERSION.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/hphi-$HPHI_VERSION.tar.gz -C hphi-$HPHI_VERSION --strip-components=1
+    check tar zxf $SOURCE_DIR/hphi-$HPHI_VERSION.tar.gz -C hphi-$HPHI_VERSION --strip-components=2
   else
     if [ -f hphi-$HPHI_VERSION.tar.gz ]; then :; else
       check wget https://github.com/issp-center-dev/hphi/releases/download/v${HPHI_VERSION}/HPhi-${HPHI_VERSION}.tar.gz -O hphi-${HPHI_VERSION}.tar.gz
     fi
-    check tar zxf hphi-${HPHI_VERSION}.tar.gz -C hphi-$HPHI_VERSION --strip-components=1
+    check tar zxf hphi-${HPHI_VERSION}.tar.gz -C hphi-$HPHI_VERSION --strip-components=2
   fi
-  cd hphi-${HPHI_VERSION}
-  cp doc/jp/userguide_jp.pdf .
-  cp doc/en/userguide_en.pdf .
 fi
