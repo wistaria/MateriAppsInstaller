@@ -25,7 +25,7 @@ rm -rf build
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DCMAKE_C_COMPILER=`which icc` -DCMAKE_CXX_COMPILER=`which icpc` \
-  -DCMAKE_CXX_COMPILER_FLAGS='-O3 -XCORE-AVX2' \
+  -DCMAKE_CXX_FLAGS='-O3 -xCORE-AVX2' \
   ../ | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
