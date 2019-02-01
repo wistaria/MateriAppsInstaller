@@ -115,7 +115,6 @@ check make $JMAKE mpi mode=shlib | tee -a $LOG
 check make yes-gpu | tee -a $LOG
 check make $JMAKE gpu | tee -a $LOG
 check make $JMAKE gpu mode=lib | tee -a $LOG
-check make $JMAKE gpu mode=shlib | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
