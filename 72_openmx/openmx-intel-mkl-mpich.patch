@@ -17,8 +17,8 @@ diff -crN openmx3.7.orig/source/makefile openmx3.7/source/makefile
   #
   
   
-! CC    = mpicc -openmp -O3 -I$(MKLROOT)/include/fftw
-! FC    = mpif90 -openmp -O3 -I$(MKLROOT)/include/fftw
+! CC    = mpicc -qopenmp -O3 -I$(MKLROOT)/include/fftw
+! FC    = mpif90 -qopenmp -O3 -I$(MKLROOT)/include/fftw
 ! LIB   = -mkl=parallel -lifcore -lmpifort -lmpi
   
   

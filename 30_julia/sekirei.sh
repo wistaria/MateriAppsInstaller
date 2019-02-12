@@ -21,6 +21,10 @@ fi
 JULIA_MAJOR_VERSION=$(echo $JULIA_VERSION | cut -d. -f1,2)
 
 sh $SCRIPT_DIR/setup.sh
+if [ -f $SCRIPT_DIR/julia_sekirei_$JULIA_VERSION.patch ]; then
+  cd $BUILD_DIR/julia-$JULIA_VERSION
+  cat $SCRIPT_DIR/julia_sekirei_$JULIA_VERSION.patch | patch -p1
+fi
 rm -rf $LOG
 
 start_info | tee -a $LOG
@@ -28,16 +32,9 @@ start_info | tee -a $LOG
 cd $BUILD_DIR/julia-$JULIA_VERSION
 echo "[make]" | tee -a $LOG
 cat << EOF > Make.user
-USEICC=1
-USEIFC=1
-USE_INTEL_MKL=1
-USE_INTEL_MKL_FFT=1
-USE_INTEL_MKL_LIBM=1
-MARCH=core-avx2
-CERTFILE=/etc/mft/ca-bundle.crt
 prefix=$PREFIX
 EOF
-check make | tee -a $LOG
+check env GOMAXPROCS=1 make | tee -a $LOG
 make install | tee -a $LOG
 
 # cd $PREFIX/share/julia/site/v$JULIA_MAJOR_VERSION/

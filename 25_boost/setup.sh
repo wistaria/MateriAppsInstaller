@@ -13,7 +13,7 @@ if [ -d boost_$BOOST_VERSION-$BOOST_MA_REVISION ]; then :; else
     check tar jxf $SOURCE_DIR/boost_$BOOST_VERSION.tar.bz2
   else
     BOOST_VERSION_DOTTED=$(echo $BOOST_VERSION | tr _ .)
-    check wget -O boost_$BOOST_VERSION.tar.bz2 http://sourceforge.net/projects/boost/files/boost/$BOOST_VERSION_DOTTED/boost_$BOOST_VERSION.tar.bz2/download
+    check wget $WGET_OPTION -O boost_$BOOST_VERSION.tar.bz2 http://sourceforge.net/projects/boost/files/boost/$BOOST_VERSION_DOTTED/boost_$BOOST_VERSION.tar.bz2/download
     check tar jxf boost_$BOOST_VERSION.tar.bz2
   fi
   check mv -f boost_$BOOST_VERSION boost_$BOOST_VERSION-$BOOST_MA_REVISION

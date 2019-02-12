@@ -9,15 +9,16 @@ set_prefix
 cd $BUILD_DIR
 if [ -d julia-$JULIA_VERSION ]; then :; else
   if [ -f $SOURCE_DIR/julia-$JULIA_VERSION-full.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/julia-$JULIA_VERSION-full.tar.gz
+    TARFILE=$SOURCE_DIR/julia-$JULIA_VERSION-full.tar.gz
   else
     check wget $WGET_OPTION -O julia-$JULIA_VERSION-full.tar.gz \
       https://github.com/JuliaLang/julia/releases/download/v$JULIA_VERSION/julia-$JULIA_VERSION-full.tar.gz
-    check tar zxf julia-$JULIA_VERSION-full.tar.gz
+    TARFILE=julia-$JULIA_VERSION-full.tar.gz
   fi
-  if [ -f $SCRIPT_DIR/julia_$JULIA_VERSION.patch ]; then
-    cd $BUILD_DIR/julia-$JULIA_VERSION
-    cat $SCRIPT_DIR/julia_$JULIA_VERSION.patch | patch -p1
+  check tar zxf $TARFILE
+  TOPDIR=$(tar --list -f $TARFILE | head -n1 | cut -d/ -f1 )
+  if [ "$TOPDIR" != "julia-$JULIA_VERSION" ]; then
+    mv $TOPDIR julia-$JULIA_VERSION
   fi
 fi
 
