@@ -1,0 +1,51 @@
+diff -crN boost_1_69_0.orig/tools/build/src/tools/mpi.jam boost_1_69_0/tools/build/src/tools/mpi.jam
+*** boost_1_69_0.orig/tools/build/src/tools/mpi.jam	Thu Dec  6 04:58:24 2018
+--- boost_1_69_0/tools/build/src/tools/mpi.jam	Tue Feb 12 23:23:33 2019
+***************
+*** 368,374 ****
+        result = [ SHELL "$(command) -showme" ] ;
+      }
+      # Look for MPICH
+!     else if [ safe-shell-command "$(command) -show" ]
+      {
+        if $(.debug-configuration)
+        {
+--- 368,375 ----
+        result = [ SHELL "$(command) -showme" ] ;
+      }
+      # Look for MPICH
+!     else if [ safe-shell-command "$(command) -show" ] &&
+!               [ safe-shell-command "$(command) -compile_info" ]
+      {
+        if $(.debug-configuration)
+        {
+***************
+*** 377,382 ****
+--- 378,404 ----
+        compile_flags = [ SHELL "$(command) -compile_info" ] ;
+        link_flags = [ SHELL "$(command) -link_info" ] ;
+      }
++     # Look for MPT
++     else if [ safe-shell-command "$(command) -show" ]
++     {
++       if $(.debug-configuration)
++       {
++         ECHO "Found MPT wrapper compiler: $(command)" ;
++       }
++ 
++       # 
++       compile_flags = [ SHELL "$(command) -show -c -v 2>/dev/null" ] ;
++       local front = [ MATCH "(.*)-v" :  $(compile_flags) ] ;
++       local back = [ MATCH "-v(.*)" :  $(compile_flags) ] ;
++       compile_flags = "$(front) $(back)" ;
++       front = [ MATCH "(.*)-c" :  $(compile_flags) ] ;
++       back = [ MATCH "-c(.*)" :  $(compile_flags) ] ;
++       compile_flags = "$(front) $(back)" ;
++       link_flags = [ SHELL "$(command) -show -v 2>/dev/null" ] ;
++       front = [ MATCH "(.*)-v" :  $(link_flags) ] ;
++       back = [ MATCH "-v(.*)" :  $(link_flags) ] ;
++       link_flags = "$(front) $(back)" ;
++     }
+      # Sun HPC and Ibm POE
+      else if [ SHELL "$(command) -v 2>/dev/null" ]
+      {
