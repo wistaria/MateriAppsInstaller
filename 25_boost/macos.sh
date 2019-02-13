@@ -9,6 +9,11 @@ set_prefix
 LOG=$BUILD_DIR/boost-$BOOST_VERSION_DOTTED-$BOOST_MA_REVISION.log
 PREFIX=$PREFIX_TOOL/boost/boost-$BOOST_VERSION_DOTTED-$BOOST_MA_REVISION
 
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
+fi
+
 sh $SCRIPT_DIR/setup.sh
 
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION/tools/build
@@ -18,8 +23,8 @@ rm -rf tools/build
 
 check cd $BUILD_DIR/boost_$BOOST_VERSION-$BOOST_MA_REVISION
 echo "using mpi : $(which mpicxx) ;" > user-config.jam
-check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged stage | tee -a $LOG
-env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=tagged install | tee -a $LOG
+check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=system stage | tee -a $LOG
+env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=system install | tee -a $LOG
 
 sh $SCRIPT_DIR/../fix_dylib.sh $PREFIX/lib | tee -a $LOG
 	  
