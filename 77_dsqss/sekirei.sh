@@ -21,15 +21,19 @@ cd $BUILD_DIR/dsqss-v$DSQSS_VERSION
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 echo "mkdir build && cd build" | tee -a $LOG
+rm -rf build
 mkdir build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=$PREFIX ../ | tee -a $LOG
+cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
+  -DCMAKE_C_COMPILER=`which icc` -DCMAKE_CXX_COMPILER=`which icpc` \
+  -DCMAKE_CXX_FLAGS='-O3 -xCORE-AVX2' \
+  ../ | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
 make | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
-cd ..
+cd ../
 mkdir -p $PREFIX/doc
 cp DSQSS_jp.pdf $PREFIX/doc
 cp DSQSS_en.pdf $PREFIX/doc

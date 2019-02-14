@@ -5,23 +5,18 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-DSQSS_VERSION_ORIG=$(echo $DSQSS_VERSION | sed 's/+/-/g')
-DSQSS_VERSION_SHORT=$(echo $DSQSS_VERSION | cut -d + -f 1)
-
 cd $BUILD_DIR
-if [ -d dsqss-$DSQSS_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/dsqss_$DSQSS_VERSION.orig.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/dsqss_$DSQSS_VERSION.orig.tar.gz
+if [ -d dsqss-v$DSQSS_VERSION ]; then :; else
+  check mkdir -p dsqss-v$DSQSS_VERSION
+  if [ -f $SOURCE_DIR/dsqss-$DSQSS_VERSION.tar.gz ]; then
+    check tar zxf $SOURCE_DIR/dsqss-$DSQSS_VERSION.tar.gz
   else
-    check wget $MALIVE_REPOSITORY/dsqss_$DSQSS_VERSION.orig.tar.gz
-    check tar zxf dsqss_$DSQSS_VERSION.orig.tar.gz
+    if [ -f dsqss-$DSQSS_VERSION.tar.gz ]; then :; else
+      check wget https://github.com/issp-center-dev/dsqss/releases/download/v${DSQSS_VERSION}/dsqss-v${DSQSS_VERSION}.tar.gz -O dsqss-v${DSQSS_VERSION}.tar.gz
+    fi
+    check tar zxf dsqss-v${DSQSS_VERSION}.tar.gz
   fi
-  cd dsqss-$DSQSS_VERSION
-  if [ -f $SOURCE_DIR/dsqss_$DSQSS_VERSION-$DSQSS_MA_REVISION.diff.gz ]; then
-    check gzip -dc $SOURCE_DIR/dsqss_$DSQSS_VERSION-$DSQSS_MA_REVISION.diff.gz | patch -p1
-  else
-    check wget $MALIVE_REPOSITORY/dsqss_$DSQSS_VERSION-$DSQSS_MA_REVISION.diff.gz
-    check gzip -dc dsqss_$DSQSS_VERSION-$DSQSS_MA_REVISION.diff.gz | patch -p1
-  fi
-  chmod +x dsqss/dsqss-$DSQSS_VERSION_SHORT/install-sh
+  cd dsqss-v${DSQSS_VERSION}
+  cp doc/DSQSS_jp.pdf .
+  cp doc/DSQSS_en.pdf .
 fi

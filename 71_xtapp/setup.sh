@@ -5,57 +5,34 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+sh $SCRIPT_DIR/download.sh
+
 cd $BUILD_DIR
 if [ -d xtapp_$XTAPP_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/xtapp_$XTAPP_VERSION.orig.tar.gz ]; then
     check tar zxf $SOURCE_DIR/xtapp_$XTAPP_VERSION.orig.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/xtapp_$XTAPP_VERSION.orig.tar.gz
-    check tar zxf xtapp_$XTAPP_VERSION.orig.tar.gz
-  fi
-  cd xtapp_$XTAPP_VERSION
-  if [ -f $SOURCE_DIR/xtapp_$XTAPP_VERSION-$XTAPP_PATCH_VERSION.debian.tar.gz ]; then
-    tar zxf $SOURCE_DIR/xtapp_$XTAPP_VERSION-$XTAPP_PATCH_VERSION.debian.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/xtapp_$XTAPP_VERSION-$XTAPP_PATCH_VERSION.debian.tar.gz
-    check tar zxf xtapp_$XTAPP_VERSION-$XTAPP_PATCH_VERSION.debian.tar.gz
-  fi
-  PATCHES="makefile.patch debian.patch"
-  for p in $PATCHES; do
-    patch -p1 < debian/patches/$p
-  done
-  cp -fp src/Makefile-dist src/Makefile
-  cp -rp src/config90.h-dist src/config90.h
-  cp -rp src/config.h-dist src/config.h
-fi
-
-cd $BUILD_DIR/xtapp_$XTAPP_VERSION
-if [ -d xtapp-util_$XTAPP_UTIL_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION.orig.tar.gz ]; then
+    cd xtapp_$XTAPP_VERSION
+    check tar zxf $SOURCE_DIR/xtapp_$XTAPP_VERSION-$XTAPP_PATCH_VERSION.debian.tar.gz
+    PATCHES=$(cat debian/patches/series)
+    for p in $PATCHES; do
+	if [ $p != "debian.patch" ]; then
+	    echo "Applying debian/patches/$p"
+	    patch -p1 < debian/patches/$p
+	fi
+    done
+    cp -fp src/Makefile-dist src/Makefile
+    
+    cd $BUILD_DIR/xtapp_$XTAPP_VERSION
     check tar zxf $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION.orig.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/xtapp-util_$XTAPP_UTIL_VERSION.orig.tar.gz
-    check tar zxf xtapp-util_$XTAPP_UTIL_VERSION.orig.tar.gz
-  fi
-  cd xtapp-util_$XTAPP_UTIL_VERSION
-  if [ -f $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION-$XTAPP_UTIL_PATCH_VERSION.debian.tar.gz ]; then
-    tar zxf $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION-$XTAPP_UTIL_PATCH_VERSION.debian.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/xtapp-util_$XTAPP_UTIL_VERSION-$XTAPP_UTIL_PATCH_VERSION.debian.tar.gz
-    check tar zxf xtapp-util_$XTAPP_UTIL_VERSION-$XTAPP_UTIL_PATCH_VERSION.debian.tar.gz
-  fi
-  PATCHES="makefile-1.patch xtapp-1.patch"
-  for p in $PATCHES; do
-    patch -p1 < debian/patches/$p
-  done
-fi
-
-cd $BUILD_DIR/xtapp_150401
-if [ -d xtapp-ps_$XTAPP_PS_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz ]; then
+    cd xtapp-util_$XTAPP_UTIL_VERSION
+    check tar zxf $SOURCE_DIR/xtapp-util_$XTAPP_UTIL_VERSION-$XTAPP_UTIL_PATCH_VERSION.debian.tar.gz
+    PATCHES=$(cat debian/patches/series)
+    for p in $PATCHES; do
+	if [ $p != "debian.patch" ]; then
+	    echo "Applying debian/patches/$p"
+	    patch -p1 < debian/patches/$p
+	fi
+    done
+    
+    cd $BUILD_DIR/xtapp_$XTAPP_VERSION
     check tar zxf $SOURCE_DIR/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
-    check tar zxf xtapp-ps_$XTAPP_PS_VERSION.orig.tar.gz
-  fi
 fi
