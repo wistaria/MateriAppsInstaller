@@ -50,16 +50,6 @@ check echo "user-atc_SYSLIB = -mkl" >> Makefile.lammps
 echo "[lib/colvars]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/colvars
 check make -f Makefile.g++ CXX=icpc | tee -a $LOG
-echo "[lib/gpu]" | tee -a $LOG
-cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/gpu
-cp Makefile.linux Makefile.gpu
-sed -i -e 's/mpic++/mpicxx/' Makefile.gpu
-check make CUDA_HOME=$CUDA_PATH $JMAKE -f Makefile.gpu | tee -a $LOG
-cat << END >> Makefile.lammps
-gpu_SYSINC =
-gpu_SYSLIB =  -lcudart -lcuda
-gpu_SYSPATH = -L${CUDA_PATH}/lib64
-END
 echo "[lib/h5md]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/lib/h5md
 check make -f Makefile.h5cc | tee -a $LOG
@@ -105,22 +95,17 @@ echo sed -i -e "/^\s*LINKFLAGS\s*=/c\LINKFLAGS = $LINKFLAGS" Makefile.mpi | tee 
 sed -i -e "/^\s*LINKFLAGS\s*=/c\LINKFLAGS = $LINKFLAGS" Makefile.mpi
 echo sed -i -e "/^\s*LIB\s*=/c\LIB = $LIBS" Makefile.mpi | tee -a $LOG
 sed -i -e "/^\s*LIB\s*=/c\LIB = $LIBS" Makefile.mpi
-cp Makefile.mpi Makefile.gpu
 
 echo "[make]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
 check make $JMAKE mpi | tee -a $LOG
 check make $JMAKE mpi mode=lib | tee -a $LOG
 check make $JMAKE mpi mode=shlib | tee -a $LOG
-check make yes-gpu | tee -a $LOG
-check make $JMAKE gpu | tee -a $LOG
-check make $JMAKE gpu mode=lib | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 cd $BUILD_DIR/lammps-$LAMMPS_VERSION/src
 mkdir -p $PREFIX/bin $PREFIX/include $PREFIX/lib
 cp -p lmp_mpi $PREFIX/bin
-cp -p lmp_gpu $PREFIX/bin
 cp -p lammps.h $PREFIX/include
 cp -p liblammps_* $PREFIX/lib
 cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX
