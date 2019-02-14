@@ -29,7 +29,7 @@ diff -crN xtapp_150401.orig/src/Makefile xtapp_150401/src/Makefile
   #    when thread computing is inconsistent, define this
 ! DEFINES = ${GDEFS} -DINCONSISTENT_THREAD_COMP
   
-! FFLAGS = -O3 -openmp -msse3 -fno-inline-functions -traceback ${DEFINES}
+! FFLAGS = -O3 -qopenmp -msse3 -fno-inline-functions -traceback ${DEFINES}
 ! F77FLAGS =
 ! F90FLAGS =
 ! FOPTNON = -O0
