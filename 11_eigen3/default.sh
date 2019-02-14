@@ -2,11 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-set_prefix
-. $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
+set_prefix
 
+. $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/eigen3-$EIGEN3_VERSION-$EIGEN3_MA_REVISION.log
+
 PREFIX=$PREFIX_TOOL/eigen3/eigen3-$EIGEN3_VERSION-$EIGEN3_MA_REVISION
 
 if [ -d $PREFIX ]; then
@@ -15,11 +16,10 @@ if [ -d $PREFIX ]; then
 fi
 
 sh $SCRIPT_DIR/setup.sh
-rm -rf $LOG
 
 mkdir $BUILD_DIR/eigen3-build-$EIGEN3_VERSION
 cd $BUILD_DIR/eigen3-build-$EIGEN3_VERSION
-start_info | tee -a $LOG
+start_info | tee $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ \
