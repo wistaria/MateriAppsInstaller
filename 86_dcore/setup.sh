@@ -10,7 +10,7 @@ sh $SCRIPT_DIR/download.sh
 cd $BUILD_DIR
 if [ -d dcore-$DCORE_VERSION ]; then :; else
   check mkdir -p dcore-$DCORE_VERSION
-  check tar zxf dcore-$DCORE_VERSION.tar.gz -C dcore-$DCORE_VERSION --strip-components=1
+  check tar zxf $SOURCE_DIR/dcore-$DCORE_VERSION.tar.gz -C dcore-$DCORE_VERSION --strip-components=1
   if [ -f $SCRIPT_DIR/dcore-$DCORE_VERSION.patch ]; then
     cd dcore-$DCORE_VERSION
     patch -p1 < $SCRIPT_DIR/dcore-$DCORE_VERSION.patch
