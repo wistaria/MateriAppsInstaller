@@ -113,7 +113,7 @@ finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/triqsvars.sh
 # triqs $(basename $0 .sh) $TRIQS_VERSION $TRIQS_MA_REVISION $(date +%Y%m%d-%H%M%S)
-unset TRIQS_ROOT
+. $PREFIX_TOOL/env.sh
 export TRIQS_ROOT=$PREFIX
 export PATH=\$TRIQS_ROOT/bin:\$PATH
 EOF
