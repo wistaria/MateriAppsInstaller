@@ -7,19 +7,17 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/dcore-$DCORE_VERSION-$DCORE_MA_REVISION.log
+rm -f $LOG
 
 CXX=g++
 
 source $PREFIX_APPS/triqs/triqsvars.sh
 
-PREFIX="$PREFIX_APPS/dcore/dcore-$DCORE_VERSION-$DCORE_MA_REVISION"
-
-if [ -d $PREFIX ]; then
-  echo "Error: $PREFIX exists"
+if [ -f $TRIQS_ROOT/bin/dcore ]; then
+  echo "Error: $TRIQS_ROOT/bin/dcore exists"
   exit 127
 fi
 
-rm -f $LOG
 sh $SCRIPT_DIR/setup.sh | tee -a $LOG
 
 rm -rf $BUILD_DIR/dcore-build-$DCORE_VERSION
@@ -40,3 +38,5 @@ echo "[ctest]" | tee -a $LOG
 ctest | tee -a $LOG
 
 finish_info | tee -a $LOG
+
+cp -f $LOG $PREFIX_APPS/triqs/
