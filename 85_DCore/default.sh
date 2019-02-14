@@ -5,16 +5,14 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $PREFIX_TOOL/env-cxx1y.sh
-LOG=$BUILD_DIR/DCore-$DCORE_VERSION-$DCORE_MA_REVISION.log
+. $PREFIX_TOOL/env.sh
+LOG=$BUILD_DIR/dcore-$DCORE_VERSION-$DCORE_MA_REVISION.log
 
 CXX=g++
 
 source $PREFIX_APPS/triqs/triqsvars.sh
 
-PREFIX="$PREFIX_APPS/DCore/DCore-$DCORE_VERSION-$DCORE_MA_REVISION"
-PREFIX_CXX03="$PREFIX/cxx03"
-PREFIX_CXX1Y="$PREFIX/cxx1y"
+PREFIX="$PREFIX_APPS/dcore/dcore-$DCORE_VERSION-$DCORE_MA_REVISION"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -24,17 +22,16 @@ fi
 rm -f $LOG
 sh $SCRIPT_DIR/setup.sh | tee -a $LOG
 
-## DCORE
-rm -rf $BUILD_DIR/DCore-build-$DCORE_VERSION-cxx1y
-mkdir -p $BUILD_DIR/DCore-build-$DCORE_VERSION-cxx1y
-cd $BUILD_DIR/DCore-build-$DCORE_VERSION-cxx1y
+rm -rf $BUILD_DIR/dcore-build-$DCORE_VERSION
+mkdir -p $BUILD_DIR/dcore-build-$DCORE_VERSION
+cd $BUILD_DIR/dcore-build-$DCORE_VERSION
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake \
   -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
   -DTRIQS_PATH=$TRIQS_ROOT \
-  $BUILD_DIR/DCore-$DCORE_VERSION | tee -a $LOG
+  $BUILD_DIR/dcore-$DCORE_VERSION | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check make -j4 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
