@@ -1,48 +1,90 @@
-diff -crN xtapp_150401.orig/src/Makefile xtapp_150401/src/Makefile
-*** xtapp_150401.orig/src/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp_150401/src/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_20180420.orig/src/Makefile xtapp_20180420/src/Makefile
+*** xtapp_20180420.orig/src/Makefile	Thu Feb 14 16:02:12 2019
+--- xtapp_20180420/src/Makefile	Thu Feb 14 16:17:04 2019
 ***************
-*** 171,186 ****
-  MDOBJ = mdunistd.o paraenv.o
-  DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+*** 133,169 ****
+  #--------------------------------
+  #for x86_64 Debian Linux by S. Todo (2014.3)
+  #
+! #ARCH_OBJ = arch_dgemm.o giounit_open.o giounit_util.o
+! #MDOBJ = mdunistd.o paraenv.o
+  #
+  # -DINCONSISTENT_THREAD_COMP
+  #    when thread computing is inconsistent, define this
+! #DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+! 
+! #FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/usr/include
+! #F77FLAGS =
+! #F90FLAGS = -ffree-line-length-none
+! #FOPTNON = -O0
   
-! FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/usr/include
-  F77FLAGS =
-  F90FLAGS = -ffree-line-length-none
-  FOPTNON = -O0
+! #LDFLAGS = -fopenmp
+! #CFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+! #CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
+! 
+! #LIBLAPACK = -lfftw3_threads -lfftw3 -llapack
+! #LIBBLAS = -lblas
+! #EXTRALIBS = -lstdc++
+! 
+! #XMPI_OBJ = xmpi_univ.o
+! ##EIGSYSTM_OBJ = eigsystm.o
+! #EIGSYSTM_OBJ = eigsystm-lapack.o
+! ##EIGSYSTM_OBJ = eigsystm-scalapack.o
+! #FFT3D_OBJ = fft3d_fftw.o
+! #FFTGRID_H_SRC = fftgrid-scl-fftw.h
   
-  LDFLAGS = -fopenmp
-! CFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
-! CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/usr/include
-  
-! LIBLAPACK = -lfftw3_threads -llapack
-  LIBBLAS = -lblas
-  EXTRALIBS = -lstdc++
-  
---- 171,186 ----
-  MDOBJ = mdunistd.o paraenv.o
-  DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
+! #CC = gcc
+! #CXX = g++
+! #FC_CIF = gfortran
+! #FFLAG_CIF = 
+  #--------------------------------
+  # for K computer
+  #
+--- 133,169 ----
+  #--------------------------------
+  #for x86_64 Debian Linux by S. Todo (2014.3)
+  #
+! ARCH_OBJ = arch_dgemm.o giounit_open.o giounit_util.o
+! MDOBJ = mdunistd.o paraenv.o
+  #
+  # -DINCONSISTENT_THREAD_COMP
+  #    when thread computing is inconsistent, define this
+! DEFINES = -O3 ${GDEFS} -DINCONSISTENT_THREAD_COMP
   
 ! FFLAGS = -O3 -fopenmp -msse3 -fno-inline-functions ${DEFINES} -I/opt/local/include
-  F77FLAGS =
-  F90FLAGS = -ffree-line-length-none
-  FOPTNON = -O0
-  
-  LDFLAGS = -fopenmp
+! F77FLAGS =
+! F90FLAGS = -ffree-line-length-none
+! FOPTNON = -O0
+! 
+! LDFLAGS = -fopenmp
 ! CFLAGS = -fopenmp -O3 -fno-inline-functions -I/opt/local/include
 ! CXXFLAGS = -fopenmp -O3 -fno-inline-functions -I/opt/local/include
+! 
+! LIBLAPACK = -L/opt/local/lib -lfftw3_threads -lfftw3 -llapack
+! LIBBLAS = -lblas
+! EXTRALIBS = -lstdc++
+! 
+! XMPI_OBJ = xmpi_univ.o
+! EIGSYSTM_OBJ = eigsystm.o
+! EIGSYSTM_OBJ = eigsystm-lapack.o
+! #EIGSYSTM_OBJ = eigsystm-scalapack.o
+! FFT3D_OBJ = fft3d_fftw.o
+! FFTGRID_H_SRC = fftgrid-scl-fftw.h
   
-! LIBLAPACK = -L/opt/local/lib -lfftw3_threads -llapack
-  LIBBLAS = -lblas
-  EXTRALIBS = -lstdc++
-  
+! CC = gcc
+! CXX = g++
+! FC_CIF = gfortran
+! FFLAG_CIF = 
+  #--------------------------------
+  # for K computer
+  #
 ***************
 *** 535,542 ****
   	${CPP} -P ${DEFINES} $< | sed '/^ *$$/d' > $*.f
   
   install: default
 ! 	install -d $(DESTDIR)/usr/bin
-! 	install inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(DESTDIR)/usr/bin
+! 	install inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd atmcdist distpart $(DESTDIR)/usr/bin
   
   # Local Variables: ***
   # mode:Makefile ***
@@ -51,34 +93,43 @@ diff -crN xtapp_150401.orig/src/Makefile xtapp_150401/src/Makefile
   
   install: default
 ! 	mkdir -p $(PREFIX)/bin
-! 	cp -p inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd $(PREFIX)/bin
+! 	cp -p inipot cgmrpt mdrpt vbpef vbstm wfn2chg wannier pefcos xticonv strconv diffstr iplstr cmpstr pe2dos tetrapdos hmatr2bnd atmcdist distpart $(PREFIX)/bin
   
   # Local Variables: ***
   # mode:Makefile ***
-*** xtapp_150401.orig/xtapp-util_150401/fldtool/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp_150401/xtapp-util_150401/fldtool/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_20180420.orig/xtapp-util_20180420/fldtool/Makefile xtapp_20180420/xtapp-util_20180420/fldtool/Makefile
+*** xtapp_20180420.orig/xtapp-util_20180420/fldtool/Makefile	Thu Feb 14 16:02:12 2019
+--- xtapp_20180420/xtapp-util_20180420/fldtool/Makefile	Thu Feb 14 16:15:34 2019
 ***************
-*** 64,71 ****
+*** 93,104 ****
   	fftgrid.h
   
   install: tools
 ! 	install -d $(DESTDIR)/usr/bin
-! 	install wfn2dx lpt2dx rho2dx rok2dx wfk2dx stm2dx rhomm lptmm wfn2ee $(DESTDIR)/usr/bin
+! 	install \
+  	wfn2dx wfk2dx lpt2dx rho2dx rok2dx stm2dx rhomm lptmm wfn2ee \
+  	wfn2respack rho2chgcar \
+  	exrho2dx stm2cci cmprho cmpband wfneig rho2xsf cmpamat cmppdos \
+! 	$(DESTDIR)/usr/bin
   
   # Local Variables: ***
   # mode:Makefile ***
---- 64,71 ----
+--- 93,104 ----
   	fftgrid.h
   
   install: tools
 ! 	mkdir -p $(PREFIX)/bin
-! 	cp -p wfn2dx lpt2dx rho2dx rok2dx wfk2dx stm2dx rhomm lptmm wfn2ee $(PREFIX)/bin
+! 	cp -p \
+  	wfn2dx wfk2dx lpt2dx rho2dx rok2dx stm2dx rhomm lptmm wfn2ee \
+  	wfn2respack rho2chgcar \
+  	exrho2dx stm2cci cmprho cmpband wfneig rho2xsf cmpamat cmppdos \
+! 	$(PREFIX)/bin
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp_150401.orig/xtapp-util_150401/inputconv/Makefile xtapp_150401/xtapp-util_150401/inputconv/Makefile
-*** xtapp_150401.orig/xtapp-util_150401/inputconv/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp_150401/xtapp-util_150401/inputconv/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_20180420.orig/xtapp-util_20180420/inputconv/Makefile xtapp_20180420/xtapp-util_20180420/inputconv/Makefile
+*** xtapp_20180420.orig/xtapp-util_20180420/inputconv/Makefile	Thu Feb 14 16:02:12 2019
+--- xtapp_20180420/xtapp-util_20180420/inputconv/Makefile	Thu Feb 14 16:15:49 2019
 ***************
 *** 39,46 ****
   	inputconv a.out
@@ -98,9 +149,9 @@ diff -crN xtapp_150401.orig/xtapp-util_150401/inputconv/Makefile xtapp_150401/xt
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp_150401.orig/xtapp-util_150401/mdtool/Makefile xtapp_150401/xtapp-util_150401/mdtool/Makefile
-*** xtapp_150401.orig/xtapp-util_150401/mdtool/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp_150401/xtapp-util_150401/mdtool/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_20180420.orig/xtapp-util_20180420/mdtool/Makefile xtapp_20180420/xtapp-util_20180420/mdtool/Makefile
+*** xtapp_20180420.orig/xtapp-util_20180420/mdtool/Makefile	Thu Feb 14 16:02:12 2019
+--- xtapp_20180420/xtapp-util_20180420/mdtool/Makefile	Thu Feb 14 16:13:38 2019
 ***************
 *** 40,47 ****
   	scanmdlog tailmdlog a.out
@@ -120,9 +171,9 @@ diff -crN xtapp_150401.orig/xtapp-util_150401/mdtool/Makefile xtapp_150401/xtapp
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp_150401.orig/xtapp-util_150401/minmaxband/Makefile xtapp_150401/xtapp-util_150401/minmaxband/Makefile
-*** xtapp_150401.orig/xtapp-util_150401/minmaxband/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp_150401/xtapp-util_150401/minmaxband/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_20180420.orig/xtapp-util_20180420/minmaxband/Makefile xtapp_20180420/xtapp-util_20180420/minmaxband/Makefile
+*** xtapp_20180420.orig/xtapp-util_20180420/minmaxband/Makefile	Thu Feb 14 16:02:12 2019
+--- xtapp_20180420/xtapp-util_20180420/minmaxband/Makefile	Thu Feb 14 16:16:16 2019
 ***************
 *** 22,29 ****
   	minmaxband a.out
@@ -142,9 +193,9 @@ diff -crN xtapp_150401.orig/xtapp-util_150401/minmaxband/Makefile xtapp_150401/x
   
   # Local Variables: ***
   # mode:Makefile ***
-diff -crN xtapp_150401.orig/xtapp-util_150401/wfchg2pdos/Makefile xtapp_150401/xtapp-util_150401/wfchg2pdos/Makefile
-*** xtapp_150401.orig/xtapp-util_150401/wfchg2pdos/Makefile	Mon Jan 19 14:41:30 2015
---- xtapp_150401/xtapp-util_150401/wfchg2pdos/Makefile	Mon Jan 19 14:42:21 2015
+diff -crN xtapp_20180420.orig/xtapp-util_20180420/wfchg2pdos/Makefile xtapp_20180420/xtapp-util_20180420/wfchg2pdos/Makefile
+*** xtapp_20180420.orig/xtapp-util_20180420/wfchg2pdos/Makefile	Thu Feb 14 16:02:12 2019
+--- xtapp_20180420/xtapp-util_20180420/wfchg2pdos/Makefile	Thu Feb 14 16:15:06 2019
 ***************
 *** 40,47 ****
   	ltzpdos wfchg2pdos a.out
