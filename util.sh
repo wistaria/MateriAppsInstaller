@@ -15,14 +15,12 @@ set_prefix() {
   if [ -n "$MAINSTALLER_CONFIG" ]; then
     if [ -f "$MAINSTALLER_CONFIG" ]; then
       . "$MAINSTALLER_CONFIG"
-      echo "MAINSTALLER_CONFIG=$MAINSTALLER_CONFIG"
     else
       echo "Warning: configuration file ($MAINSTALLER_CONFIG) not found. Skipped."
     fi
   else
     if [ -f "$MAINSTALLER_CONFIG_DEF" ]; then
       . "$MAINSTALLER_CONFIG_DEF"
-      echo "MAINSTALLER_CONFIG=$MAINSTALLER_CONFIG_DEF"
     fi
   fi
 
@@ -44,13 +42,11 @@ set_prefix() {
     echo "Fatal: target directory $PREFIX_TOOL does not exist!"
     exit 127
   fi
-  echo "PREFIX_TOOL=$PREFIX_TOOL"
   export PREFIX_TOOL
   if [ -d "$PREFIX_APPS" ]; then :; else
     echo "Fatal: target directory $PREFIX_APPS does not exist!"
     exit 127
   fi
-  echo "PREFIX_APPS=$PREFIX_APPS"
   export PREFIX_APPS
 
   if [ -z "$BUILD_DIR" ]; then
@@ -65,7 +61,6 @@ set_prefix() {
     echo "Fatal: have no permission to write in build directory $BUILD_DIR"
     exit 127
   fi
-  echo "BUILD_DIR=$BUILD_DIR"
   export BUILD_DIR
 
   if [ -z "$SOURCE_DIR" ]; then
@@ -75,16 +70,13 @@ set_prefix() {
     echo "Fatal: target directory $SOURCE_DIR does not exist!"
     exit 127
   fi
-  echo "SOURCE_DIR=$SOURCE_DIR"
   export SOURCE_DIR
 
   if [ -z "$MALIVE_REPOSITORY" ]; then
     MALIVE_REPOSITORY="$MALIVE_REPOSITORY_DEF"
   fi
-  echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
   export MALIVE_REPOSITORY
 
-  echo "WGET_OPTION=$WGET_OPTION"
   export WGET_OPTION
 
   return 0
@@ -98,6 +90,15 @@ check() {
     exit $result
   fi
   return 0
+}
+
+print_prefix() {
+  echo "PREFIX_TOOL=$PREFIX_TOOL"
+  echo "PREFIX_APPS=$PREFIX_APPS"
+  echo "BUILD_DIR=$BUILD_DIR"
+  echo "SOURCE_DIR=$SOURCE_DIR"
+  echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
+  echo "WGET_OPTION=$WGET_OPTION"
 }
 
 start_info() {

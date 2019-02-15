@@ -5,11 +5,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-if [ -f $PREFIX_TOOL/env.sh ]; then
-  echo "Error: $PREFIX_TOOL/env.sh exists"
-  exit 127
-fi
-
 sh $SCRIPT_DIR/install_cm.sh
 
 cat << EOF > $BUILD_DIR/env.sh
