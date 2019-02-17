@@ -1,0 +1,559 @@
+diff --git a/ACKNOWLEDGE.TXT b/ACKNOWLEDGE.TXT
+index 37810aa..5f23253 100644
+--- a/ACKNOWLEDGE.TXT
++++ b/ACKNOWLEDGE.TXT
+@@ -2,9 +2,9 @@ Whenever scientific publications result from a program based on ALPS Core Librar
+ 
+ 1) The most current ALPS Core Libraries paper:
+ 
+-A. Gaenko et al., Comp. Phys. Comm. (2017) v.213, p.235-251
+-http://www.sciencedirect.com/science/article/pii/S0010465516303885
+-http://dx.doi.org/10.1016/j.cpc.2016.12.009
++Wallerberger, Markus, et al. "Updated Core Libraries of the ALPS Project." 
++arXiv preprint arXiv:1811.08331 (2018).
++https://arxiv.org/abs/1811.08331
+ 
+ 2) The most current ALPS paper:
+ 
+diff --git a/accumulators/test/save_load.cpp b/accumulators/test/save_load.cpp
+index fb97fbe..e587fda 100644
+--- a/accumulators/test/save_load.cpp
++++ b/accumulators/test/save_load.cpp
+@@ -44,9 +44,13 @@ class AccumulatorTest : public ::testing::Test {
+     typedef A accumulator_type;
+ 
+     unsigned int nsamples;
++    alps::testing::unique_file h5_tmp_file;
+     const std::string h5name;
+ 
+-    AccumulatorTest() : nsamples(0), h5name(alps::testing::temporary_filename("save_load.h5."))
++    AccumulatorTest() :
++        nsamples(0),
++        h5_tmp_file("save_load.h5.", alps::testing::unique_file::REMOVE_AFTER),
++        h5name(h5_tmp_file.name())
+     { }
+ 
+     // Add (constant) data to an accumulator
+@@ -99,7 +103,7 @@ class AccumulatorTest : public ::testing::Test {
+     template <typename T>
+     void load(T& measurements) const
+     {
+-        alps::hdf5::archive ar(h5name,"w");
++        alps::hdf5::archive ar(h5name,"r");
+         ar["mydata"] >> measurements;
+     }
+ };
+diff --git a/common/build/Jenkinsfile.pauli b/common/build/Jenkinsfile.pauli
+new file mode 100644
+index 0000000..3bf88ef
+--- /dev/null
++++ b/common/build/Jenkinsfile.pauli
+@@ -0,0 +1,124 @@
++
++/// Get a build dir based on name
++def build_dir_name(name) { "build.tmp/${name}" }
++
++/// Calling shell for the particular phase
++def call_phase(phase, name, compiler, mpilib) {
++    sh """export PHASE=${phase}
++          export COMPILER=${compiler}
++          export MPI_VERSION=${mpilib}
++          export BUILD_DIR='${build_dir_name(name)}'
++          ./common/build/build.pauli.jenkins.sh
++       """
++}
++
++/// Sub-pipeline for a project; returns closure defining the sub-pipe
++def sub_pipe(name, compiler, mpilib) {
++    { ->
++        stage("Sub-pipeline with ${name}") {
++            stash(name: name)
++            node("master-node") {
++                unstash(name: name)
++                
++                stage("Config") {
++                    echo "Config step with compiler=${compiler} mpilib=${mpilib}"
++                    call_phase('cmake', name, compiler, mpilib)
++                }
++
++                stage("Build") {
++                    echo "Build step with compiler=${compiler} mpilib=${mpilib}"
++                    call_phase('make', name, compiler, mpilib)
++                }
++
++                stage("Test")  {
++                    echo "Test step with compiler=${compiler} mpilib=${mpilib}"
++                    call_phase('test', name, compiler, mpilib)
++                    junit "${build_dir_name(name)}/*/test/*.xml"
++                }
++                
++                stage("Install")  {
++                    echo "Install step with compiler=${compiler} mpilib=${mpilib}"
++                    call_phase('install', name, compiler, mpilib)
++                    zip archive: true, dir: "${build_dir_name(name)}/install", glob: '', zipFile: "${build_dir_name(name)}/alpscore.zip"
++                    fingerprint "${build_dir_name(name)}/alpscore.zip"
++                }
++            }
++        }
++    }
++}
++
++
++pipeline {
++    agent {
++        node {
++            label 'master-node'
++        }
++
++    }
++
++    parameters {
++        string(name: 'COMPILERS', defaultValue: 'gcc_4.8.5,gcc_5.4.0,clang_3.4.2,clang_5.0.1,intel_18.0.5', description: 'Compilers to use')
++        string(name: 'MPI_VERSIONS', defaultValue: 'MPI_OFF,OpenMPI', description: 'MPI versions to link with')
++    }
++
++    stages {
++        stage('Parallel stages') {
++            steps {
++                script {
++
++                    projects = [:]
++                    for (comp in params.COMPILERS.tokenize(',')) {
++                        for (mpilib in params.MPI_VERSIONS.tokenize(',')) {
++
++                            // Filter out combinations that don't work with MPI
++                            if (comp=="gcc_5.4.0" || comp=="intel_18.0.5" || mpilib=="MPI_OFF") {
++                                key="compiler=${comp}_mpilib=${mpilib}"
++                                projects[key]=sub_pipe(key, comp, mpilib)
++                            }
++
++                        }
++                    }
++                    echo "DEBUG: Projects: ${projects}"
++                    parallel (projects)
++
++                } // end script
++            } // end steps
++        } // end stage
++    } // end stages
++    post {
++        always {
++            echo 'DEBUG: Build is over'
++        }
++        success {
++            echo 'DEBUG: Build successful'
++        }
++        unstable {
++            echo 'DEBUG: Build is unstable'
++            emailext to: 'galexv+jenkins.status@umich.edu',
++                     recipientProviders: [brokenTestsSuspects(), culprits(), requestor()],
++                     subject: 'ALPSCore: Jenkins build is unstable',
++                     attachLog: true,
++                     compressLog: true,
++                     body: "ALPSCore build is unstable: see attached log"
++        }
++        failure {
++            echo 'DEBUG: Build failed'
++            emailext to: 'galexv+jenkins.status@umich.edu',
++                     recipientProviders: [brokenTestsSuspects(), culprits(), requestor()],
++                     subject: 'ALPSCore: Jenkins build has failed',
++                     attachLog: true,
++                     compressLog: true,
++                     body: "ALPSCore build has failed: see attached log"
++        }
++        changed {
++            echo 'DEBUG: Build status changed'
++            emailext to: 'galexv+jenkins.status@umich.edu',
++                     recipientProviders: [brokenTestsSuspects(), culprits(), requestor()],
++                     subject: 'ALPSCore: Jenkins build status changed',
++                     attachLog: true,
++                     compressLog: true,
++                     body: "ALPSCore build status changed"
++        }
++        
++    }
++}
+diff --git a/common/build/build.pauli.jenkins.sh b/common/build/build.pauli.jenkins.sh
+new file mode 100755
+index 0000000..6e890ed
+--- /dev/null
++++ b/common/build/build.pauli.jenkins.sh
+@@ -0,0 +1,124 @@
++#!/usr/bin/env bash
++# Script used by Jenkins to build ALPSCore on Pauli cluster
++
++# This script expects the following environment variables
++# COMPILER - the compiler to build with
++# MPI_VERSION - MPI library to link with
++# BUILD_DIR - (optional) A directory name to build in (default: formed from COMPILER and MPI_VERSION)
++# PHASE - 'cmake' | 'make' | 'test' | 'install' (all of the above if empty)
++# The scripts creates directories under ./build.tmp/
++
++
++BASE_DIR=$(/bin/pwd)
++
++# This function sets build environment unless it's already set (as determined by env. var `build_environment_set`)
++function setup_environment() {
++    [[ $build_environment_set == 1 ]] && return 0
++    
++    module purge
++    module add cmake
++    case $COMPILER in
++        gcc_4.8.5) 
++            export CC=$(which gcc)
++            export CXX=$(which g++)
++            ;;
++        gcc_5.4.0)
++            module add gnu/5.4.0
++            export CC=$(which gcc)
++            export CXX=$(which g++)
++            ;;
++        clang_3.4.2) 
++            export CC=$(which clang)
++            export CXX=$(which clang++)
++            ;;
++        clang_5.0.1)
++            module add llvm5/5.0.1
++            export CC=$(which clang)
++            export CXX=$(which clang++)
++            ;;
++        intel_18.0.5)
++            . /opt/intel/bin/compilervars.sh intel64
++            # we have to load GNU CC before OpenMPI, but will use Intel
++            [[ $MPI_VERSION = OpenMPI ]] && module add gnu/5.4.0 openmpi/1.10.7
++            export CC=/opt/intel/bin/icc
++            export CXX=/opt/intel/bin/icpc
++            ;;
++        *) 
++            echo "Unsupported compiler passed via COMPILER='$COMPILER'; valid values are:" 2>&1
++            echo "gcc_4.8.5 gcc_5.4.0 clang_3.4.2 clang_5.0.1 intel_18.0.5"
++            exit 1
++            ;;
++        
++    esac
++
++    case $MPI_VERSION in
++        MPI_OFF)
++            ENABLE_MPI=OFF
++            ;;
++        OpenMPI)
++            ENABLE_MPI=ON
++            module add openmpi/1.10.7
++            ;;
++        *)
++            echo "Unsupported MPI version passed via MPI_VERSION='$MPI_VERSION'; valid values are:" 2>&1
++            echo "MPI_OFF OpenMPI" 2>&1
++            exit 1
++   	    ;;
++    esac
++
++    export BOOST_ROOT=/opt/ohpc/pub/libs/gnu/openmpi/boost/1.66.0
++
++    [[ $BUILD_DIR ]] || BUILD_DIR="build.tmp/${COMPILER}_${MPI_VERSION}"
++    mkdir -pv "$BUILD_DIR"
++    cd "$BUILD_DIR"
++
++    build_environment_set=1
++}
++
++function run_cmake() {
++    rm -rf *
++    cmake -DCMAKE_INSTALL_PREFIX=$PWD/install \
++          -DTesting=ON -DExtensiveTesting=OFF \
++          -DCMAKE_BUILD_TYPE=Release \
++          -DENABLE_MPI=${ENABLE_MPI} \
++          -DTestXMLOutput=TRUE \
++          -DEIGEN3_INCLUDE_DIR=$HOME/.local/packages/eigen-3.3.4 \
++          -DDocumentation=OFF \
++          "$BASE_DIR"
++}
++
++function run_make() {
++    make -j8 VERBOSE=1
++}
++
++function run_test() {
++    make test
++}
++
++function run_install() {
++    make -j8 install
++}
++
++
++set build_env_set=0
++
++if [[ $PHASE == 'cmake' || $PHASE == '' ]]; then
++    setup_environment
++    run_cmake || exit $?
++fi
++
++if [[ $PHASE == 'make' || $PHASE == '' ]]; then
++    setup_environment
++    run_make || exit $?
++fi
++
++if [[ $PHASE == 'test' || $PHASE == '' ]]; then
++    setup_environment
++    run_test || exit $?
++fi
++
++if [[ $PHASE == 'install' || $PHASE == '' ]]; then
++    setup_environment
++    run_install || exit $?
++fi
++
+diff --git a/common/cmake/ALPSEnableTests.cmake b/common/cmake/ALPSEnableTests.cmake
+index 9da4fdc..6dc9ef7 100644
+--- a/common/cmake/ALPSEnableTests.cmake
++++ b/common/cmake/ALPSEnableTests.cmake
+@@ -48,46 +48,81 @@ if (NOT tests_are_already_enabled)
+     set(tests_are_already_enabled TRUE)
+ endif(NOT tests_are_already_enabled)
+ 
++
++# internal function to build a test executable
++# MAIN|NOMAIN TARGET <target_name> EXE <exe_name> SRCS <src1> <src2>...
++function(alps_build_gtest_)
++    include(CMakeParseArguments)
++    cmake_parse_arguments("arg" "" "NOMAIN;TARGET" "SRCS" ${ARGN})
++    set(usage_help_ "alps_build_gtest_([NOMAIN true|false] TARGET tgt SRCS file1 file2...)")
++    if (arg_UNPARSED_ARGUMENTS)
++        message(FATAL_ERROR
++            "Unknown parameters: ${arg_UNPARSED_ARGUMENTS}\n"
++            "Usage: ${usage_help_}")
++    endif()
++    if (NOT arg_TARGET)
++        message(FATAL_ERROR "'TARGET' must be specified in ${usage_help_}")
++    endif()
++
++    add_executable(${arg_TARGET} ${arg_SRCS})
++    if (ALPS_BUILD_STATIC)
++        set_property(TARGET ${arg_TARGET} PROPERTY LINK_SEARCH_START_STATIC 1)
++        set_property(TARGET ${arg_TARGET} PROPERTY LINK_SEARCH_END_STATIC 1)
++    endif()
++
++    if (arg_NOMAIN)
++        set(link_test_ ${GTEST_LIBRARY})
++    else()
++        set(link_test_ ${GTEST_MAIN_LIBRARIES})
++    endif()
++    
++    target_link_libraries(${arg_TARGET} ${PROJECT_NAME} ${${PROJECT_NAME}_DEPENDS} ${link_test_})
++endfunction()      
++  
++
+ # custom function to add test with xml output and linked to gtest
+ # arg0 - test (assume the source is ${test}.cpp)
+ # optional arg: NOMAIN: do not link libgtest_main containing main()
+ # optional arg: MAIN: do link libgtest_main containing main()
+ # optional arg: PARTEST: run test in parallel using N processes, where N is run-time value of environment variable ALPS_TEST_MPI_NPROC
+ #               (or 1 if the variable is not set) (FIXME: make this a configurable constant!)
++# optional arg: COMPILEFAIL: expect compilation failure as positive test outcome
+ # optional arg: SRCS source1 source2... : additional source files
+ # Affected by: ${PROJECT_NAME}_DEPENDS variable.
+ function(alps_add_gtest test)
+     include(CMakeParseArguments)
+-    cmake_parse_arguments("arg" "NOMAIN;MAIN;PARTEST" "" "SRCS" ${ARGN})
++    cmake_parse_arguments("arg" "NOMAIN;MAIN;PARTEST;COMPILEFAIL" "" "SRCS" ${ARGN})
++    set(usage_help_ "alps_add_gtest(testname [MAIN|NOMAIN] [PARTEST] [COMPILEFAIL] [SRCS extra_sources...])")
+     if (TestXMLOutput)
+         set (test_xml_output_ --gtest_output=xml:${test}.xml)
+     endif()
+     if (arg_NOMAIN AND arg_MAIN)
+-        message(FATAL_ERROR "Incorrect use of alps_add_gtest(testname [MAIN|NOMAIN] [PARTEST] [SRCS extra_sources...])")
++        message(FATAL_ERROR "Incorrect use of ${usage_help_}")
+     endif()
+     if (arg_UNPARSED_ARGUMENTS) 
+         message(FATAL_ERROR
+-            "Unknown parameters: ${arg_UNPARSED_ARGUMENTS}"
+-            "Usage: alps_add_gtest(testname [MAIN|NOMAIN] [PARTEST] [SRCS extra_sources...])")
++            "Unknown parameters: ${arg_UNPARSED_ARGUMENTS}\n"
++            "Usage: ${usage_help_}")
+     endif()
++
+     set(sources_ ${test} ${arg_SRCS})
+-    
+-    add_executable(${test} ${sources_})
+-    if (ALPS_BUILD_STATIC)
+-      set_property(TARGET ${test} PROPERTY LINK_SEARCH_START_STATIC 1)
+-      set_property(TARGET ${test} PROPERTY LINK_SEARCH_END_STATIC 1)
+-    endif()
+ 
+-    if (arg_NOMAIN)
+-        set(link_test_ ${GTEST_LIBRARY})
+-    else()
+-        set(link_test_ ${GTEST_MAIN_LIBRARIES})
+-    endif()
++    alps_build_gtest_(NOMAIN ${arg_NOMAIN} TARGET ${test} SRCS ${sources_})
++    
++    if (arg_COMPILEFAIL)
++        set(nocompile_target_ ${test}.nocompile)
++        alps_build_gtest_(NOMAIN ${arg_NOMAIN} TARGET ${nocompile_target_} SRCS ${sources_})
++        set_property(TARGET ${nocompile_target_} PROPERTY EXCLUDE_FROM_ALL 1)
++        target_compile_definitions(${nocompile_target_} PRIVATE "-DALPS_TEST_EXPECT_COMPILE_FAILURE")
+ 
+-    target_link_libraries(${test} ${PROJECT_NAME} ${${PROJECT_NAME}_DEPENDS} ${link_test_})
+-    # FIXME: if compiler supports MPI directly, the MPIEXEC program is not deduced!
+-    # FIXME: in the MPI test command, POSIX shell is assumed
+-    if (arg_PARTEST AND MPIEXEC)
++        set(build_cmd_ "cmake --build . --target ${nocompile_target_}")
++        set(run_fail_cmd_ "$<TARGET_FILE:${nocompile_target_}> ${test_xml_output_}")
++        set(run_ok_cmd_ "$<TARGET_FILE:${test}> ${test_xml_output_}")
++        set(shell_cmd_ "if ${build_cmd_}\; then ${run_fail_cmd_}\; false\; else ${run_ok_cmd_}\; fi")
++        set(cmd_ "/bin/sh" "-c" "${shell_cmd_}")
++    elseif (arg_PARTEST AND MPIEXEC) 
++        # FIXME: if compiler supports MPI directly, the MPIEXEC program is not deduced!
++        # FIXME: in the MPI test command, POSIX shell is assumed
+         set(cmd_ "/bin/sh" "-c" "${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} \${ALPS_TEST_MPI_NPROC:-1} ${MPIEXEC_PREFLAGS} $<TARGET_FILE:${test}> ${MPIEXEC_POSTFLAGS} ${test_xml_output_}")
+     else()
+         set(cmd_ $<TARGET_FILE:${test}> ${test_xml_output_})
+diff --git a/hdf5/include/alps/hdf5/vector.hpp b/hdf5/include/alps/hdf5/vector.hpp
+index 1076326..a18c1f6 100644
+--- a/hdf5/include/alps/hdf5/vector.hpp
++++ b/hdf5/include/alps/hdf5/vector.hpp
+@@ -176,8 +176,9 @@ namespace alps {
+                     ar.delete_data(path);
+                 else if (path.find_last_of('@') != std::string::npos && ar.is_attribute(path))
+                     ar.delete_attribute(path);
++                std::string cpath = ar.complete_path(path);
+                 for(typename std::vector<T, A>::const_iterator it = value.begin(); it != value.end(); ++it)
+-                    save(ar, ar.complete_path(path) + "/" + cast<std::string>(it - value.begin()), *it);
++                    save(ar, cpath + "/" + cast<std::string>(it - value.begin()), *it);
+             }
+         }
+ 
+@@ -214,10 +215,11 @@ namespace alps {
+         ) {
+             using alps::cast;
+             if (ar.is_group(path)) {
+-                std::vector<std::string> children = ar.list_children(path);
++                std::string cpath = ar.complete_path(path);
++                std::vector<std::string> children = ar.list_children(cpath);
+                 value.resize(children.size());
+                 for (typename std::vector<std::string>::const_iterator it = children.begin(); it != children.end(); ++it)
+-                   load(ar, ar.complete_path(path) + "/" + *it, value[cast<std::size_t>(*it)]);
++                   load(ar, cpath + "/" + *it, value[cast<std::size_t>(*it)]);
+             } else {
+                 if (ar.is_complex(path) != has_complex_elements<T>::value)
+                     throw archive_error("no complex value in archive" + ALPS_STACKTRACE);
+diff --git a/params/test/CMakeLists.txt b/params/test/CMakeLists.txt
+index 3d84e47..331c513 100644
+--- a/params/test/CMakeLists.txt
++++ b/params/test/CMakeLists.txt
+@@ -19,6 +19,7 @@ set (test_src
+   dictionary_hdf5
+   params_hdf5
+   params_hdf5_with_ini
++  params_vec_hdf5
+   )
+ 
+ foreach(test ${test_src})
+diff --git a/params/test/params_vec_hdf5.cpp b/params/test/params_vec_hdf5.cpp
+new file mode 100644
+index 0000000..da08ab8
+--- /dev/null
++++ b/params/test/params_vec_hdf5.cpp
+@@ -0,0 +1,49 @@
++/*
++ * Copyright (C) 1998-2019 ALPS Collaboration. See COPYRIGHT.TXT
++ * All rights reserved. Use is subject to license terms. See LICENSE.TXT
++ * For use in publications, see ACKNOWLEDGE.TXT
++ */
++
++/** @file params_vec_hdf5.cpp
++
++    @brief Tests saving/loading of vector of parameters
++*/
++
++#include "./params_test_support.hpp"
++
++#include <iostream>
++#include <alps/hdf5/vector.hpp>
++#include <alps/testing/unique_file.hpp>
++
++using alps::params;
++namespace ah5=alps::hdf5;
++
++class ParamsVectorTest : public ::testing::Test {
++  protected:
++    std::vector<params> par_;
++  public:
++    ParamsVectorTest() : par_(3) {
++      par_[0]["p"] = 1.0;
++      par_[1]["q"] = 2.0;
++      par_[2]["r"] = 3.0;
++    }
++};
++
++TEST_F(ParamsVectorTest, saveLoad) {
++    alps::testing::unique_file ufile("params_vec.h5.", alps::testing::unique_file::REMOVE_NOW);
++    std::vector<params> p_other;
++    {
++        ah5::archive ar(ufile.name(), "w");
++        ar["paramsvec"] << par_;
++    }
++
++    {
++        ah5::archive ar(ufile.name(), "r");
++        ar["paramsvec"] >> p_other;
++    }
++
++    EXPECT_EQ(par_.size(), p_other.size());
++    for (std::size_t i = 0; i < par_.size(); ++i) {
++      EXPECT_EQ(par_[i], p_other[i]);
++    }
++}
+diff --git a/utilities/test/CMakeLists.txt b/utilities/test/CMakeLists.txt
+index 6947f83..877e94a 100644
+--- a/utilities/test/CMakeLists.txt
++++ b/utilities/test/CMakeLists.txt
+@@ -33,3 +33,6 @@ if(ALPS_HAVE_MPI)
+   alps_add_gtest(mpi_utils_env_exceptions1 PARTEST SRCS mpi_test_support)
+   alps_add_gtest(mpi_utils_env_exceptions2 PARTEST SRCS mpi_test_support)
+ endif()
++
++# Testing "compilation failure test" machinery
++alps_add_gtest(compilation_failure_test COMPILEFAIL)
+diff --git a/utilities/test/compilation_failure_test.cpp b/utilities/test/compilation_failure_test.cpp
+new file mode 100644
+index 0000000..332b1cc
+--- /dev/null
++++ b/utilities/test/compilation_failure_test.cpp
+@@ -0,0 +1,36 @@
++/*
++ * Copyright (C) 1998-2018 ALPS Collaboration. See COPYRIGHT.TXT
++ * All rights reserved. Use is subject to license terms. See LICENSE.TXT
++ * For use in publications, see ACKNOWLEDGE.TXT
++ */
++
++/**
++   @file compilation_failure_test.cpp
++   @brief A demo and a test to test for a compilation error
++
++   Here we define a function template that accepts only floating-point arguments,
++   and verify that passing an integer argument does not compile.
++*/
++
++#include <type_traits>
++#include "gtest/gtest.h"
++
++template <typename T>
++void do_something(T& val)
++{
++    static_assert(std::is_floating_point<T>::value,
++                  "do_something(T&) requires a floating point argument");
++    val=0.0;
++}
++
++TEST(utilities, testCompilationFailure) {
++    double x=1.0;
++    do_something(x);
++    SUCCEED();
++#ifdef ALPS_TEST_EXPECT_COMPILE_FAILURE
++    // The following code should not compile:
++    int m=1;
++    do_something(m);
++    FAIL() << "This code should not have compiled";
++#endif
++}
