@@ -12,6 +12,7 @@ TOOL="
 APPS="
 70_alps:macos
 71_xtapp:macos
+73_espresso:default
 83_triqs:default
 84_alpscore-cthyb:default
 86_dcore:default
