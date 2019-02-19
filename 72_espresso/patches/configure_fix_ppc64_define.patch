@@ -1,0 +1,10 @@
+--- a/install/configure
++++ b/install/configure
+@@ -4112,7 +4112,6 @@
+ ppc64 )
+         try_mpif90="mpxlf90_r mpf90_r mpif90"
+         try_f90="xlf90_r $try_f90"
+-        try_dflags="-D__XLF"
+         ;;
+ # PowerPC MareNostrum
+ ppc64-mn )

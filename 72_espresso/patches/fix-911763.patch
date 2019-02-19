@@ -1,0 +1,23 @@
+Description: Fix FTBFS #911763
+ Update config.guess and config.sub to be able to compile on recent
+architectures. Using autoreconf would fail :
+https://github.com/andreww/fox/issues/4
+Author: Frédéric Bonnard <frediz@fdz.fr>
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+Index: espresso-6.3/install/extlibs_makefile
+===================================================================
+--- espresso-6.3.orig/install/extlibs_makefile	2018-07-06 15:36:48.000000000 +0000
++++ espresso-6.3/install/extlibs_makefile	2018-10-24 11:01:09.354784414 +0000
+@@ -88,7 +88,10 @@
+ 	if test ! -d ../FoX; then \
+         mkdir ../FoX; \
+ 	(gzip -dc ../archive/fox.tgz | (cd ../FoX; tar -xvf -)); \
+-	cd ../FoX/fox/; export FC=$(F90); export FCFLAGS="$(FOX_FLAGS)"; \
++	cd ../FoX/fox/; \
++	cp -f /usr/share/misc/config.sub config/; \
++	cp -f /usr/share/misc/config.guess config/; \
++	export FC=$(F90); export FCFLAGS="$(FOX_FLAGS)"; \
+ 	./configure --prefix=$(TOPDIR)/FoX ;\
+ 	$(MAKE) install; cd ../; rm -fr fox;fi
+ # ELPA

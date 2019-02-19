@@ -1,0 +1,11 @@
+--- a/test-suite/Makefile
++++ b/test-suite/Makefile
+@@ -33,8 +33,6 @@
+ 	@sed "s|XXXXXX|$(ESPRESSO_ROOT)|g" < userconfig.tmp > userconfig
+ 
+ pseudo :
+-	@./check_pseudo.sh pw_
+-	@./check_pseudo.sh cp_
+ 
+ run-tests : run-tests-serial
+ 

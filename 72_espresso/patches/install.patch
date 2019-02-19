@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -267,7 +267,7 @@
+ 
+ install : 
+ 	@if test -d bin ; then mkdir -p $(DESTDIR)$(bindir) ; \
+-	for x in `find * ! -path "test-suite/*" -name *.x -type f` ; do \
++	for x in `find * ! -path "test-suite/*" ! -path "*x.dSYM/*" -name *.x -type f` ; do \
+ 		cp $$x $(DESTDIR)$(bindir)/ ; done ; \
+ 	fi
+ 	@echo 'Quantum ESPRESSO binaries installed in $(DESTDIR)$(bindir)'

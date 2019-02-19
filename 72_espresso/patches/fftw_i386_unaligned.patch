@@ -1,0 +1,155 @@
+--- ./install/make.sys.in.orig	2014-05-29 23:14:30.821771694 +0200
++++ ./install/make.sys.in	2014-05-29 23:15:17.878014373 +0200
+@@ -39,7 +39,7 @@
+ #                  You may use this instead of tweaking DFLAGS and FDFLAGS
+ #                  BEWARE: will not work for IBM xlf! Manually edit FDFLAGS
+ MANUAL_DFLAGS  =
+-DFLAGS         = @dflags@ $(MANUAL_DFLAGS)
++DFLAGS         = @dflags@ $(FFTW_FORCE_ALIGN) $(MANUAL_DFLAGS)
+ FDFLAGS        = @fdflags@ $(MANUAL_DFLAGS)
+ 
+ # IFLAGS = how to locate directories where files to be included are
+Index: espresso-5.0.2/Modules/fft_scalar.f90
+===================================================================
+--- espresso-5.0.2.orig/Modules/fft_scalar.f90	2013-12-10 21:30:27.099627593 +0100
++++ espresso-5.0.2/Modules/fft_scalar.f90	2013-12-10 21:30:29.311639122 +0100
+@@ -57,11 +57,20 @@
+ 
+ #elif defined __FFTW3
+ 
+-        !  Only FFTW_ESTIMATE is actually used
+-
+-#define  FFTW_MEASURE  0
++#define  FFTW_MEASURE   0
++#define  FFTW_UNALIGNED 2
+ #define  FFTW_ESTIMATE 64
+ 
++#if defined _FFTW_FORCE_UNALIGNED
++
++#define  FFTW_PLAN_TYPE FFTW_UNALIGNED + FFTW_ESTIMATE
++
++#else 
++
++#define  FFTW_PLAN_TYPE FFTW_ESTIMATE
++
++#endif
++
+ #endif
+ 
+ #if defined __FFTW 
+@@ -218,10 +227,10 @@
+        IF( bw_planz( icurrent) /= 0 ) CALL dfftw_destroy_plan( bw_planz( icurrent) )
+        idir = -1
+        CALL dfftw_plan_many_dft( fw_planz( icurrent), 1, nz, nsl, c, &
+-            (/SIZE(c)/), 1, ldz, cout, (/SIZE(cout)/), 1, ldz, idir, FFTW_ESTIMATE)
++            (/SIZE(c)/), 1, ldz, cout, (/SIZE(cout)/), 1, ldz, idir, FFTW_PLAN_TYPE)
+        idir = 1
+        CALL dfftw_plan_many_dft( bw_planz( icurrent), 1, nz, nsl, c, &
+-            (/SIZE(c)/), 1, ldz, cout, (/SIZE(cout)/), 1, ldz, idir, FFTW_ESTIMATE)
++            (/SIZE(c)/), 1, ldz, cout, (/SIZE(cout)/), 1, ldz, idir, FFTW_PLAN_TYPE)
+ 
+ #elif defined __ESSL || defined __LINUX_ESSL
+ 
+@@ -540,33 +549,33 @@
+           idir = -1
+           CALL dfftw_plan_many_dft( fw_plan(2,icurrent), 1, ny, 1, r(1:), &
+                (/ldx*ldy/), ldx, 1, r(1:), (/ldx*ldy/), ldx, 1, idir, &
+-               FFTW_ESTIMATE)
++               FFTW_PLAN_TYPE)
+           idir =  1
+           CALL dfftw_plan_many_dft( bw_plan(2,icurrent), 1, ny, 1, r(1:), &
+                (/ldx*ldy/), ldx, 1, r(1:), (/ldx*ldy/), ldx, 1, idir, &
+-               FFTW_ESTIMATE)
++               FFTW_PLAN_TYPE)
+ 
+           IF( fw_plan(1,icurrent) /= 0 ) CALL dfftw_destroy_plan( fw_plan(1,icurrent) )
+           IF( bw_plan(1,icurrent) /= 0 ) CALL dfftw_destroy_plan( bw_plan(1,icurrent) )
+           idir = -1
+           CALL dfftw_plan_many_dft( fw_plan(1,icurrent), 1, nx, ny, r(1:), &
+                (/ldx*ldy/), 1, ldx, r(1:), (/ldx*ldy/), 1, ldx, idir, &
+-               FFTW_ESTIMATE)
++               FFTW_PLAN_TYPE)
+           idir =  1
+           CALL dfftw_plan_many_dft( bw_plan(1,icurrent), 1, nx, ny, r(1:), &
+                (/ldx*ldy/), 1, ldx, r(1:), (/ldx*ldy/), 1, ldx, idir, &
+-               FFTW_ESTIMATE)
++               FFTW_PLAN_TYPE)
+        ELSE
+           IF( fw_plan( 1, icurrent) /= 0 ) CALL dfftw_destroy_plan( fw_plan( 1, icurrent) )
+           IF( bw_plan( 1, icurrent) /= 0 ) CALL dfftw_destroy_plan( bw_plan( 1, icurrent) )
+           idir = -1
+           CALL dfftw_plan_many_dft( fw_plan( 1, icurrent), 2, (/nx, ny/), nzl,&
+                r(1:), (/nx, ny/), 1, nx*ny, r(1:), (/nx, ny/), 1, nx*ny, idir,&
+-               FFTW_ESTIMATE)
++               FFTW_PLAN_TYPE)
+           idir = 1
+           CALL dfftw_plan_many_dft( bw_plan( 1, icurrent), 2, (/nx, ny/), nzl,&
+                r(1:), (/nx, ny/), 1, nx*ny, r(1:), (/nx, ny/), 1, nx*ny, idir,&
+-               FFTW_ESTIMATE)
++               FFTW_PLAN_TYPE)
+        END IF
+ 
+ #elif defined __ESSL || defined __LINUX_ESSL
+@@ -1149,10 +1158,10 @@
+        IF( bw_plan(icurrent) /= 0 ) CALL dfftw_destroy_plan( bw_plan(icurrent) )
+        idir = -1
+        CALL dfftw_plan_dft_3d ( fw_plan(icurrent), nx, ny, nz, f(1:), &
+-            f(1:), idir, FFTW_ESTIMATE)
++            f(1:), idir, FFTW_PLAN_TYPE)
+        idir =  1
+        CALL dfftw_plan_dft_3d ( bw_plan(icurrent), nx, ny, nz, f(1:), &
+-            f(1:), idir, FFTW_ESTIMATE)
++            f(1:), idir, FFTW_PLAN_TYPE)
+ 
+ #elif defined __ESSL || defined __LINUX_ESSL
+ 
+@@ -1425,27 +1434,27 @@
+        idir = -1
+        CALL dfftw_plan_many_dft( fw_plan( 1, icurrent), &
+             1, nx, 1, f(1:), (/ldx, ldy, ldz/), 1, ldx, &
+-            f(1:), (/ldx, ldy, ldz/), 1, ldx, idir, FFTW_ESTIMATE)
++            f(1:), (/ldx, ldy, ldz/), 1, ldx, idir, FFTW_PLAN_TYPE)
+        idir = 1
+        CALL dfftw_plan_many_dft( bw_plan( 1, icurrent), &
+             1, nx, 1, f(1:), (/ldx, ldy, ldz/), 1, ldx, &
+-            f(1:), (/ldx, ldy, ldz/), 1, ldx, idir, FFTW_ESTIMATE)
++            f(1:), (/ldx, ldy, ldz/), 1, ldx, idir, FFTW_PLAN_TYPE)
+        idir = -1
+        CALL dfftw_plan_many_dft( fw_plan( 2, icurrent), &
+             1, ny, nx, f(1:), (/ldx, ldy, ldz/), ldx, 1, &
+-            f(1:), (/ldx, ldy, ldz/), ldx, 1, idir, FFTW_ESTIMATE)
++            f(1:), (/ldx, ldy, ldz/), ldx, 1, idir, FFTW_PLAN_TYPE)
+        idir = 1
+        CALL dfftw_plan_many_dft( bw_plan( 2, icurrent), &
+             1, ny, nx, f(1:), (/ldx, ldy, ldz/), ldx, 1, &
+-            f(1:), (/ldx, ldy, ldz/), ldx, 1, idir, FFTW_ESTIMATE)
++            f(1:), (/ldx, ldy, ldz/), ldx, 1, idir, FFTW_PLAN_TYPE)
+        idir = -1
+        CALL dfftw_plan_many_dft( fw_plan( 3, icurrent), &
+             1, nz, nx*ny, f(1:), (/ldx, ldy, ldz/), ldx*ldy, 1, &
+-            f(1:), (/ldx, ldy, ldz/), ldx*ldy, 1, idir, FFTW_ESTIMATE)
++            f(1:), (/ldx, ldy, ldz/), ldx*ldy, 1, idir, FFTW_PLAN_TYPE)
+        idir = 1
+        CALL dfftw_plan_many_dft( bw_plan( 3, icurrent), &
+             1, nz, nx*ny, f(1:), (/ldx, ldy, ldz/), ldx*ldy, 1, &
+-            f(1:), (/ldx, ldy, ldz/), ldx*ldy, 1, idir, FFTW_ESTIMATE)
++            f(1:), (/ldx, ldy, ldz/), ldx*ldy, 1, idir, FFTW_PLAN_TYPE)
+ 
+ #elif defined __ESSL || defined __LINUX_ESSL
+        !
+@@ -1735,13 +1744,13 @@
+              call dfftw_destroy_plan(bw_planz(icurrent))
+         call dfftw_plan_many_dft( bw_planz(icurrent), 1, nz, ldx*ldy, &
+              f(1:), (/SIZE(f)/), ldx*ldy, 1, f(1:), (/SIZE(f)/), ldx*ldy, 1, &
+-             1, FFTW_ESTIMATE )
++             1, FFTW_PLAN_TYPE )
+ 
+         if ( bw_planxy(icurrent) /= 0 ) &
+              call dfftw_destroy_plan(bw_planxy(icurrent))
+         call dfftw_plan_many_dft( bw_planxy(icurrent), 2, (/nx, ny/), nplanes,&
+              f(nstart:),  (/ldx, ldy/), 1, ldx*ldy, f(nstart:), (/ldx, ldy/), &
+-             1, ldx*ldy, 1, FFTW_ESTIMATE )
++             1, ldx*ldy, 1, FFTW_PLAN_TYPE )
+ 
+ #elif defined __ESSL || defined __LINUX_ESSL
+ 

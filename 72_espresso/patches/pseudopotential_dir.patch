@@ -1,0 +1,48 @@
+# use /usr/share/espresso/pseudo as directory for pseudo-potentials if the
+# environment variable is missing and $HOME/espresso/pseudo does not exist.
+Index: qe-6.0/Modules/read_namelists.f90
+===================================================================
+--- qe-6.0.orig/Modules/read_namelists.f90
++++ qe-6.0/Modules/read_namelists.f90
+@@ -20,6 +20,8 @@ MODULE read_namelists_module
+   !
+   USE kinds,     ONLY : DP
+   USE input_parameters
++  USE iotk_module, ONLY : iotk_free_unit, iotk_open_write, iotk_close_write
++  USE io_files, ONLY : delete_if_present
+   !
+   IMPLICIT NONE
+   !
+@@ -61,6 +63,8 @@ MODULE read_namelists_module
+        !
+        CHARACTER(LEN=2) :: prog   ! ... specify the calling program
+        !
++       INTEGER :: iunpse, ierr 
++       !
+        !
+        IF ( prog == 'PW' ) THEN
+           title = ' '
+@@ -103,6 +107,23 @@ MODULE read_namelists_module
+        IF ( TRIM( pseudo_dir ) == ' ') THEN
+           CALL get_environment_variable( 'HOME', pseudo_dir )
+           pseudo_dir = TRIM( pseudo_dir ) // '/espresso/pseudo/'
++          CALL iotk_free_unit( iunpse )
++          ! 
++          ! ... it is not obvious how to check for the existence of a
++          ! ... directory with iotk, so we try to create a file in 
++          ! ... $HOME/espresso/pseudo to see if that directory exists
++          ! ... and remove the auxiliary file again afterwards
++          !
++          CALL iotk_open_write ( iunpse, FILE = TRIM( pseudo_dir ) // '.x', IERR=ierr )
++          IF( ierr /= 0 ) THEN
++             !
++             ! ... use the system wide default
++             !
++             pseudo_dir = '/usr/share/espresso/pseudo/'
++          ELSE
++             CALL iotk_close_write( iunpse )
++          END IF
++          CALL delete_if_present( TRIM( pseudo_dir ) // '.x' )
+        END IF
+        !
+        refg          = 0.05_DP

@@ -1,0 +1,37 @@
+--- a/environment_variables
++++ b/environment_variables
+@@ -17,11 +17,11 @@
+ 
+ # The following should be good for most cases 
+ 
+-PREFIX=`cd ../../.. ; pwd`
++PREFIX=/usr
+ BIN_DIR=$PREFIX/bin
+-PSEUDO_DIR=$PREFIX/pseudo
++PSEUDO_DIR=$PREFIX/share/espresso/pseudo
+ # Beware: everything in $TMP_DIR will be destroyed !
+-TMP_DIR=$PREFIX/tempdir
++TMP_DIR=$(cd ../../..; pwd)/tempdir
+ 
+ # There should be no need to change anything below this line
+ 
+@@ -57,7 +57,7 @@
+ # parallelism, do not run on too many processors
+ 
+ PARA_PREFIX=" "
+-PARA_PREFIX="mpirun -np 4"
++
+ #
+ # available flags: 
+ #                  -ni n        number of images        (or -nimage)
+@@ -76,8 +76,8 @@
+ # number of processors in PARA_PREFIX and the number of images in
+ # PARA_IMAGE_POSTFIX
+ #
+-PARA_IMAGE_POSTFIX="-ni 2 $PARA_POSTFIX"
+-PARA_IMAGE_PREFIX="mpirun -np 4"
++PARA_IMAGE_POSTFIX="-ni 1 $PARA_POSTFIX"
++PARA_IMAGE_PREFIX=" "
+ 
+ # function to test the exit status of a job
+ check_failure () {

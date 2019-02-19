@@ -1,0 +1,12 @@
+pseudopotential_dir.patch
+#fftw_i386_unaligned.patch
+#elpa3_support.patch
+install_bindir.patch
+configure_fix_ppc64_define.patch
+#elpa_2016.05.003.patch
+make-install-PHONY.patch
+fix_example_scripts.patch
+disable_pseudo_download.patch
+fix-911763.patch
+install.patch
+environment_variables.patch

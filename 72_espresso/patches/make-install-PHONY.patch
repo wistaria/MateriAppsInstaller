@@ -1,0 +1,18 @@
+Description: .PHONY target has to be declared to avoid target name conflict
+ with install/ directory.
+Bug: https://gitlab.com/QEF/q-e/issues/50
+Forwarded: https://gitlab.com/QEF/q-e/issues/50
+Author: Andrius Merkys <andrius.merkys@gmail.com>
+Last-Update: 2018-08-23
+
+--- a/Makefile
++++ b/Makefile
+@@ -263,6 +263,8 @@
+ # - If the final directory does not exists it creates it
+ #########################################################
+ 
++.PHONY: install
++
+ install : 
+ 	@if test -d bin ; then mkdir -p $(DESTDIR)$(bindir) ; \
+ 	for x in `find * ! -path "test-suite/*" -name *.x -type f` ; do \
