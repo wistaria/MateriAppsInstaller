@@ -2,11 +2,13 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-set_prefix
-. $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
+set_prefix
 
+. $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION.log
+rm -rf $LOG
+
 PREFIX=$PREFIX_TOOL/hdf5/hdf5-$HDF5_VERSION-$HDF5_MA_REVISION
 
 if [ -d $PREFIX ]; then
@@ -15,7 +17,6 @@ if [ -d $PREFIX ]; then
 fi
 
 sh $SCRIPT_DIR/setup.sh
-rm -rf $LOG
 
 cd $BUILD_DIR/hdf5-$HDF5_VERSION
 echo "[make]" | tee -a $LOG

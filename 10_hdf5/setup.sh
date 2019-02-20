@@ -2,16 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../util.sh
-set_prefix
-. $PREFIX_TOOL/env.sh
 . $SCRIPT_DIR/version.sh
+set_prefix
+
+sh $SCRIPT_DIR/download.sh
 
 cd $BUILD_DIR
 if [ -d hdf5-$HDF5_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/hdf5-$HDF5_VERSION.tar.bz2 ]; then
-    check tar jxf $SOURCE_DIR/hdf5-$HDF5_VERSION.tar.bz2
-  else
-    check wget http://exa.phys.s.u-tokyo.ac.jp/archive/source/hdf5-$HDF5_VERSION.tar.bz2
-    tar jxf hdf5-$HDF5_VERSION.tar.bz2
-  fi
+  tar jxf $SOURCE_DIR/hdf5-$HDF5_VERSION.tar.bz2
 fi
