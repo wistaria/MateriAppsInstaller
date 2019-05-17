@@ -7,6 +7,6 @@ set_prefix
 
 . $PREFIX_TOOL/env.sh
 
-HPHIVARS_SH=$PREFIX_APPS/hphi/hphivars-$HPHI_VERSION-$HPHI_MA_REVISION.sh
-rm -f $PREFIX_APPS/hphi/hphivars.sh
-ln -s $HPHIVARS_SH $PREFIX_APPS/hphi/hphivars.sh
+RESPACKVARS_SH=$PREFIX_APPS/respack/respackvars-$RESPACK_VERSION-$RESPACK_MA_REVISION.sh
+rm -f $PREFIX_APPS/respack/respackvars.sh
+ln -s $RESPACKVARS_SH $PREFIX_APPS/respack/respackvars.sh
