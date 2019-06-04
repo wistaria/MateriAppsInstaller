@@ -30,6 +30,9 @@ make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
 cd ..
+
+cd $BUILD_DIR/dsqss-v$DSQSS_VERSION
+
 mkdir -p $PREFIX/doc
 cp DSQSS_jp.pdf $PREFIX/doc
 cp DSQSS_en.pdf $PREFIX/doc
@@ -39,7 +42,7 @@ finish_info | tee -a $LOG
 cat << EOF > $BUILD_DIR/dsqssvars.sh
 # dsqss $(basename $0 .sh) $DSQSS_VERSION $DSQSS_MA_REVISION $(date +%Y%m%d-%H%M%S)
 export DSQSS_ROOT=$PREFIX
-export PATH=$PREFIX/bin:\$PATH
+source \$DSQSS_ROOT/share/dsqss/dsqssvars-${DSQSS_VERSION}.sh
 EOF
 DSQSSVARS_SH=$PREFIX_APPS/dsqss/dsqssvars-$DSQSS_VERSION-$DSQSS_MA_REVISION.sh
 rm -f $DSQSSVARS_SH
