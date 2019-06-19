@@ -17,9 +17,14 @@ fi
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
 
+# find slurm
+if [ $(which sinfo 2> /dev/null) ]; then
+  SLURM_OPT="--with-slurm --with-pmi=$(dirname $(dirname $(which sinfo)))"
+fi
+
 cd $BUILD_DIR/openmpi-$OPENMPI_VERSION
 echo "[make]" | tee -a $LOG
-check ./configure --prefix=$PREFIX | tee -a $LOG
+check ./configure --prefix=$PREFIX --with-hwloc $SLURM_OPT CC=icc CXX=icpc FC=ifort | tee -a $LOG
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
