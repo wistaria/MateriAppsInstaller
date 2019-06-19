@@ -21,29 +21,39 @@ cd $BUILD_DIR/dsqss-v$DSQSS_VERSION
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 echo "mkdir build && cd build" | tee -a $LOG
-rm -rf build
 mkdir build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
-  -DCMAKE_C_COMPILER=`which icc` -DCMAKE_CXX_COMPILER=`which icpc` \
-  -DCMAKE_CXX_FLAGS='-O3 -xCORE-AVX2' \
-  ../ | tee -a $LOG
+cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DCONFIG=intel ../ | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
 make | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
-cd ../
+
+cd $BUILD_DIR/dsqss-v$DSQSS_VERSION
+
 mkdir -p $PREFIX/doc
 cp DSQSS_jp.pdf $PREFIX/doc
 cp DSQSS_en.pdf $PREFIX/doc
+
+cd ${PREFIX}/bin
+for file in dla pmwa_B pmwa_H; do
+  mv ${file} ${file}_nocount
+  cat << EOF > ${file}
+#!/bin/sh
+/home/issp/materiapps/tool/bin/issp-ucount dsqss
+${PREFIX}/bin/${file}_nocount \$@
+EOF
+  chmod +x ${file}
+done
 
 finish_info | tee -a $LOG
 
 cat << EOF > $BUILD_DIR/dsqssvars.sh
 # dsqss $(basename $0 .sh) $DSQSS_VERSION $DSQSS_MA_REVISION $(date +%Y%m%d-%H%M%S)
+source $PREFIX_TOOL/env.sh
 export DSQSS_ROOT=$PREFIX
-export PATH=$PREFIX/bin:\$PATH
+source \$DSQSS_ROOT/share/dsqss/dsqssvars-${DSQSS_VERSION}.sh
 EOF
 DSQSSVARS_SH=$PREFIX_APPS/dsqss/dsqssvars-$DSQSS_VERSION-$DSQSS_MA_REVISION.sh
 rm -f $DSQSSVARS_SH

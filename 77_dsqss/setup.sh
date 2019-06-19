@@ -8,15 +8,17 @@ set_prefix
 cd $BUILD_DIR
 if [ -d dsqss-v$DSQSS_VERSION ]; then :; else
   check mkdir -p dsqss-v$DSQSS_VERSION
-  if [ -f $SOURCE_DIR/dsqss-$DSQSS_VERSION.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/dsqss-$DSQSS_VERSION.tar.gz
+  if [ -f $SOURCE_DIR/dsqss-v$DSQSS_VERSION.tar.gz ]; then
+    cd dsqss-v$DSQSS_VERSION
+    check tar zxf $SOURCE_DIR/dsqss-v$DSQSS_VERSION.tar.gz --strip-components=1
   else
     if [ -f dsqss-$DSQSS_VERSION.tar.gz ]; then :; else
-      check wget https://github.com/issp-center-dev/dsqss/releases/download/v${DSQSS_VERSION}/dsqss-v${DSQSS_VERSION}.tar.gz -O dsqss-v${DSQSS_VERSION}.tar.gz
+      check wget https://github.com/issp-center-dev/dsqss/archive/v${DSQSS_VERSION}.tar.gz -O dsqss-v${DSQSS_VERSION}.tar.gz
     fi
-    check tar zxf dsqss-v${DSQSS_VERSION}.tar.gz
+    cd dsqss-v${DSQSS_VERSION}
+    check tar zxf $BUILD_DIR/dsqss-v${DSQSS_VERSION}.tar.gz --strip-components=1
   fi
-  cd dsqss-v${DSQSS_VERSION}
-  cp doc/DSQSS_jp.pdf .
-  cp doc/DSQSS_en.pdf .
+  for lang in jp en; do
+    check wget https://issp-center-dev.github.io/dsqss/manual/v${DSQSS_VERSION}/${lang}/DSQSS-v${DSQSS_VERSION}.pdf -O DSQSS_${lang}.pdf
+  done
 fi
