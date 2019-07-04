@@ -24,5 +24,5 @@ fi
 
 ## TRIQS-HubbardI
 if [ -f $SOURCE_DIR/triqs-hubbardI-$TRIQS_HUBBARDI_VERSION.tar.gz ]; then :; else
-  check wget -O $SOURCE_DIR/triqs-hubbardI-$TRIQS_HUBBARDI_VERSION.tar.gz https://github.com/TRIQS/hubbardI/archive/$TRIQS_HUBBARDI_VERSION.zip
+  check wget -O $SOURCE_DIR/triqs-hubbardI-$TRIQS_HUBBARDI_VERSION.tar.gz https://github.com/TRIQS/hubbardI/archive/$TRIQS_HUBBARDI_VERSION.tar.gz
 fi

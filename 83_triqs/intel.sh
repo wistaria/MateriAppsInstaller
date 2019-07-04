@@ -8,8 +8,11 @@ set_prefix
 . $PREFIX_TOOL/env.sh
 LOG=$BUILD_DIR/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION.log
 
-CXX=icc
+echo $LD_LIBRARY_PATH
+
+CC=icc
 CXX=icpc
+FCC=ifort
 
 PREFIX="$PREFIX_APPS/triqs/triqs-$TRIQS_VERSION-$TRIQS_MA_REVISION"
 
@@ -68,7 +71,7 @@ make install | tee -a $LOG
 echo "[ctest TRIQS-CTHyb]" | tee -a $LOG
 ctest | tee -a $LOG
 
-## TRIQS-DFTTools
+ TRIQS-DFTTools
 rm -rf $BUILD_DIR/triqs-dfttools-build-$TRIQS_DFTTOOLS_VERSION
 mkdir -p $BUILD_DIR/triqs-dfttools-build-$TRIQS_DFTTOOLS_VERSION
 cd $BUILD_DIR/triqs-dfttools-build-$TRIQS_DFTTOOLS_VERSION
@@ -98,6 +101,7 @@ check cmake \
   -DCMAKE_C_COMPILER=$CC \
   -DCMAKE_CXX_COMPILER=$CXX \
   -DCMAKE_CXX_FLAGS="-std=c++1y" \
+  -DCMAKE_Fortran_COMPILER=$FCC \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DTRIQS_PATH=$PREFIX \
   $BUILD_DIR/triqs-hubbardI-$TRIQS_HUBBARDI_VERSION | tee -a $LOG
