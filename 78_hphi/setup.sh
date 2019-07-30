@@ -16,4 +16,10 @@ if [ -d hphi-$HPHI_VERSION ]; then :; else
     fi
     check tar zxf hphi-${HPHI_VERSION}.tar.gz -C hphi-$HPHI_VERSION --strip-components=2
   fi
+  cd hphi-$HPHI_VERSION
+  if [ -f $SCRIPT_DIR/hphi-$HPHI_VERSION.patch ]; then
+    patch -p1 < $SCRIPT_DIR/hphi-$HPHI_VERSION.patch
+  fi
+  cp doc/userguide_HPhi_ja.pdf .
+  cp doc/userguide_HPhi_en.pdf .
 fi
