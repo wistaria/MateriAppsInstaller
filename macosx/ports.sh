@@ -3,7 +3,7 @@ port -N install ld64 +ld64_xcode
 port -N install gcc8 openmpi-gcc8
 port select --set gcc mp-gcc8
 port select --set mpi openmpi-gcc8-fortran
-port -N install wget subversion fftw-3 +gcc8 fftw-3-single +gcc8 gsl +gcc8
+port -N install wget subversion cmake fftw-3 +gcc8 fftw-3-single +gcc8 gsl +gcc8
 port -N install qt4-mac
 port -N install hdf5 +gcc8 +threadsafe
 port -N install gnuplot
