@@ -17,8 +17,8 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 
-mkdir -p $BUILD_DIR/scalapack-build-$SCALAPACK_VERSION
-cd $BUILD_DIR/scalapack-build-$SCALAPACK_VERSION
+mkdir -p $BUILD_DIR/scalapack-$SCALAPACK_VERSION-build
+cd $BUILD_DIR/scalapack-$SCALAPACK_VERSION-build
 start_info | tee $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
