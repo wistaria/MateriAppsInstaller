@@ -1,0 +1,20 @@
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -149,14 +149,14 @@
+ ########################################################################
+ # User input options                                                   #
+ ########################################################################
+-option(BUILD_EXE "Build lmp binary" ON)
++option(BUILD_EXE "Build lammps binary" ON)
+ if(BUILD_EXE)
+-  set(LAMMPS_MACHINE "" CACHE STRING "Suffix to append to lmp binary (WON'T enable any features automatically")
++  set(LAMMPS_MACHINE "" CACHE STRING "Suffix to append to lammps binary (WON'T enable any features automatically")
+   mark_as_advanced(LAMMPS_MACHINE)
+   if(LAMMPS_MACHINE)
+     set(LAMMPS_MACHINE "_${LAMMPS_MACHINE}")
+   endif()
+-  set(LAMMPS_BINARY lmp${LAMMPS_MACHINE})
++  set(LAMMPS_BINARY lammps${LAMMPS_MACHINE})
+ endif()
+ 
+ option(BUILD_LIB "Build LAMMPS library" OFF)
