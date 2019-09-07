@@ -29,12 +29,6 @@ echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
 echo "cp -r samples ${PREFIX}" | tee -a $LOG
 cp -r ../samples ${PREFIX}
-echo "mkdir -p ${PREFIX}/doc" | tee -a $LOG
-mkdir -p $PREFIX/doc | tee -a $LOG
-echo "cp ../userguide_jp.pdf ${PREFIX}/doc" | tee -a $LOG
-cp ../userguide_jp.pdf ${PREFIX}/doc/ | tee -a $LOG
-echo "cp ../userguide_en.pdf ${PREFIX}/doc" | tee -a $LOG
-cp ../userguide_en.pdf ${PREFIX}/doc/ | tee -a $LOG
 finish_info | tee -a $LOG
 
 cat << EOF > ${BUILD_DIR}/hphivars.sh

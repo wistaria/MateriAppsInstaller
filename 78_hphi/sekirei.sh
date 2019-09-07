@@ -18,7 +18,6 @@ fi
 source /etc/profile.d/modules.sh
 module unload cuda
 module load cuda/8.0
-
 module list
 
 sh ${SCRIPT_DIR}/setup.sh
@@ -40,13 +39,6 @@ echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
 echo "cp -r samples ${PREFIX}" | tee -a $LOG
 cp -r ../samples ${PREFIX}
-echo "mkdir -p ${PREFIX}/doc" | tee -a $LOG
-mkdir -p $PREFIX/doc | tee -a $LOG
-echo "cp ../userguide_HPhi_ja.pdf ${PREFIX}/doc" | tee -a $LOG
-cp ../userguide_HPhi_ja.pdf ${PREFIX}/doc/ | tee -a $LOG
-echo "cp ../userguide_HPhi_en.pdf ${PREFIX}/doc" | tee -a $LOG
-cp ../userguide_HPhi_en.pdf ${PREFIX}/doc/ | tee -a $LOG
-
 cd $PREFIX/bin
 for file in HPhi; do
   mv ${file} ${file}_nocount
@@ -57,7 +49,6 @@ ${PREFIX}/bin/${file}_nocount \$@
 EOF
   chmod +x ${file}
 done
-
 finish_info | tee -a $LOG
 
 cat << EOF > ${BUILD_DIR}/hphivars.sh
