@@ -25,8 +25,8 @@ check cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCONFIG=intel ../
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
-echo "cp -r samples ${PREFIX}" | tee -a $LOG
-cp -r samples ${PREFIX}
+echo "cp -r ../samples ${PREFIX}" | tee -a $LOG
+cp -r ../samples ${PREFIX}
 finish_info | tee -a $LOG
 
 cat << EOF > ${BUILD_DIR}/mvmcvars.sh

@@ -25,8 +25,8 @@ check cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCONFIG=sekirei ../
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
-echo "cp -r samples ${PREFIX}" | tee -a $LOG
-cp -r samples ${PREFIX}
+echo "cp -r ../samples ${PREFIX}" | tee -a $LOG
+cp -r ../samples ${PREFIX}
 cd $PREFIX/bin
 for file in vmc.out; do
   mv ${file} ${file}_nocount
