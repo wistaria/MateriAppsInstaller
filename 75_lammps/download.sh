@@ -6,5 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/lammps-$LAMMPS_VERSION.tar.gz ]; then :; else
-  check wget -O $SOURCE_DIR/lammps-$LAMMPS_VERSION.tar.gz https://github.com/lammps/lammps/archive/patch_${LAMMPS_DOWNLOAD_VERSION}.tar.gz
+  check wget -O $SOURCE_DIR/lammps-$LAMMPS_VERSION.tar.gz https://github.com/lammps/lammps/archive/${LAMMPS_DOWNLOAD_VERSION}.tar.gz
 fi
