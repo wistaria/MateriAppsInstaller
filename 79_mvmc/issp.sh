@@ -4,9 +4,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 . $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/mvmc-$MVMC_VERSION-$MVMC_PATCH_VERSION.log
+LOG=$BUILD_DIR/mvmc-$MVMC_VERSION-$MVMC_MA_REVISION.log
 
-PREFIX="$PREFIX_APPS/mvmc/mvmc-$MVMC_VERSION-$MVMC_PATCH_VERSION"
+PREFIX="$PREFIX_APPS/mvmc/mvmc-$MVMC_VERSION-$MVMC_MA_REVISION"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
