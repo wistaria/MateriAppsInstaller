@@ -5,6 +5,8 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+sh $SCRIPT_DIR/download.sh
+
 cd $BUILD_DIR
 if [ -d lammps-$LAMMPS_VERSION ]; then :; else
   check mkdir -p lammps-$LAMMPS_VERSION

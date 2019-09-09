@@ -26,8 +26,9 @@ start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake -C../cmake/presets/all_on.cmake -C../cmake/presets/nolib.cmake \
       -DBUILD_LIB=yes -DBUILD_SHARED_LIBS=yes \
+      -DPC_FFTW3_INCLUDE_DIRS=$FFTW_ROOT/include -DPC_FFTW3_LIBRARY_DIRS=$FFTW_ROOT/lib \
       -DPKG_USER-INTEL=no \
-      -DCMAKE_BUILD_TYPE="Release" -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=$PREFIX \
+      -DCMAKE_BUILD_TYPE="Release" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ../cmake 2>&1 | tee -a $LOG
 
 echo "[make]" | tee -a $LOG
