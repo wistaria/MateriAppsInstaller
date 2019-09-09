@@ -74,3 +74,16 @@ diff -crN lammps-20190807.orig/cmake/Modules/Packages/MESSAGE.cmake lammps-20190
     endif()
   
     list(APPEND LAMMPS_LINK_LIBS cslib)
+diff -crN lammps-20190807.orig/src/memory.cpp lammps-20190807/src/memory.cpp
+*** lammps-20190807.orig/src/memory.cpp	Wed Aug  7 00:17:40 2019
+--- lammps-20190807/src/memory.cpp	Mon Sep  9 17:38:52 2019
+***************
+*** 13,18 ****
+--- 13,19 ----
+  
+  #include "memory.h"
+  #include <cstdlib>
++ #include <string.h>
+  #include "error.h"
+  
+  #if defined(LMP_USER_INTEL) && defined(__INTEL_COMPILER)
