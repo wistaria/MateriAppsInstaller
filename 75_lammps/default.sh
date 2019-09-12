@@ -31,10 +31,7 @@ check cmake -C../cmake/presets/all_on.cmake -C../cmake/presets/nolib.cmake \
       -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ../cmake 2>&1 | tee -a $LOG
 
-echo "[make]" | tee -a $LOG
-check make 2>&1 | tee -a $LOG
-
-echo "[make install]" | tee -a $LOG
+echo "[make & make install]" | tee -a $LOG
 check make install 2>&1 | tee -a $LOG
 check cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX/share/lammps/ 2>&1 | tee -a $LOG
 finish_info | tee -a $LOG
