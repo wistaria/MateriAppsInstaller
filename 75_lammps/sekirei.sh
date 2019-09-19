@@ -23,23 +23,40 @@ module list
 
 sh $SCRIPT_DIR/setup.sh
 
-cd $BUILD_DIR/lammps-$LAMMPS_VERSION
-mkdir -p build
-cd build
 start_info | tee -a $LOG
 
+echo "[building GPU version]"
+cd $BUILD_DIR/lammps-$LAMMPS_VERSION
+mkdir -p build-gpu
+cd build-gpu
 echo "[cmake]" | tee -a $LOG
 check cmake -C../cmake/presets/all_on.cmake -C../cmake/presets/nolib.cmake \
       -DBUILD_LIB=yes -DBUILD_SHARED_LIBS=yes \
       -DPKG_GPU=yes -DGPU_API=cuda -DCUDA_CUDA_LIBRARY=$CUDA_PATH/lib64/stubs/libcuda.so \
       -DPKG_USER-CGDNA=no \
+      -DLAMMPS_MACHINE=gpu -DLAMMPS_LIB_SUFFIX=gpu \
       -DPC_FFTW3_INCLUDE_DIRS=$FFTW_ROOT/include -DPC_FFTW3_LIBRARY_DIRS=$FFTW_ROOT/lib \
       -DCMAKE_CXX_FLAGS="-DLMP_INTEL_NO_TBB" \
       -DCMAKE_BUILD_TYPE="Release" -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_INSTALL_PREFIX=$PREFIX \
       ../cmake 2>&1 | tee -a $LOG
-
 echo "[make & make install]" | tee -a $LOG
 check make install 2>&1 | tee -a $LOG
+
+echo "[building CPU version]"
+cd $BUILD_DIR/lammps-$LAMMPS_VERSION
+mkdir -p build
+cd build
+echo "[cmake]" | tee -a $LOG
+check cmake -C../cmake/presets/all_on.cmake -C../cmake/presets/nolib.cmake \
+      -DBUILD_LIB=yes -DBUILD_SHARED_LIBS=yes \
+      -DPKG_USER-CGDNA=no \
+      -DPC_FFTW3_INCLUDE_DIRS=$FFTW_ROOT/include -DPC_FFTW3_LIBRARY_DIRS=$FFTW_ROOT/lib \
+      -DCMAKE_CXX_FLAGS="-DLMP_INTEL_NO_TBB" \
+      -DCMAKE_BUILD_TYPE="Release" -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_INSTALL_PREFIX=$PREFIX \
+      ../cmake 2>&1 | tee -a $LOG
+echo "[make & make install]" | tee -a $LOG
+check make install 2>&1 | tee -a $LOG
+
 check cp -rp $BUILD_DIR/lammps-$LAMMPS_VERSION/examples $PREFIX/share/lammps/ 2>&1 | tee -a $LOG
 finish_info | tee -a $LOG
 
@@ -50,9 +67,13 @@ export LAMMPS_ROOT=$PREFIX
 export LAMMPS_VERSION=$LAMMPS_VERSION
 export LAMMPS_MA_REVISION=$LAMMPS_MA_REVISION
 export PATH=\$LAMMPS_ROOT/bin:\$PATH
-export LD_LIBRARY_PATH=\$LAMMPS_ROOT/lib:\$LD_LIBRARY_PATH
 export LAMMPS_POTENTIALS=\$LAMMPS_ROOT/share/lammps/potentials
 EOF
+if [ -d $LAMMPS_ROOT/lib64 ]; then
+  echo "export LD_LIBRARY_PATH=\$LAMMPS_ROOT/lib64:\$LD_LIBRARY_PATH" >> $BUILD_DIR/lammpsvars.sh
+else
+  echo "export LD_LIBRARY_PATH=\$LAMMPS_ROOT/lib:\$LD_LIBRARY_PATH" >> $BUILD_DIR/lammpsvars.sh
+fi
 LAMMPSVARS_SH=$PREFIX_APPS/lammps/lammpsvars-$LAMMPS_VERSION-$LAMMPS_MA_REVISION.sh
 rm -f $LAMMPSVARS_SH
 cp -f $BUILD_DIR/lammpsvars.sh $LAMMPSVARS_SH
