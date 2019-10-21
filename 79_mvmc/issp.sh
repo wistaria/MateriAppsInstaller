@@ -21,7 +21,7 @@ echo "[make]" | tee -a $LOG
 check rm -rf build
 check mkdir build
 check cd build
-check cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCONFIG=sekirei ../
+check cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCONFIG=sekirei -DUSE_SCALAPACK=ON ../
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
