@@ -9,12 +9,15 @@ set_prefix
 LOG=$BUILD_DIR/dcore-$DCORE_VERSION-$DCORE_MA_REVISION.log
 rm -f $LOG
 
+PREFIX="${PREFIX_APPS}/dcore/dcore-${DCORE_VERSION}-${DCORE_MA_REVISION}"
+
 CXX=g++
 
-source $PREFIX_APPS/triqs/triqsvars.sh
+TRIQSVARS=${PREFIX_APPS}/triqs/triqsvars.sh
+source $TRIQSVARS
 
-if [ -f $TRIQS_ROOT/bin/dcore ]; then
-  echo "Error: $TRIQS_ROOT/bin/dcore exists"
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
   exit 127
 fi
 
@@ -26,9 +29,9 @@ cd $BUILD_DIR/dcore-build-$DCORE_VERSION
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 check cmake \
-  -DCMAKE_CXX_COMPILER=$CXX \
-  -DCMAKE_CXX_FLAGS="-std=c++1y" \
+  -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DTRIQS_PATH=$TRIQS_ROOT \
+  -DMPIEXEC=mpiexec \
   $BUILD_DIR/dcore-$DCORE_VERSION | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check make -j4 | tee -a $LOG
@@ -39,4 +42,14 @@ ctest | tee -a $LOG
 
 finish_info | tee -a $LOG
 
-cp -f $LOG $PREFIX_APPS/triqs/
+cat << EOF > ${BUILD_DIR}/dcorevars.sh
+# dcore $(basename $0 .sh) ${DCORE_VERSION} ${DCORE_MA_REVISION} $(date +%Y%m%d-%H%M%S)
+. ${PREFIX_TOOL}/env.sh
+. $TRIQSVARS
+export DCORE_ROOT=$PREFIX
+export PATH=\${DCORE_ROOT}/bin:\$PATH
+EOF
+DCOREVARS_SH=${PREFIX_APPS}/dcore/dcorevars-${DCORE_VERSION}-${DCORE_MA_REVISION}.sh
+rm -f $DCOREVARS_SH
+cp -f ${BUILD_DIR}/dcorevars.sh $DCOREVARS_SH
+cp -f $LOG ${PREFIX_APPS}/dcore/

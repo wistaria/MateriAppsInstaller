@@ -31,16 +31,23 @@ echo "[cmake]" | tee -a $LOG
 check cmake \
   -DCMAKE_INSTALL_PREFIX=$PREFIX \
   -DTRIQS_PATH=$TRIQS_ROOT \
-  -DMPIEXEC=mpiexec \
+  -DMPIEXEC=mpijob \
   $BUILD_DIR/dcore-$DCORE_VERSION | tee -a $LOG
 echo "[make]" | tee -a $LOG
 check make -j4 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
-echo "[ctest]" | tee -a $LOG
-ctest | tee -a $LOG
+echo "[copy examples]" | tee -a $LOG
+cp -r $BUILD_DIR/dcore-$DCORE_VERSION/examples $PREFIX/
 
 finish_info | tee -a $LOG
+
+cp ${PREFIX}/bin/dcore ${PREFIX}/bin/dcore_nocount
+cat << EOF > ${PREFIX}/bin/dcore
+/home/issp/materiapps/tool/bin/issp-ucount dcore
+${PREFIX}/bin/dcore_nocount \$@
+EOF
+chmod +x ${PREFIX}/bin/dcore
 
 cat << EOF > ${BUILD_DIR}/dcorevars.sh
 # dcore $(basename $0 .sh) ${DCORE_VERSION} ${DCORE_MA_REVISION} $(date +%Y%m%d-%H%M%S)
