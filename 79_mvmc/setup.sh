@@ -5,17 +5,14 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+sh $SCRIPT_DIR/download.sh
+
 cd $BUILD_DIR
 if [ -d mVMC-$MVMC_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/mVMC-$MVMC_VERSION.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/mVMC-$MVMC_VERSION.tar.gz
-  else
-    if [ -f mVMC-$mVMC_VERSION.tar.gz ]; then :; else
-      check wget https://github.com/issp-center-dev/mVMC/releases/download/v${MVMC_VERSION}/mVMC-${MVMC_VERSION}.tar.gz -O mVMC-${MVMC_VERSION}.tar.gz
-    fi
-    check tar zxf mVMC-${MVMC_VERSION}.tar.gz
+  check mkdir -p mvmc-$MVMC_VERSION
+  check tar zxf $SOURCE_DIR/mVMC-$MVMC_VERSION.tar.gz -C mvmc-$MVMC_VERSION --strip-components=1
+  cd mvmc-$MVMC_VERSION
+  if [ -f $SCRIPT_DIR/mvmc-$MVMC_VERSION.patch ]; then
+    patch -p1 < $SCRIPT_DIR/mvmc-$MVMC_VERSION.patch
   fi
-  cd mVMC-${MVMC_VERSION}
-  cp doc/jp/userguide_jp.pdf .
-  cp doc/en/userguide_en.pdf .
 fi

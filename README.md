@@ -39,8 +39,6 @@ Setup
 
 * インストールするディレクトリ(上記 PREFIX, PREFIX_TOOL, PREFIX_APPS で指定したディレクトリ)を作成
 
-* Mac OS X (Marvericks)のコンパイル環境設定 https://github.com/wistaria/installer/wiki/Marvericks
-
 インストール
 =============
 
@@ -66,6 +64,4 @@ Setup
 Status
 =========
 
-* 国内のスパコンへのインストール状況 Installation Status
-    * ツール類 Tools https://docs.google.com/spreadsheet/pub?key=0Aj5PAnoVBnOedDM0ZVdVenNpdXctTGpBY3FkZHhNU2c&single=true&gid=1&output=html
-    * アプリケーション Applications https://docs.google.com/spreadsheet/pub?key=0Aj5PAnoVBnOedDM0ZVdVenNpdXctTGpBY3FkZHhNU2c&single=true&gid=2&output=html
+* バージョン情報 Version Information: https://1drv.ms/x/s!Aiwat40kj6WrmBHroPX3n3Uft8cO

@@ -5,14 +5,15 @@ ENV_CONF="default"
 TOOL="
 11_eigen3:default
 11_komega:default
+12_scalapack:macos
 25_boost:macos
 40_alpscore:default
 "
 
 APPS="
 70_alps:macos
-71_xtapp:macos
-73_espresso:default
+72_espresso:default
+75_lammps:default
 83_triqs:default
 84_alpscore-cthyb:default
 86_dcore:default
@@ -21,10 +22,8 @@ APPS="
 # APPS="
 # 70_alps:macos
 # 71_xtapp:macos
-# 72_espresso:default
 # 72_openmx:macos
 # 75_gromacs:macos
-# 75_lammps:default
 # 77_dsqss:default
 # 78_hphi:macos
 # 79_mvmc:default

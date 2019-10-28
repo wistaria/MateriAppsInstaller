@@ -1,6 +1,6 @@
-diff -crN alps-20180220-r7849.orig/config/FindBoostForALPS.cmake alps-20180220-r7849/config/FindBoostForALPS.cmake
-*** alps-20180220-r7849.orig/config/FindBoostForALPS.cmake	Tue Feb 20 10:07:41 2018
---- alps-20180220-r7849/config/FindBoostForALPS.cmake	Wed Feb 13 17:56:57 2019
+diff -crN alps_20180220~r7849.orig/config/FindBoostForALPS.cmake alps_20180220~r7849/config/FindBoostForALPS.cmake
+*** alps_20180220~r7849.orig/config/FindBoostForALPS.cmake	2019-08-02 15:16:51.000000000 +0900
+--- alps_20180220~r7849/config/FindBoostForALPS.cmake	2019-08-02 15:16:37.000000000 +0900
 ***************
 *** 21,40 ****
     # Debug flag for FindBoost.cmake
@@ -102,9 +102,33 @@ diff -crN alps-20180220-r7849.orig/config/FindBoostForALPS.cmake alps-20180220-r
   
   endif(NOT Boost_ROOT_DIR)
   
-diff -crN alps-20180220-r7849.orig/src/alps/hdf5/archive.cpp alps-20180220-r7849/src/alps/hdf5/archive.cpp
-*** alps-20180220-r7849.orig/src/alps/hdf5/archive.cpp	Fri Jan 13 16:59:45 2017
---- alps-20180220-r7849/src/alps/hdf5/archive.cpp	Wed Feb 13 20:20:51 2019
+diff -crN alps_20180220~r7849.orig/src/alps/alea/histogram.h alps_20180220~r7849/src/alps/alea/histogram.h
+*** alps_20180220~r7849.orig/src/alps/alea/histogram.h	2013-09-06 00:05:22.000000000 +0900
+--- alps_20180220~r7849/src/alps/alea/histogram.h	2019-08-02 15:15:05.000000000 +0900
+***************
+*** 85,93 ****
+    // forward a few things from container
+  
+    const_iterator begin() const { return histogram_.begin();}
+!   const_iterator rbegin() const { return histogram_.rbegin();}
+    const_iterator end() const { return histogram_.end();}
+!   const_iterator rend() const { return histogram_.rend();}
+    size_type size() const { return histogram_.size();}
+    value_type operator[](size_type i) const { return histogram_[i];}
+    value_type at(size_type i) const { return histogram_.at(i);}
+--- 85,93 ----
+    // forward a few things from container
+  
+    const_iterator begin() const { return histogram_.begin();}
+!   const_reverse_iterator rbegin() const { return histogram_.rbegin();}
+    const_iterator end() const { return histogram_.end();}
+!   const_reverse_iterator rend() const { return histogram_.rend();}
+    size_type size() const { return histogram_.size();}
+    value_type operator[](size_type i) const { return histogram_[i];}
+    value_type at(size_type i) const { return histogram_.at(i);}
+diff -crN alps_20180220~r7849.orig/src/alps/hdf5/archive.cpp alps_20180220~r7849/src/alps/hdf5/archive.cpp
+*** alps_20180220~r7849.orig/src/alps/hdf5/archive.cpp	2019-08-02 15:16:53.000000000 +0900
+--- alps_20180220~r7849/src/alps/hdf5/archive.cpp	2019-08-02 15:16:37.000000000 +0900
 ***************
 *** 33,38 ****
 --- 33,39 ----
