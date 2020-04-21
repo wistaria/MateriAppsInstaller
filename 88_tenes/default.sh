@@ -31,6 +31,7 @@ make | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
+ln -sf $PREFIX/share/tenes/${TENES_VERSION}/sample $PREFIX/sample
 cd ..
 
 finish_info | tee -a $LOG
