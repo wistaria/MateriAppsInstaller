@@ -33,6 +33,7 @@ make -j4 | tee -a $LOG
 
 echo "[make install]" | tee -a $LOG
 make install | tee -a $LOG
+ln -sf $PREFIX/share/tenes/${TENES_VERSION}/sample $PREFIX/sample
 
 cd $PREFIX/bin
 for file in tenes; do
