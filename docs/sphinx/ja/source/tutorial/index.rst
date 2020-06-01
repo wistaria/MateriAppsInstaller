@@ -9,10 +9,16 @@
 macOS 10.13 (High Sierra)へのインストール
 ------------------------------------------------------------
 
-.. include:: review2.rst
+.. include:: review1.rst
 
 
 物性研システムC (enaga)へのインストール
 ------------------------------------------------------------
 
-.. include:: review1.rst
+.. include:: review2.rst
+
+
+Add install script of new software
+------------------------------------------------------------
+
+.. include:: review3.rst
