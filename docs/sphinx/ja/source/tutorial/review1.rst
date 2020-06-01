@@ -1,4 +1,4 @@
-MateriApps 開発チーム
+本チュートリアルは、MateriApps 開発チームにより執筆されたものです。
 
 Basic information / 基本情報
 ****************************
