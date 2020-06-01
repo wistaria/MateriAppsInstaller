@@ -9,10 +9,10 @@
 macOS 10.13 (High Sierra)へのインストール
 ------------------------------------------------------------
 
- `MateriAppsのレビュー記事 <https://ma.issp.u-tokyo.ac.jp/app-post/1138?appid=268>`_ から転用？
+.. include:: review2.rst
 
 
 物性研システムC (enaga)へのインストール
 ------------------------------------------------------------
 
- `MateriAppsのレビュー記事 <https://ma.issp.u-tokyo.ac.jp/app-post/1122?appid=268>`_ から転用？
+.. include:: review1.rst
