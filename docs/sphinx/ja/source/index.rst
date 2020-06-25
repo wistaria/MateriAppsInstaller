@@ -16,6 +16,7 @@ Contents
    about/index
    how_to_use/index
    tutorial/index
+   filespecification/index
    contact/index
    acknowledge/index
    

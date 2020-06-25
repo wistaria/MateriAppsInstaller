@@ -4,13 +4,10 @@
    contain the root `toctree` directive.
 
 ********************************
-チュートリアル
+ファイル形式
 ********************************
 
 .. toctree::
    :maxdepth: 2
-   
-   review1
-   review2
-   review3
 
+   info
