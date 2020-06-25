@@ -23,29 +23,34 @@ MateriAppsLIVE!は手軽にシミュレーションを試せるが、実用向�
 
 
 1.  特殊なツールに依存しない (shell, make, tarなどがあればOK)。
+
 2.  スパコンはそれぞれ特殊なので、あまりユニバーサルなインストーラを作ることは目指しても仕方がない。例外には個別のスクリプトを作成することで対処する。
+
 3.  ツールは、Linux (RPM Package, Debian Package)やMac OS X (MacPorts)ですでにパッケージとして用意されている場合にはそちらを使う。
+
 4.  アプリのバージョンは、 `MateriApps LIVE! <http://cmsi.github.io/MateriAppsLive/release.html>`_ と揃える。必要なパッチもMateriApps LIVE!用のDebian Packageと共通とする。
+
 5.  ツール・アプリ毎に別のフォルダを使う。その下にバージョン別のフォルダを準備する。
 
-   - cmakeの場合の例
+    - cmakeの場合の例
 
      .. code-block:: bash
 
 	$PREFIX_TOOL/cmake/cmake-3.2.1-1
 
+
 6. それぞれのツール・アプリ、バージョン用の環境変数設定スクリプトを準備する。
 
    - cmakeの場合の例
-   
+
      .. code-block:: bash
 
-	$PREFIX_TOOL/cmake/cmakevars-3.2.1-1.sh
-
-
+   	$PREFIX_TOOL/cmake/cmakevars-3.2.1-1.sh
 
 7.  ツールの環境変数設定スクリプトについては ``PREFIX_TOOL/env.d`` にリンクを張り、 ``PREFIX_TOOL/env.sh`` で一括設定されるように古いバージョンを残せるようにする。
+
 8.  インストールとリンクの張替えを分ける (リンクの張替えを行うまでは、他に影響を与えない)。
+
 9.  一時的に違う場所にインストールしてテストできるようにする。
 
 

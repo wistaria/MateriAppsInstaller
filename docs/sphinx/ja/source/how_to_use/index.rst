@@ -19,7 +19,92 @@
      .. code-block:: bash
 
 	git clone https://github.com/wistaria/MateriAppsInstaller.git
-    
+
+ディレクトリ構造
+=================
+
+- 展開後に得られるディレクトリの構造は以下の通りである。
+
+  .. code-block:: bash
+
+		  ├── 00_env
+		  │   ├── default.sh
+		  │   ├── fx10.sh
+		  │   ├── install_cm.sh
+		  │   ├── obsolete
+		  │   │   ├── camphor.kudpc.kyoto-u.ac.jp
+		  │   │   ├── kashiwa.issp.u-tokyo.ac.jp
+		  │   │   └── tatara.cc.kyushu-u.ac.jp
+		  │   └── version.sh
+		  ├── 01_gcc7
+		  │   ├── default.sh
+		  │   ├── link.sh
+		  │   ├── setup.sh
+		  │   └── version.sh
+		  .
+		  .
+		  .
+		  ├── README.md
+		  ├── check
+		  │   ├── k.sh
+		  │   ├── macos.sh
+		  │   ├── sekirei.sh
+		  │   ├── zetta-gcc.sh
+		  │   └── zetta-intel.sh
+		  ├── check_prefix.sh
+		  ├── fix_dylib.sh
+		  ├── list_maversion.sh
+		  ├── macosx
+		  │   ├── install.sh
+		  │   └── ports.sh
+		  └── util.sh
+
+
+- ソフトウェア・ライブラリに関するディレクトリは以下のような構成になっている。
+
+  .. code-block:: bash
+
+	  -- software_name
+		|- default.sh
+		|- link.sh
+		|- setup.sh
+		|- version.sh
+		|- patches 
+	  	|- config 
+		|- README.md
+ 
+
+  各ファイルおよびディレクトリの説明を以下に記載する(詳細はファイル形式を参考のこと)。    
+
+  - default.sh (必須)
+
+  - link.sh (必須)
+
+  - setup.sh (必須)
+
+  - download.sh (必須)
+
+  - version.sh (optional)
+
+  - patches (optional)
+
+  - config (optional)
+
+  - README.md (必須)
+
+- また、上記以外にもxxxxのため、以下のファイル・ディレクトリが用意されている。
+
+  - checkディレクトリ
+
+  - check_prefix.sh
+
+  - fix_dylib.sh
+
+  - list_maversion.sh
+
+  - util.sh
+
+  - macosxディレクトリ
 
 
 セットアップ
