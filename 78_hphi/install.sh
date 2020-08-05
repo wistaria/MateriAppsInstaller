@@ -1,7 +1,13 @@
 #!/bin/sh
+set -o pipefail
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+CONFIG_DIR=$SCRIPT_DIR/config/$mode
+if [ ! -d $CONFIG_DIR ]; then
+  echo "Error: unknown mode: $mode"
+  exit 127
+fi
 
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
@@ -10,12 +16,6 @@ set_prefix
 . ${PREFIX_TOOL}/env.sh
 LOG=${BUILD_DIR}/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}.log
 PREFIX="${PREFIX_APPS}/hphi/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}"
-
-CONFIG_DIR=$SCRIPT_DIR/config/$mode
-if [ ! -d $CONFIG_DIR ]; then
-  echo "Error: unknown mode: $mode"
-  exit 127
-fi
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -29,13 +29,13 @@ start_info | tee -a $LOG
 
 echo "[cmake]" | tee -a $LOG
 rm -rf build && mkdir -p build && cd build
-env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
+check env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
   sh $CONFIG_DIR/cmake.sh
 
 echo "[make]" | tee -a $LOG
-check make | tee -a $LOG
+check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
-check make install | tee -a $LOG
+check make install | tee -a $LOG || exit 1
 echo "cp -r samples ${PREFIX}" | tee -a $LOG
 cp -r ../samples ${PREFIX}
 

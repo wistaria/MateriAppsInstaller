@@ -1,11 +1,7 @@
 #!/bin/sh
+set -o pipefail
 
-if [ $# -eq 0 ]; then
-  mode=default
-else
-  mode=$1
-fi
-
+mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
@@ -33,14 +29,14 @@ cd $BUILD_DIR/TeNeS-$TENES_VERSION
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG
 rm -rf build && mkdir -p build && cd build
-env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
+check env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
   sh $CONFIG_DIR/cmake.sh
 
 echo "[make]" | tee -a $LOG
-make | tee -a $LOG
+check make | tee -a $LOG || exit 1
 
 echo "[make install]" | tee -a $LOG
-make install | tee -a $LOG
+check make install | tee -a $LOG || exit 1
 ln -sf $PREFIX/share/tenes/${TENES_VERSION}/sample $PREFIX/sample
 cd ..
 
