@@ -108,3 +108,10 @@ start_info() {
 finish_info() {
   echo "Finish: $(date)"
 }
+
+calc_strip_components(){
+  if [ $# -lt 2 ];then
+    echo "usage: calc_strip_components tarfile file_in_rootdir"
+  fi
+  tar tf $1 | grep $2 | awk -F / 'BEGIN {res=99999}; {if (NF<res) res=NF}; END{print res-1}'
+}
