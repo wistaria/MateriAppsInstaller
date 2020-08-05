@@ -47,7 +47,7 @@ cd ..
 finish_info | tee -a $LOG
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
-  sh $CONFIG_DIR/postprocess.sh
+  env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
 fi
 
 cat << EOF > $BUILD_DIR/tenesvars.sh
