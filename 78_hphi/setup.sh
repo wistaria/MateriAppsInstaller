@@ -15,6 +15,6 @@ if [ -d hphi-$HPHI_VERSION ]; then :; else
   check tar zxf $tarfile -C hphi-$HPHI_VERSION --strip-components=$sc
   cd hphi-$HPHI_VERSION
   if [ -f $SCRIPT_DIR/patch/hphi-$HPHI_VERSION.patch ]; then
-    patch -p1 < $SCRIPT_DIR/hphi-$HPHI_VERSION.patch
+    patch -p1 < $SCRIPT_DIR/patch/hphi-$HPHI_VERSION.patch
   fi
 fi

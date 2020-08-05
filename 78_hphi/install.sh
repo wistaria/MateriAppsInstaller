@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 
@@ -8,12 +7,10 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-
 . ${PREFIX_TOOL}/env.sh
 LOG=${BUILD_DIR}/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}.log
 PREFIX="${PREFIX_APPS}/hphi/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}"
 
-set -ue
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
