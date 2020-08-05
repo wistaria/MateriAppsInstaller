@@ -28,7 +28,7 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/TeNeS-v$TENES_VERSION
+cd $BUILD_DIR/TeNeS-$TENES_VERSION
 
 start_info | tee -a $LOG
 echo "[cmake]" | tee -a $LOG

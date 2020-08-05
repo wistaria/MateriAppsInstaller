@@ -5,17 +5,13 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+sh ${SCRIPT_DIR}/download.sh
+
 cd $BUILD_DIR
-if [ -d TeNeS-v$TENES_VERSION ]; then :; else
-  check mkdir -p TeNeS-v$TENES_VERSION
-  if [ -f $SOURCE_DIR/TeNeS-v$TENES_VERSION.tar.gz ]; then
-    cd TeNeS-v$TENES_VERSION
-    check tar zxf $SOURCE_DIR/TeNeS-v$TENES_VERSION.tar.gz --strip-components=1
-  else
-    if [ -f TeNeS-$TENES_VERSION.tar.gz ]; then :; else
-      check wget https://github.com/issp-center-dev/TeNeS/archive/v${TENES_VERSION}.tar.gz -O TeNeS-v${TENES_VERSION}.tar.gz
-    fi
-    cd TeNeS-v${TENES_VERSION}
-    check tar zxf $BUILD_DIR/TeNeS-v${TENES_VERSION}.tar.gz --strip-components=1
-  fi
+if [ -d TeNeS-$TENES_VERSION ]; then :; else
+  check mkdir -p TeNeS-$TENES_VERSION
+  cd TeNeS-$TENES_VERSION
+  tarfile=$SOURCE_DIR/TeNeS-$TENES_VERSION.tar.gz
+  SC=`calc_strip_components $tarfile README.md`
+  check tar zxf $SOURCE_DIR/TeNeS-$TENES_VERSION.tar.gz --strip-components=$SC
 fi
