@@ -10,9 +10,11 @@ sh ${SCRIPT_DIR}/download.sh
 cd $BUILD_DIR
 if [ -d hphi-$HPHI_VERSION ]; then :; else
   check mkdir -p hphi-$HPHI_VERSION
-  check tar zxf $SOURCE_DIR/hphi-$HPHI_VERSION.tar.gz -C hphi-$HPHI_VERSION --strip-components=2
+  tarfile=$SOURCE_DIR/hphi-$HPHI_VERSION.tar.gz
+  sc=`calc_strip_components $tarfile README.md`
+  check tar zxf $tarfile -C hphi-$HPHI_VERSION --strip-components=$sc
   cd hphi-$HPHI_VERSION
-  if [ -f $SCRIPT_DIR/hphi-$HPHI_VERSION.patch ]; then
+  if [ -f $SCRIPT_DIR/patch/hphi-$HPHI_VERSION.patch ]; then
     patch -p1 < $SCRIPT_DIR/hphi-$HPHI_VERSION.patch
   fi
 fi

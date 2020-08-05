@@ -1,54 +1,51 @@
 #!/bin/sh
 
+
+mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+
 . $SCRIPT_DIR/../util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+
 . ${PREFIX_TOOL}/env.sh
 LOG=${BUILD_DIR}/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}.log
-
 PREFIX="${PREFIX_APPS}/hphi/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}"
+
+set -ue
+CONFIG_DIR=$SCRIPT_DIR/config/$mode
+if [ ! -d $CONFIG_DIR ]; then
+  echo "Error: unknown mode: $mode"
+  exit 127
+fi
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
 
-source /etc/profile.d/modules.sh
-module unload cuda
-module load cuda/8.0
-module list
-
 sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
 cd ${BUILD_DIR}/hphi-${HPHI_VERSION}
 start_info | tee -a $LOG
+
+echo "[cmake]" | tee -a $LOG
+rm -rf build && mkdir -p build && cd build
+env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
+  sh $CONFIG_DIR/cmake.sh
+
 echo "[make]" | tee -a $LOG
-check rm -rf build
-check mkdir build
-check cd build
-check cmake \
-  -DCUDA_CUDART_LIBRARY=$CUDA_HOME/lib64/libcudart.so \
-  -DCONFIG=sekirei_acc \
-  -DUSE_SCALAPACK=ON \
-  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  ../
 check make | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG
 echo "cp -r samples ${PREFIX}" | tee -a $LOG
 cp -r ../samples ${PREFIX}
-cd $PREFIX/bin
-for file in HPhi; do
-  mv ${file} ${file}_nocount
-  cat << EOF > ${file}
-#!/bin/sh
-/home/issp/materiapps/tool/bin/issp-ucount hphi
-${PREFIX}/bin/${file}_nocount \$@
-EOF
-  chmod +x ${file}
-done
+
+if [ -e $CONFIG_DIR/postprocess.sh ];then
+  env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
+fi
+
 finish_info | tee -a $LOG
 
 cat << EOF > ${BUILD_DIR}/hphivars.sh
@@ -56,12 +53,6 @@ cat << EOF > ${BUILD_DIR}/hphivars.sh
 . ${PREFIX_TOOL}/env.sh
 export HPHI_ROOT=$PREFIX
 export PATH=\${HPHI_ROOT}/bin:\$PATH
-
-source /etc/profile.d/modules.sh
-module unload cuda
-module load cuda/8.0
-module list
-
 EOF
 HPHIVARS_SH=${PREFIX_APPS}/hphi/hphivars-${HPHI_VERSION}-${HPHI_MA_REVISION}.sh
 rm -f $HPHIVARS_SH
