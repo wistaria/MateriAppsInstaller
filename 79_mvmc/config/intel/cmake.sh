@@ -1,4 +1,4 @@
 ${CMAKE} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  -CONFIG=intel \
+  -DCONFIG=intel \
   ../ 2>&1 | tee -a $LOG
