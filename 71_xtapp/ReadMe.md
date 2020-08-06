@@ -6,12 +6,13 @@
 ## LICENSE 
 
  GPL version 3
-## OFFICIAL_URL 
+## Official page 
 
  http://xtapp.cp.is.s.u-tokyo.ac.jp/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/741
 ## CORE DEVELOPERS 
 
- Yoshihide Yoshimoto (Graduate School of Information Science and Technology, University of Tokyo),
+- Yoshihide Yoshimoto (Graduate School of Information Science and Technology, University of Tokyo)
+- 

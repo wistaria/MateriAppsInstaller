@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GNU LESSER GENERAL PUBLIC LICENSE Version 3
-## OFFICIAL_URL 
+## Official page 
 
  https://github.com/issp-center-dev/Komega
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/546
 ## CORE DEVELOPERS 
 
- Mituaki Kawamura (Institute for Solid State Physics, The University of Tokyo)
+- Mituaki Kawamura (Institute for Solid State Physics, The University of Tokyo)

@@ -6,12 +6,12 @@
 ## LICENSE 
 
  This software is distributed with GNU General Public License (GPL) Version 3.
-## OFFICIAL_URL 
+## Official page 
 
  https://github.com/issp-center-dev/dsqss
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/180
 ## CORE DEVELOPERS 
 
- Kenji HARADA (Kyoto Univ.)
+- Kenji HARADA (Kyoto Univ.)

@@ -6,12 +6,13 @@
 ## LICENSE 
 
  GPL version 3
-## OFFICIAL_URL 
+## Official page 
 
  http://sourceforge.net/projects/xtapp-tapioca
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/415
 ## CORE DEVELOPERS 
 
- Shinji Tsuneyuki (Graduate School of Science, Univ. Tokyo),
+- Shinji Tsuneyuki (Graduate School of Science, Univ. Tokyo)
+- 

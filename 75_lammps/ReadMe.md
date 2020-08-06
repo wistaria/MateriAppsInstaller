@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GPLv2 
-## OFFICIAL_URL 
+## Official page 
 
  https://lammps.sandia.gov
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/613
 ## CORE DEVELOPERS 
 
- 
+- 

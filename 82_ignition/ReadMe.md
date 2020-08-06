@@ -6,12 +6,12 @@
 ## LICENSE 
 
  Nano-Ignition License 
-## OFFICIAL_URL 
+## Official page 
 
  http://nano-ignition.ims.ac.jp/ (In Japanese)
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/305
 ## CORE DEVELOPERS 
 
- 
+- 

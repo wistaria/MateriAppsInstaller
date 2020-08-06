@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GNU Lesser General Public License (LGPL), version 2.1
-## OFFICIAL_URL 
+## Official page 
 
  http://www.gromacs.org/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/670
 ## CORE DEVELOPERS 
 
- 
+- 

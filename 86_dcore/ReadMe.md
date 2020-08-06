@@ -6,12 +6,16 @@
 ## LICENSE 
 
  GNU GPL v3
-## OFFICIAL_URL 
+## Official page 
 
  https://issp-center-dev.github.io/DCore/index.html
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/1004
 ## CORE DEVELOPERS 
 
- Mitsuaki Kawamura (Institute for Solid State Physics, The University of Tokyo), Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo), Junya Otsuki (Faculty of Science, Department of Physics, Tohoku University), Hiroshi Shinaoka (Faculty of Science, Department of Physics, Saitama University), Takeo Kato (Institute for Solid State Physics, The University of Tokyo).
+- Mitsuaki Kawamura (Institute for Solid State Physics, The University of Tokyo)
+-  Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo)
+-  Junya Otsuki (Faculty of Science, Department of Physics, Tohoku University)
+-  Hiroshi Shinaoka (Faculty of Science, Department of Physics, Saitama University)
+-  Takeo Kato (Institute for Solid State Physics, The University of Tokyo).

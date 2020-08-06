@@ -6,12 +6,13 @@
 ## LICENSE 
 
  ALPS Licence 
-## OFFICIAL_URL 
+## Official page 
 
  http://alps.comp-phys.org
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/217
 ## CORE DEVELOPERS 
 
- Matthias Troyer (Swiss Federal Institute of Technology Zurich), Synge Todo (Department of Physics/The Institute for Solid State Physics, The University of Tokyo)
+- Matthias Troyer (Swiss Federal Institute of Technology Zurich)
+-  Synge Todo (Department of Physics/The Institute for Solid State Physics, The University of Tokyo)

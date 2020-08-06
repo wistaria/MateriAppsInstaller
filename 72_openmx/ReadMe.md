@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GNU-GPL
-## OFFICIAL_URL 
+## Official page 
 
  http://www.openmx-square.org/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/649
 ## CORE DEVELOPERS 
 
- Taisuke Ozaki (Institute for Solid State Physics, The University of Tokyo)
+- Taisuke Ozaki (Institute for Solid State Physics, The University of Tokyo)

@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GNU GPLv3
-## OFFICIAL_URL 
+## Official page 
 
  https://github.com/issp-center-dev/TeNeS
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/2291
 ## CORE DEVELOPERS 
 
- 
+- 

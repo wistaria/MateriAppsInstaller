@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GNU GPL v3
-## OFFICIAL_URL 
+## Official page 
 
  https://sites.google.com/view/kazuma7k6r
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/772
 ## CORE DEVELOPERS 
 
- 
+- 

@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GPL v3
-## OFFICIAL_URL 
+## Official page 
 
  http://loto.sourceforge.net/feram/index.en.html
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/149
 ## CORE DEVELOPERS 
 
- Takeshi Nishimatsu（Institute for Materials Research, Tohoku University）
+- Takeshi Nishimatsu（Institute for Materials Research, Tohoku University）

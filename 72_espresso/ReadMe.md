@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GNU GPL v2
-## OFFICIAL_URL 
+## Official page 
 
  http://www.quantum-espresso.org/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/740
 ## CORE DEVELOPERS 
 
- 
+- 

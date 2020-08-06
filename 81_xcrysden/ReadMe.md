@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GPL ver. 2 or later
-## OFFICIAL_URL 
+## Official page 
 
  http://www.xcrysden.org/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/725
 ## CORE DEVELOPERS 
 
- 
+- 

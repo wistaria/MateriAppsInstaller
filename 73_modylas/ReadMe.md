@@ -6,12 +6,12 @@
 ## LICENSE 
 
  MODYLAS licence
-## OFFICIAL_URL 
+## Official page 
 
  http://www.modylas.org/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/412
 ## CORE DEVELOPERS 
 
- 
+- 

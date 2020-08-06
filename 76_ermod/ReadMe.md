@@ -6,12 +6,12 @@
 ## LICENSE 
 
  GPL v2
-## OFFICIAL_URL 
+## Official page 
 
  https://sourceforge.net/projects/ermod/
-## URL_TO_MA 
+## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/274
 ## CORE DEVELOPERS 
 
- Nobuyuki Matsubayashi（Graduate School of Engineering Science, Osaka University）、Shun Sakuraba（Japan Atomic Energy Agency）
+- Nobuyuki Matsubayashi（Graduate School of Engineering Science, Osaka University）、Shun Sakuraba（Japan Atomic Energy Agency）
