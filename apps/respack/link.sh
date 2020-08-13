@@ -1,12 +1,12 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $PREFIX_TOOL/env.sh
+. $MA_ROOT/env.sh
 
-RESPACKVARS_SH=$PREFIX_APPS/respack/respackvars-$RESPACK_VERSION-$RESPACK_MA_REVISION.sh
-rm -f $PREFIX_APPS/respack/respackvars.sh
-ln -s $RESPACKVARS_SH $PREFIX_APPS/respack/respackvars.sh
+VARS_SH=$MA_ROOT/${__NAME__}/${__NAME__}vars-$__VERSION__-$__MA_REVISION__.sh
+rm -f $MA_ROOT/${__NAME__}/${__NAME__}vars.sh
+ln -s $VARS_SH $MA_ROOT/${__NAME__}/${__NAME__}vars.sh
