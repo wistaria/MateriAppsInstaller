@@ -54,7 +54,7 @@ set_prefix() {
     SOURCE_DIR="$SOURCE_DIR_DEF"
   fi
   if [ -d "$SOURCE_DIR" ]; then :; else
-    mkdir -p $BUILD_DIR || exit 127
+    mkdir -p $SOURCE_DIR || exit 127
     echo "Notice: source directory $SOURCE_DIR has been created"
   fi
   export SOURCE_DIR
