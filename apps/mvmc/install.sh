@@ -1,3 +1,4 @@
+#!/bin/sh
 set -o pipefail
 
 mode=${1:-default}
@@ -8,22 +9,22 @@ if [ ! -d $CONFIG_DIR ]; then
   exit 127
 fi
 
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/mvmc-$MVMC_VERSION-$MVMC_MA_REVISION.log
-PREFIX="$PREFIX_APPS/mvmc/mvmc-$MVMC_VERSION-$MVMC_MA_REVISION"
+. ${MA_ROOT}/env.sh
+LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
 
-sh $SCRIPT_DIR/setup.sh
+sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/mvmc-$MVMC_VERSION
+cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 echo "[cmake]" | tee -a $LOG
@@ -35,7 +36,7 @@ echo "[make]" | tee -a $LOG
 check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1
-echo "cp -r ../samples ${PREFIX}" | tee -a $LOG
+echo "cp -r samples ${PREFIX}" | tee -a $LOG
 cp -r ../samples ${PREFIX}
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
@@ -44,13 +45,15 @@ fi
 
 finish_info | tee -a $LOG
 
-cat << EOF > ${BUILD_DIR}/mvmcvars.sh
-# mvmc $(basename $0 .sh) ${MVMC_VERSION} ${MVMC_MA_REVISION} $(date +%Y%m%d-%H%M%S)
-. ${PREFIX_TOOL}/env.sh
-export MVMC_ROOT=$PREFIX
-export PATH=\${MVMC_ROOT}/bin:\$PATH
+ROOTNAME=$(toupper ${__NAME__})_ROOT
+
+cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
+# ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
+. ${MA_ROOT}/env.sh
+export ${ROOTNAME}=$PREFIX
+export PATH=\${${ROOTNAME}}/bin:\$PATH
 EOF
-MVMCVARS_SH=${PREFIX_APPS}/mvmc/mvmcvars-${MVMC_VERSION}-${MVMC_MA_REVISION}.sh
-rm -f $MVMCVARS_SH
-cp -f ${BUILD_DIR}/mvmcvars.sh $MVMCVARS_SH
-cp -f $LOG ${PREFIX_APPS}/mvmc/
+VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
+rm -f $VARS_SH
+cp -f ${BUILD_DIR}/${__NAME__}vars.sh $VARS_SH
+cp -f $LOG ${MA_ROOT}/${__NAME__}/
