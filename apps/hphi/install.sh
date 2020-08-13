@@ -9,13 +9,13 @@ if [ ! -d $CONFIG_DIR ]; then
   exit 127
 fi
 
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. ${PREFIX_TOOL}/env.sh
+. ${MA_ROOT}/env.sh
 LOG=${BUILD_DIR}/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}.log
-PREFIX="${PREFIX_APPS}/hphi/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}"
+PREFIX="${MA_ROOT}/hphi/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -47,11 +47,11 @@ finish_info | tee -a $LOG
 
 cat << EOF > ${BUILD_DIR}/hphivars.sh
 # hphi $(basename $0 .sh) ${HPHI_VERSION} ${HPHI_MA_REVISION} $(date +%Y%m%d-%H%M%S)
-. ${PREFIX_TOOL}/env.sh
+. ${MA_ROOT}/env.sh
 export HPHI_ROOT=$PREFIX
 export PATH=\${HPHI_ROOT}/bin:\$PATH
 EOF
-HPHIVARS_SH=${PREFIX_APPS}/hphi/hphivars-${HPHI_VERSION}-${HPHI_MA_REVISION}.sh
+HPHIVARS_SH=${MA_ROOT}/hphi/hphivars-${HPHI_VERSION}-${HPHI_MA_REVISION}.sh
 rm -f $HPHIVARS_SH
 cp -f ${BUILD_DIR}/hphivars.sh $HPHIVARS_SH
-cp -f $LOG ${PREFIX_APPS}/hphi/
+cp -f $LOG ${MA_ROOT}/hphi/
