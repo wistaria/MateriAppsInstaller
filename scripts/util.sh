@@ -7,10 +7,10 @@ set_prefix() {
   export __MAINSTALLER__SET_PREFIX__=true
 
   MAINSTALLER_CONFIG_DEF="$HOME/.mainstaller"
-  PREFIX_DEF="$HOME/materiapps"
+  MA_ROOT_DEF="$HOME/materiapps"
   BUILD_DIR_DEF="$HOME/build"
   SOURCE_DIR_DEF="$HOME/source"
-  MALIVE_REPOSITORY_DEF="http://download.sourceforge.net/project/materiappslive/Debian/archive/stretch"
+  MALIVE_REPOSITORY_DEF="http://download.sourceforge.net/project/materiappslive/Debian/archive/buster"
 
   if [ -n "$MAINSTALLER_CONFIG" ]; then
     if [ -f "$MAINSTALLER_CONFIG" ]; then
@@ -24,16 +24,17 @@ set_prefix() {
     fi
   fi
 
-  if [ -z "$PREFIX" ]; then
-    PREFIX="$PREFIX_DEF"
+  if [ -z "$MA_ROOT" ]; then
+    MA_ROOT="$MA_ROOT_DEF"
   fi
-  if [ -d "$PREFIX" ]; then :; else
-    echo "Fatal: target directory $PREFIX does not exist!"
+  if [ -d "$MA_ROOT" ]; then :; else
+    echo "Fatal: target directory $MA_ROOT does not exist!"
     exit 127
   fi
-  PREFIX_TOOL="$PREFIX"
-  PREFIX_APPS="$PREFIX"
-  export PREFIX PREFIX_TOOL PREFIX_APPS
+  export MA_ROOT
+  PREFIX_TOOL="$MA_ROOT"
+  PREFIX_APPS="$MA_ROOT"
+  export PREFIX_TOOL PREFIX_APPS
 
   if [ -z "$BUILD_DIR" ]; then
     BUILD_DIR="$BUILD_DIR_DEF"
@@ -79,7 +80,7 @@ check() {
 }
 
 print_prefix() {
-  echo "PREFIX=$PREFIX"
+  echo "MA_ROOT=$MA_ROOT"
   echo "BUILD_DIR=$BUILD_DIR"
   echo "SOURCE_DIR=$SOURCE_DIR"
   echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"

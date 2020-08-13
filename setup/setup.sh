@@ -12,6 +12,5 @@ fi
 . $SCRIPT_DIR/../scripts/util.sh
 set_prefix
 
-mkdir -p $PREFIX/env.d $PREFIX/lib
-
+mkdir -p $MA_ROOT/env.d $MA_ROOT/lib
 sh $CONFIG_DIR/setup.sh
