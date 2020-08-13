@@ -31,7 +31,9 @@ set_prefix() {
     echo "Fatal: target directory $PREFIX does not exist!"
     exit 127
   fi
-  export PREFIX
+  PREFIX_TOOL="$PREFIX"
+  PREFIX_APPS="$PREFIX"
+  export PREFIX PREFIX_TOOL PREFIX_APPS
 
   if [ -z "$BUILD_DIR" ]; then
     BUILD_DIR="$BUILD_DIR_DEF"
