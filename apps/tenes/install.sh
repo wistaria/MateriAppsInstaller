@@ -9,24 +9,24 @@ if [ ! -d $CONFIG_DIR ]; then
   exit 127
 fi
 
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $PREFIX_TOOL/env.sh
-LOG=$BUILD_DIR/tenes-$TENES_VERSION-$TENES_MA_REVISION.log
-PREFIX="$PREFIX_APPS/tenes/tenes-$TENES_VERSION-$TENES_MA_REVISION"
+. ${MA_ROOT}/env.sh
+LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
 
-sh $SCRIPT_DIR/setup.sh
+sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
-cd $BUILD_DIR/TeNeS-$TENES_VERSION
-
+cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
+
 echo "[cmake]" | tee -a $LOG
 rm -rf build && mkdir -p build && cd build
 check env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
@@ -34,24 +34,26 @@ check env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
 
 echo "[make]" | tee -a $LOG
 check make | tee -a $LOG || exit 1
-
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1
-ln -sf $PREFIX/share/tenes/${TENES_VERSION}/sample $PREFIX/sample
-cd ..
-
-finish_info | tee -a $LOG
+echo "cp -r samples ${PREFIX}" | tee -a $LOG
+cp -r ../samples ${PREFIX}
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
   env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
 fi
 
-cat << EOF > $BUILD_DIR/tenesvars.sh
-# tenes $(basename $0 .sh) $TENES_VERSION $TENES_MA_REVISION $(date +%Y%m%d-%H%M%S)
-export TENES_ROOT=$PREFIX
-export \$PATH=\$TENES_ROOT/bin:\$PATH
+finish_info | tee -a $LOG
+
+ROOTNAME=$(toupper ${__NAME__})_ROOT
+
+cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
+# ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
+. ${MA_ROOT}/env.sh
+export ${ROOTNAME}=$PREFIX
+export PATH=\${${ROOTNAME}}/bin:\$PATH
 EOF
-TENESVARS_SH=$PREFIX_APPS/tenes/tenesvars-$TENES_VERSION-$TENES_MA_REVISION.sh
-rm -f $TENESVARS_SH
-cp -f $BUILD_DIR/tenesvars.sh $TENESVARS_SH
-cp -f $LOG $PREFIX_APPS/tenes
+VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
+rm -f $VARS_SH
+cp -f ${BUILD_DIR}/${__NAME__}vars.sh $VARS_SH
+cp -f $LOG ${MA_ROOT}/${__NAME__}/
