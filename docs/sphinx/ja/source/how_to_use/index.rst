@@ -27,51 +27,38 @@
 
   .. code-block:: bash
 
-		  ├── 00_env
-		  │   ├── default.sh
-		  │   ├── fx10.sh
-		  │   ├── install_cm.sh
-		  │   ├── obsolete
-		  │   │   ├── camphor.kudpc.kyoto-u.ac.jp
-		  │   │   ├── kashiwa.issp.u-tokyo.ac.jp
-		  │   │   └── tatara.cc.kyushu-u.ac.jp
-		  │   └── version.sh
-		  ├── 01_gcc7
-		  │   ├── default.sh
-		  │   ├── link.sh
-		  │   ├── setup.sh
-		  │   └── version.sh
-		  .
-		  .
-		  .
-		  ├── README.md
-		  ├── check
-		  │   ├── k.sh
-		  │   ├── macos.sh
-		  │   ├── sekirei.sh
-		  │   ├── zetta-gcc.sh
-		  │   └── zetta-intel.sh
-		  ├── check_prefix.sh
-		  ├── fix_dylib.sh
-		  ├── list_maversion.sh
-		  ├── macosx
-		  │   ├── install.sh
-		  │   └── ports.sh
-		  └── util.sh
+		  |─ setup
+		  |─ apps
+		  |─ docs
+		  |─ tools
+		  |─ check
+		  |   |- k.sh
+		  |   |- macos.sh
+		  |   |- sekirei.sh
+		  |   |─ zetta-gcc.sh
+		  |   |- zetta-intel.sh
+		  |─ check_prefix.sh
+		  |─ fix_dylib.sh
+		  |─ list_maversion.sh
+		  |─ macosx
+		  |   |─ install.sh
+		  |   |─ ports.sh
+		  |- README.md
+		  |- util.sh
 
 
-- ソフトウェア・ライブラリに関するディレクトリは以下のような構成になっている。
+- setup, tools, apps内にあるディレクトリは以下のような構成になっている。
 
   .. code-block:: bash
 
 	  -- software_name
-		|- default.sh
+		|- README.md
+		|- download.sh
 		|- link.sh
 		|- setup.sh
 		|- version.sh
-		|- patches 
+		|- patch 
 	  	|- config 
-		|- README.md
  
 
   各ファイルおよびディレクトリの説明を以下に記載する(詳細はファイル形式を参考のこと)。    
@@ -88,7 +75,7 @@
 
     - 用意したソースコードアーカイブを展開し、（存在するなら）パッチを適用する
 
-  - default.sh (必須)
+  - download.sh (必須)
 
     - プログラムのビルドならびにインストールを行う
 
@@ -96,7 +83,7 @@
 
     - インストールしたディレクトリや設定ファイルへのシンボリックリンクを作成する
 
-  - patches (optional)
+  - patch (optional)
 
     - パッチを格納するディレクトリ
 
@@ -108,7 +95,7 @@
 
     - ソフトウェアの簡単な紹介や公式サイトの URL などが記載されている
 
-- また、上記以外にもxxxxのため、以下のファイル・ディレクトリが用意されている。
+- また、上記以外にも以下のファイル・ディレクトリが用意されている。
 
   - list_maversion.sh
 
@@ -158,18 +145,10 @@
 インストール
 ============
 
--  下記「国内のスパコンへのインストール状況」を見ながら、番号の小さいものから順番にスクリプトを実行していく。
+-  install.shを実行する。
 
-    - 国内のスパコンへのインストール状況
-       - `ツール類 <https://docs.google.com/spreadsheets/u/0/d/1ykttehDs9vn8XljJ6YE0bwsdjBMjw5sGTjFkVMygjHs/pub?single=true&gid=1&output=html>`_ 
-       - `アプリケーション <https://docs.google.com/spreadsheets/u/0/d/1ykttehDs9vn8XljJ6YE0bwsdjBMjw5sGTjFkVMygjHs/pub?single=true&gid=2&output=html>`_
-       - 表で「○」となっている場合: default.sh を実行する。
-       - 表に「○」以外(例: fx10)が記載されている場合: 対応するスクリプト(例: fx10.sh)を実行する。
-
-    - インストールが完了したら link.sh を実行する。
-
-- ソフトウェアのバージョン情報
-    -  `バージョン情報 <https://1drv.ms/x/s!Aiwat40kj6WrmBHroPX3n3Uft8cO>`_ にあるMateriAppsInstallerの箇所に、現在対応しているソフトウェアのバージョン情報を記載している。
+    - configフォルダの下にインストールに対応しているコンパイラ名でサブディレクトリがある。
+    - 該当するコンパイラを指定したい場合にはinstall.sh の後に, コンパイラ名を追加する。
 
 
 ツール・アプリの利用方法
