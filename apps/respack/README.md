@@ -16,3 +16,10 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/772
 
+## CORE DEVELOPERS 
+
+- Kazuma NAKAMURA (Department of Basic Sciences, Kyushu Institute of Technology)
+- Yoshihide YOSHIMOTO (Department of Computer Science, The University of Tokyo)
+- Yoshiro NOHARA
+- Yusuke NOMURA (Department of Applied Physics, The University of Tokyo)
+- Terumasa TADANO (National Institute for Materials Science)

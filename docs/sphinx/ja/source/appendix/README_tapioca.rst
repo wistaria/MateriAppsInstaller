@@ -29,6 +29,8 @@ CORE DEVELOPERS
 ---------------
 
 -  Shinji Tsuneyuki (Graduate School of Science, Univ. Tokyo)
--  Yoshihide Yoshimoto (Graduate School of Information Science and Technology, University of Tokyo)
--  Kanako Yoshizawa (The Institute for Solid State Physics, The University of Tokyo)
+-  Yoshihide Yoshimoto (Graduate School of Information Science and
+   Technology, University of Tokyo)
+-  Kanako Yoshizawa (The Institute for Solid State Physics, The
+   University of Tokyo)
 -  Naoki Watanabe (Mizuho Information and Research Institute)

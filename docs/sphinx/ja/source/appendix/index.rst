@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
     
 ********************************
-アプリ一覧(英語表記)
+Apps Table
 ********************************
         
 .. toctree::
@@ -13,6 +13,7 @@
    README_alps
    README_dcore
    README_dsqss
+   README_espresso
    README_gromacs
    README_hphi
    README_komega
@@ -20,7 +21,6 @@
    README_modylas
    README_mvmc
    README_openmx
-   README_espresso
    README_respack
    README_tapioca
    README_tenes
