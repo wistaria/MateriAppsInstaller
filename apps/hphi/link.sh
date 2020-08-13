@@ -7,6 +7,6 @@ set_prefix
 
 . $MA_ROOT/env.sh
 
-HPHIVARS_SH=$MA_ROOT/hphi/hphivars-$HPHI_VERSION-$HPHI_MA_REVISION.sh
-rm -f $MA_ROOT/hphi/hphivars.sh
-ln -s $HPHIVARS_SH $MA_ROOT/hphi/hphivars.sh
+VARS_SH=$MA_ROOT/${__NAME__}/${__NAME__}vars-$__VERSION__-$__MA_REVISION__.sh
+rm -f $MA_ROOT/${__NAME__}/${__NAME__}vars.sh
+ln -s $VARS_SH $MA_ROOT/${__NAME__}/${__NAME__}vars.sh
