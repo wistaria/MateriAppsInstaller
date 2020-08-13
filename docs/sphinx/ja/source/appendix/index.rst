@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
     
 ********************************
-Apps Table
+アプリ一覧(英語表記)
 ********************************
         
 .. toctree::

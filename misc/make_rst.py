@@ -36,7 +36,7 @@ with open(os.path.join(path_to_sphinx_ja, "index.rst"), "w") as fw:
    contain the root `toctree` directive.
     
 ********************************
-Apps Table
+アプリ一覧(英語表記)
 ********************************
         
 .. toctree::
