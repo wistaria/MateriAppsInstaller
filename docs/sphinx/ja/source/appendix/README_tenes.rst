@@ -22,3 +22,13 @@ MateriApps URL
 --------------
 
 https://ma.issp.u-tokyo.ac.jp/en/app/2291
+
+CORE DEVELPOERS
+--------------
+
+- Tsuyoshi Okubo (Graduate School of Science, Univ. of Tokyo)
+- Satoshi Morita (Institute for Solid State Physics, Univ. of Tokyo)
+- Yuichi Motoyama (Institute for Solid State Physics, Univ. of Tokyo)
+- Kazuyoshi Yoshimi (Institute for Solid State Physics, Univ. of Tokyo)
+- Takeo Kato (Institute for Solid State Physics, Univ. of Tokyo)
+- Naoki Kawashima (Institute for Solid State Physics, Univ. of Tokyo)

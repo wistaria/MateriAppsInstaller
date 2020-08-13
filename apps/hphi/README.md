@@ -7,12 +7,15 @@
 ## LICENSE 
 
  GNU GPL version 3
-## Official page 
 
- http://www.pasums.issp.u-tokyo.ac.jp/HPhi/en/
+## OFFICIAL PAGE
+
+ http://www.pasums.issp.u-tokyo.ac.jp/hphi/en/
+
 ## MateriApps URL 
 
  https://ma.issp.u-tokyo.ac.jp/en/app/367
+
 ## CORE DEVELOPERS 
 
 - Youhei Yamaji (Quantum-Phase Electronics Center, The University of Tokyo)
