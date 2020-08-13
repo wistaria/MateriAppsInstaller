@@ -1,23 +1,12 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
-set_prefix
-. $PREFIX_TOOL/env.sh
-
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
-BOOSTVARS_SH=$PREFIX_TOOL/boost/boostvars-$BOOST_VERSION_DOTTED-$BOOST_MA_REVISION.sh
-if [ -f $BOOSTVARS_SH ]; then
-  rm -f $PREFIX_TOOL/env.d/boostvars.sh
-  ln -s $BOOSTVARS_SH $PREFIX_TOOL/env.d/boostvars.sh
-else
-  . $SCRIPT_DIR/version-fx10.sh
-  BOOSTVARS_SH=$PREFIX_TOOL/boost/boostvars-$BOOST_VERSION_DOTTED-$BOOST_MA_REVISION.sh
-  if [ -f $BOOSTVARS_SH ]; then
-    rm -f $PREFIX_TOOL/env.d/boostvars.sh
-    ln -s $BOOSTVARS_SH $PREFIX_TOOL/env.d/boostvars.sh
-  else
-    echo "Error: boost not installed"
-    exit 127
-  fi
-fi
+set_prefix
+
+. $MA_ROOT/env.sh
+
+VARS_SH=$MA_ROOT/${__NAME__}/${__NAME__}vars-$__VERSION__-$__MA_REVISION__.sh
+rm -f $MA_ROOT/${__NAME__}/${__NAME__}vars.sh
+ln -s $VARS_SH $MA_ROOT/${__NAME__}/${__NAME__}vars.sh
