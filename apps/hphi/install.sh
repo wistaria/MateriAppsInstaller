@@ -14,8 +14,8 @@ fi
 set_prefix
 
 . ${MA_ROOT}/env.sh
-LOG=${BUILD_DIR}/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}.log
-PREFIX="${MA_ROOT}/hphi/hphi-${HPHI_VERSION}-${HPHI_MA_REVISION}"
+LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -24,7 +24,7 @@ fi
 
 sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
-cd ${BUILD_DIR}/hphi-${HPHI_VERSION}
+cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 echo "[cmake]" | tee -a $LOG
@@ -45,13 +45,15 @@ fi
 
 finish_info | tee -a $LOG
 
-cat << EOF > ${BUILD_DIR}/hphivars.sh
-# hphi $(basename $0 .sh) ${HPHI_VERSION} ${HPHI_MA_REVISION} $(date +%Y%m%d-%H%M%S)
+ROOTNAME=$(toupper ${__NAME__})_ROOT
+
+cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
+# ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 . ${MA_ROOT}/env.sh
-export HPHI_ROOT=$PREFIX
-export PATH=\${HPHI_ROOT}/bin:\$PATH
+export ${ROOTNAME}=$PREFIX
+export PATH=\${${ROOTNAME}}/bin:\$PATH
 EOF
-HPHIVARS_SH=${MA_ROOT}/hphi/hphivars-${HPHI_VERSION}-${HPHI_MA_REVISION}.sh
-rm -f $HPHIVARS_SH
-cp -f ${BUILD_DIR}/hphivars.sh $HPHIVARS_SH
-cp -f $LOG ${MA_ROOT}/hphi/
+VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
+rm -f $VARS_SH
+cp -f ${BUILD_DIR}/${__NAME__}vars.sh $VARS_SH
+cp -f $LOG ${MA_ROOT}/${__NAME__}/

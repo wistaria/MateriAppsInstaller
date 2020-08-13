@@ -54,7 +54,7 @@ set_prefix() {
     SOURCE_DIR="$SOURCE_DIR_DEF"
   fi
   if [ -d "$SOURCE_DIR" ]; then :; else
-    mkdir -p $BUILD_DIR || exit 127
+    mkdir -p $SOURCE_DIR || exit 127
     echo "Notice: source directory $SOURCE_DIR has been created"
   fi
   export SOURCE_DIR
@@ -97,4 +97,12 @@ calc_strip_components(){
     echo "usage: calc_strip_components tarfile file_in_rootdir"
   fi
   tar tf $1 | grep $2 | awk -F / 'BEGIN {res=99999}; {if (NF<res) res=NF}; END{print res-1}'
+}
+
+toupper(){
+  echo $@ | tr '[a-z]' '[A-Z]'
+}
+
+tolower(){
+  echo $@ | tr '[A-Z]' '[a-z]'
 }
