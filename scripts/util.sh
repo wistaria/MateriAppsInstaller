@@ -28,8 +28,8 @@ set_prefix() {
     MA_ROOT="$MA_ROOT_DEF"
   fi
   if [ -d "$MA_ROOT" ]; then :; else
-    echo "Fatal: target directory $MA_ROOT does not exist!"
-    exit 127
+    mkdir -p $MA_ROOT || exit 127
+    echo "Notice: target directory $MA_ROOT has been created"
   fi
   export MA_ROOT
   PREFIX_TOOL="$MA_ROOT"
@@ -40,8 +40,8 @@ set_prefix() {
     BUILD_DIR="$BUILD_DIR_DEF"
   fi
   if [ -d "$BUILD_DIR" ]; then :; else
-    echo "Fatal: target directory $BUILD_DIR does not exist!"
-    exit 127
+    mkdir -p $BUILD_DIR || exit 127
+    echo "Notice: build directory $BUILD_DIR has been created"
   fi
   RES=$(touch $BUILD_DIR/.mainstaller.tmp > /dev/null 2>&1; echo $?; rm -f $BUILD_DIR/.mainstaller.tmp)
   if [ $RES = 0 ]; then :; else
@@ -54,8 +54,8 @@ set_prefix() {
     SOURCE_DIR="$SOURCE_DIR_DEF"
   fi
   if [ -d "$SOURCE_DIR" ]; then :; else
-    echo "Fatal: target directory $SOURCE_DIR does not exist!"
-    exit 127
+    mkdir -p $BUILD_DIR || exit 127
+    echo "Notice: source directory $SOURCE_DIR has been created"
   fi
   export SOURCE_DIR
 
@@ -63,8 +63,6 @@ set_prefix() {
     MALIVE_REPOSITORY="$MALIVE_REPOSITORY_DEF"
   fi
   export MALIVE_REPOSITORY
-
-  export WGET_OPTION
 
   return 0
 }
@@ -84,7 +82,6 @@ print_prefix() {
   echo "BUILD_DIR=$BUILD_DIR"
   echo "SOURCE_DIR=$SOURCE_DIR"
   echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
-  echo "WGET_OPTION=$WGET_OPTION"
 }
 
 start_info() {
