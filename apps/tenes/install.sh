@@ -36,8 +36,6 @@ echo "[make]" | tee -a $LOG
 check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1
-echo "cp -r samples ${PREFIX}" | tee -a $LOG
-cp -r ../samples ${PREFIX}
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
   env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
