@@ -45,13 +45,15 @@ fi
 
 finish_info | tee -a $LOG
 
+ROOTNAME=$(toupper ${__NAME__})_ROOT
+
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 . ${MA_ROOT}/env.sh
-export HPHI_ROOT=$PREFIX
-export PATH=\${HPHI_ROOT}/bin:\$PATH
+export ${ROOTNAME}=$PREFIX
+export PATH=\${${ROOTNAME}}/bin:\$PATH
 EOF
-HPHIVARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
-rm -f $HPHIVARS_SH
-cp -f ${BUILD_DIR}/${__NAME__}vars.sh $HPHIVARS_SH
+VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
+rm -f $VARS_SH
+cp -f ${BUILD_DIR}/${__NAME__}vars.sh $VARS_SH
 cp -f $LOG ${MA_ROOT}/${__NAME__}/
