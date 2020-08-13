@@ -98,3 +98,11 @@ calc_strip_components(){
   fi
   tar tf $1 | grep $2 | awk -F / 'BEGIN {res=99999}; {if (NF<res) res=NF}; END{print res-1}'
 }
+
+toupper(){
+  echo $@ | tr '[a-z]' '[A-Z]'
+}
+
+tolower(){
+  echo $@ | tr '[A-Z]' '[a-z]'
+}
