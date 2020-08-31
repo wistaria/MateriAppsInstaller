@@ -1,0 +1,18 @@
+diff -uprN openmx-3.9.2.org/source/makefile openmx-3.9.2/source/makefile
+--- openmx-3.9.2.org/source/makefile	2020-08-13 22:08:36.000000000 +0900
++++ openmx-3.9.2/source/makefile	2020-08-13 22:06:33.000000000 +0900
+@@ -5,10 +5,10 @@
+ #                                                                 #
+ ###################################################################
+ 
+-MKLROOT = /opt/intel/mkl
+-CC = mpicc -O3 -xHOST -ip -no-prec-div -qopenmp -I/opt/intel/mkl/include/fftw
+-FC = mpif90 -O3 -xHOST -ip -no-prec-div -qopenmp 
+-LIB= -L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lmkl_blacs_openmpi_lp64 -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -liomp5 -lpthread -lm -ldl
++# MKLROOT = /opt/intel/mkl
++# CC = mpicc -O3 -xHOST -ip -no-prec-div -qopenmp -I/opt/intel/mkl/include/fftw
++# FC = mpif90 -O3 -xHOST -ip -no-prec-div -qopenmp 
++# LIB= -L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lmkl_blacs_openmpi_lp64 -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -liomp5 -lpthread -lm -ldl
+ 
+ #
+ # System B (Sekirei) at ISSP, Univ. of Tokyo
