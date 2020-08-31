@@ -1,0 +1,26 @@
+--- a/CPV/src/forces.f90
++++ b/CPV/src/forces.f90
+@@ -297,7 +297,7 @@
+ !$omp task default(none) &
+ !$omp          firstprivate(igrp,idx, nogrp_, ngw, i, n, nsp, na, nh, ish, iss1, iss2, tens ) &
+ !$omp          private(iv,jv,ivoff,jvoff,dd,dv,inl,jnl,is,isa,ism,fi,fip) &
+-!$omp          shared( f, deeq, bec, af, aa, dvan )
++!$omp          shared(f, deeq, bec, af, aa, dvan)
+ 
+             IF( idx + i - 1 <= n ) THEN
+ 
+--- a/FFTXlib/fft_helper_subroutines.f90
++++ b/FFTXlib/fft_helper_subroutines.f90
+@@ -470,10 +470,9 @@
+ 
+      do eig_index = 1, 2 * fftx_ntgrp(desc), 2
+ 
+-!$omp task default(none) &
++!$omp task &
+ !$omp          firstprivate( eig_index, i, nbsp_bgrp, right_nnr ) &
+-!$omp          private( eig_offset ) &
+-!$omp          shared( c_bgrp, desc, psis )
++!$omp          private( eig_offset )
+         !
+         !  here we pack 2*nogrp electronic states in the psis array
+         !  note that if nogrp == nproc_bgrp each proc perform a full 3D

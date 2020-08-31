@@ -1,17 +1,20 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
 sh $SCRIPT_DIR/download.sh
 
 cd $BUILD_DIR
-if [ -d espresso-$ESPRESSO_VERSION ]; then :; else
-  check mkdir -p espresso-$ESPRESSO_VERSION
-  check tar zxf $SOURCE_DIR/qe-$ESPRESSO_VERSION.tar.gz -C espresso-$ESPRESSO_VERSION --strip-components=1
-  cd espresso-$ESPRESSO_VERSION
+targetdir=${__NAME__}-${__VERSION__}
+if [ -d $targetdir ]; then :; else
+  check mkdir -p $targetdir
+  tarfile=$SOURCE_DIR/qe-${__VERSION__}.tar.gz
+  sc=`calc_strip_components $tarfile README.md`
+  check tar zxf $tarfile -C $targetdir --strip-components=${sc}
+  cd $targetdir
   if [ -f $SCRIPT_DIR/patches/series ]; then
     for p in $(cat $SCRIPT_DIR/patches/series); do
       if [ $p != debian.patch ]; then
