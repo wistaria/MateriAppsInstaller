@@ -29,10 +29,10 @@ start_info | tee -a $LOG
 
 CC=${CC:-"gcc"}
 FC=${FC:-"gfortran"}
-MPIF90=${MPIF90:-"mpif90"}
+CPP=${CPP:-"cpp"}
 
 echo "[configure]" | tee -a $LOG
-check env LOG=$LOG PREFIX=$PREFIX CC=$CC FC=$FC MPIF90=$MPIF90 \
+check env LOG=$LOG PREFIX=$PREFIX CC=$CC FC=$FC CPP=$CPP \
   sh $CONFIG_DIR/configure.sh
 
 echo "[make]" | tee -a $LOG
