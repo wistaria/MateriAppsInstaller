@@ -24,26 +24,22 @@ fi
 
 sh $SCRIPT_DIR/setup.sh
 
-cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}/tools/build
 start_info | tee -a $LOG
 
 echo "[bootstrap]" | tee -a $LOG
+check cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}/tools/build
 if [ -f $CONFIG_DIR/bootstrap.sh ]; then
   env PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/booststrap.sh
 else  
-  check sh bootstrap.sh | tee -a $LOG
-  ./b2 --prefix=$PREFIX install | tee -a $LOG
+  env PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/booststrap.sh
 fi
-rm -rf tools/build
 
 echo "[build]" | tee -a $LOG
 check cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-if [ -f $CONFIG_DIR/bootstrap.sh ]; then
-  env PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/build.sh
-else  
-  echo "using mpi : $(which mpicxx) ;" > user-config.jam
-  check env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=system stage | tee -a $LOG
-  env BOOST_BUILD_PATH=. $PREFIX/bin/b2 --prefix=$PREFIX --layout=system install | tee -a $LOG
+if [ -f $CONFIG_DIR/build.sh ]; then
+  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/build.sh
+else
+  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/build.sh
 fi
 
 if [ -f $CONFIG_DIR/postprocess.sh ]; then
