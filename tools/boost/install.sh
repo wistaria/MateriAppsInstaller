@@ -31,7 +31,7 @@ check cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}/tools/build
 if [ -f $CONFIG_DIR/bootstrap.sh ]; then
   env PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
 else  
-  env PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/booststrap.sh
+  env PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/bootstrap.sh
 fi
 
 echo "[build]" | tee -a $LOG
