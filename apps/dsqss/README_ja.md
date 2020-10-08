@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/app/171
 
-## CORE DEVELOPERS 
-
-- 加藤 康之(東京大学 工学系研究科)

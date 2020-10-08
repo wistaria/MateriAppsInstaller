@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/app/534
 
-## CORE DEVELOPERS 
-
-- 河村光晶(東京大学 物性研究所)

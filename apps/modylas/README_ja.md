@@ -16,7 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/app/404
 
-## CORE DEVELOPERS 
-
-- <span class="st">安藤 嘉倫(名古屋大学 大学院工学研究科)
--  小嶋 秀和</span>

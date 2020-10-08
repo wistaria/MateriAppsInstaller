@@ -16,9 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/741
 
-## CORE DEVELOPERS 
-
-- Yoshihide Yoshimoto (Graduate School of Information Science and Technology, University of Tokyo)
-- Jun Yamauchi (School of Science and Technology, Keio University)
-- Kanako Yoshizawa (The Institute for Solid State Physics, The University of Tokyo
-

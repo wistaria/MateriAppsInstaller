@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/app/213
 
-## CORE DEVELOPERS 
-
-- Matthias Troyer (スイス連邦工科大学チューリッヒ校)、藤堂 眞治(東京大学 大学院理学系研究科/物性研究所)

@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/app/594
 
-## CORE DEVELOPERS 
-
-- 尾崎 泰助（東京大学 物性研究所）

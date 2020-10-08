@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/app/411
 
-## CORE DEVELOPERS 
-
-- 常行真司（東京大学）、吉本芳英（東京大学）、吉澤香奈子（RIST）、渡辺尚貴（みずほ情報総研）
