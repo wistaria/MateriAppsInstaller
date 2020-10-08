@@ -1,3 +1,7 @@
+set -u
+
 ${CMAKE} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_C_FLAGS=${OPT_FLAGS} \
+  -DCMAKE_VERBOSE_MAKEFILE=1 \
   ../ 2>&1 | tee -a $LOG
