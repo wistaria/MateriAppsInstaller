@@ -1,11 +1,19 @@
 #!/bin/sh
 set -o pipefail
 
+# configurable variables (e.g. compiler)
+export CC=${CC:-"gcc"}
+export FC=${FC:-"gfortran"}
+export CPP=${CPP:-"cpp"}
+export OPT_FLAGS=${OPT_FLAGS}
+
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
+  echo "Available list:"
+  ls -1 config
   exit 127
 fi
 
@@ -26,11 +34,6 @@ sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
-
-export CC=${CC:-"gcc"}
-export FC=${FC:-"gfortran"}
-export CPP=${CPP:-"cpp"}
-export OPT_FLAGS=${OPT_FLAGS}
 
 echo "[configure]" | tee -a $LOG
 

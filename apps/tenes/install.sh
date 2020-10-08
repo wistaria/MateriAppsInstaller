@@ -12,6 +12,8 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
+  echo "Available list:"
+  ls -1 config
   exit 127
 fi
 
