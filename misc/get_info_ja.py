@@ -19,6 +19,8 @@ url_list.append("https://ma.issp.u-tokyo.ac.jp/app/#gsc.tab=0")#
 for idx in range(27):
     url_list.append("https://ma.issp.u-tokyo.ac.jp/app/page/{}#gsc.tab=0".format(idx+2))
 
+print(url_list)
+    
 # name, summary, official_url, license
 select_str_dict = {"name": "#top > header > div.inner.app-header__inner > div > h2", 
                    "summary":"#top > header > div.inner.app-header__inner > div.app-header__content > div > p",
@@ -27,13 +29,13 @@ select_str_dict = {"name": "#top > header > div.inner.app-header__inner > div > 
                    "avalability": "#top > div > section > section:nth-child(4) > table > tbody > tr:nth-child(1) > td > p",
                    "core developers": "#top > div > section > section:nth-child(4) > table > tbody > tr:nth-child(2) > td > p"}
 
-with h5py.File("materiapps_info.h5", "w") as fw:
+with h5py.File("materiapps_info_ja.h5", "a") as fw:
     for idx, url in enumerate(url_list):
         print("Read {}".format(idx))
         res = requests.get(url)
         soup = BeautifulSoup(res.text, "html.parser")
         #Get App's URL
-        elems = soup.find_all(href=re.compile("/app/[0-9]+"), text=re.compile("To Detail"))
+        elems = soup.find_all(href=re.compile("/app/[0-9]+"), text=re.compile("アプリ詳細へ"))
         pickup_links = [elem.attrs["href"] for elem in elems]
         print(pickup_links)
         for pickup_link in pickup_links:
@@ -54,6 +56,7 @@ with h5py.File("materiapps_info.h5", "w") as fw:
             
             #print name
             app_name = info_dict["name"]
+            print(info_dict)
             if app_name in fw:
                 del fw[app_name]
             fw.create_group(app_name)
