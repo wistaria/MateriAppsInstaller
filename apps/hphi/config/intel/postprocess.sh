@@ -1,1 +1,1 @@
-sh $(dirname $0)/../default/postprocess.sh
+sh $(dirname $0)/../default/$(basename $0)
