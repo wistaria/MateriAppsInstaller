@@ -14,8 +14,8 @@ fi
 set_prefix
 
 . ${MA_ROOT}/env.sh
-LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
-PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -27,15 +27,18 @@ rm -rf $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-CC=${CC:-"gcc"}
-FC=${FC:-"gfortran"}
-CPP=${CPP:-"cpp"}
+export CC=${CC:-"gcc"}
+export FC=${FC:-"gfortran"}
+export CPP=${CPP:-"cpp"}
+export OPT_FLAGS=${OPT_FLAGS}
 
 echo "[configure]" | tee -a $LOG
-check env LOG=$LOG PREFIX=$PREFIX CC=$CC FC=$FC CPP=$CPP \
-  sh $CONFIG_DIR/configure.sh
+
+make veryclean
+check sh $CONFIG_DIR/configure.sh
 
 echo "[make]" | tee -a $LOG
+make clean
 check make all | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1

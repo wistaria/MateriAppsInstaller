@@ -1,6 +1,12 @@
 #!/bin/sh
 set -o pipefail
 
+# configurable variables (e.g. compiler)
+export CMAKE=${CMAKE:-cmake}
+export CXX=${CXX:-}
+export OPT_FLAGS=${OPT_FLAGS:-}
+export ISSP_UCOUNT=${ISSP_UCOUT:-/home/issp/materiapps/bin/issp-ucount}
+
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
@@ -14,8 +20,8 @@ fi
 set_prefix
 
 . ${MA_ROOT}/env.sh
-LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
-PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -29,8 +35,7 @@ start_info | tee -a $LOG
 
 echo "[cmake]" | tee -a $LOG
 rm -rf build && mkdir -p build && cd build
-check env LOG=$LOG PREFIX=$PREFIX CMAKE=${CMAKE:-cmake}\
-  sh $CONFIG_DIR/cmake.sh
+check sh $CONFIG_DIR/cmake.sh
 
 echo "[make]" | tee -a $LOG
 check make | tee -a $LOG || exit 1
@@ -38,7 +43,7 @@ echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
-  env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
+check sh $CONFIG_DIR/postprocess.sh
 fi
 
 finish_info | tee -a $LOG
