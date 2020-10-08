@@ -4,14 +4,7 @@ OpenMX
 SUMMARY
 -------
 
-OpenMX is a first-principles software based on the pseudo-atomic
-localized basis functions. It calculates electronic structure rapidly
-for a wide range of materials including crystals, interfaces, liquids,
-etc. It speedily provides molecular dynamics simulation and structural
-optimization of large-scale systems and also implements a hybrid
-parallelism. It is able to deal with non-collinear magnetism and
-non-equilibrium Green’s function calculations for electrical
-conductions.
+原子局在基底と擬ポテンシャルを用いた第一原理計算プログラム。結晶・界面・溶液などの広範な物理系に対して、局在基底を利用した高速の電子状態計算を行う。大規模系に対して分子動力学計算や構造最適化を速やかに実行でき、ハイブリッド並列も実装する。ノンコリニア磁性や非平衡グリーン関数法による電気伝導計算にも対応。
 
 LICENSE
 -------
@@ -26,10 +19,4 @@ http://www.openmx-square.org/
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/649
-
-CORE DEVELOPERS
----------------
-
--  Taisuke Ozaki (Institute for Solid State Physics, The University of
-   Tokyo)
+https://ma.issp.u-tokyo.ac.jp/app/594

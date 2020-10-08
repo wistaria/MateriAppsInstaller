@@ -4,15 +4,7 @@ MODYLAS
 SUMMARY
 -------
 
-MODYLAS is a highly parallelized general-purpose molecular dynamics (MD)
-simulation program appropriate for very large physical, chemical, and
-biological systems. It is equipped most standard MD techniques including
-free energy calculations based on thermodynamic integration method.
-Long-range forces are evaluated rigorously by the fast multipole method
-(FMM) without using the fast Fourier transform (FFT) in order to realize
-excellent scalability. The program enables investigations of large-scale
-real systems such as viruses, liposomes, assemblies of proteins and
-micelles, and polymers. It works on ordinary linux machines, too.
+任意の分子集合体に対する汎用の大規模分子動力学計算プログラム。長距離力の取り扱いを含め、ナノ分野・バイオ分野における分子動力学計算に必要な各種手法を備える。高効率の並列計算が可能であり、超並列スパコンを用いて溶媒中のウイルス(約1000万原子)の全原子計算やリポソーム(数十万原子)の長時間計算が可能。
 
 LICENSE
 -------
@@ -27,4 +19,4 @@ http://www.modylas.org/
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/412
+https://ma.issp.u-tokyo.ac.jp/app/404

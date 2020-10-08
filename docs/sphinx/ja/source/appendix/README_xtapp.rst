@@ -4,12 +4,7 @@ xTAPP
 SUMMARY
 -------
 
-xTAPP is a first-principles plane-wave pseudo-potential code. It
-computes band structure and electronic states with high precision for a
-wide range of materials including metals, oxide surfaces, solid
-interfaces, and so forth. It has support tools and visualization of
-output and input, is available as a massively parallel computer using
-OpenMP, MPI, and GPGPU.
+擬ポテンシャル法と平面波基底を用いた第一原理計算ライブラリ。金属、半導体、酸化物、表面・界面など広範な対象に対して、バンド計算・電子状態計算を高精度で行うことができる。出入力の補助ツール・可視化プログラムが整備されているほか、OpenMP・MPI・GPGPUに対応しており京コンピュータを含む超高並列型計算機で利用可能。
 
 LICENSE
 -------
@@ -24,13 +19,4 @@ http://xtapp.cp.is.s.u-tokyo.ac.jp/
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/741
-
-CORE DEVELOPERS
----------------
-
--  Yoshihide Yoshimoto (Graduate School of Information Science and
-   Technology, University of Tokyo)
--  Jun Yamauchi (School of Science and Technology, Keio University)
--  Kanako Yoshizawa (The Institute for Solid State Physics, The
-   University of Tokyo
+https://ma.issp.u-tokyo.ac.jp/app/738
