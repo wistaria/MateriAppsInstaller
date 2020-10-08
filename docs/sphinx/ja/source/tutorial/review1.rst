@@ -1,22 +1,23 @@
 macOS 10.13 (High Sierra)へのインストール
 ------------------------------------------------------------
 
+本節では、MacOS 10.13 (High Sierra)でMateriApps Installerを利用する方法を記載します。本チュートリアルは、MateriApps 開発チームにより執筆された記事をベースにしています。
 
-本チュートリアルは、MateriApps 開発チームにより執筆されたものです。
-
-Basic information / 基本情報
+基本情報
 ****************************
 
--  Install target directory / インストール先 (PREFIX)
+基本的な設定は以下のとおりです。
+
+-  インストール先 (PREFIX)
 
    -  $HOME/materiapps
 
--  Build directory / ビルドディレクトリ
+-  ビルドディレクトリ
 
    -  $HOME/build
 
--  Support of C++1y / C++1yサーポート: Yes
--  Compiler / コンパイラ
+-  C++1yのサーポート: あり
+-  コンパイラ
 
    -  gcc 7.3 (from MacPorts)
 
@@ -44,10 +45,10 @@ Basic information / 基本情報
 
    -  Use git 2.15 in macOS
 
-Directories / ディレクトリ
+ディレクトリ
 **************************
 
--  Create $HOME/materiapps /  $HOME/materiapps を作成
+-  $HOME/materiapps を作成
 
    .. raw:: html
 
@@ -61,7 +62,7 @@ Directories / ディレクトリ
 
       </div>
 
--  Create $HOME/build /  $HOME/build を作成
+-  $HOME/build を作成
 
    .. raw:: html
 
@@ -75,7 +76,7 @@ Directories / ディレクトリ
 
       </div>
 
--  Create $HOME/source /  $HOME/source を作成
+-  $HOME/source を作成
 
    .. raw:: html
 
@@ -89,7 +90,7 @@ Directories / ディレクトリ
 
       </div>
 
-Download of MateriApps Installer / MateriApps Installer のダウンロード
+MateriApps Installer のダウンロード
 **********************************************************************
 
 .. raw:: html
@@ -158,7 +159,7 @@ MacPortsのインストール
 
       </div>
 
-Install tools using MateriApps Installer / MateriApps Installerによるツールのインストール
+MateriApps Installerによるツールのインストール
 *****************************************************************************************
 
 -  00_env
@@ -265,10 +266,10 @@ Install tools using MateriApps Installer / MateriApps Installerによるツー�
 
       </div>
 
-How to use / 使い方
+使い方
 *******************
 
--  Tools (python, python3, etc)
+-  Tools (python, python3, etc) の設定を行う
 
    .. raw:: html
 
@@ -283,8 +284,7 @@ How to use / 使い方
       </div>
 
    Bashの設定ファイル($HOME/.bash_profile)に書いておくと良い
--  Check version of installed software /
-   インストールされているバージョンの確認
+-  インストールされているバージョンの確認
 
    .. raw:: html
 
@@ -298,7 +298,7 @@ How to use / 使い方
 
       </div>
 
--  ALPS
+-  ALPS の実行環境を設定
 
    .. raw:: html
 
@@ -312,7 +312,7 @@ How to use / 使い方
 
       </div>
 
--  HΦ
+-  HΦ の実行環境を設定
 
    .. raw:: html
 
@@ -326,7 +326,7 @@ How to use / 使い方
 
       </div>
 
--  OpenMX
+-  OpenMX の実行環境を設定
 
    .. raw:: html
 

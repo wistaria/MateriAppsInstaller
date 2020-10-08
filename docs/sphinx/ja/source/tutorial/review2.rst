@@ -2,29 +2,28 @@
 ------------------------------------------------------------
 
 
-本チュートリアルは、MateriApps 開発チームにより執筆されたものです。
+本節では、物性研システムC(enaga)でMateriApps Installerを利用する方法を記載します。本チュートリアルは、MateriApps 開発チームにより執筆された記事をベースにしています。
 
-Basic information / 基本情報
+基本情報
 ****************************
 
--  Install target directory / インストール先 (PREFIX)
+-  インストール先 (PREFIX)
 
    -  /home/issp/materiapps/intel18.0-gcc7.2-cxx1y
 
--  Build directory / ビルドディレクトリ
+-  ビルドディレクトリ
 
    -  $HOME/build
 
--  Support of C**1y / C**1yサーポート: Yes
--  Compiler / コンパイラ
+-  C**1yサーポート: あり
+-  コンパイラ
 
-   -  module intel/18.0.3 (for compilation of applications /
-      アプリケーションコンパイル用)
-   -  module gcc/7.2.0 (for compilation of tools / ツールコンパイル用)
+   -  module intel/18.0.3 (アプリケーションコンパイル用)
+   -  module gcc/7.2.0 (ツールコンパイル用)
 
 -  MPI
 
-   -  module mpt/2.17 (MPI Library / MPIライブラリ)
+   -  module mpt/2.17 (MPIライブラリ)
 
 -  CMake
 
@@ -32,22 +31,21 @@ Basic information / 基本情報
 
 -  BLAS/LAPACK
 
-   -  module intel-mkl/18.0.3 (MKL Library / MKLライブラリ)
+   -  module intel-mkl/18.0.3 (MKLライブラリ)
 
 -  HDF5
 
-   -  Use MateriApps Installer / MateriApps Installer でインストールする
+   -  MateriApps Installer でインストールする
 
 -  Python
 
-   -  Use MateriApps Installer / MateriApps Installer でインストールする
+   -  MateriApps Installer でインストールする
 
 -  Git
 
-   -  Use git 2.14.3 installed by default /
-      デフォルトでインストールされている git 2.14.3 を使う
+   -  デフォルトでインストールされている git 2.14.3 を使う
 
-Download of MateriApps Installer / MateriApps Installer のダウンロード
+MateriApps Installer のダウンロード
 **********************************************************************
 
 .. raw:: html
@@ -65,10 +63,10 @@ Download of MateriApps Installer / MateriApps Installer のダウンロード
 
    </div>
 
-Configuration files / 設定ファイル
+設定ファイル
 **********************************
 
--  Create $HOME/.mainstaller / $HOME/.mainstaller を作成
+-  $HOME/.mainstaller を作成
 
    .. raw:: html
 
@@ -84,9 +82,7 @@ Configuration files / 設定ファイル
 
       </div>
 
--  Create /home/issp/materiapps/intel18.0-gcc7.2-cxx1y/env.d/00_local.sh
-   / /home/issp/materiapps/intel18.0-gcc7.2-cxx1y/env.d/00_local.sh
-   を作成
+-  /home/issp/materiapps/intel18.0-gcc7.2-cxx1y/env.d/00_local.sh を作成
 
    .. raw:: html
 
@@ -105,7 +101,7 @@ Configuration files / 設定ファイル
 
       </div>
 
-Install tools using MateriApps Installer / MateriApps Installerによるツールのインストール
+MateriApps Installerによるツールのインストール
 *****************************************************************************************
 
 -  00_env
@@ -257,7 +253,7 @@ Install tools using MateriApps Installer / MateriApps Installerによるツー�
 
       </div>
 
-How to use / 使い方
+使い方
 *******************
 
 -  Tools (python, python3, etc)
@@ -290,7 +286,7 @@ How to use / 使い方
 
       </div>
 
--  ALPS
+-  ALPS の実行環境を設定
 
    .. raw:: html
 
@@ -304,7 +300,7 @@ How to use / 使い方
 
       </div>
 
--  HΦ
+-  HΦ の実行環境を設定
 
    .. raw:: html
 
@@ -318,7 +314,7 @@ How to use / 使い方
 
       </div>
 
--  OpenMX
+-  OpenMX の実行環境を設定
 
    .. raw:: html
 

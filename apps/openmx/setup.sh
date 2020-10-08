@@ -1,28 +1,24 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+sh ${SCRIPT_DIR}/download.sh
+
 cd $BUILD_DIR
-if [ -d openmx-$OPENMX_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/openmx_$OPENMX_VERSION.orig.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/openmx_$OPENMX_VERSION.orig.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/openmx_$OPENMX_VERSION.orig.tar.gz
-    check tar zxf openmx_$OPENMX_VERSION.orig.tar.gz
+if [ -d ${__NAME__}-${__VERSION__} ]; then :; else
+  check mkdir -p ${__NAME__}-$__VERSION__
+  tarfile=$SOURCE_DIR/${__NAME__}-${__VERSION_MM__}.tar.gz
+  check tar zxf $tarfile -C ${__NAME__}-${__VERSION__} --strip-components=1
+
+  tarfile=$SOURCE_DIR/${__NAME__}-patch-${__VERSION__}.tar.gz
+  check tar zxf $tarfile -C ${__NAME__}-${__VERSION__}/source --strip-components=0
+  cd ${__NAME__}-$__VERSION__
+  mv source/kpoint.in ../work
+
+  if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
+    patch -p1 < $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch
   fi
-  cd openmx-$OPENMX_VERSION
-  if [ -f $SOURCE_DIR/openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz ]; then
-    tar zxf $SOURCE_DIR/openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz
-  else
-    check wget $MALIVE_REPOSITORY/openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz
-    check tar zxf openmx_$OPENMX_VERSION-$OPENMX_PATCH_VERSION.debian.tar.gz
-  fi
-  PATCHES="fix_typos.patch"
-  for p in $PATCHES; do
-    patch -p1 < debian/patches/$p
-  done
-  chmod -R a+r DFT_DATA13 openmx*.pdf work
 fi

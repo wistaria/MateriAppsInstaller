@@ -5,16 +5,16 @@
 ダウンロード
 ============
 
-- インストールスクリプト集であるMateriAppsInstallerは以下の手順でダウンロードできる。
+- MateriAppsInstallerは以下の手順でダウンロードできる。
   
-  - リリース版のダウンロード。
+  - リリース版のダウンロード
 
     MateriAppsInstallerのリリースページ(URLを後日追加)に行き、zipファイルをダウンロードした後に展開する。
-    なお、リリースページからダウンロードするzipファイルには本マニュアルのpdf版が同封されている。
+    リリースページからダウンロードするzipファイルには本マニュアルのpdf版も同封されている。
 
-  - git を利用してダウンロード。
+  - git を利用したダウンロード
     
-    以下のコマンドを打つことで、MateriAppsInstallerのインストールが可能である。
+    以下のコマンドを打つことで、MateriAppsInstallerのダウンロードが可能である。
 
      .. code-block:: bash
 
@@ -126,10 +126,10 @@
 セットアップ
 ============
 
--  インストール場所の設定
+-  MateriApps Installerによって導入されるアプリケーションのインストール場所の設定
 
    -  default では ``$HOME/materiapps`` の下にソフトウェアがインストールされる。
-   -  インストール場所の変更は、 ``$HOME/.mainstaller`` の中で以下のオプションを設定することで可能。
+   -  インストール場所は、 ``$HOME/.mainstaller`` の中で以下のオプションを設定することで変更可能。
 
       .. csv-table:: テーブルのタイトル
 	 :header: "オプション", "デフォルト", "説明"
@@ -141,14 +141,14 @@
          ``BUILD_DIR`` , ``$HOME/build`` ,build を行う場所
          ``SOURCE_DIR`` , ``$HOME/source`` ,source tarballの置き場
 
--  インストールするディレクトリ(上記 ``PREFIX``, ``PREFIX_TOOL``, ``PREFIX_APPS`` で指定したディレクトリ)を作成
+-  インストールするディレクトリ(上記 ``PREFIX``, ``PREFIX_TOOL``, ``PREFIX_APPS`` で指定したディレクトリ)は新たに作成される
 
 インストール
 ============
 
--  install.shを実行する。
+-  各アプリケーションごとにinstall.shを実行する。
 
-    - configフォルダの下にインストールに対応しているコンパイラ名でサブディレクトリがある(gcc, intelなど)。
+    - 各アプリケーションのconfigサブフォルダの下にインストールに対応しているコンパイラ名でサブディレクトリがある(gcc, intelなど)。
     - 該当するコンパイラを指定したい場合にはinstall.sh の後に, コンパイラ名を追加する。以下にgccでコンパイルする例を記載する。
       
       .. code-block:: bash
@@ -175,7 +175,7 @@
 
       .. code-block:: bash
 
-	 source $PREFIX_APPS/alps/alpsvar.sh
+	 source $PREFIX_ALPS/alps/alpsvar.sh
 
 -  インストールのテスト方法
 
