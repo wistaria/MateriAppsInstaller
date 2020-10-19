@@ -8,4 +8,4 @@ FFLAGS="-O3 ${OPT_FLAGS}" \
   2>&1 | tee -a $LOG
 
 sed -i.bak -c 's/^\s*F90\s*=.*$/F90 = ifort/' make.inc
-sed -i.bak -c 's/^\s*BLAS_LIBS\s*=.*$/BLAS_LIBS = -mkl=parallel/' make.inc
+sed -i.bak -c 's/^\s*BLAS_LIBS\s*=.*$/BLAS_LIBS = -mkl=cluster/' make.inc
