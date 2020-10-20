@@ -16,10 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/1004
 
-## CORE DEVELOPERS 
-
-- Mitsuaki Kawamura (Institute for Solid State Physics, The University of Tokyo)
--  Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo)
--  Junya Otsuki (Faculty of Science, Department of Physics, Tohoku University)
--  Hiroshi Shinaoka (Faculty of Science, Department of Physics, Saitama University)
--  Takeo Kato (Institute for Solid State Physics, The University of Tokyo).

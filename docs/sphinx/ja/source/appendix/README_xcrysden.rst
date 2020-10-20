@@ -4,13 +4,9 @@ XCRYSDEN
 SUMMARY
 -------
 
-An open-source application for visualization of crystal structures and
-grid data that runs on most UNIX and UNIX-like platforms. This
-application can visualize calculation results from the following
-electronic structure packages: GAUSSIAN, CRYSTAL, Quantum Espresso
-(PWscf), WIEN2k, FHI98MD. Three-dimensional data such as electron
-densities and local potentials as well as Fermi surfaces can be
-visualized using this application.
+UNIX系プラットフォームで動作する結晶構造ならびにグリッドデータの可視化のためのオープンソースアプリケーション。GAUSSIAN,
+CRYSTAL, Quantum Espresso(PWscf), WIEN2k,
+FHI98MDなど、多くのソフトの出力ファイルに対応している。電子密度やポテンシャルなどの3次元データの可視化に加えて、フェルミ面の表示も行うことができる。
 
 LICENSE
 -------
@@ -25,4 +21,4 @@ http://www.xcrysden.org/
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/725
+https://ma.issp.u-tokyo.ac.jp/app/718

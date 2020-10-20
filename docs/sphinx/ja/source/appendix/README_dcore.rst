@@ -4,13 +4,7 @@ DCore
 SUMMARY
 -------
 
-A tool for performing quantum many-body simulations based on dynamical
-mean-field theory. In addition to predefined models, one can construct
-and solve an ab-initio tight-binding model by using wannier 90 or
-RESPACK. We provide a post-processing tool for computing physical
-quantities such as the density of state and the momentum resolved
-spectral function. DCore depends on external libraries such as TRIQS and
-ALPSCore.
+動的平均場理論による多体量子計算を行うためのツール。予め定義されたモデルに加え、第一原理計算の結果からwannier90やRESPACKによって有効強束縛モデルを構成し、解析することが可能。計算結果を後処理することで、状態密度や波数空間でのスペクトル関数などを表示できる。計算にはTRIQSやALPSCoreなどの外部ライブラリを利用。
 
 LICENSE
 -------
@@ -25,18 +19,4 @@ https://issp-center-dev.github.io/DCore/index.html
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/1004
-
-CORE DEVELOPERS
----------------
-
--  Mitsuaki Kawamura (Institute for Solid State Physics, The University
-   of Tokyo)
--  Kazuyoshi Yoshimi (Institute for Solid State Physics, The University
-   of Tokyo)
--  Junya Otsuki (Faculty of Science, Department of Physics, Tohoku
-   University)
--  Hiroshi Shinaoka (Faculty of Science, Department of Physics, Saitama
-   University)
--  Takeo Kato (Institute for Solid State Physics, The University of
-   Tokyo).
+https://ma.issp.u-tokyo.ac.jp/app/1003
