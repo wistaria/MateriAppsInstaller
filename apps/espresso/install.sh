@@ -36,7 +36,9 @@ cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 echo "[preprocess]" | tee -a $LOG
-
+if [ -f CMakeLists.txt ] ; then
+  rm -rf build && mkdir build && cd build
+fi
 check sh $CONFIG_DIR/preprocess.sh
 
 echo "[make]" | tee -a $LOG
