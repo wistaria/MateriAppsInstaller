@@ -35,10 +35,9 @@ rm -rf $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-echo "[configure]" | tee -a $LOG
+echo "[preprocess]" | tee -a $LOG
 
-make veryclean
-check sh $CONFIG_DIR/configure.sh
+check sh $CONFIG_DIR/preprocess.sh
 
 echo "[make]" | tee -a $LOG
 make clean

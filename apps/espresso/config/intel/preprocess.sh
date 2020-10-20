@@ -1,3 +1,5 @@
+make veryclean
+
 CFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
 FFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
 ./configure \

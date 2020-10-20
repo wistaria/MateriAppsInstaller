@@ -37,9 +37,12 @@ rm -rf $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-echo "[cmake]" | tee -a $LOG
+echo "[preprocess]" | tee -a $LOG
+if [ -f CMakeLists.txt ]; then
+  rm -rf build && mkdir -p build && cd build
+fi
 rm -rf build && mkdir -p build && cd build
-check sh $CONFIG_DIR/cmake.sh
+check sh $CONFIG_DIR/preprocess.sh
 
 echo "[make]" | tee -a $LOG
 check make | tee -a $LOG || exit 1
