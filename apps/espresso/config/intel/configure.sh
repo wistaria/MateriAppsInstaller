@@ -1,5 +1,5 @@
-CFLAGS="-O3 ${OPT_FLAGS}" \
-FFLAGS="-O3 ${OPT_FLAGS}" \
+CFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
+FFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
 ./configure \
   --prefix=${PREFIX} \
   --enable-openmp \

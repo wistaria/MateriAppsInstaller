@@ -5,7 +5,7 @@ set -o pipefail
 export CC=${CC:-"gcc"}
 export FC=${FC:-"gfortran"}
 export CPP=${CPP:-"cpp"}
-export OPT_FLAGS=${OPT_FLAGS}
+export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS}
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
