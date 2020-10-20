@@ -41,7 +41,6 @@ echo "[preprocess]" | tee -a $LOG
 if [ -f CMakeLists.txt ]; then
   rm -rf build && mkdir -p build && cd build
 fi
-rm -rf build && mkdir -p build && cd build
 check sh $CONFIG_DIR/preprocess.sh
 
 echo "[make]" | tee -a $LOG
