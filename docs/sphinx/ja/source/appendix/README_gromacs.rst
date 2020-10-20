@@ -4,12 +4,7 @@ Gromacs
 SUMMARY
 -------
 
-Open-source package for molecular dynamics simulation designed for
-biological macromolecules. This package can perform molecular dynamics
-simulation of biological macromolecules such as proteins, lipids, and
-nuclear acids as well as solutions by controlling temperature and
-pressure. This package can treat long-range interaction and free energy,
-and is designed for parallel computing.
+生体分子向けにデザインされたオープンソースの分子動力学パッケージ。たんばく質、脂質、核酸などの生体高分子や溶液・界面系の動力学シュミレーションを行うことができる。温度圧力制御、長距離相互作用計算、自由エネルギー計算等を効率よく行うことができる。並列計算機向けにデザインされているため並列計算も得意とする。
 
 LICENSE
 -------
@@ -24,4 +19,4 @@ http://www.gromacs.org/
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/670
+https://ma.issp.u-tokyo.ac.jp/app/663

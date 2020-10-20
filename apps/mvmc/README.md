@@ -16,12 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/518
 
-## CORE DEVELOPERS 
-
-- Takahiro Misawa (Institute for Solid State Physics ,The University of Tokyo)
--  Satoshi Morita (Institute for Solid State Physics ,The University of Tokyo) Takahiro Ohgoe (Department of Applied Physics ,The University of Tokyo)
--  Kota Ido (Department of Applied Physics ,The University of Tokyo)
--  Masatoshi Imada (Department of Applied Physics ,The University of Tokyo)
--  Kazuyoshi Yoshimi (Institute for Solid State Physics ,The University of Tokyo)
--  Mituaki Kawamura (Institute for Solid State Physics ,The University of Tokyo)
--  Takeo Kato (Institute for Solid State Physics ,The University of Tokyo)

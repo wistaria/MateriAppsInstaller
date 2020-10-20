@@ -4,16 +4,12 @@ TAPIOCA
 SUMMARY
 -------
 
-A tool of input-file preparation and visualization for xTAPP, an
-application of the first-principle calculation. By graphical user
-interface (GUI), this application helps xTAPP users for making input
-files, and visualizes results of wavefunctions, electron densities, and
-potential profiles into three-dimensional graphics from output files.
+第一原理計算アプリケーションxTAPPの入力支援・可視化を行うツール。グラフィカルユーザーインターフェース(GUI)を利用して、xTAPPの入力ファイルを作成でき、出力ファイルから波動関数・電子密度・ポテンシャルなどを3次元的に可視化することができる。
 
 LICENSE
 -------
 
-GPL version 3
+GPL version 3（商用利用の場合は要相談）
 
 OFFICIAL PAGE
 -------------
@@ -23,14 +19,4 @@ http://sourceforge.net/projects/xtapp-tapioca
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/415
-
-CORE DEVELOPERS
----------------
-
--  Shinji Tsuneyuki (Graduate School of Science, Univ. Tokyo)
--  Yoshihide Yoshimoto (Graduate School of Information Science and
-   Technology, University of Tokyo)
--  Kanako Yoshizawa (The Institute for Solid State Physics, The
-   University of Tokyo)
--  Naoki Watanabe (Mizuho Information and Research Institute)
+https://ma.issp.u-tokyo.ac.jp/app/411
