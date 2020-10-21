@@ -106,3 +106,14 @@ toupper(){
 tolower(){
   echo $@ | tr '[A-Z]' '[a-z]'
 }
+
+finish_test() {
+  echo # emptyline
+  if [ $# = 1 ]; then
+    if [ $1 != 0 ]; then
+      echo "Test Failed."
+    else
+      echo "Test Passed."
+    fi
+  fi
+}
