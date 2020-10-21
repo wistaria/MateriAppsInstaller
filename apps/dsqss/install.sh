@@ -59,6 +59,7 @@ cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 . ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
+. \${${ROOTNAME}}/share/dsqss/dsqssvars-${__VERSION__}.sh
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
