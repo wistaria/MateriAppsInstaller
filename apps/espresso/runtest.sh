@@ -19,6 +19,8 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
+trap 'finish_test $?' EXIT
+
 . ${MA_ROOT}/env.sh
 
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
@@ -48,7 +50,7 @@ workdir="test_`date +%FT%T`"
 rm -rf $workdir
 cp -r test $workdir
 cd $workdir
-sh ./test.sh
+sh ./test.sh || exit 127
 
 echo
 echo "Test finishes ($workdir)"

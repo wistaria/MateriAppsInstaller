@@ -1,3 +1,6 @@
+set -u
+set -o pipefail
+
 for exe in pw.x bands.x; do
   if [ ! -f ${PREFIX}/bin/${exe} ]; then
     echo "Error: ${PREFIX}/bin/${exe} does not exist"
@@ -5,4 +8,4 @@ for exe in pw.x bands.x; do
   fi
 done
 
-${MPIEXEC_CMD} pw.x -in scf.in | tee scf.out
+${MPIEXEC_CMD} pw.x -in scf.in | tee scf.out || exit 127

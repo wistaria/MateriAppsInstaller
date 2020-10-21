@@ -1,3 +1,6 @@
+set -u
+set -o pipefail
+
 for exe in vmcdry.out vmc.out; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then
     echo "Error: ${PREFIX}/bin/${exe} does not exist"
@@ -5,4 +8,4 @@ for exe in vmcdry.out vmc.out; do
   fi
 done
 
-${MPIEXEC_CMD} vmc.out -s stdface.def 2>&1 | tee log
+${MPIEXEC_CMD} vmc.out -s stdface.def 2>&1 | tee log  || exit 127
