@@ -1,0 +1,20 @@
+[hamiltonian]
+model = "spin"
+M =  1                 # S=1/2
+Jz = -1.0              # coupling constant, negative for AF
+Jxy = -1.0             # coupling constant, negative for AF
+h = 0.0                # magnetic field
+
+[lattice]
+lattice = "hypercubic" # hypercubic, periodic
+dim = 1                # dimension
+L = 2                  # number of sites along each direction
+bc = false             # open boundary
+
+[parameter]
+beta = 100             # inverse temperature
+nset = 5               # set of Monte Carlo sweeps
+npre = 10              # MCSteps to estimate hyperparameter
+ntherm = 10            # MCSweeps for thermalization
+nmcs = 100             # MCSweeps for measurement
+seed = 31415           # seed of RNG
