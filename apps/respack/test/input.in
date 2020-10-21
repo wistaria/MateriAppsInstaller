@@ -1,0 +1,39 @@
+&param_chiqw 
+/ 
+
+&param_wannier 
+N_wannier=8,               !Total number of considerd band in wannier calc 
+Lower_energy_window=-7.0d0,!LOWER BOUND OF ENERGY WINDOW (eV)
+Upper_energy_window=17.0d0,!UPPER BOUND OF ENERGY WINDOW (eV)
+flg_BMAT=1,                !0:BMAT=unit matrix, 1:reading BMAT
+N_initial_guess=8/         !TOTAL NUMBER OF INITIAL GUESS GAUSSIAN       
+s  0.5D0 0.00D0 0.00D0 0.00D0 
+px 0.5D0 0.00D0 0.00D0 0.00D0 
+py 0.5D0 0.00D0 0.00D0 0.00D0 
+pz 0.5D0 0.00D0 0.00D0 0.00D0 
+s  0.5D0 0.25D0 0.25D0 0.25D0 
+px 0.5D0 0.25D0 0.25D0 0.25D0 
+py 0.5D0 0.25D0 0.25D0 0.25D0 
+pz 0.5D0 0.25D0 0.25D0 0.25D0 
+0.50 -0.5D0  0.5D0 -0.5D0 0.0d0  0.0d0  0.0d0  0.0d0  
+0.50  0.5D0 -0.5D0 -0.5D0 0.0d0  0.0d0  0.0d0  0.0d0  
+0.50 -0.5D0 -0.5D0  0.5D0 0.0d0  0.0d0  0.0d0  0.0d0   
+0.50  0.5D0  0.5D0  0.5D0 0.0d0  0.0d0  0.0d0  0.0d0 
+0.00  0.0d0  0.0d0  0.0d0 0.5D0 -0.5D0  0.5D0 -0.5D0  
+0.00  0.0d0  0.0d0  0.0d0 0.5D0  0.5D0 -0.5D0 -0.5D0  
+0.00  0.0d0  0.0d0  0.0d0 0.5D0 -0.5D0 -0.5D0  0.5D0  
+0.00  0.0d0  0.0d0  0.0d0 -0.5D0  -0.5D0  -0.5D0  -0.5D0  
+
+&param_interpolation   
+N_sym_points=3/      !Number of symmetry points 
+0.50d0 0.50d0 0.50d0 !L
+0.00d0 0.00d0 0.00d0 !G
+0.50d0 0.00d0 0.50d0 !X
+0.50d0 0.25d0 0.75d0 !W
+0.50d0 0.50d0 0.50d0 !L  
+
+&param_visualization   
+/
+
+&param_calc_int 
+/
