@@ -1,5 +1,7 @@
 set -o pipefail
 
+sh ./download_pp.sh
+
 for exe in calc_wannier calc_chiqw calc_j3d calc_w3d calc_gw transfer_analysis wfn2respack qe2respack.py xtapp2respack.sh
 do
   if [ ! -f ${PREFIX}/bin/${exe} ]; then

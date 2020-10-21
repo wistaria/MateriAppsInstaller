@@ -1,6 +1,7 @@
 #!/bin/sh
 set -o pipefail
 
+
 # configurable variables (e.g. compiler)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
 export MPIEXEC=${MPIEXEC-"mpiexec"}
@@ -44,13 +45,10 @@ fi
 
 export PREFIX
 
-sh test/download_pp.sh
-
 workdir="test_`date +%FT%T`"
 rm -rf $workdir
 cp -r test $workdir
 cd $workdir
 sh ./test.sh || exit 127
 
-echo
-echo "Test finishes ($workdir)"
+true

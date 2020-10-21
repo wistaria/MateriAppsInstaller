@@ -1,6 +1,8 @@
 set -u
 set -o pipefail
 
+sh ./download_pp.sh
+
 for exe in pw.x bands.x; do
   if [ ! -f ${PREFIX}/bin/${exe} ]; then
     echo "Error: ${PREFIX}/bin/${exe} does not exist"
