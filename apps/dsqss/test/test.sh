@@ -1,6 +1,6 @@
 for exe in dla pmwa_H pmwa_B; do
-  if [ ! -x ${rootdir}/bin/$exe ]; then
-    echo "Error: ${rootdir}/bin/${exe} does not exist"
+  if [ ! -x ${PREFIX}/bin/$exe ]; then
+    echo "Error: ${PREFIX}/bin/${exe} does not exist"
     exit 127
   fi
 done

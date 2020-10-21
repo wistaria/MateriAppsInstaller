@@ -30,16 +30,17 @@ echo "source $VARS_SH"
 . $VARS_SH
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
-eval rootdir='$'$ROOTNAME
-export rootdir
-if [ -z "$rootdir" ]; then
+eval PREFIX='$'$ROOTNAME
+if [ -z "$PREFIX" ]; then
   echo "Error: $ROOTNAME does not set in the configuration file (${VARS_SH})"
   exit 127
 fi
-if [ ! -d "$rootdir" ]; then
-  echo "Error: $rootdir does not exist"
+if [ ! -d "$PREFIX" ]; then
+  echo "Error: $PREFIX does not exist"
   exit 127
 fi
+
+export PREFIX
 
 workdir="test_`date +%FT%T`"
 rm -rf $workdir
@@ -47,4 +48,5 @@ cp -r test $workdir
 cd $workdir
 sh ./test.sh
 
+echo
 echo "Test finishes ($workdir)"
