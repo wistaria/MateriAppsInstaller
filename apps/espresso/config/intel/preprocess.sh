@@ -11,3 +11,4 @@ FFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
 
 sed -i.bak -c 's/^\s*F90\s*=.*$/F90 = ifort/' make.inc
 sed -i.bak -c 's/^\s*BLAS_LIBS\s*=.*$/BLAS_LIBS = -mkl=cluster/' make.inc
+sed -i.back -c 's/-x\s*f95-cpp-input/-cpp/' make.inc
