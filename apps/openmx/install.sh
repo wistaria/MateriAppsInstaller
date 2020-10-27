@@ -1,11 +1,21 @@
 #!/bin/sh
 set -o pipefail
 
+# configurable variables (e.g. compiler)
+export CMAKE=${CMAKE:-cmake}
+export CC=${CC:-}
+export FC=${FC:-}
+export SCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES:-}
+export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
+export ISSP_UCOUNT=${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}
+
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
+  echo "Available list:"
+  ls -1 config
   exit 127
 fi
 
@@ -14,8 +24,8 @@ fi
 set_prefix
 
 . ${MA_ROOT}/env.sh
-LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
-PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
@@ -28,15 +38,23 @@ cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 cd source
+
+echo "[preprocess]" | tee -a $LOG
+if [ -f CMakeLists.txt ]; then
+  rm -rf build && mkdir -p build && cd build
+fi
+check sh $CONFIG_DIR/preprocess.sh
+
 echo "[make]" | tee -a $LOG
-check env LOG=$LOG\
-  sh $CONFIG_DIR/make.sh
-# check make | tee -a $LOG || exit 1
+check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
-# check make install | tee -a $LOG || exit 1
+mkdir -p $PREFIX/bin
+check make install DESTDIR=$PREFIX/bin | tee -a $LOG || exit 1
+
+cd ../
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
-  env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
+check sh $CONFIG_DIR/postprocess.sh
 fi
 
 finish_info | tee -a $LOG
