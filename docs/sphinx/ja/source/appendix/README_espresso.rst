@@ -4,13 +4,7 @@ QUANTUM ESPRESSO
 SUMMARY
 -------
 
-Open-source program for first-principles calculation based on
-pseudo-potential and plane-wave basis. This package performs
-electronic-state calculation with high accuracy based on density
-functional theory. In addition to basic-set programs, many core-packages
-and plugins are included. This package can be utilized for academic
-research and industrial development, and also supports parallel
-computing.
+擬ポテンシャル法と平面波基底を用いた第一原理計算ライブラリ。広範な物理系に対して、密度汎関数法に基づく電子状態計算を高精度で行うことができる。基本プログラムのほかに多数のコアパッケージ・プラグインが含まれ、無償ながら研究・開発に利用できる多くの充実した機能を持つ。MPIによる並列計算にも対応している。
 
 LICENSE
 -------
@@ -25,4 +19,4 @@ http://www.quantum-espresso.org/
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/740
+https://ma.issp.u-tokyo.ac.jp/app/720

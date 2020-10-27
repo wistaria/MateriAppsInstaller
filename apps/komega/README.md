@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/546
 
-## CORE DEVELOPERS 
-
-- Mituaki Kawamura (Institute for Solid State Physics, The University of Tokyo)
