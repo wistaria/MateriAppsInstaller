@@ -106,3 +106,7 @@ toupper(){
 tolower(){
   echo $@ | tr '[A-Z]' '[a-z]'
 }
+
+capitalize(){
+  echo $@ | awk '{ print toupper(substr($0, 1, 1)) substr($0, 2, length($0) - 1) }'
+}
