@@ -4,9 +4,8 @@ TeNeS
 SUMMARY
 -------
 
-A solver program for two dimensional quantum lattice model based on a
-projected entangled pair state wavefunction and the corner transfer
-matrix renormalization group method.
+テンソルネットワーク法、特にPEPS
+波動関数状態と角転送行列くりこみ群法を用いた、二次元量子格子模型の基底状態ソルバー。
 
 LICENSE
 -------
@@ -21,14 +20,4 @@ https://github.com/issp-center-dev/TeNeS
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/2291
-
-CORE DEVELOPERS
----------------
-
--  Tsuyoshi Okubo (Graduate School of Science, Univ. of Tokyo)
--  Satoshi Morita (Institute for Solid State Physics, Univ. of Tokyo)
--  Yuichi Motoyama (Institute for Solid State Physics, Univ. of Tokyo)
--  Kazuyoshi Yoshimi (Institute for Solid State Physics, Univ. of Tokyo)
--  Takeo Kato (Institute for Solid State Physics, Univ. of Tokyo)
--  Naoki Kawashima (Institute for Solid State Physics, Univ. of Tokyo)
+https://ma.issp.u-tokyo.ac.jp/app/2290

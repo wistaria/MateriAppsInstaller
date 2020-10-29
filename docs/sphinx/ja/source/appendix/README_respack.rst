@@ -4,16 +4,11 @@ RESPACK
 SUMMARY
 -------
 
-RESPACK is a first-principles calculation software for evaluating the
-interaction parameters of materials. It is able to calculate the
-maximally localized Wannier functions, the RPA response functions, and
-frequency-dependent electronic interaction parameters. RESPACK receives
-its input data from a band calculation using norm-conserving
-pseudopotentials with plane-wave basis sets. Utilities which convert a
-result of xTAPP or Quantum ESPRESSO to an input for RESPACK are
-prepared. The software has been used successfully for a wide range of
-materials such as metals, semiconductors, transition-metal compounds,
-and organic compounds. It supports OpenMP / MPI parallelization.
+物質の相互作用パラメータを評価する第一原理計算ソフトウェア。
+最局在ワニエ関数、RPA応答関数、周波数依存電子間相互作用パラメータが計算可能。ノルム保存型擬ポテンシャル+平面波基底を用いるバンド計算に対応しており、xTAPP
+および Quantum ESPRESSO
+に関しては、ファイルの変換スクリプトが用意されている。金属、半導体、遷移金属化合物、有機化合物など広範な物質群を計算できる。OpenMP
+/ MPI に対応。
 
 LICENSE
 -------
@@ -28,16 +23,4 @@ https://sites.google.com/view/kazuma7k6r
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/en/app/772
-
-CORE DEVELOPERS
----------------
-
--  Kazuma NAKAMURA (Department of Basic Sciences, Kyushu Institute of
-   Technology)
--  Yoshihide YOSHIMOTO (Department of Computer Science, The University
-   of Tokyo)
--  Yoshiro NOHARA
--  Yusuke NOMURA (Department of Applied Physics, The University of
-   Tokyo)
--  Terumasa TADANO (National Institute for Materials Science)
+https://ma.issp.u-tokyo.ac.jp/app/767

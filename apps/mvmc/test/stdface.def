@@ -1,0 +1,9 @@
+lattice = "chain"
+L = 8
+Lsub = 2
+
+model = "Spin"
+2Sz = 0
+J = 1.0
+
+NSROptItrStep = 300

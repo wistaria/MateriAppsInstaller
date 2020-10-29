@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/180
 
-## CORE DEVELOPERS 
-
-- Kenji HARADA (Kyoto Univ.)

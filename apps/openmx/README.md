@@ -16,6 +16,3 @@
 
  https://ma.issp.u-tokyo.ac.jp/en/app/649
 
-## CORE DEVELOPERS 
-
-- Taisuke Ozaki (Institute for Solid State Physics, The University of Tokyo)

@@ -18,8 +18,8 @@ if [ -d $targetdir ]; then :; else
   if [ -f $SCRIPT_DIR/patches/series ]; then
     for p in $(cat $SCRIPT_DIR/patches/series); do
       if [ $p != debian.patch ]; then
-        echo "applying $p"
-        patch -p1 < $SCRIPT_DIR/patches/$p
+        # echo "applying $p"
+        # patch -p1 < $SCRIPT_DIR/patches/$p
       fi
     done
   fi
