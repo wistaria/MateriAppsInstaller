@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. $SCRIPT_DIR/../../scripts/util.sh
+
 BJAM="$PREFIX/bin/b2 --layout=system --ignore-site-config"
 
 # setup config files
