@@ -13,7 +13,7 @@ if [ -n "${MA_PYTHON3}" ]; then
     MA_HAVE_PYTHON3=yes
     MA_PYTHON3_VERSION=$(${MA_PYTHON3} -c "import sys; print('{}.{}.{}'.format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro))")
     MA_PYTHON3_VERSION_MAJOR=$(${MA_PYTHON3} -c "import sys; print(sys.version_info.major)")
-    MA_PYTHON3_VERSION_MINOR=$(${MA_PYTHON3} -c "import sys; print(sys.version_info.major)")
+    MA_PYTHON3_VERSION_MINOR=$(${MA_PYTHON3} -c "import sys; print(sys.version_info.minor)")
     MA_PYTHON3_VERSION_PATCH=$(${MA_PYTHON3} -c "import sys; print(sys.version_info.micro)")
   fi
 fi
