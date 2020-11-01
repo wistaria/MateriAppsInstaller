@@ -3,23 +3,22 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Overview of MateriAppsInstaller
+Overview of MateriApps Installer
 ------------------------------------------
-The MateriApps Installer is a collection of shell scripts to assist in the installation of computational material science applications for various computing environments. The MateriApps Installer includes shell scripts to be installed on Linux PCs, cluster workstations, and major supercomputer systems in Japan. It is also used for pre-installation (a list of installed software can be found at ****).
+MateriApps Installer is a collection of shell scripts to assist in the installation of computational material science applications for various computing environments. The MateriApps Installer includes shell scripts to be installed on Linux PCs, cluster workstations, and major supercomputer systems. MateriApps Installer is also used for pre-installation for domestic joint-use supercomputers (a list of installed software can be found in Chapter of Application List).
 
 
-Background of Development
+Background of the Development
 ------------------------------------------
-Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For the advancement of computational materials science, the development of algorithms to solve the equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, MateriApps <http://ma.cms-initiative.jp>_, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.
+Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, `MateriApps<http://ma.cms-initiative.jp>`_, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.
 
-One of the obstacles for users to start using published applications in materials science is the installation of software. The MateriApps LIVE! <https://cmsi.github.io/MateriAppsLive/>_ is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. LIVE! is a VirtualBox Virtual Hard Disk Image (OVA) that includes the MateriApps application, OS (Debian GNU/Linux), editor, visualization tools, and other environments needed to get started with the tutorial. By using LIVE! it is possible to easily set up a computing environment for participants in classes and software training sessions.
+One of the obstacles for users to start using published applications in materials science is the installation of software. `MateriApps LIVE<https://cmsi.github.io/MateriAppsLive/>`_ is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. MateriApps LIVE! is a Virtual Hard Disk Image (OVA) of VirtualBox that includes applications, OS (Debian GNU/Linux), editors, visualization tools, and other environments needed to get started with the tutorial. By using MateriApps LIVE!, it is possible to easily set up a computing environment for participants in classes and software training sessions.
 
-However, the MateriApps LIVE! calculation environment is not sufficient for practical applications. To enable users to easily install computational materials science applications in a wide range of computing environments, from major domestic supercomputers such as the National Institute for Materials Science supercomputers, to clustered computers in laboratories, to personal computers, the development of the MateriAppsInstaller has been started.
-
+However, the calculation environment provided by MateriApps LIVE! is not sufficient for practical applications. To enable users to easily install applications of computational materials science in a wide range of computing environments, from major domestic joint-use supercomputers to clustered computers in laboratories and personal computers, the development of MateriApps Installer has been started.
 
 Goal of MateriApps Installer
 ------------------------------------------
-The goals of the MateriApps Installer are as follows
+The goals of MateriApps Installer are as follows
 
 - To install common applications (cf. `MateriApps <http://ma.cms-initiative.jp>`_) on all major domestic and foreign supercomputers.
 - Similarly, we will prepare scripts for installation on CentOS (RedHat), Debian (Ubuntu) and Mac OS X environments.
@@ -27,15 +26,15 @@ The goals of the MateriApps Installer are as follows
 
 Design Policies
 ------------------------------------------
-The design policy of the MateriApps Installer is as follows:
+The design policy of MateriApps Installer is as follows:
 
-1. Don't depend on special tools (shell, make, tar, etc. are sufficient).
+1. Do not depend on special tools (shell, make, tar, etc. are sufficient).
 
-2. Supercomputers are different from each other, so don't aim to make a universal installer, but make a separate script for exceptions.
+2. Supercomputers are different from each other, so do not aim to make a universal installer, but make a separate script for exceptions.
 
 3. As for the tools, if the package is already available for Linux (RPM Package, Debian Package) or Mac OS X (MacPorts), use it.
 
-4. The version of the application should be the same as `MateriApps LIVE! Necessary patches should also be the same as in the Debian Package for MateriApps LIVE!
+4. The version of the application should be the same as MateriApps LIVE! Necessary patches should also be the same as in Debian Package for MateriApps LIVE!
 
 5. Use a separate folder for each tool/application. Prepare a separate folder for each tool/application.
 
@@ -54,15 +53,15 @@ The design policy of the MateriApps Installer is as follows:
 
    	$PREFIX_TOOL/cmake/cmakevars-3.2.1-1.sh.
 
-7. For the tools' environment variables, link to ``PREFIX_TOOL/env.d`` so that we can keep the old version for collective setting in ``PREFIX_TOOL/env.sh``.
+7. For the environment variables of the tools, link to ``PREFIX_TOOL/env.d`` so that we can keep the old version for collective setting in ``PREFIX_TOOL/env.sh``.
    
-8. Separate installation and relinking (it doesn't affect anything else until the relinking is done). 
+8. Separate installation and relinking (it does not affect anything else until the relinking is done). 
 
 9. Install to a different location for testing.
 
 Main developers
 ------------------------------------------
-The MateriApps Installer is developed by the following members
+MateriApps Installer is developed by the following members.
 
 - ver. xxx
    - Shinji Todo (Graduate School of Science, The University of Tokyo)
