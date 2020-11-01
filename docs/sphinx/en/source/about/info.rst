@@ -10,9 +10,9 @@ MateriApps Installer is a collection of shell scripts to assist in the installat
 
 Background of the Development
 ------------------------------------------
-Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, `MateriApps<http://ma.cms-initiative.jp>`_, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.
+Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, `MateriApps <http://ma.cms-initiative.jp>`_, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.
 
-One of the obstacles for users to start using published applications in materials science is the installation of software. `MateriApps LIVE<https://cmsi.github.io/MateriAppsLive/>`_ is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. MateriApps LIVE! is a Virtual Hard Disk Image (OVA) of VirtualBox that includes applications, OS (Debian GNU/Linux), editors, visualization tools, and other environments needed to get started with the tutorial. By using MateriApps LIVE!, it is possible to easily set up a computing environment for participants in classes and software training sessions.
+One of the obstacles for users to start using published applications in materials science is the installation of software. `MateriApps LIVE! <https://cmsi.github.io/MateriAppsLive/>`_ is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. MateriApps LIVE! is a Virtual Hard Disk Image (OVA) of VirtualBox that includes applications, OS (Debian GNU/Linux), editors, visualization tools, and other environments needed to get started with the tutorial. By using MateriApps LIVE!, it is possible to easily set up a computing environment for participants in classes and software training sessions.
 
 However, the calculation environment provided by MateriApps LIVE! is not sufficient for practical applications. To enable users to easily install applications of computational materials science in a wide range of computing environments, from major domestic joint-use supercomputers to clustered computers in laboratories and personal computers, the development of MateriApps Installer has been started.
 
@@ -40,7 +40,7 @@ The design policy of MateriApps Installer is as follows:
 
     - For example, in the case of cmake
 
-     ... code-block:: bash
+     .. code-block:: bash
 
 	$PREFIX_TOOL/cmake/cmake-3.2.1-1
 
@@ -49,7 +49,7 @@ The design policy of MateriApps Installer is as follows:
 
     - Example for cmake
 
-     ... code-block:: bash
+     .. code-block:: bash
 
    	$PREFIX_TOOL/cmake/cmakevars-3.2.1-1.sh.
 

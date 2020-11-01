@@ -5,16 +5,16 @@ Usage
 Download
 ============
 
-- You can download MateriAppsInstaller by following the steps below.
+- You can download MateriApps Installer by the following steps.
   
   - Download the release version
 
-    Go to the MateriAppsInstaller release page (URL to be added later) to download the zip file and then extract it.
+    Go to the MateriApps Installer release page (URL to be added later) to download the zip file and then extract it.
     The zip file you download from the release page includes a pdf version of this manual.
 
   - Download with git
     
-    You can download the MateriAppsInstaller by typing the following command.
+    You can download the MateriApps Installer by typing the following command.
 
      .. code-block:: bash
 
@@ -66,7 +66,7 @@ Directory Structure
 
   - README.md (essential)
 
-    - It includes a brief introduction to the software and the URL of the official website.
+    - It includes a brief introduction of the software and the URLs of the official website.
 
   - download.sh (essential)
 
@@ -94,13 +94,13 @@ Directory Structure
 
   - config (optional)
 
-    - Additional settings for installation other than the default settings, such as when using an Intel compiler
+    - Additional settings for installation other than the default settings, such as when using the Intel Compiler
 
 - In addition to the above, the following file directories are also available.
 
   - list_maversion.sh
 
-    - A script that summarizes the version.sh information in each directory
+    - A script that summarizes the information of ``version.sh`` in each directory
 
   - util.sh
 
@@ -116,7 +116,7 @@ Directory Structure
 
   - fix_dylib.sh
 
-    - Script to modify RPATH information on macOS
+    - A script to modify information of PATH on macOS
 
   - macosx directory
 
@@ -125,29 +125,29 @@ Directory Structure
 Setup
 ============
 
-- Configuring the installation location for applications deployed by the MateriApps Installer
+- Configuring the installation location for applications extracted by the MateriApps Installer
 
    - By default, the software is installed under ``$HOME/materiapps``.
    - You can change the installation location by setting the following options in ``$HOME/.mainstaller``.
 
-      .. csv-table:: Title of table
+      .. csv-table:: Explanation of options
 	 :header: "option", "default", "description"
 	 :widths: 15, 15, 30
 
-         ``PREFIX`` , ``$HOME/materiapps``,  Tool and app installation location (if you want to install them both in the same place)
-         ``PREFIX_TOOL`` , ``$HOME/materiapps`` ,Where to install the tool
-         ``PREFIX_APPS`` , ``$HOME/materiapps`` ,Where to install the application software
-         ``BUILD_DIR`` , ``$HOME/build`` ,Where to build
-         ``SOURCE_DIR`` , ``$HOME/source`` ,Source tarball directory
+         ``PREFIX`` , ``$HOME/materiapps``,  Install directory of applications and tools (if you want to install them both in the same place)
+         ``PREFIX_TOOL`` , ``$HOME/materiapps`` ,Install directory of tools
+         ``PREFIX_APPS`` , ``$HOME/materiapps`` ,Install directory of applications
+         ``BUILD_DIR`` , ``$HOME/build`` ,Directory for build
+         ``SOURCE_DIR`` , ``$HOME/source`` ,Directory of source tarballs
 
--  The installation directory (the directory specified in ``PREFIX``, ``PREFIX_TOOL`` and ``PREFIX_APPS`` above) is newly created.
+-  The install directory (the directory specified in ``PREFIX``, ``PREFIX_TOOL`` and ``PREFIX_APPS`` above) is newly created.
 
 Install
 ============
 
 - Run "install.sh" for each application.
 
-    - In each application's config sub folder, there is a subdirectory with the compiler name corresponding to the installation (gcc, intel, etc.).
+    - In ``config`` directory of each application, there are subdirectories with the compiler name corresponding to the installation (gcc, intel, etc.).
     - If you want to specify the compiler, you can add the compiler name after install.sh. The following is an example of compiling with gcc.
       
       .. code-block:: bash
@@ -160,17 +160,17 @@ How to use the tools and apps
 
 - Tools (cmake, hdf5, python, etc.)
    
-   - Run the following command (or write the same in a shell initialization script)
+   - Run the following command (or write the same command in a shell initialization script)
 
      .. code-block:: bash
 
 	source $PREFIX_TOOL/env.sh
 
-- Applications (alps, openmx, modylas, etc.)
+- Applications (ALPS, OpenMX, MODYLAS, etc.)
 
-   - Set environment variables (e.g. ``PATH``) for each app using scripts.
+   - Set environment variables (e.g. ``PATH``) for each application using scripts.
     
-      For example, in the case of alps:
+      For example, in the case of ALPS:
 
       .. code-block:: bash
 
