@@ -30,12 +30,11 @@ mkdir $BUILD_DIR/${__NAME__}-${__VERSION__}/build
 cd $BUILD_DIR/${__NAME__}-${__VERSION__}/build
 echo "[cmake]" | tee -a $LOG
 check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF \
-  $BUILD_DIR/${__NAME__}-${__VERSION__} | tee -a $LOG
+  $BUILD_DIR/${__NAME__}-${__VERSION__} 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-make install | tee -a $LOG
+make install 2>&1 | tee -a $LOG
 
 finish_info | tee -a $LOG
-
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
 DIRNAME=$(capitalize ${__NAME__})_DIR

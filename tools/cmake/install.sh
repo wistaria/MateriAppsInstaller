@@ -34,13 +34,13 @@ rm -rf build && mkdir -p build && cd build
 if [ -f $CONFIG_DIR/preprocess.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/preprocess.sh
 else
-  check ../bootstrap --prefix=$PREFIX | tee -a $LOG
+  check ../bootstrap --prefix=$PREFIX 2>&1 | tee -a $LOG
 fi
 
 echo "[make]" | tee -a $LOG
-check make | tee -a $LOG
+check make 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-check make install | tee -a $LOG
+check make install 2>&1 | tee -a $LOG
 
 if [ -f $CONFIG_DIR/postprocess.sh ];then
   check sh $CONFIG_DIR/postprocess.sh
