@@ -20,6 +20,7 @@ if [ -d $targetdir ]; then :; else
       if [ $p != debian.patch ]; then
         # echo "applying $p"
         # patch -p1 < $SCRIPT_DIR/patches/$p
+        :
       fi
     done
   fi
