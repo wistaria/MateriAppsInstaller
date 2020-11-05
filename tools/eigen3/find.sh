@@ -1,0 +1,16 @@
+#!/bin/sh
+
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+
+MA_BOOOT_VERSION=$(sh ${SCRIPT_DIR}/../../scripts/cmake-find-package.sh eigen3)
+MA_EIGEN3_VERSION_MAJOR=$(echo ${MA_BOOOT_VERSION} | cut -d . -f 1)
+MA_EIGEN3_VERSION_MINOR=$(echo ${MA_BOOOT_VERSION} | cut -d . -f 2)
+MA_EIGEN3_VERSION_PATCH=$(echo ${MA_BOOOT_VERSION} | cut -d . -f 3)
+
+<< "#__COMMENT__"
+  echo "MA_EIGEN3=${MA_EIGEN3}"
+  echo "MA_EIGEN3_VERSION=${MA_EIGEN3_VERSION}"
+  echo "MA_EIGEN3_VERSION_MAJOR=${MA_EIGEN3_VERSION_MAJOR}"
+  echo "MA_EIGEN3_VERSION_MINOR=${MA_EIGEN3_VERSION_MINOR}"
+  echo "MA_EIGEN3_VERSION_PATCH=${MA_EIGEN3_VERSION_PATCH}"
+#__COMMENT__

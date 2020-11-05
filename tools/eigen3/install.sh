@@ -6,8 +6,6 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
-  echo "Available list:"
-  ls -1 $SCRIPT_DIR/config
   exit 127
 fi
 
@@ -28,35 +26,22 @@ sh $SCRIPT_DIR/setup.sh
 
 start_info | tee -a $LOG
 
-echo "[bootstrap]" | tee -a $LOG
-check cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}/tools/build
-if [ -f $CONFIG_DIR/bootstrap.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
-else  
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/bootstrap.sh
-fi
-
-echo "[build]" | tee -a $LOG
-check cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-if [ -f $CONFIG_DIR/build.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/build.sh
-else
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/build.sh
-fi
-
-if [ -f $CONFIG_DIR/postprocess.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/postprocess.sh
-fi
+mkdir $BUILD_DIR/${__NAME__}-${__VERSION__}/build
+cd $BUILD_DIR/${__NAME__}-${__VERSION__}/build
+echo "[cmake]" | tee -a $LOG
+check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF \
+  $BUILD_DIR/${__NAME__}-${__VERSION__} 2>&1 | tee -a $LOG
+echo "[make install]" | tee -a $LOG
+make install 2>&1 | tee -a $LOG
 
 finish_info | tee -a $LOG
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
-
+DIRNAME=$(capitalize ${__NAME__})_DIR
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export PATH=\${${ROOTNAME}}/bin:\$PATH
-export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
+export ${DIRNAME}=\${${ROOTNAME}}
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
