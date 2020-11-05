@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-MateriAppsInstallerの概要
+MateriApps Installerの概要
 ------------------------------------------
 MateriApps Installerは様々な計算機環境に対応した計算物質科学アプリケーションのインストール補助を行うシェルスクリプト集である。MateriApps Installerには、オープンソースの計算物質科学アプリケーションやツール類を、macOSをはじめ、Linux PCやクラスタワークステーション、さらには国内の主要なスパコンシステムにインストールするためのシェルスクリプトが含まれる。MateriApps Installerは、東京大学物性研究所の全国共同利用スパコンにおいて、主要アプリケーションのプレインストールにも利用されている(インストールされているソフトウェア一覧は****に記載されている)。
 
@@ -14,7 +14,7 @@ MateriApps Installerは様々な計算機環境に対応した計算物質科学
 
 利用者が物質科学の公開アプリケーションを使い始めようとする際に障害となるのは、ソフトウェアのインストール作業である。そこで手持ちのノートPCなどを用いて、気軽に計算物質科学アプリケーションを試せすことができる環境 MateriApps LIVE! <https://cmsi.github.io/MateriAppsLive/>_ の開発・公開も行っている。MateriApps LIVE!は、MateriAppsアプリケーション、OS (Debian GNU/Linux)、エディタ、可視化ツールなど、チュートリアルを始めるのに必要な環境がVirtualBoxの仮想ハードディスクイメージ(OVA)としてまとめられている。MateriApps LIVE!を用いることで、授業やソフトウェア講習会などで参加者の計算機環境を簡単に構築することが可能である。
 
-しかしながら、実用向けの計算を行うにはMateriApps LIVE!の計算環境では非力である。物性研スーパーコンピュータなどの国内の主要なスーパーコンピュータから各研究室のクラスター計算機、個人のPCなど、幅広い計算環境において計算物質科学アプリケーションを利用者が手軽にインストールできるよう、MateriAppsInstallerの開発が開始された。
+しかしながら、実用向けの計算を行うにはMateriApps LIVE!の計算環境では非力である。物性研スーパーコンピュータなどの国内の主要なスーパーコンピュータから各研究室のクラスター計算機、個人のPCなど、幅広い計算環境において計算物質科学アプリケーションを利用者が手軽にインストールできるよう、MateriApps Installerの開発が開始された。
 
 
 目標
