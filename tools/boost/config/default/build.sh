@@ -2,15 +2,11 @@
 
 . $SCRIPT_DIR/../../scripts/util.sh
 
-BJAM="$PREFIX/bin/b2 --layout=system --ignore-site-config toolset=intel"
+BJAM="$PREFIX/bin/b2 --layout=system --ignore-site-config"
 
 # setup config files
 
-for m in mpiicc mpicc; do
-  mc=$(which $m 2> /dev/null)
-  test -n "$mc" && break
-done
-echo "using mpi : $mc ;" > user-config.jam
+echo "using mpi : $(which mpicc) ;" > user-config.jam
 . $SCRIPT_DIR/../python/find.sh
 if [ ${MA_HAVE_PYTHON2} = "yes" ]; then
   cp user-config.jam user-config-python2.jam

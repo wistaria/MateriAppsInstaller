@@ -92,19 +92,23 @@ finish_info() {
   echo "Finish: $(date)"
 }
 
-calc_strip_components(){
+calc_strip_components() {
   if [ $# -lt 2 ];then
     echo "usage: calc_strip_components tarfile file_in_rootdir"
   fi
   tar tf $1 | grep $2 | awk -F / 'BEGIN {res=99999}; {if (NF<res) res=NF}; END{print res-1}'
 }
 
-toupper(){
+toupper() {
   echo $@ | tr '[a-z]' '[A-Z]'
 }
 
-tolower(){
+tolower() {
   echo $@ | tr '[A-Z]' '[a-z]'
+}
+
+capitalize() {
+  echo $@ | awk '{ print toupper(substr($0, 1, 1)) substr($0, 2, length($0) - 1) }'
 }
 
 finish_test() {
