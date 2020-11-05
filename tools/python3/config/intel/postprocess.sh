@@ -32,3 +32,9 @@ $PREFIX/bin/pip3 install mock | tee -a $LOG
 
 echo "[toml]" | tee -a $LOG
 $PREFIX/bin/pip3 install toml | tee -a $LOG
+
+echo "[Cython]" | tee -a $LOG
+$PREFIX/bin/pip3 install Cython | tee -a $LOG
+
+echo "[mpi4py]" | tee -a $LOG
+$PREFIX/bin/pip3 install mpi4py | tee -a $LOG

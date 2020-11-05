@@ -1,6 +1,8 @@
+# Intel compiler seems not to work?
+# And so use GCC
+
 ./configure \
   --prefix=$PREFIX \
   --enable-shared \
-  CC=`which icc` \
-  CFLAGS="${MA_EXTRA_FLAGS}" \
+  --enable-optimizations \
   2>&1 | tee -a $LOG

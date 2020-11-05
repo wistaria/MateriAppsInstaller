@@ -4,10 +4,7 @@ set -o pipefail
 # configurable variables (e.g. compiler)
 export CMAKE=${CMAKE:-cmake}
 export CC=${CC:-}
-export FC=${FC:-}
-export SCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES:-}
 export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
-export ISSP_UCOUNT=${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
