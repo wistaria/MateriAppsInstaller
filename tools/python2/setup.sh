@@ -16,11 +16,5 @@ if [ -d ${__NAME__}-${__VERSION__} ]; then :; else
     patch -p1 < $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch
   fi
 fi
-
-if [ -f get-pip.py ]; then :; else
-  if [ ! -f $SOURCE_DIR/get-pip.py ]; then
-    check wget $WGET_OPTION https://bootstrap.pypa.io/get-pip.py -O $SOURCE_DIR/get-pip.py
-  fi
-  check cp $SOURCE_DIR/get-pip.py .
-fi
+check cp $SOURCE_DIR/get-pip.py .
 
