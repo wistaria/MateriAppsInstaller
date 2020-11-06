@@ -5,16 +5,16 @@
 ダウンロード
 ============
 
-- MateriAppsInstallerは以下の手順でダウンロードできる。
+- MateriApps Installerは以下の手順でダウンロードできる。
   
   - リリース版のダウンロード
 
-    MateriAppsInstallerのリリースページ(URLを後日追加)に行き、zipファイルをダウンロードした後に展開する。
+    MateriApps Installerのリリースページ(URLを後日追加)に行き、zipファイルをダウンロードした後に展開する。
     リリースページからダウンロードするzipファイルには本マニュアルのpdf版も同封されている。
 
   - git を利用したダウンロード
     
-    以下のコマンドを打つことで、MateriAppsInstallerのダウンロードが可能である。
+    以下のコマンドを打つことで、MateriApps Installerのダウンロードが可能である。
 
      .. code-block:: bash
 
