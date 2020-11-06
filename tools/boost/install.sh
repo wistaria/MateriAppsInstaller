@@ -57,6 +57,7 @@ cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
 export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
+export PYTHONPATH=\${${ROOTNAME}}/lib/python:\$PYTHONPATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
