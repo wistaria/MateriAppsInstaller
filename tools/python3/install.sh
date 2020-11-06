@@ -45,7 +45,7 @@ check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1
 
-export PVERSION=$($PREFIX/bin/python3 --version | cut -d' ' -f2 | cut -d. -f1,2)
+export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
 check sh $CONFIG_DIR/postprocess.sh
