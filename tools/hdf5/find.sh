@@ -8,7 +8,7 @@ MA_HDF5_VERSION_MAJOR=$(echo ${MA_HDF5_VERSION} | cut -d . -f 1)
 MA_HDF5_VERSION_MINOR=$(echo ${MA_HDF5_VERSION} | cut -d . -f 2)
 MA_HDF5_VERSION_PATCH=$(echo ${MA_HDF5_VERSION} | cut -d . -f 3)
 
-if [ -n ${MA_HDF5_VERSION} ]; then
+if [ -n "${MA_HDF5_VERSION}" ]; then
   MA_HAVE_HDF5=yes
 fi
 

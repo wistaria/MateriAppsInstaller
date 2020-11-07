@@ -15,12 +15,6 @@ fi
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $SCRIPT_DIR/../../tools/boost/find.sh; if [ ${MA_HAVE_BOOST} = "no" ]; then echo "Error: boost not found"; exit 127; fi
-
-. $SCRIPT_DIR/../../tools/cmake/find.sh; if [ ${MA_HAVE_CMAKE} = "no" ]; then echo "Error: cmake not found"; exit 127; fi
-
-. $SCRIPT_DIR/../../tools/hdf5/find.sh; if [ ${MA_HAVE_HDF5} = "no" ]; then echo "Error: hdf5 not found"; exit 127; fi
-
 . ${MA_ROOT}/env.sh
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
@@ -29,6 +23,10 @@ if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+
+. $SCRIPT_DIR/../../tools/boost/find.sh; if [ ${MA_HAVE_BOOST} = "no" ]; then echo "Error: boost not found"; exit 127; fi
+. $SCRIPT_DIR/../../tools/cmake/find.sh; if [ ${MA_HAVE_CMAKE} = "no" ]; then echo "Error: cmake not found"; exit 127; fi
+. $SCRIPT_DIR/../../tools/hdf5/find.sh; if [ ${MA_HAVE_HDF5} = "no" ]; then echo "Error: hdf5 not found"; exit 127; fi
 
 sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG

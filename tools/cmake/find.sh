@@ -12,10 +12,9 @@ if [ -n "${MA_CMAKE}" ]; then
   MA_CMAKE_VERSION_MAJOR=$(echo ${MA_CMAKE_VERSION} | cut -d . -f 1)
   MA_CMAKE_VERSION_MINOR=$(echo ${MA_CMAKE_VERSION} | cut -d . -f 2)
   MA_CMAKE_VERSION_PATCH=$(echo ${MA_CMAKE_VERSION} | cut -d . -f 3)
-  MA_HAVE_CMAKE=yes
 fi
 
-if [ -n ${MA_CMAKE_VERSION} ]; then
+if [ -n "${MA_CMAKE_VERSION}" ]; then
   MA_HAVE_CMAKE=yes
 fi
 

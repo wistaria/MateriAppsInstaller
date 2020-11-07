@@ -8,7 +8,7 @@ MA_BOOST_VERSION_MAJOR=$(echo ${MA_BOOST_VERSION} | cut -d . -f 1)
 MA_BOOST_VERSION_MINOR=$(echo ${MA_BOOST_VERSION} | cut -d . -f 2)
 MA_BOOST_VERSION_PATCH=$(echo ${MA_BOOST_VERSION} | cut -d . -f 3)
 
-if [ -n ${MA_BOOST_VERSION} ]; then
+if [ -n "${MA_BOOST_VERSION}" ]; then
   MA_HAVE_BOOST=yes
 fi
 

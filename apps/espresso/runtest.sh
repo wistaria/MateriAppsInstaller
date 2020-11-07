@@ -47,7 +47,7 @@ export PREFIX
 
 workdir="test_`date +%FT%T`"
 rm -rf $workdir
-cp -r test $workdir
+cp -r $SCRIPT_DIR/test $workdir
 cd $workdir
 sh ./test.sh || exit 127
 

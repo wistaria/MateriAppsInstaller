@@ -17,7 +17,7 @@ if [ -n "${MA_PYTHON3}" ]; then
   fi
 fi
 
-if [ -n ${MA_PYTHON3_VERSION} ]; then
+if [ -n "${MA_PYTHON3_VERSION}" ]; then
   MA_HAVE_PYTHON3=yes
 fi
 

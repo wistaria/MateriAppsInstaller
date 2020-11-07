@@ -8,7 +8,7 @@ MA_EIGEN3_VERSION_MAJOR=$(echo ${MA_EIGEN3_VERSION} | cut -d . -f 1)
 MA_EIGEN3_VERSION_MINOR=$(echo ${MA_EIGEN3_VERSION} | cut -d . -f 2)
 MA_EIGEN3_VERSION_PATCH=$(echo ${MA_EIGEN3_VERSION} | cut -d . -f 3)
 
-if [ -n ${MA_EIGEN3_VERSION} ]; then
+if [ -n "${MA_EIGEN3_VERSION}" ]; then
   MA_HAVE_EIGEN3=yes
 fi
 
