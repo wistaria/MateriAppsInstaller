@@ -6,5 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.bz2 ]; then :; else
-  check wget -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.bz2 https://gitlab.com/libeigen/eigen/-/archive/${__VERSION__}/eigen-${__VERSION__}.tar.bz2
+  check wget --no-check-certificate -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.bz2 https://gitlab.com/libeigen/eigen/-/archive/${__VERSION__}/eigen-${__VERSION__}.tar.bz2
 fi
