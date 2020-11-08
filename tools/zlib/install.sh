@@ -1,4 +1,5 @@
 #!/bin/sh
+
 set -o pipefail
 
 mode=${1:-default}
@@ -7,7 +8,7 @@ CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
   echo "Available list:"
-  ls -1 config
+  ls -1 $SCRIPT_DIR/config
   exit 127
 fi
 
@@ -24,31 +25,24 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
-. $SCRIPT_DIR/../../tools/zlib/find.sh; if [ ${MA_HAVE_ZLIB} = "no" ]; then echo "Error: zlib not found"; exit 127; fi
-
 sh $SCRIPT_DIR/setup.sh
-rm -f $LOG
-check cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+
 start_info | tee -a $LOG
 
-echo "[preprocess]" | tee -a $LOG
-if [ -f $CONFIG_DIR/preprocess.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/preprocess.sh
+echo "[configure]" | tee -a $LOG
+cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+if [ -f $CONFIG_DIR/bootstrap.sh ]; then
+  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
 else
-  if [ -n "$ZLIB_ROOT" ]; then
-    check ./configure --prefix=$PREFIX --with-tcltk --with-zlib=$ZLIB_ROOT 2>&1 | tee -a $LOG
-  else
-    check ./configure --prefix=$PREFIX --with-tcltk 2>&1 | tee -a $LOG
-  fi
+  check ./configure --prefix=$PREFIX 2>&1 | tee -a $LOG
 fi
-
-echo "[make]" | tee -a $LOG
-check make -i 2>&1 | tee -a $LOG
+echo "[build]" | tee -a $LOG
+check make 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-check make -i install 2>&1 | tee -a $LOG
+make install 2>&1 | tee -a $LOG
 
-if [ -f $CONFIG_DIR/postprocess.sh ];then
-  check sh $CONFIG_DIR/postprocess.sh
+if [ -f $CONFIG_DIR/postprocess.sh ]; then
+  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/postprocess.sh
 fi
 
 finish_info | tee -a $LOG
@@ -58,7 +52,7 @@ ROOTNAME=$(toupper ${__NAME__})_ROOT
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export PATH=\${${ROOTNAME}}/bin:\$PATH
+export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
