@@ -37,7 +37,7 @@ cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}/build
 if [ -f $CONFIG_DIR/bootstrap.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
 else
-  check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_OPENMP=ON .. 2>&1 | tee -a $LOG
+  check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_OPENMP=ON -DENABLE_THREADS=ON .. 2>&1 | tee -a $LOG
 fi
 echo "[build]" | tee -a $LOG
 check make 2>&1 | tee -a $LOG
@@ -50,7 +50,7 @@ cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}/build-float
 if [ -f $CONFIG_DIR/bootstrap-float.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap-float.sh
 else
-  check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_OPENMP=ON -DENABLE_FLOAT=ON .. 2>&1 | tee -a $LOG
+  check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_OPENMP=ON -DENABLE_THREADS=ON -DENABLE_FLOAT=ON .. 2>&1 | tee -a $LOG
 fi
 echo "[build]" | tee -a $LOG
 check make 2>&1 | tee -a $LOG
