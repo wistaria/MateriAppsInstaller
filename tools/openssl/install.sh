@@ -39,7 +39,8 @@ fi
 echo "[build]" | tee -a $LOG
 check make 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-make install 2>&1 | tee -a $LOG
+check make install 2>&1 | tee -a $LOG
+cp -rp $SCRIPT_DIR/cert/cacert.pem $PREFIX/ssl/cert.pem 2>&1 | tee -a $LOG
 
 if [ -f $CONFIG_DIR/postprocess.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/postprocess.sh
@@ -52,7 +53,6 @@ ROOTNAME=$(toupper ${__NAME__})_ROOT
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export ${ROOTNAME}_DIR=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
 export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
