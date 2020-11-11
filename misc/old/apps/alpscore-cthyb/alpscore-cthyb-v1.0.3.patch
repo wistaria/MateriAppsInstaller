@@ -1,0 +1,13 @@
+diff -crN alpscore-cthyb-v1.0.3.orig/test/gtest-all.cc alpscore-cthyb-v1.0.3/test/gtest-all.cc
+*** alpscore-cthyb-v1.0.3.orig/test/gtest-all.cc	Thu Mar 22 13:57:27 2018
+--- alpscore-cthyb-v1.0.3/test/gtest-all.cc	Thu Feb 14 09:58:39 2019
+***************
+*** 305,310 ****
+--- 305,311 ----
+  #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
+  
+  #include <math.h>
++ #include <limits.h>
+  
+  #if GTEST_OS_LINUX
+  

@@ -1,0 +1,66 @@
+diff -crN tapioca_1.5.0.orig/src/Makefile tapioca_1.5.0/src/Makefile
+*** tapioca_1.5.0.orig/src/Makefile	Mon Apr  6 17:41:22 2015
+--- tapioca_1.5.0/src/Makefile	Mon Apr  6 17:42:03 2015
+***************
+*** 71,77 ****
+  test: $(TARGET)
+  
+  install: $(TARGET)
+! 	install -d $(DESTDIR)/usr/libexec/tapioca
+! 	install $(TARGET) $(DESTDIR)/usr/libexec/tapioca
+  
+  include Makefile.dep
+--- 71,77 ----
+  test: $(TARGET)
+  
+  install: $(TARGET)
+! 	mkdir -p $(PREFIX)/libexec
+! 	cp -p $(TARGET) $(PREFIX)/libexec
+  
+  include Makefile.dep
+diff -crN tapioca_1.5.0.orig/src/Makefile.inc tapioca_1.5.0/src/Makefile.inc
+*** tapioca_1.5.0.orig/src/Makefile.inc	Mon Apr  6 17:41:22 2015
+--- tapioca_1.5.0/src/Makefile.inc	Mon Apr  6 17:43:18 2015
+***************
+*** 37,56 ****
+  #ICON   = 
+  
+  ### for Linux, debian 6
+! QT4    =  /usr
+! CC     =  g++
+! CFLAGS = -O3 -Wall
+! INCS   = -I/usr/include/qt4 -I/usr/X11R6/include
+! LIBS   = -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGLU -llapack -lblas
+! ICON   =
+! 
+! ### for Mac
+! #QT4    =  /usr/local/Trolltech/Qt-4.8.4
+  #CC     =  g++
+  #CFLAGS = -O3 -Wall
+! #INCS   = -I$(QT4)/include -I/usr/X11R6/include
+! #LIBS   = -F$(QT4)/lib -L$(QT4)/lib -framework QtXml -framework QtOpenGL -framework QtGui -framework QtCore -framework OpenGL -llapack -lblas
+! #ICON   = 
+  
+  #########################################
+  ### do not edit lines below
+--- 37,56 ----
+  #ICON   = 
+  
+  ### for Linux, debian 6
+! #QT4    =  /usr
+  #CC     =  g++
+  #CFLAGS = -O3 -Wall
+! #INCS   = -I/usr/include/qt4 -I/usr/X11R6/include
+! #LIBS   = -lQtCore -lQtGui -lQtOpenGL -lQtXml -lGLU -llapack -lblas
+! #ICON   =
+! 
+! ### for Mac
+! QT4    =  /opt/local
+! CC     =  g++
+! CFLAGS = -O3 -Wall
+! INCS   = -I$(QT4)/include
+! LIBS   = -F$(QT4)/Library/Frameworks -L$(QT4)/lib -framework QtXml -framework QtOpenGL -framework QtGui -framework QtCore -framework OpenGL -llapack -lblas
+! ICON   = 
+  
+  #########################################
+  ### do not edit lines below

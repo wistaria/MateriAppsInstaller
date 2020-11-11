@@ -1,0 +1,71 @@
+diff -urN numpy-1.9.2.orig/numpy/distutils/fcompiler/intel.py numpy-1.9.2/numpy/distutils/fcompiler/intel.py
+--- numpy-1.9.2.orig/numpy/distutils/fcompiler/intel.py	2014-10-26 23:36:14.000000000 +0900
++++ numpy-1.9.2/numpy/distutils/fcompiler/intel.py	2018-02-14 19:54:15.625463636 +0900
+@@ -50,8 +50,9 @@
+         return ['-fPIC']
+ 
+     def get_flags_opt(self):
+-        #return ['-i8 -xhost -openmp -fp-model strict']
+-        return ['-xhost -openmp -fp-model strict']
++        v = self.get_version()
++        mpopt = 'openmp' if v and v < '15' else 'qopenmp'
++        return ['-fp-model strict -O1 -{}'.format(mpopt)]
+ 
+     def get_flags_arch(self):
+         return []
+@@ -113,8 +114,9 @@
+         return ['-fPIC']
+ 
+     def get_flags_opt(self):
+-        #return ['-i8 -xhost -openmp -fp-model strict']
+-        return ['-xhost -openmp -fp-model strict']
++        v = self.get_version()
++        mpopt = 'openmp' if v and v < '15' else 'qopenmp'
++        return ['-fp-model strict -O1 -{}'.format(mpopt)]
+ 
+     def get_flags_arch(self):
+         return []
+diff -urN numpy-1.9.2.orig/numpy/distutils/intelccompiler.py numpy-1.9.2/numpy/distutils/intelccompiler.py
+--- numpy-1.9.2.orig/numpy/distutils/intelccompiler.py	2014-10-26 23:36:14.000000000 +0900
++++ numpy-1.9.2/numpy/distutils/intelccompiler.py	2018-02-14 19:54:15.625463636 +0900
+@@ -11,7 +11,10 @@
+ 
+     def __init__ (self, verbose=0, dry_run=0, force=0):
+         UnixCCompiler.__init__ (self, verbose, dry_run, force)
+-        self.cc_exe = 'icc -fPIC'
++        v = self.get_version()
++        mpopt = 'openmp' if v and v < '15' else 'qopenmp'
++        self.cc_exe = ('icc -fPIC -fp-model strict -O3 '
++                       '-fomit-frame-pointer -{}').format(mpopt)
+         compiler = self.cc_exe
+         self.set_executables(compiler=compiler,
+                              compiler_so=compiler,
+@@ -32,11 +35,14 @@
+     """ A modified Intel x86_64 compiler compatible with a 64bit gcc built Python.
+     """
+     compiler_type = 'intelem'
+-    cc_exe = 'icc -m64 -fPIC'
++    cc_exe = 'icc -m64'
+     cc_args = "-fPIC"
+     def __init__ (self, verbose=0, dry_run=0, force=0):
+         UnixCCompiler.__init__ (self, verbose, dry_run, force)
+-        self.cc_exe = 'icc -m64 -fPIC'
++        v = self.get_version()
++        mpopt = 'openmp' if v and v < '15' else 'qopenmp'
++        self.cc_exe = ('icc -m64 -fPIC -fp-model strict -O3 '
++                       '-fomit-frame-pointer -{}').format(mpopt)
+         compiler = self.cc_exe
+         self.set_executables(compiler=compiler,
+                              compiler_so=compiler,
+diff -urN numpy-1.9.2.orig/numpy/distutils/system_info.py numpy-1.9.2/numpy/distutils/system_info.py
+--- numpy-1.9.2.orig/numpy/distutils/system_info.py	2015-02-02 01:38:25.000000000 +0900
++++ numpy-1.9.2/numpy/distutils/system_info.py	2018-02-14 19:55:15.370444533 +0900
+@@ -955,7 +955,7 @@
+                 plt = '64'
+                 #l = 'mkl_ipf'
+             elif cpu.is_Xeon():
+-                plt = 'em64t'
++                plt = 'intel64'
+                 #l = 'mkl_em64t'
+             else:
+                 plt = '32'
