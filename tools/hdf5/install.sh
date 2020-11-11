@@ -34,13 +34,12 @@ cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
 if [ -f $CONFIG_DIR/bootstrap.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
 else
-  check ./config --prefix=$PREFIX 2>&1 | tee -a $LOG
+  check ./configure --prefix=$PREFIX  --enable-threadsafe --enable-unsupported --with-pthread=yes 2>&1 | tee -a $LOG
 fi
 echo "[build]" | tee -a $LOG
 check make 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-check make install 2>&1 | tee -a $LOG
-cp -rp $SCRIPT_DIR/cert/cacert.pem $PREFIX/ssl/cert.pem 2>&1 | tee -a $LOG
+make install 2>&1 | tee -a $LOG
 
 if [ -f $CONFIG_DIR/postprocess.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/postprocess.sh

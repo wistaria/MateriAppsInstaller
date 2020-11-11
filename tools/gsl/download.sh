@@ -6,5 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ]; then :; else
-  check wget -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz https://www.kernel.org/pub/software/scm/git/${__NAME__}-${__VERSION__}.tar.gz
+  check wget --no-check-certificate -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz http://mirrors.kernel.org/gnu/${__NAME__}/${__NAME__}-${__VERSION__}.tar.gz
 fi

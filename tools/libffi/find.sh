@@ -2,35 +2,19 @@
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 
-MA_HAVE_OPENSSL=no
-MA_OPENSSL=$(which openssl)
-MA_OPENSSL_VERSION=
-MA_OPENSSL_VERSION_MAJOR=
-MA_OPENSSL_VERSION_MINOR=
-MA_OPENSSL_VERSION_PATCH=
+MA_HAVE_LIBFFI=no
 
-if [ -n "${MA_OPENSSL}" ]; then
-  for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
-  echo "void SSL_CTX_new(); int main() { SSL_CTX_new(); }" > test-$$.c
-  ${__CC__} test-$$.c -o test-$$ -L${OPENSSL_ROOT}/lib -lssl > /dev/null 2>&1
-  if [ $? = 0 ]; then
-    MA_OPENSSL_VERSION=$(${MA_OPENSSL} version | awk '{print $2}')
-    MA_OPENSSL_VERSION_MAJOR=$(echo ${MA_OPENSSL_VERSION} | cut -d . -f 1)
-    MA_OPENSSL_VERSION_MINOR=$(echo ${MA_OPENSSL_VERSION} | cut -d . -f 2)
-    MA_OPENSSL_VERSION_PATCH=$(echo ${MA_OPENSSL_VERSION} | cut -d . -f 3)
-  fi
-  rm -f test-$$.c test-$$
+for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
+cat <<EOF > test-$$.c
+#include <ffi.h>
+int main() { ffi_closure_free((void*)0); }
+EOF
+${__CC__} test-$$.c -o test-$$ -I${LIBFFI_ROOT}/include -L${LIBFFI_ROOT}/lib64 -lffi > /dev/null 2>&1
+if [ $? = 0 ]; then
+  MA_HAVE_LIBFFI=yes
 fi
-
-if [ -n "${MA_OPENSSL_VERSION}" ]; then
-  MA_HAVE_OPENSSL=yes
-fi
+rm -f test-$$.c test-$$
 
 << "#__COMMENT__"
-  echo "MA_HAVE_OPENSSL=${MA_HAVE_OPENSSL}"
-  echo "MA_OPENSSL=${MA_OPENSSL}"
-  echo "MA_OPENSSL_VERSION=${MA_OPENSSL_VERSION}"
-  echo "MA_OPENSSL_VERSION_MAJOR=${MA_OPENSSL_VERSION_MAJOR}"
-  echo "MA_OPENSSL_VERSION_MINOR=${MA_OPENSSL_VERSION_MINOR}"
-  echo "MA_OPENSSL_VERSION_PATCH=${MA_OPENSSL_VERSION_PATCH}"
+  echo "MA_HAVE_LIBFFI=${MA_HAVE_LIBFFI}"
 #__COMMENT__

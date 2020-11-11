@@ -1,13 +1,18 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
 sh $SCRIPT_DIR/download.sh
 
 cd $BUILD_DIR
-if [ -d hdf5-$HDF5_VERSION ]; then :; else
-  tar jxf $SOURCE_DIR/hdf5-$HDF5_VERSION.tar.bz2
+if [ -d ${__NAME__}-${__VERSION__} ]; then :; else
+  tar jxf $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.bz2
+  mv -f ${__NAME__}-${__VERSION__} ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+  if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
+    cd ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+    cat $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch | patch -p1
+  fi
 fi
