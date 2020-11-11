@@ -46,6 +46,8 @@ check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
 check make install | tee -a $LOG || exit 1
 
+ln -s $PREFIX/share/tenes/sample $PREFIX/sample
+
 if [ -e $CONFIG_DIR/postprocess.sh ];then
 check sh $CONFIG_DIR/postprocess.sh
 fi
