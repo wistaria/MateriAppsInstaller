@@ -1,12 +1,12 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $PREFIX_TOOL/env.sh
+. $MA_ROOT/env.sh
 
-GITVARS_SH=$PREFIX_TOOL/git/gitvars-$GIT_VERSION-$GIT_MA_REVISION.sh
-rm -f $PREFIX_TOOL/env.d/gitvars.sh
-ln -s $GITVARS_SH $PREFIX_TOOL/env.d/gitvars.sh
+VARS_SH=$MA_ROOT/${__NAME__}/${__NAME__}vars-$__VERSION__-$__MA_REVISION__.sh
+rm -f $MA_ROOT/env.d/${__NAME__}vars.sh
+ln -s $VARS_SH $MA_ROOT/env.d/${__NAME__}vars.sh

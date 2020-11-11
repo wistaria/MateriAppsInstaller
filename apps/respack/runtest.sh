@@ -1,9 +1,6 @@
 #!/bin/sh
 set -o pipefail
 
-# Path to pw.x
-# If undef or empty, use QE in materiapps
-export PWX=${PWX:-""}
 
 # configurable variables (e.g. compiler)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
@@ -26,11 +23,6 @@ set_prefix
 trap 'finish_test $?' EXIT
 
 . ${MA_ROOT}/env.sh
-
-if [ -z ${PWX} ]; then
-  . ${MA_ROOT}/espresso/espressovars.sh
-  PWX=${ESPRESSO_ROOT}/bin/pw.x
-fi
 
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 if [ ! -f "$VARS_SH" ]; then
@@ -55,7 +47,7 @@ export PREFIX
 
 workdir="test_`date +%FT%T`"
 rm -rf $workdir
-cp -r test $workdir
+cp -r $SCRIPT_DIR/test $workdir
 cd $workdir
 sh ./test.sh || exit 127
 

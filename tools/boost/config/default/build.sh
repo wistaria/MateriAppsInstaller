@@ -31,7 +31,16 @@ fi
 # install
 
 env BOOST_BUILD_PATH=. ${BJAM} --user-config=user-config.jam --without-python --prefix=$PREFIX install 2>&1 | tee -a $LOG
-cp -rp stage-python2/lib/cmake/boost_mpi_python-* stage-python2/lib/cmake/boost_numpy-* stage-python2/lib/cmake/boost_python-* $PREFIX/lib/cmake 2>&1 | tee -a $LOG
-cp -rp stage-python2/lib/boost-python* stage-python2/lib/libboost_*python* stage-python2/lib/libboost_*numpy* $PREFIX/lib 2>&1 | tee -a $LOG
-cp -rp stage-python3/lib/cmake/boost_mpi_python-* stage-python3/lib/cmake/boost_numpy-* stage-python3/lib/cmake/boost_python-* $PREFIX/lib/cmake 2>&1 | tee -a $LOG
-cp -rp stage-python3/lib/boost-python* stage-python3/lib/libboost_*python* stage-python3/lib/libboost_*numpy* $PREFIX/lib 2>&1 | tee -a $LOG
+if [ ${MA_HAVE_PYTHON2} = "yes" ]; then
+  cp -rp stage-python2/lib/cmake/boost_mpi_python-* stage-python2/lib/cmake/boost_numpy-* stage-python2/lib/cmake/boost_python-* $PREFIX/lib/cmake 2>&1 | tee -a $LOG
+  cp -rp stage-python2/lib/libboost_*python* stage-python2/lib/libboost_*numpy* $PREFIX/lib 2>&1 | tee -a $LOG
+  mkdir -p $PREFIX/lib/python${MA_PYTHON2_VERSION_MAJOR}.${MA_PYTHON2_VERSION_MINOR}/boost 2>&1 | tee -a $LOG
+  cp -rp stage-python2/lib/boost-python${MA_PYTHON2_VERSION_MAJOR}.${MA_PYTHON2_VERSION_MINOR}/mpi.so $PREFIX/lib/python${MA_PYTHON2_VERSION_MAJOR}.${MA_PYTHON2_VERSION_MINOR}/boost/ 2>&1 | tee -a $LOG
+fi
+if [ ${MA_HAVE_PYTHON3} = "yes" ]; then
+  cp -rp stage-python3/lib/cmake/boost_mpi_python-* stage-python3/lib/cmake/boost_numpy-* stage-python3/lib/cmake/boost_python-* $PREFIX/lib/cmake 2>&1 | tee -a $LOG
+  cp -rp stage-python3/lib/libboost_*python* stage-python3/lib/libboost_*numpy* $PREFIX/lib 2>&1 | tee -a $LOG
+  mkdir -p $PREFIX/lib/python${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR}/boost 2>&1 | tee -a $LOG
+  cp -rp stage-python3/lib/boost-python${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR}/mpi.so $PREFIX/lib/python${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR}/boost/ 2>&1 | tee -a $LOG
+  ln -sf python${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR} $PREFIX/lib/python 2>&1 | tee -a $LOG
+fi

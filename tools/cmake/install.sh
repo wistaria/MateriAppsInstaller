@@ -24,6 +24,8 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
+. $SCRIPT_DIR/../../tools/openssl/find.sh; if [ ${MA_HAVE_OPENSSL} = "no" ]; then echo "Error: openssl not found"; exit 127; fi
+
 sh $SCRIPT_DIR/setup.sh
 rm -f $LOG
 check cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
