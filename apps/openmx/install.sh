@@ -45,11 +45,9 @@ if [ -f CMakeLists.txt ]; then
 fi
 check sh $CONFIG_DIR/preprocess.sh
 
-echo "[make]" | tee -a $LOG
-check make | tee -a $LOG || exit 1
 echo "[make install]" | tee -a $LOG
 mkdir -p $PREFIX/bin
-check make install DESTDIR=$PREFIX/bin | tee -a $LOG || exit 1
+check make all DESTDIR=$PREFIX/bin | tee -a $LOG || exit 1
 
 cd ../
 
