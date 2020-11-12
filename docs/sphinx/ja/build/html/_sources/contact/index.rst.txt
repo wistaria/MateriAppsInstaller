@@ -6,15 +6,15 @@
 お問い合わせ
 =========================================
 
-MateriAppsInstaller に関するお問い合わせはこちらにお寄せください。
+MateriApps Installer に関するお問い合わせはこちらにお寄せください。
 
 - バグ報告
 
-  MateriAppsInstaller のバグ関連の報告は `GitHubのIssues <https://github.com/wistaria/MateriAppsInstaller>`_ で受け付けています。
+  MateriApps Installer のバグ関連の報告は `GitHubのIssues <https://github.com/wistaria/MateriAppsInstaller>`_ で受け付けています。
 
   バグを早期に解決するため、報告時には次のガイドラインに従ってください。
      
-     - 使用している MateriAppsInstaller のバージョンを指定してください。
+     - 使用している MateriApps Installer のバージョンを指定してください。
 
      - インストールに問題がある場合には、使用しているオペレーティングシステムとコンパイラの情報についてお知らせください.
 

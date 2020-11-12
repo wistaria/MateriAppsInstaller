@@ -1,23 +1,22 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<html lang="ja">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>4.1. インストール関連ファイル &#8212; MateriAppsInstaller 1.0-beta ドキュメント</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4.1. インストール関連ファイル &#8212; MateriApps Installer 1.0-beta ドキュメント</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
-    <link rel="next" title="5. お問い合わせ" href="../contact/index.html" />
+    <link rel="next" title="5. アプリ一覧" href="../appendix/index.html" />
     <link rel="prev" title="4. ファイル形式" href="index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -36,45 +35,170 @@
           <div class="body" role="main">
             
   <div class="section" id="id1">
-<h1>4.1. インストール関連ファイル<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">4.1. </span>インストール関連ファイル<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p>ここでは、ソフトウェアのインストールに必要な各ファイルに関するフォーマットやルールなどを説明します。</p>
-<div class="section" id="default-sh">
-<h2>4.1.1. default.sh<a class="headerlink" href="#default-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="version-sh">
+<h2><span class="section-number">4.1.1. </span>version.sh<a class="headerlink" href="#version-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ソフトウェアのバージョンを指定するためのスクリプト。</p>
+<p>アンダースコア2つずつに挟まれた変数は他のスクリプト中で用いるための変数。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;NAME&gt;_VERSION</span></code></p>
+<ul>
+<li><p>ソフトウェアのバージョン</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;NAME&gt;_MA_REVISION</span></code></p>
+<ul>
+<li><p>同一バージョンに対して MAInstaller のスクリプトが改訂された場合、それを区別するための識別子</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__NAME__</span></code></p>
+<ul>
+<li><p>ディレクトリ名などに用いられる、ソフトウェアの名前</p></li>
+<li><p>MAInstaller では、スタイルとして小文字に統一している</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__VERSION__</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;NAME&gt;_VERSION</span></code> を指定する</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__MA_REVISION__</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;NAME&gt;_MA_REVISION</span></code> を指定する</p></li>
+</ul>
+</li>
+</ul>
+<p>例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">TENES_VERSION</span><span class="o">=</span><span class="s2">&quot;1.1.2&quot;</span>
+<span class="nv">TENES_MA_REVISION</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
+
+<span class="nv">__NAME__</span><span class="o">=</span>tenes
+<span class="nv">__VERSION__</span><span class="o">=</span><span class="si">${</span><span class="nv">TENES_VERSION</span><span class="si">}</span>
+<span class="nv">__MA_REVISION__</span><span class="o">=</span><span class="si">${</span><span class="nv">TENES_MA_REVISION</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-sh">
+<h2><span class="section-number">4.1.2. </span>install.sh<a class="headerlink" href="#install-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>T.B.A.</p>
 </div>
-<div class="section" id="link-sh">
-<h2>4.1.2. link.sh<a class="headerlink" href="#link-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>T.B.A.</p>
+<div class="section" id="download-sh">
+<h2><span class="section-number">4.1.3. </span>download.sh<a class="headerlink" href="#download-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ソースコードをインターネットから入手するためのスクリプト。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$SOURCE_DIR</span></code> にダウンロードする</p>
+<ul>
+<li><p>保存されたファイルはフォーマットに従ってリネームしておく</p>
+<ul>
+<li><p>ソフトウェアごとの違いをできるだけ減らすため</p></li>
+</ul>
+</li>
+<li><p>特に、バージョン番号は必ず付与し、区別可能にしておく</p></li>
+</ul>
+</li>
+<li><p>すでにダウンロード済みの場合はスキップする</p>
+<ul>
+<li><p>外部アクセスできない環境の場合は、手動でファイルを置けるようにしてある</p></li>
+</ul>
+</li>
+</ul>
+<p>例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>
+. <span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
+. <span class="nv">$SCRIPT_DIR</span>/version.sh
+set_prefix
+
+<span class="k">if</span> <span class="o">[</span> -f <span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz <span class="o">]</span><span class="p">;</span> <span class="k">then</span> :<span class="p">;</span> <span class="k">else</span>
+  check wget https://github.com/issp-center-dev/TeNeS/archive/v<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz -O <span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz
+<span class="k">fi</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="setup-sh">
-<h2>4.1.3. setup.sh<a class="headerlink" href="#setup-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>T.B.A.</p>
+<h2><span class="section-number">4.1.4. </span>setup.sh<a class="headerlink" href="#setup-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>アーカイブファイルを展開するためのスクリプト。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">download.sh</span></code> を実行してアーカイブファイルを取得する</p>
+<ul>
+<li><p>すでにダウンロードされているかのチェックは <code class="docutils literal notranslate"><span class="pre">download.sh</span></code> が行う</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$SOURCE_DIR</span></code> 内にあるアーカイブファイルを <code class="docutils literal notranslate"><span class="pre">$BUILD_DIR</span></code> に展開する</p>
+<ul>
+<li><p>展開後のディレクトリは、フォーマットに従ってリネームしておく</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">patch</span></code> ディレクトリ内にパッチファイルがある場合にはそれを適用する</p></li>
+</ul>
+<p>例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>
+. <span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
+. <span class="nv">$SCRIPT_DIR</span>/version.sh
+set_prefix
+
+sh <span class="si">${</span><span class="nv">SCRIPT_DIR</span><span class="si">}</span>/download.sh
+
+<span class="nb">cd</span> <span class="nv">$BUILD_DIR</span>
+<span class="k">if</span> <span class="o">[</span> -d <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> :<span class="p">;</span> <span class="k">else</span>
+  check mkdir -p <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="nv">$__VERSION__</span>
+  <span class="nv">tarfile</span><span class="o">=</span><span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz
+  <span class="nv">sc</span><span class="o">=</span><span class="sb">`</span>calc_strip_components <span class="nv">$tarfile</span> README.md<span class="sb">`</span>
+  check tar zxf <span class="nv">$tarfile</span> -C <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span> --strip-components<span class="o">=</span><span class="nv">$sc</span>
+  <span class="nb">cd</span> <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="nv">$__VERSION__</span>
+  <span class="k">if</span> <span class="o">[</span> -f <span class="nv">$SCRIPT_DIR</span>/patch/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.patch <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    patch -p1 &lt; <span class="nv">$SCRIPT_DIR</span>/patch/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.patch
+  <span class="k">fi</span>
+<span class="k">fi</span>
+</pre></div>
 </div>
-<div class="section" id="version-sh">
-<h2>4.1.4. version.sh<a class="headerlink" href="#version-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>T.B.A.</p>
+</div>
+<div class="section" id="link-sh">
+<h2><span class="section-number">4.1.5. </span>link.sh<a class="headerlink" href="#link-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>設定ファイルのシンボリックリンクを作成するスクリプト。</p>
+<ul class="simple">
+<li><p>アプリケーションの場合とツールの場合でシンボリックリンクの作成先が異なる</p>
+<ul>
+<li><p>アプリの場合は <code class="docutils literal notranslate"><span class="pre">$MA_ROOT/$__NAME__/${__NAME__}vars.sh</span></code></p></li>
+<li><p>ツールの場合は <code class="docutils literal notranslate"><span class="pre">$MA_ROOT/env.d/${__NAME__}vars.sh</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>
+. <span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
+. <span class="nv">$SCRIPT_DIR</span>/version.sh
+set_prefix
+
+. <span class="nv">$MA_ROOT</span>/env.sh
+
+<span class="nv">VARS_SH</span><span class="o">=</span><span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars-<span class="nv">$__VERSION__</span>-<span class="nv">$__MA_REVISION__</span>.sh
+rm -f <span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars.sh
+ln -s <span class="nv">$VARS_SH</span> <span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars.sh
+</pre></div>
+</div>
 </div>
 <div class="section" id="readme-md">
-<h2>4.1.5. README.md<a class="headerlink" href="#readme-md" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.6. </span>README.md<a class="headerlink" href="#readme-md" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>T.B.A.</p>
 </div>
 </div>
-<div class="section" id="id2">
-<h1>4.2. 管理用ファイル<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="scripts">
+<h1><span class="section-number">4.2. </span>管理用ファイル (<code class="docutils literal notranslate"><span class="pre">scripts/</span></code> )<a class="headerlink" href="#scripts" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="util-sh">
+<h2><span class="section-number">4.2.1. </span>util.sh<a class="headerlink" href="#util-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>スクリプト内で使う関数を定義しているスクリプト。</p>
+</div>
 <div class="section" id="check-prefix-sh">
-<h2>4.2.1. check_prefix.sh<a class="headerlink" href="#check-prefix-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.2. </span>check_prefix.sh<a class="headerlink" href="#check-prefix-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>T.B.A.</p>
 </div>
 <div class="section" id="fix-dylib-sh">
-<h2>4.2.2. fix_dylib.sh<a class="headerlink" href="#fix-dylib-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.3. </span>fix_dylib.sh<a class="headerlink" href="#fix-dylib-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>T.B.A.</p>
 </div>
 <div class="section" id="list-maversion-sh">
-<h2>4.2.3. list_maversion.sh<a class="headerlink" href="#list-maversion-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>T.B.A.</p>
-</div>
-<div class="section" id="util-sh">
-<h2>4.2.4. util.sh<a class="headerlink" href="#util-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.4. </span>list_maversion.sh<a class="headerlink" href="#list-maversion-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>T.B.A.</p>
 </div>
 </div>
@@ -86,7 +210,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">MateriAppsInstaller</a></h1>
+<h1 class="logo"><a href="../index.html">MateriApps Installer</a></h1>
 
 
 
@@ -97,41 +221,40 @@
 
 <h3>ナビゲーション</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../about/index.html">1. MateriAppsInstaller とは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/index.html">1. MateriApps Installer とは？</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to_use/index.html">2. 利用方法</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">3. ?`???[?g???A??</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">3. チュートリアル</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">4. ファイル形式</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">4.1. インストール関連ファイル</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">4.2. 管理用ファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scripts">4.2. 管理用ファイル (<code class="docutils literal notranslate"><span class="pre">scripts/</span></code> )</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../contact/index.html">5. お問い合わせ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../acknowledge/index.html">6. 謝辞</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">5. アプリ一覧</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contact/index.html">6. お問い合わせ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge/index.html">7. 謝辞</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">4. ファイル形式</a><ul>
-      <li>Previous: <a href="index.html" title="前の章へ">4. ファイル形式</a></li>
-      <li>Next: <a href="../contact/index.html" title="次の章へ">5. お問い合わせ</a></li>
+  <li><a href="index.html"><span class="section-number">4. </span>ファイル形式</a><ul>
+      <li>Previous: <a href="index.html" title="前の章へ"><span class="section-number">4. </span>ファイル形式</a></li>
+      <li>Next: <a href="../appendix/index.html" title="次の章へ"><span class="section-number">5. </span>アプリ一覧</a></li>
   </ul></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>クイック検索</h3>
+  <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="検索" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -148,7 +271,7 @@
       &copy;2020, Institute for Solid State Physics, University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
