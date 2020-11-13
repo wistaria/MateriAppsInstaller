@@ -121,3 +121,39 @@ finish_test() {
     fi
   fi
 }
+
+# https://qiita.com/opiliones/items/e6d75237bf8650313c56
+pipefail() {
+  local cmd= i=1 ret1 ret2
+  pipe_parse "$@" || {
+    eval "$cmd"
+    return
+  }
+
+  exec 4>&1
+
+  ret1=$(
+    exec 3>&1
+    {
+      eval "$cmd" 3>&-
+      echo $? >&3
+    } 4>&- | {
+      shift $i
+      pipefail "$@"
+    } 3>&- >&4 4>&-
+  )
+  ret2=$?
+
+  exec 4>&-
+  [ $ret2 -ne 0 ] && \
+    return $ret2 || return $ret1
+}
+
+pipe_parse() {
+  [ "$1" = '|' ] && return
+
+  cmd="$cmd \${$i}"
+  i=$((i+1))
+  shift
+  [ $# -gt 0 ] && pipe_parse "$@"
+}
