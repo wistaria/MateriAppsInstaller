@@ -1,5 +1,8 @@
 set -u
-set -o pipefail
+
+pipe=`mktemp`
+trap "rm -f $pipe" EXIT
+mkfifo $pipe
 
 for exe in tenes_simple tenes_std tenes; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then

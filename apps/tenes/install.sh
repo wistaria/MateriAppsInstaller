@@ -31,6 +31,7 @@ fi
 
 export pipe=`mktemp`
 trap "rm -f $pipe" EXIT
+mkfifo $pipe
 
 tee -a $LOG < $pipe &
 
