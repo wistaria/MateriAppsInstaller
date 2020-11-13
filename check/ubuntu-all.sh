@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOOLS="gcc10:default openssl:default cmake:default zlib:default git:default boost:default eigen3:default fftw:default gsl:default hdf5:default libffi:default "
+TOOLS="gcc10:default openssl:default cmake:default zlib:default git:default boost:default eigen3:default fftw:default gsl:default hdf5:default libffi:default openblas:default lapack:default"
 
 TOP_DIR=$(cd "$(dirname $0)"; cd ..; pwd)
 

@@ -24,12 +24,19 @@ cat << EOF > ${WORK_DIR}/CMakeLists.txt
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 project(find)
 find_package(${PACKAGE})
-message(STATUS "find-package-result: \${${VERSION_VAR}}")
+message(STATUS "find-package-found: \${${PACKAGE}_FOUND}")
+message(STATUS "find-package-version: \${${VERSION_VAR}}")
 EOF
 
 (cd ${WORK_DIR} && cmake -DCMAKE_FIND_DEBUG_MODE=1 . > output.txt 2>&1)
 if [ -z "$DEBUG" ]; then
-  grep 'find-package-result:' ${WORK_DIR}/output.txt | awk '{print $3}'
+  FOUND=$(grep 'find-package-found:' ${WORK_DIR}/output.txt | awk '{print $3}')
+  VERSION=$(grep 'find-package-version:' ${WORK_DIR}/output.txt | awk '{print $3}')
+  if [ -z "$VERSION" ]; then
+    test "$FOUND" = "TRUE" && echo "yes" || echo ""
+  else
+    echo $VERSION
+  fi
 else
   cat ${WORK_DIR}/output.txt
 fi
