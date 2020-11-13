@@ -28,36 +28,30 @@ if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
-
-export pipe=`mktemp`
-trap "rm -f $pipe" EXIT
-mkfifo $pipe
-
-tee -a $LOG < $pipe &
-
-sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
-cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
-start_info > $pipe
 
-echo "[preprocess]" > $pipe
+pipefail sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG || exit 1
+cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
+start_info | tee -a $LOG
+
+echo "[preprocess]" | tee -a $LOG
 if [ -f CMakeLists.txt ]; then
   rm -rf build && mkdir -p build && cd build
 fi
-check sh $CONFIG_DIR/preprocess.sh
+pipefail check sh $CONFIG_DIR/preprocess.sh \| tee -a $LOG || exit 1
 
-echo "[make]" > $pipe
-check make > $pipe || exit 1
-echo "[make install]" > $pipe
-check make install > $pipe || exit 1
+echo "[make]" | tee -a $LOG
+pipefail check make \| tee -a $LOG || exit 1
+echo "[make install]" | tee -a $LOG
+pipefail check make install \| tee -a $LOG || exit 1
 
 ln -s $PREFIX/share/tenes/sample $PREFIX/sample
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
-check sh $CONFIG_DIR/postprocess.sh
+pipefail check sh $CONFIG_DIR/postprocess.sh \| tee -a $LOG || exit 1
 fi
 
-finish_info > $pipe
+finish_info | tee -a $LOG
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
 
