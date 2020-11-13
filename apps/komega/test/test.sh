@@ -1,4 +1,3 @@
-set -x
 set -u
 
 . $SCRIPT_DIR/../../scripts/util.sh
