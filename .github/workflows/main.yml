@@ -13,6 +13,11 @@ jobs:
       - name: apt
         run: sudo apt install openmpi-bin libopenmpi-dev libscalapack-openmpi-dev
 
+      - name: pip
+        run: |
+          python3 -m pip install -U pip
+          python3 -m pip install numpy scipy toml
+
       - name: setup
         run: sh setup/setup.sh
 

@@ -1,5 +1,7 @@
 set -u
 
+. $SCRIPT_DIR/../../scripts/util.sh
+
 for exe in ShiftK.out; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then
     echo "Error: ${PREFIX}/bin/${exe} does not exist"
@@ -14,7 +16,7 @@ for header in komega.h komega_bicg.mod komega_cg_r.mod komega_cg_c.mod komega_co
   fi
 done
 
-if [ is_macos ]; then
+if is_macos ; then
   so_suffix=dylib
 else
   so_suffix=so
