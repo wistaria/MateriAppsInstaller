@@ -1,5 +1,4 @@
 #!/bin/sh
-set -o pipefail
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)

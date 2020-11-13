@@ -1,6 +1,4 @@
 #!/bin/sh
-set -o pipefail
-
 
 # configurable variables (e.g. compiler)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
