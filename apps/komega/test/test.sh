@@ -1,5 +1,4 @@
 set -u
-set -o pipefail
 
 for exe in ShiftK.out; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then
@@ -15,7 +14,13 @@ for header in komega.h komega_bicg.mod komega_cg_r.mod komega_cg_c.mod komega_co
   fi
 done
 
-for lib in libkomega.a libkomega.so ;do
+if [ `uname -s` == "Darwin" ]; then
+  so_suffix=dylib
+else
+  so_suffix=so
+fi
+
+for lib in libkomega.a libkomega.${so_suffix} ;do
   if [ ! -f ${PREFIX}/lib/$lib ]; then
     echo "Error: ${PREFIX}/lib/${lib} does not exist"
     exit 127

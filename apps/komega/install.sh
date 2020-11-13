@@ -1,5 +1,4 @@
 #!/bin/sh
-set -o pipefail
 
 # configurable variables (e.g. compiler)
 export FC=${FC:-}
@@ -29,19 +28,19 @@ if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
-
-sh ${SCRIPT_DIR}/setup.sh
 rm -rf $LOG
+
+pipefail check sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG || exit 1
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 for process in preprocess build install postprocess; do
-  echo "[${process}]" | tee -a $LOG
-  __file__=${process}.sh
-  if [ -f $CONFIG_DIR/$__file__ ]; then
-    check sh $CONFIG_DIR/$__file__
-  elif [ -f $DEFAULT_CONFIG_DIR/$__file__ ]; then
-    check sh $DEFAULT_CONFIG_DIR/$__file__
+  if [ -f $CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $CONFIG_DIR/${process}.sh \| tee -a $LOG || exit 1
+  elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG || exit 1
   fi
 done
 
