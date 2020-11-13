@@ -27,27 +27,20 @@
 
   .. code-block:: bash
 
-		  |─ setup
-		  |─ apps
-		  |─ docs
-		  |─ tools
-		  |─ check
-		  |   |- k.sh
-		  |   |- macos.sh
-		  |   |- sekirei.sh
-		  |   |─ zetta-gcc.sh
-		  |   |- zetta-intel.sh
-		  |─ check_prefix.sh
-		  |─ fix_dylib.sh
-		  |─ list_maversion.sh
-		  |─ macosx
-		  |   |─ install.sh
-		  |   |─ ports.sh
 		  |- README.md
-		  |- util.sh
+		  |─ apps
+		  |─ check
+		  |─ check_prefix.sh
+		  |─ docs
+		  |─ list_maversion.sh
+		  |─ macos
+		  |- scripts
+		  |─ setup
+		  |─ tools
 
 
-- setup, tools, apps内にあるディレクトリは以下のような構成になっている。
+
+- apps, tools内にあるディレクトリは以下のような構成になっている。
 
   .. code-block:: bash
 
@@ -62,67 +55,74 @@
 	      |- config 
 		
 
-  各ファイルおよびディレクトリの説明を以下に記載する(詳細はファイル形式を参考のこと)。    
+  各ファイルおよびディレクトリの説明を以下に記載する。なお、* がついているファイルは、ディレクトリ内に必ず存在するファイルを示す。
 
-  - README.md (必須)
+  - README.md (*)
 
     - ソフトウェアの簡単な紹介や公式サイトの URL などが記載されている
 
-  - download.sh (必須)
+  - download.sh (*)
 
     - ソースコードアーカイブをダウンロードする
 
-  - link.sh (必須)
+  - link.sh (*)
 
     - インストールしたディレクトリや設定ファイルへのシンボリックリンクを作成する
 
-  - setup.sh (必須)
+  - setup.sh (*)
 
     - 用意したソースコードアーカイブを展開し、（存在するなら）パッチを適用する
 
-  - version.sh (必須)
+  - version.sh (*)
 
     - ダウンロードするバージョンを指定する
 
-  - install.sh (必須)
+  - install.sh (*)
 
     - プログラムのビルドならびにインストールを行う
 
-  - patch (optional)
+  - patch
 
     - パッチを格納するディレクトリ
 
-  - config (optional)
+  - config
 
     - Intel コンパイラを用いる場合など、デフォルト設定以外のインストールを行うための追加設定集
 
+
+
 - また、上記以外にも以下のファイル・ディレクトリが用意されている。
-
-  - list_maversion.sh
-
-    - 各ディレクトリ中にある version.sh の情報をまとめるスクリプト
-
-  - util.sh
-
-    - インストールディレクトリの設定など、スクリプト中で使うユーティリティ関数が定義されている
 
   - check_prefix.sh
 
     - インストール先のトップディレクトリなど、各スクリプト共通で用いられる変数を表示するスクリプト
 
+  - list_maversion.sh
+
+    - 各ディレクトリ中にある version.sh の情報をまとめるスクリプト
+
   - checkディレクトリ
 
     - 各種ホストで複数のインストールスクリプトを順番に走らせるためのスクリプト
 
-  - fix_dylib.sh
+  - docsディレクトリ
 
-    - macOS で RPATH 情報を修正するためのスクリプト
+    - マニュアル及びそのソースコード一式が格納されているディレクトリ
 
-  - macosxディレクトリ
+  - macosディレクトリ
 
     - Macports を用いて必要なツールをインストールするためのスクリプト
 
+  - scriptsディレクトリ
 
+    - ??? (t.b.a.)
+
+  - setupディレクトリ
+
+    - ソフトウェアのインストールを行うための前準備を行うためのスクリプトが格納されている(詳細はこの後のセットアップを参照)
+
+
+      
 セットアップ
 ============
 
@@ -133,7 +133,7 @@
 
 -  MateriApps Installerによって導入されるアプリケーションのインストール場所の設定
 
-  -  インストール場所は、次のように ``$HOME/.mainstaller`` ファイルで設定可能 ::
+  -  インストール場所は、次のように ``$HOME/.mainstaller`` ファイルで設定可能 (自分で作成する必要あり) ::
 
       # シェルスクリプトとして処理されるため、 = の前後に空白は置いてはいけない
 
@@ -161,7 +161,7 @@
 
     sh install.sh
 
-  - ソースコードのダウンロード(``download.sh``)・展開(``setup.sh``)を行った後に、ビルドおよびインストールを行う
+  - このスクリプトを実行すると、ソースコードのダウンロード(``download.sh``)・展開(``setup.sh``)を行った後に、ビルドおよびインストールが自動に行われる
   - ソフトウェアによってはコンパイラやライブラリに対する設定が定義済みの場合があり、 ``config`` ディレクトリ以下にサブディレクトリとして収められている
 
     - ``sh install.sh intel`` のように、引数で与えることで使用可能
