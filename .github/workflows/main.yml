@@ -10,6 +10,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: apt
+        run: sudo apt install openmpi-bin libopenmpi-devel libscalapack-openmpi-dev
+
       - name: setup
         run: sh setup/setup.sh
 
