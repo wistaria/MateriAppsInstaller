@@ -122,6 +122,10 @@ finish_test() {
   fi
 }
 
+is_macos() {
+  test $(uname -s | cut -d' ' -f1) = "Darwin"
+}
+
 # https://qiita.com/opiliones/items/e6d75237bf8650313c56
 pipefail() {
   local cmd= i=1 ret1 ret2
