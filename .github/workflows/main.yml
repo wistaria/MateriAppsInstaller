@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: apt
-        run: sudo apt install openmpi-bin libopenmpi-devel libscalapack-openmpi-dev
+        run: sudo apt install openmpi-bin libopenmpi-dev libscalapack-openmpi-dev
 
       - name: setup
         run: sh setup/setup.sh
