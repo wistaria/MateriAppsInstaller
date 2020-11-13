@@ -14,7 +14,7 @@ for header in komega.h komega_bicg.mod komega_cg_r.mod komega_cg_c.mod komega_co
   fi
 done
 
-if [ `uname -s` == "Darwin" ]; then
+if [ "`uname -s`" = "Darwin" ]; then
   so_suffix=dylib
 else
   so_suffix=so
