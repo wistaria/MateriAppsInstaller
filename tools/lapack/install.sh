@@ -25,26 +25,22 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
+. $SCRIPT_DIR/../../tools/openblas/find.sh; if [ ${MA_HAVE_BLAS} = "no" ]; then echo "Error: blas not found"; exit 127; fi
+
 sh $SCRIPT_DIR/setup.sh
 
 start_info | tee -a $LOG
 
-echo "[configure]" | tee -a $LOG
-cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-if [ -f $CONFIG_DIR/bootstrap.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
-else
-  check ./config --prefix=$PREFIX 2>&1 | tee -a $LOG
-fi
-echo "[build]" | tee -a $LOG
+echo "[cmake]" | tee -a $LOG
+mkdir -p $BUILD_DIR/lapack-$LAPACK_VERSION/build
+cd $BUILD_DIR/lapack-$LAPACK_VERSION/build
+cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DUSE_OPTIMIZED_BLAS=ON -DCBLAS=ON -DLAPACKE=ON .. 2>&1 | tee -a ${LOG}
+echo "[make]" | tee -a $LOG
 check make 2>&1 | tee -a $LOG
+echo "[make test]" | tee -a $LOG
+check make test 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
 check make install 2>&1 | tee -a $LOG
-cp -rp $SCRIPT_DIR/cert/cacert.pem $PREFIX/ssl/cert.pem 2>&1 | tee -a $LOG
-
-if [ -f $CONFIG_DIR/postprocess.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/postprocess.sh
-fi
 
 finish_info | tee -a $LOG
 
@@ -53,8 +49,6 @@ ROOTNAME=$(toupper ${__NAME__})_ROOT
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export ${ROOTNAME}_DIR=\${${ROOTNAME}}
-export PATH=\${${ROOTNAME}}/bin:\$PATH
 export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh

@@ -29,18 +29,15 @@ sh $SCRIPT_DIR/setup.sh
 
 start_info | tee -a $LOG
 
-echo "[configure]" | tee -a $LOG
 cd $BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-if [ -f $CONFIG_DIR/bootstrap.sh ]; then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/bootstrap.sh
-else
-  check ./config --prefix=$PREFIX 2>&1 | tee -a $LOG
+if [ -f $CONFIG_DIR/preprocess.sh ]; then
+  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/preprocess.sh
 fi
+
 echo "[build]" | tee -a $LOG
-check make 2>&1 | tee -a $LOG
+check make PREFIX=$PREFIX NO_CBLAS=1 NO_LAPACK=1 NO_AFFINITY=1 NO_WARMUP=1 DYNAMIC_ARCH=1 NUM_THREADS=64 2>&1 | tee -a $LOG
 echo "[make install]" | tee -a $LOG
-check make install 2>&1 | tee -a $LOG
-cp -rp $SCRIPT_DIR/cert/cacert.pem $PREFIX/ssl/cert.pem 2>&1 | tee -a $LOG
+make -i install PREFIX=$PREFIX NO_CBLAS=1 NO_LAPACK=1 NO_LAPACKE=1 2>&1 | tee -a $LOG
 
 if [ -f $CONFIG_DIR/postprocess.sh ]; then
   env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/postprocess.sh
@@ -53,8 +50,6 @@ ROOTNAME=$(toupper ${__NAME__})_ROOT
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export ${ROOTNAME}_DIR=\${${ROOTNAME}}
-export PATH=\${${ROOTNAME}}/bin:\$PATH
 export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
