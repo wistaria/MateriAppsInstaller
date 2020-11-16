@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # configurable variables (e.g. compiler)
 export CMAKE=${CMAKE:-cmake}
@@ -30,7 +31,7 @@ if [ -d $PREFIX ]; then
 fi
 rm -rf $LOG
 
-pipefail sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG || exit 1
+pipefail sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
@@ -38,17 +39,17 @@ echo "[preprocess]" | tee -a $LOG
 if [ -f CMakeLists.txt ]; then
   rm -rf build && mkdir -p build && cd build
 fi
-pipefail check sh $CONFIG_DIR/preprocess.sh \| tee -a $LOG || exit 1
+pipefail check sh $CONFIG_DIR/preprocess.sh \| tee -a $LOG
 
 echo "[make]" | tee -a $LOG
-pipefail check make \| tee -a $LOG || exit 1
+pipefail check make \| tee -a $LOG
 echo "[make install]" | tee -a $LOG
-pipefail check make install \| tee -a $LOG || exit 1
+pipefail check make install \| tee -a $LOG
 
 ln -s $PREFIX/share/tenes/sample $PREFIX/sample
 
 if [ -e $CONFIG_DIR/postprocess.sh ];then
-pipefail check sh $CONFIG_DIR/postprocess.sh \| tee -a $LOG || exit 1
+pipefail check sh $CONFIG_DIR/postprocess.sh \| tee -a $LOG
 fi
 
 finish_info | tee -a $LOG

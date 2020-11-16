@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # configurable variables (e.g. compiler)
 export FC=${FC:-}
@@ -30,17 +31,17 @@ if [ -d $PREFIX ]; then
 fi
 rm -rf $LOG
 
-pipefail check sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG || exit 1
+pipefail check sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 for process in preprocess build install postprocess; do
   if [ -f $CONFIG_DIR/${process}.sh ]; then
     echo "[${process}]" | tee -a $LOG
-    pipefail check sh $CONFIG_DIR/${process}.sh \| tee -a $LOG || exit 1
+    pipefail check sh $CONFIG_DIR/${process}.sh \| tee -a $LOG
   elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
     echo "[${process}]" | tee -a $LOG
-    pipefail check sh $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG || exit 1
+    pipefail check sh $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
   fi
 done
 

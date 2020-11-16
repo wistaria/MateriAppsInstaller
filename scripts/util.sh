@@ -43,7 +43,9 @@ set_prefix() {
     mkdir -p $BUILD_DIR || exit 127
     echo "Notice: build directory $BUILD_DIR has been created"
   fi
-  RES=$(touch $BUILD_DIR/.mainstaller.tmp > /dev/null 2>&1; echo $?; rm -f $BUILD_DIR/.mainstaller.tmp)
+  RES=0
+  touch $BUILD_DIR/.mainstaller.tmp > /dev/null 2>&1 || RES=$?
+  rm -f $BUILD_DIR/.mainstaller.tmp
   if [ $RES = 0 ]; then :; else
     echo "Fatal: have no permission to write in build directory $BUILD_DIR"
     exit 127
@@ -68,10 +70,11 @@ set_prefix() {
 }
 
 check() {
-  "$@"
-  result=$?
+  local result=0
+  echo "$@" 2>&1
+  "$@" || result=$?
   if [ $result -ne 0 ]; then
-    echo "Failed: $@" >&2
+    echo "Failed: $@"
     exit $result
   fi
   return 0
