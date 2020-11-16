@@ -71,8 +71,7 @@ set_prefix() {
 
 check() {
   local result=0
-  echo "$@" 2>&1
-  "$@" || result=$?
+  "$@" 2>&1 || result=$?
   if [ $result -ne 0 ]; then
     echo "Failed: $@"
     exit $result
