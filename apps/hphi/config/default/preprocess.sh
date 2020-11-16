@@ -1,5 +1,9 @@
 set -u
 
+rm -rf build
+mkdir build
+cd build
+
 if [ -z "${SCALAPACK_LIBRARIES}" ];then
   USE_SCALAPACK=OFF
 else
@@ -15,4 +19,4 @@ ${CMAKE} \
   -DCMAKE_VERBOSE_MAKEFILE=1 \
   -DUSE_SCALAPACK=${USE_SCALAPACK} \
   -DSCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES} \
-  ../ 2>&1 | tee -a $LOG
+  ../
