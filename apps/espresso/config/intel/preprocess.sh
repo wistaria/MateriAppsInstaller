@@ -1,5 +1,13 @@
 make veryclean
 
+set -e
+
+CC=${CC:-icc}
+FC=${FC:-ifort}
+F90=${FC}
+MPIF90=${MPIF90:-mpiifort}
+BLAS_LIBS=${BLAS_LIBS:-"-mkl=cluster"}
+
 CFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
 FFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
 ./configure \
@@ -9,6 +17,6 @@ FFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
   CC=icc FC=ifort F77=ifort F90=ifort MPIF90=mpiifort \
   2>&1 | tee -a $LOG
 
-sed -i.bak -c 's/^\s*F90\s*=.*$/F90 = ifort/' make.inc
-sed -i.bak -c 's/^\s*BLAS_LIBS\s*=.*$/BLAS_LIBS = -mkl=cluster/' make.inc
-sed -i.back -c 's/-x\s*f95-cpp-input/-cpp/' make.inc
+sed -i.bak 's/^\s*F90\s*=.*$/F90 = ifort/' make.inc
+sed -i.bak "s/^\\s*BLAS_LIBS\\s*=.*$/BLAS_LIBS = ${BLAS_LIBS}/" make.inc
+sed -i.bak 's/-x\s*f95-cpp-input/-cpp/' make.inc
