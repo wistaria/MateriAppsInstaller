@@ -3,8 +3,12 @@ name: main
 on: [push]
 
 jobs:
-  setup:
+  apps:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app: [tenes, komega, hphi, mvmc]
 
     steps:
       - name: Checkout code
@@ -20,15 +24,6 @@ jobs:
 
       - name: setup
         run: sh setup/setup.sh
-
-  apps:
-    runs-on: ubuntu-latest
-    needs: setup 
-    strategy:
-      matrix:
-        app: [tenes, komega, hphi, mvmc]
-    steps:
+      
       - name: test
-        run: |
-          cd $GITHUB_WORKSPACE
-          sh .github/scripts/test_single.sh ${{matrix.app}}
+        run: sh .github/scripts/test_single.sh ${{matrix.app}}
