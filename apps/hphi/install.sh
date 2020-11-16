@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-xtraced=$(set -o | awk '/xtrace/{ print $2 }')
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 echo configurations > config.txt
 eval "
 set -x
@@ -17,8 +17,11 @@ export MAKE_J=${MAKE_J:-}
 export ISSP_UCOUNT=${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}
 
 " 2> config.txt
-if [ "$xtraced" = "off" ]; then
+if [ "$XTRACED" = "off" ]; then
   set +x
+  SHFLAG=""
+else
+  SHFLAG="-x"
 fi
 
 mode=${1:-default}
@@ -45,17 +48,17 @@ fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
-pipefail sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 for process in preprocess build install postprocess; do
   if [ -f $CONFIG_DIR/${process}.sh ]; then
     echo "[${process}]" | tee -a $LOG
-    pipefail check sh $CONFIG_DIR/${process}.sh \| tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}.sh \| tee -a $LOG
   elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
     echo "[${process}]" | tee -a $LOG
-    pipefail check sh $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
   fi
 done
 
