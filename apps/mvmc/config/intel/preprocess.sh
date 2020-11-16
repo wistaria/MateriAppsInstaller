@@ -1,3 +1,7 @@
+rm -rf build
+mkdir build
+cd build
+
 ${CMAKE} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_VERBOSE_MAKEFILE=1 \
@@ -6,4 +10,4 @@ ${CMAKE} \
   -DUSE_SCALAPACK=ON \
   -DSCALAPACK_LIBRARIES="-mkl=cluster" \
   -DCONFIG=intel \
-  ../ 2>&1 | tee -a $LOG
+  ../
