@@ -29,5 +29,6 @@ jobs:
         app: [tenes, komega, hphi, mvmc]
     steps:
       - name: test
-        run: ./.github/scripts/test_single.sh ${{matrix.app}}
-        shell: sh
+        run: |
+          cd ${{GITHUB_WORKSPACE}}
+          sh .github/scripts/test_single.sh ${{matrix.app}}
