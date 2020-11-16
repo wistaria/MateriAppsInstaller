@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         app: [tenes, komega, hphi, mvmc]
+      fail-fast: false
 
     steps:
       - name: Checkout code
