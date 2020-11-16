@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # configurable variables (e.g. compiler)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
@@ -12,7 +13,7 @@ else
 fi
 
 mode=${1:-default}
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 
 . $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
