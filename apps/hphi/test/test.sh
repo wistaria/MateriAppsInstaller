@@ -1,5 +1,6 @@
 set -u
-set -o pipefail
+
+. $SCRIPT_DIR/../../scripts/util.sh
 
 for exe in HPhi; do
   if [ ! -e ${PREFIX}/bin/${exe} ]; then
@@ -8,4 +9,4 @@ for exe in HPhi; do
   fi
 done
 
-${MPIEXEC_CMD} HPhi -s stdface.def | tee log || exit 127
+check ${MPIEXEC_CMD} HPhi -s stdface.def

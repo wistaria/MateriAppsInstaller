@@ -12,4 +12,4 @@ done
 
 tenes_simple simple.toml
 tenes_std std.toml
-pipefail check ${MPIEXEC_CMD} tenes input.toml \| tee log
+check ${MPIEXEC_CMD} tenes input.toml
