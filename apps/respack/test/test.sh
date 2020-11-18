@@ -1,6 +1,8 @@
-set -o pipefail
+. $UTIL_SH
+set_prefix
 
-sh ./download_pp.sh
+export TESTDIR=$(cd $(dirname $0); pwd)
+check sh ${TESTDIR}/download_pp.sh
 
 for exe in calc_wannier calc_chiqw calc_j3d calc_w3d calc_gw transfer_analysis wfn2respack qe2respack.py xtapp2respack.sh
 do
@@ -10,12 +12,24 @@ do
   fi
 done
 
-set -e
+if [ -z ${PWX} ];then
+  echo "Error: PWX is empty"
+  exit 127
+fi
+ret=0
+type ${PWX} > /dev/null 2>/dev/null || ret=$?
+if [ $ret -ne 0 ]; then
+  if [ -f $MA_ROOT/espresso/espressovars.sh ]; then
+    . $MA_ROOT/espresso/espressovars.sh
+  else
+    echo "Error: $PWX is not found"
+    exit 127
+  fi
+fi
+check ${MPIEXEC_CMD} ${PWX} -in scf.in
 
-${MPIEXEC_CMD} ${PWX} -in scf.in | tee scf.out || exit 127
-
-qe2respack.py work/Si.save 2>&1 | tee -a log || exit 127
-calc_wannier < input.in 2>&1 | tee -a log || exit 127
-calc_w3d < input.in 2>&1 | tee -a log || exit 127
-calc_j3d < input.in 2>&1 | tee -a log || exit 127
-${MPIEXEC_CMD} calc_chiqw < input.in 2>&1 | tee -a log || exit 127
+check qe2respack.py work/Si.save 2>&1
+check calc_wannier < input.in 2>&1
+check calc_w3d < input.in 2>&1
+check calc_j3d < input.in 2>&1
+check ${MPIEXEC_CMD} calc_chiqw < input.in 2>&1

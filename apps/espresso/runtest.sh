@@ -1,6 +1,5 @@
 #!/bin/sh
-set -o pipefail
-
+set -e
 
 # configurable variables (e.g. compiler)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
@@ -15,8 +14,9 @@ fi
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
 
-. $SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 . $SCRIPT_DIR/version.sh
 set_prefix
 
@@ -49,6 +49,6 @@ workdir="test_`date +%FT%T`"
 rm -rf $workdir
 cp -r $SCRIPT_DIR/test $workdir
 cd $workdir
-sh ./test.sh || exit 127
+check sh ./test.sh
 
 true

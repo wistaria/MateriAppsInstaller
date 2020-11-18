@@ -6,4 +6,4 @@ ${CMAKE:-cmake} \
   -DCMAKE_VERBOSE_MAKEFILE=1 \
   -DCMAKE_CXX_FLAGS="${MA_EXTRA_FLAGS}" \
   -DCMAKE_BUILD_TYPE=Release \
-  ../ | tee -a $LOG
+  ../ > $pipe

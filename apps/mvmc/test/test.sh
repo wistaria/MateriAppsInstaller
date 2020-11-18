@@ -1,5 +1,6 @@
 set -u
-set -o pipefail
+
+. $UTIL_SH
 
 for exe in vmcdry.out vmc.out; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then
@@ -8,4 +9,4 @@ for exe in vmcdry.out vmc.out; do
   fi
 done
 
-${MPIEXEC_CMD} vmc.out -s stdface.def 2>&1 | tee log  || exit 127
+check ${MPIEXEC_CMD} vmc.out -s stdface.def 2>&1

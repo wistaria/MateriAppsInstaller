@@ -5,6 +5,9 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ]; then :; else
-  check wget https://github.com/issp-center-dev/hphi/releases/download/v${__VERSION__}/HPhi-${__VERSION__}.tar.gz -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz
+URL=https://github.com/issp-center-dev/HPhi/archive/v${__VERSION__}.tar.gz
+ARCHIVE=${SOURCE_DIR}/${__NAME__}-${__VERSION__}.tar.gz
+
+if [ -f $ARCHIVE ]; then :; else
+  check wget $URL -O $ARCHIVE
 fi
