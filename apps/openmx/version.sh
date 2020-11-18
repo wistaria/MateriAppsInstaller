@@ -5,4 +5,6 @@ OPENMX_RELEASE_DATE=20Feb11
 __NAME__=openmx
 __VERSION__=${OPENMX_VERSION}
 __MA_REVISION__=${OPENMX_MA_REVISION}
+
 __VERSION_MM__=$(echo $__VERSION__ | cut -d. -f1,2)
+__VERSION_PATCH__=$(echo $__VERSION__ | cut -d. -f3)

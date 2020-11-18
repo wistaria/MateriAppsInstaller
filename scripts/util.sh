@@ -163,3 +163,26 @@ pipe_parse() {
   shift
   [ $# -gt 0 ] && pipe_parse "$@"
 }
+
+check_cc() {
+  local ret=0
+  tmpfile=$(mktemp)
+  mv $tmpfile $tmpfile.c
+  echo 'int main(int, char**){return 0;}' >> $tmpfile.c
+  $@ -fsyntax-only $tmpfile.c || ret=$?
+  rm -f $tmpfile.c
+  return $ret
+}
+
+check_fc() {
+  local ret=0
+  tmpfile=$(mktemp)
+  mv $tmpfile $tmpfile.f90
+  cat <<EOF >> $tmpfile.f90
+      program main
+      end program
+EOF
+  $@ -fsyntax-only $tmpfile.f90 || ret=$?
+  rm -f $tmpfile.f90
+  return $ret
+}
