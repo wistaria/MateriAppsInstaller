@@ -20,7 +20,7 @@
     nbnd = 50
  /
  &electrons
-    diagonalization = cg
+    diagonalization = 'cg'
     conv_thr =  1.0d-8
     mixing_beta = 0.3
  /

@@ -1,8 +1,10 @@
 set -u
 
-sh ./download_pp.sh
+. $UTIL_SH
 
-. $SCRIPT_DIR/../../scripts/util.sh
+export TESTDIR=$(cd $(dirname $0); pwd)
+check sh ${TESTDIR}/download_pp.sh
+
 
 for exe in pw.x bands.x; do
   if [ ! -f ${PREFIX}/bin/${exe} ]; then
