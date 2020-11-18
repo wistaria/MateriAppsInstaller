@@ -2,8 +2,8 @@ cd source
 
 sh $(dirname $0)/../default/preprocess_common.sh
 
-CC=${CC:-mpiicc}
-FC=${FC:-mpiifort}
+CC=${CC:-mpicc}
+FC=${FC:-mpif90}
 OMP_FLAG=${OMP_FLAG:-"-qopenmp"}
 
 echo CC=${CC}
