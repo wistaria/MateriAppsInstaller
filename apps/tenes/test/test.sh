@@ -1,7 +1,7 @@
 set -u
 set -e
 
-. $SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 
 for exe in tenes_simple tenes_std tenes; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then

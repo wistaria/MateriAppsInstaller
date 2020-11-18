@@ -1,6 +1,6 @@
 set -u
 
-. $SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 
 for exe in vmcdry.out vmc.out; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then

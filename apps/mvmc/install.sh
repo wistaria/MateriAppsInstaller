@@ -35,6 +35,7 @@ if [ ! -d $CONFIG_DIR ]; then
 fi
 DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
 
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix

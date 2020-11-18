@@ -13,9 +13,10 @@ else
 fi
 
 mode=${1:-default}
-export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
 
-. $SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 . $SCRIPT_DIR/version.sh
 set_prefix
 
