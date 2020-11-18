@@ -1,10 +1,11 @@
 #!/bin/sh
 
-cd ${GITHUB_WORKSPACE}/apps/tenes
-sh install.sh
-sh runtest.sh
+appname=$1
 
-cd ${GITHUB_WORKSPACE}/apps/komega
-sh install.sh
-sh runtest.sh
+SCRIPT_DIR=$(cd $(dirname $0); pwd)
 
+if [ -f $SCRIPT_DIR/${appname}.sh ]; then
+  sh $SCRIPT_DIR/${appname}.sh
+else
+  sh $SCRIPT_DIR/test_single.sh $appname
+fi

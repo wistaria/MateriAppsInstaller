@@ -1,4 +1,4 @@
-name: dsqss
+name: main
 
 on: [push]
 
@@ -6,12 +6,17 @@ jobs:
   apps:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        app: [tenes, komega, hphi, mvmc, openmx, dsqss, espresso]
+      fail-fast: false
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: apt
-        run: sudo apt install openmpi-bin libopenmpi-dev
+        run: sudo apt install openmpi-bin libopenmpi-dev libscalapack-openmpi-dev libfftw3-dev
 
       - name: pip
         run: |
@@ -21,12 +26,5 @@ jobs:
       - name: setup
         run: sh setup/setup.sh
       
-      - name: build
-        run: |
-          cd ${GITHUB_WORKSPACE}/apps/dsqss
-          sh install.sh
-
       - name: test
-        run: |
-          cd ${GITHUB_WORKSPACE}/apps/dsqss
-          sh runtest.sh
+        run: sh .github/scripts/test.sh ${{matrix.app}}
