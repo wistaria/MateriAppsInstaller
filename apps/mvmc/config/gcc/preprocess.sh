@@ -1,3 +1,7 @@
+rm -rf build
+mkdir build
+cd build
+
 if [ -z "$SCALAPACK_LIBRARIES" ]; then
   USE_SCALAPACK=OFF
 else
@@ -12,4 +16,4 @@ ${CMAKE} \
   -DUSE_SCALAPACK=${USE_SCALAPACK} \
   -DSCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES} \
   -DCONFIG=gcc \
-  ../ 2>&1 | tee -a $LOG
+  ../

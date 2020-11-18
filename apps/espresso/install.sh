@@ -1,11 +1,27 @@
 #!/bin/sh
-set -o pipefail
+set -e
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+echo configurations > config.txt
+eval "
+set -x
 
 # configurable variables (e.g. compiler)
-export CC=${CC:-"gcc"}
-export FC=${FC:-"gfortran"}
-export CPP=${CPP:-"cpp"}
-export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS}
+
+export CC=${CC:-}
+export FC=${FC:-}
+export MPIF90=${MPIF90:-}
+export CPP=${CPP:-}
+export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
+export MAKE_J=${MAKE_J:-}
+
+" 2> config.txt
+if [ "$XTRACED" = "off" ]; then
+  set +x
+  SHFLAG=""
+else
+  SHFLAG="-x"
+fi
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
@@ -16,40 +32,35 @@ if [ ! -d $CONFIG_DIR ]; then
   ls -1 config
   exit 127
 fi
+DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
 
-. $SCRIPT_DIR/../../scripts/util.sh
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 . $SCRIPT_DIR/version.sh
 set_prefix
 
 . ${MA_ROOT}/env.sh
-export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
-
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+mv config.txt $LOG
 
-sh ${SCRIPT_DIR}/setup.sh
-rm -rf $LOG
+pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-echo "[preprocess]" | tee -a $LOG
-if [ -f CMakeLists.txt ] ; then
-  rm -rf build && mkdir build && cd build
-fi
-check sh $CONFIG_DIR/preprocess.sh
-
-echo "[make]" | tee -a $LOG
-make clean
-check make all | tee -a $LOG || exit 1
-echo "[make install]" | tee -a $LOG
-check make install | tee -a $LOG || exit 1
-
-if [ -e $CONFIG_DIR/postprocess.sh ];then
-  env PREFIX=$PREFIX sh $CONFIG_DIR/postprocess.sh
-fi
+for process in preprocess build install postprocess; do
+  if [ -f $CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}.sh \| tee -a $LOG
+  elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
+  fi
+done
 
 finish_info | tee -a $LOG
 

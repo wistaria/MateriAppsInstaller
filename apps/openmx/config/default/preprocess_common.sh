@@ -1,8 +1,8 @@
 if [ ! -f makefile.org ]; then
   sed \
-  -e 's/^\s*\(CC\s*=\)/# \1/' \
-  -e 's/^\s*\(FC\s*=\)/# \1/' \
-  -e 's/^\s*\(LIB\s*=\)/# \1/' \
-  -e 's/^\s*\(MKLROOT\s*=\)/# \1/' \
+  -e 's/^[ ]*\(CC[ ]*=\)/# \1/' \
+  -e 's/^[ ]*\(FC[ ]*=\)/# \1/' \
+  -e 's/^[ ]*\(LIB[ ]*=\)/# \1/' \
+  -e 's/^[ ]*\(MKLROOT[ ]*=\)/# \1/' \
   makefile > makefile.org
 fi

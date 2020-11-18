@@ -1,5 +1,9 @@
 set -u
 
+rm -rf build
+mkdir build
+cd build
+
 ${CMAKE} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_VERBOSE_MAKEFILE=1 \
@@ -11,4 +15,4 @@ ${CMAKE} \
   -DCMAKE_Fortran_FLAGS_RELEASE="-O3 -DNDEBUG -DHAVE_SSE2" \
   -DUSE_SCALAPACK=ON \
   -DSCALAPACK_LIBRARIES="-mkl=cluster" \
-  ../ 2>&1 | tee -a $LOG
+  ../

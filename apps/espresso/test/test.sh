@@ -1,7 +1,10 @@
 set -u
-set -o pipefail
 
-sh ./download_pp.sh
+. $UTIL_SH
+
+export TESTDIR=$(cd $(dirname $0); pwd)
+check sh ${TESTDIR}/download_pp.sh
+
 
 for exe in pw.x bands.x; do
   if [ ! -f ${PREFIX}/bin/${exe} ]; then
@@ -10,4 +13,4 @@ for exe in pw.x bands.x; do
   fi
 done
 
-${MPIEXEC_CMD} pw.x -in scf.in | tee scf.out || exit 127
+check ${MPIEXEC_CMD} pw.x -in scf.in
