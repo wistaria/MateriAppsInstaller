@@ -1,4 +1,4 @@
-make veryclean
+rm -f make.inc
 
 set -e
 
@@ -14,8 +14,7 @@ FFLAGS="-O3 ${MA_EXTRA_FLAGS}" \
   --prefix=${PREFIX} \
   --enable-openmp \
   --with-scalapack=yes \
-  CC=icc FC=ifort F77=ifort F90=ifort MPIF90=mpiifort \
-  2>&1 | tee -a $LOG
+  CC=icc FC=ifort F77=ifort F90=ifort MPIF90=mpiifort
 
 sed -i.bak 's/^\s*F90\s*=.*$/F90 = ifort/' make.inc
 sed -i.bak "s/^\\s*BLAS_LIBS\\s*=.*$/BLAS_LIBS = ${BLAS_LIBS}/" make.inc

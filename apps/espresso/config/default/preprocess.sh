@@ -1,5 +1,4 @@
-make veryclean
-
+rm -f make.inc
 set -e
 
 . $UTIL_SH
@@ -13,7 +12,6 @@ FFLAGS="-O3 ${FFLAGS} ${MA_EXTRA_FLAGS}" \
   --prefix=${PREFIX} \
   --enable-openmp \
   --with-scalapack=yes \
-  CC=${CC} FC=${FC} F77=${FC} F90=${FC} CPP=${CPP} \
-  2>&1 | tee -a $LOG
+  CC=${CC} FC=${FC} F77=${FC} F90=${FC} CPP=${CPP}
 
 sed -i.bak "s@^[ ]*F90[ ]*=.*\$@F90 = ${FC}@" make.inc
