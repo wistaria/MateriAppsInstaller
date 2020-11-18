@@ -21,7 +21,7 @@ jobs:
       - name: pip
         run: |
           python3 -m pip install -U pip
-          python3 -m pip install numpy scipy toml
+          python3 -m pip install numpy scipy toml setuptools
 
       - name: setup
         run: sh setup/setup.sh
