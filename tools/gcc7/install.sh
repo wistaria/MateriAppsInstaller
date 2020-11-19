@@ -21,12 +21,12 @@ else
 fi
 
 mode=${1:-default}
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
   echo "Available list:"
-  ls -1 config
+  ls -1 $SCRIPT_DIR/config
   exit 127
 fi
 DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
@@ -45,6 +45,7 @@ fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
+rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG

@@ -19,4 +19,7 @@ if [ -d ${NV} ]; then :; else
   mv mpc-${MPC_VERSION} mpc
   check tar jxf $SOURCE_DIR/isl-$ISL_VERSION.tar.bz2
   mv isl-$ISL_VERSION isl
+  if [ -f $SCRIPT_DIR/patch/${NV}.patch ]; then
+    cat $SCRIPT_DIR/patch/${NV}.patch | patch -p1
+  fi
 fi
