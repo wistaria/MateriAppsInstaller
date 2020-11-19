@@ -4,15 +4,13 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
+sh ${SCRIPT_DIR}/download.sh
 
-sh $SCRIPT_DIR/download.sh
-
+NV=${__NAME__}-${__VERSION__}
 cd $BUILD_DIR
-if [ -d ${__NAME__}-${__VERSION__}-${__MA_REVISION__} ]; then :; else
-  rm -rf ${__NAME__}-${__VERSION__}
-  check tar zxf $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz
-  mv ${__NAME__}-${__VERSION__} ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-  cd ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+if [ -d ${NV} ]; then :; else
+  check tar zxf $SOURCE_DIR/$NV.tar.gz
+  cd $NV
   check tar jxf $SOURCE_DIR/gmp-${GMP_VERSION}.tar.bz2
   mv gmp-${GMP_VERSION} gmp
   check tar jxf $SOURCE_DIR/mpfr-${MPFR_VERSION}.tar.bz2
