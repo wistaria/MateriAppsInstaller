@@ -30,6 +30,6 @@ check ${MPIEXEC_CMD} ${PWX} -in scf.in
 
 check qe2respack.py work/Si.save 2>&1
 check calc_wannier < input.in 2>&1
+check ${MPIEXEC_CMD} calc_chiqw < input.in 2>&1
 check calc_w3d < input.in 2>&1
 check calc_j3d < input.in 2>&1
-check ${MPIEXEC_CMD} calc_chiqw < input.in 2>&1
