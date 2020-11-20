@@ -1,0 +1,28 @@
+diff -uprN mvmc-1.1.1.orig/src/mVMC/calham.c mvmc-1.1.1/src/mVMC/calham.c
+--- mvmc-1.1.1.orig/src/mVMC/calham.c	2020-11-20 20:15:30.000000000 +0900
++++ mvmc-1.1.1/src/mVMC/calham.c	2020-11-20 20:16:34.000000000 +0900
+@@ -81,8 +81,8 @@ double complex CalculateHamiltonian(cons
+   firstprivate(Nsize, Nsite2, NProj, NQPFull, NCoulombIntra, CoulombIntra, ParaCoulombIntra, \
+                NCoulombInter, CoulombInter, ParaCoulombInter, NHundCoupling, HundCoupling, ParaHundCoupling, \
+                NTransfer, Transfer, ParaTransfer, NPairHopping, PairHopping, ParaPairHopping, \
+-               NExchangeCoupling, ExchangeCoupling, ParaExchangeCoupling, NInterAll, InterAll, ParaInterAll, n0, n1) \
+-  shared(eleCfg, eleProjCnt, eleIdx, eleNum, ip) reduction(+:e)
++               NExchangeCoupling, ExchangeCoupling, ParaExchangeCoupling, NInterAll, InterAll, ParaInterAll, n0, n1, ip) \
++  shared(eleCfg, eleProjCnt, eleIdx, eleNum) reduction(+:e)
+   {
+     myEleIdx = GetWorkSpaceThreadInt(Nsize);
+     myEleNum = GetWorkSpaceThreadInt(Nsite2);
+diff -uprN mvmc-1.1.1.orig/src/mVMC/calham_real.c mvmc-1.1.1/src/mVMC/calham_real.c
+--- mvmc-1.1.1.orig/src/mVMC/calham_real.c	2020-11-20 20:15:30.000000000 +0900
++++ mvmc-1.1.1/src/mVMC/calham_real.c	2020-11-20 20:17:55.000000000 +0900
+@@ -60,8 +60,8 @@ double CalculateHamiltonian_real(const d
+     firstprivate(Nsize, Nsite2, NProj, NQPFull, NCoulombIntra, CoulombIntra, ParaCoulombIntra,   \
+     NCoulombInter, CoulombInter, ParaCoulombInter, NHundCoupling, HundCoupling, ParaHundCoupling,    \
+     NTransfer, Transfer, ParaTransfer, NPairHopping, PairHopping, ParaPairHopping,    \
+-    NExchangeCoupling, ExchangeCoupling, ParaExchangeCoupling, NInterAll, InterAll, ParaInterAll, n0, n1)\
+-    shared(eleCfg, eleProjCnt, eleIdx, eleNum, ip) reduction(+:e)
++    NExchangeCoupling, ExchangeCoupling, ParaExchangeCoupling, NInterAll, InterAll, ParaInterAll, n0, n1, ip)\
++    shared(eleCfg, eleProjCnt, eleIdx, eleNum) reduction(+:e)
+   {
+     myEleIdx = GetWorkSpaceThreadInt(Nsize);
+     myEleNum = GetWorkSpaceThreadInt(Nsite2);
