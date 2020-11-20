@@ -1,5 +1,6 @@
 set -u
-set -o pipefail
+
+. $UTIL_SH
 
 for exe in dla pmwa_H pmwa_B; do
   if [ ! -x ${PREFIX}/bin/$exe ]; then
@@ -10,12 +11,12 @@ done
 
 cd dla
 dla_pre std.toml
-${MPIEXEC_CMD} dla param.in 2>&1 | tee -a ../log || exit 127
-echo test for dla finished | tee -a ../log
+check ${MPIEXEC_CMD} dla param.in 2>&1
+echo test for dla finished
 cd ..
 
 cd pmwa
 pmwa_pre std.in
-${MPIEXEC_CMD} pmwa_H param.in 2>&1 | tee -a ../log  exit 127
-echo test for pmwa finished | tee -a ../log
+check ${MPIEXEC_CMD} pmwa_H param.in 2>&1
+echo test for pmwa finished
 cd ..

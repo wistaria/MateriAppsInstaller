@@ -43,7 +43,9 @@ set_prefix() {
     mkdir -p $BUILD_DIR || exit 127
     echo "Notice: build directory $BUILD_DIR has been created"
   fi
-  RES=$(touch $BUILD_DIR/.mainstaller.tmp > /dev/null 2>&1; echo $?; rm -f $BUILD_DIR/.mainstaller.tmp)
+  RES=0
+  touch $BUILD_DIR/.mainstaller.tmp > /dev/null 2>&1 || RES=$?
+  rm -f $BUILD_DIR/.mainstaller.tmp
   if [ $RES = 0 ]; then :; else
     echo "Fatal: have no permission to write in build directory $BUILD_DIR"
     exit 127
@@ -68,10 +70,10 @@ set_prefix() {
 }
 
 check() {
-  "$@"
-  result=$?
+  local result=0
+  "$@" 2>&1 || result=$?
   if [ $result -ne 0 ]; then
-    echo "Failed: $@" >&2
+    echo "Failed: $@"
     exit $result
   fi
   return 0
@@ -120,4 +122,100 @@ finish_test() {
       echo "Test Passed."
     fi
   fi
+}
+
+is_macos() {
+  test $(uname -s | cut -d' ' -f1) = "Darwin"
+}
+
+# https://qiita.com/opiliones/items/e6d75237bf8650313c56
+pipefail() {
+  local cmd= i=1 ret1 ret2
+  pipe_parse "$@" || {
+    eval "$cmd"
+    return
+  }
+
+  exec 4>&1
+
+  ret1=$(
+    exec 3>&1
+    {
+      eval "$cmd" 3>&-
+      echo $? >&3
+    } 4>&- | {
+      shift $i
+      pipefail "$@"
+    } 3>&- >&4 4>&-
+  )
+  ret2=$?
+
+  exec 4>&-
+  [ $ret2 -ne 0 ] && \
+    return $ret2 || return $ret1
+}
+
+pipe_parse() {
+  [ "$1" = '|' ] && return
+
+  cmd="$cmd \${$i}"
+  i=$((i+1))
+  shift
+  [ $# -gt 0 ] && pipe_parse "$@"
+}
+
+check_cc() {
+  local ret=0
+  tmpfile=$(mktemp)
+  mv $tmpfile $tmpfile.c
+  echo 'int main(int, char**){return 0;}' >> $tmpfile.c
+  $@ -fsyntax-only $tmpfile.c || ret=$?
+  rm -f $tmpfile.c
+  return $ret
+}
+
+check_fc() {
+  local ret=0
+  tmpfile=$(mktemp)
+  mv $tmpfile $tmpfile.f90
+  cat <<EOF >> $tmpfile.f90
+      program main
+      end program
+EOF
+  $@ -fsyntax-only $tmpfile.f90 || ret=$?
+  rm -f $tmpfile.f90
+  return $ret
+}
+
+check_header() {
+  local ret=0
+  tmpfile=$(mktemp)
+  mv $tmpfile $tmpfile.cc
+  echo "#include <$1>" >> $tmpfile.cc
+  ${CXX:-cxx} -fsyntax-only $tmpfile.cc || ret=$?
+  rm -f $tmpfile.cc
+  return $ret
+}
+
+find_tool() {
+  local toolname=$1
+  if [ -z "${SCRIPT_DIR:+UNDEF}" ]; then
+    echo "Error: SCRIPT_DIR is not defined"
+    return 127
+  fi
+
+  local findsh=$SCRIPT_DIR/../../tools/${toolname}/find.sh
+  if [ ! -f $findsh ]; then
+    echo "Error: $findsh is not found"
+    return 127
+  fi
+
+  . $findsh
+  local MA_HAVE_XXX=MA_HAVE_$(toupper ${toolname})
+  local res=$(eval echo \$$MA_HAVE_XXX)
+  if [ $res = "no" ]; then
+    echo "Error: ${toolname} not found"
+    return 127
+  fi
+  return 0
 }

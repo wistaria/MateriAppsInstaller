@@ -1,3 +1,5 @@
+.. highlight:: bash
+
 ********************************
 利用方法
 ********************************
@@ -14,11 +16,9 @@
 
   - git を利用したダウンロード
     
-    以下のコマンドを打つことで、MateriApps Installerのダウンロードが可能である。
+    以下のコマンドを打つことで、MateriApps Installerのダウンロードが可能である。:: 
 
-     .. code-block:: bash
-
-	git clone https://github.com/wistaria/MateriAppsInstaller.git
+        git clone https://github.com/issp-center-dev/MateriAppsInstaller
 
 ディレクトリ構造
 =================
@@ -27,160 +27,218 @@
 
   .. code-block:: bash
 
-		  |─ setup
-		  |─ apps
-		  |─ docs
-		  |─ tools
-		  |─ check
-		  |   |- k.sh
-		  |   |- macos.sh
-		  |   |- sekirei.sh
-		  |   |─ zetta-gcc.sh
-		  |   |- zetta-intel.sh
-		  |─ check_prefix.sh
-		  |─ fix_dylib.sh
-		  |─ list_maversion.sh
-		  |─ macosx
-		  |   |─ install.sh
-		  |   |─ ports.sh
 		  |- README.md
-		  |- util.sh
+		  |─ apps
+		  |─ check
+		  |─ check_prefix.sh
+		  |─ docs
+		  |─ list_maversion.sh
+		  |─ macos
+		  |- scripts
+		  |─ setup
+		  |─ tools
 
 
-- setup, tools, apps内にあるディレクトリは以下のような構成になっている。
+
+- apps, tools内にあるディレクトリは以下のような構成になっている。
 
   .. code-block:: bash
 
-	  -- software_name
-		|- README.md
-		|- download.sh
-		|- link.sh
-		|- setup.sh
-		|- version.sh
-		|- install.sh
-		|- patch 
-	  	|- config 
- 
+	-- software_name
+	      |- README.md
+	      |- download.sh
+	      |- link.sh
+	      |- setup.sh
+	      |- version.sh
+	      |- install.sh
+	      |- patch 
+	      |- config 
+		
 
-  各ファイルおよびディレクトリの説明を以下に記載する(詳細はファイル形式を参考のこと)。    
+  各ファイルおよびディレクトリの説明を以下に記載する。なお、* がついているファイルは、ディレクトリ内に必ず存在するファイルを示す。
 
-  - README.md (必須)
+  - README.md (*)
 
     - ソフトウェアの簡単な紹介や公式サイトの URL などが記載されている
 
-  - download.sh (必須)
+  - download.sh (*)
 
     - ソースコードアーカイブをダウンロードする
 
-  - link.sh (必須)
+  - link.sh (*)
 
     - インストールしたディレクトリや設定ファイルへのシンボリックリンクを作成する
 
-  - setup.sh (必須)
+  - setup.sh (*)
 
     - 用意したソースコードアーカイブを展開し、（存在するなら）パッチを適用する
 
-  - version.sh (必須)
+  - version.sh (*)
 
     - ダウンロードするバージョンを指定する
 
-  - install.sh (必須)
+  - install.sh (*)
 
     - プログラムのビルドならびにインストールを行う
 
-  - patch (optional)
+  - patch
 
     - パッチを格納するディレクトリ
 
-  - config (optional)
+  - config
 
     - Intel コンパイラを用いる場合など、デフォルト設定以外のインストールを行うための追加設定集
 
+
+
 - また、上記以外にも以下のファイル・ディレクトリが用意されている。
-
-  - list_maversion.sh
-
-    - 各ディレクトリ中にある version.sh の情報をまとめるスクリプト
-
-  - util.sh
-
-    - インストールディレクトリの設定など、スクリプト中で使うユーティリティ関数が定義されている
 
   - check_prefix.sh
 
     - インストール先のトップディレクトリなど、各スクリプト共通で用いられる変数を表示するスクリプト
 
+  - list_maversion.sh
+
+    - 各ディレクトリ中にある version.sh の情報をまとめるスクリプト
+
   - checkディレクトリ
 
     - 各種ホストで複数のインストールスクリプトを順番に走らせるためのスクリプト
 
-  - fix_dylib.sh
+  - docsディレクトリ
 
-    - macOS で RPATH 情報を修正するためのスクリプト
+    - マニュアル及びそのソースコード一式が格納されているディレクトリ
 
-  - macosxディレクトリ
+  - macosディレクトリ
 
     - Macports を用いて必要なツールをインストールするためのスクリプト
 
+  - scriptsディレクトリ
 
+    - ??? (t.b.a.)
+
+  - setupディレクトリ
+
+    - ソフトウェアのインストールを行うための前準備を行うためのスクリプトが格納されている(詳細はこの後のセットアップを参照)
+
+
+      
 セットアップ
 ============
 
+- ソフトウェアのインストールを行う前に ``setup/setup.sh`` を実行する必要がある
+
+  - ``sh setup/setup.sh``
+  - このスクリプトは初期設定として、インストールディレクトリや作業用ディレクトリなどの作成を行う
+
 -  MateriApps Installerによって導入されるアプリケーションのインストール場所の設定
 
-   -  default では ``$HOME/materiapps`` の下にソフトウェアがインストールされる。
-   -  インストール場所は、 ``$HOME/.mainstaller`` の中で以下のオプションを設定することで変更可能。
+  -  インストール場所は、次のように ``$HOME/.mainstaller`` ファイルで設定可能 (自分で作成する必要あり) ::
 
-      .. csv-table:: テーブルのタイトル
-	 :header: "オプション", "デフォルト", "説明"
-	 :widths: 15, 15, 30
+      # シェルスクリプトとして処理されるため、 = の前後に空白は置いてはいけない
 
-         ``PREFIX`` , ``$HOME/materiapps``,  ツールとアプリのインストール場所(両方とも同じ場所にインストールする場合)
-         ``PREFIX_TOOL`` , ``$HOME/materiapps`` ,ツールのインストール場所
-         ``PREFIX_APPS`` , ``$HOME/materiapps`` ,アプリのインストール場所
-         ``BUILD_DIR`` , ``$HOME/build`` ,build を行う場所
-         ``SOURCE_DIR`` , ``$HOME/source`` ,source tarballの置き場
+      MA_ROOT=$HOME/materiapps  # ソフトウェアのインストール先
+      BUILD_DIR=$HOME/build     # インストール作業場所
+      SOURCE_DIT=$HOME/source   # ファイルダウンロード場所
 
--  インストールするディレクトリ(上記 ``PREFIX``, ``PREFIX_TOOL``, ``PREFIX_APPS`` で指定したディレクトリ)は新たに作成される
+    .. csv-table:: 
+      :header: "オプション", "デフォルト", "説明"
+      :widths: 15, 15, 30
+
+        ``MA_ROOT`` , ``$HOME/materiapps``,  ソフトウェアのインストール先
+        ``BUILD_DIR`` , ``$HOME/build`` , インストール作業場所
+        ``SOURCE_DIR`` , ``$HOME/source`` , ソースコードアーカイブファイルのダウンロード場所
+
+  - このファイルがない場合は ``$HOME/materiapps`` の下にソフトウェアがインストールされる
+  - 実際のインストール場所は、以降で説明するインストール作業を行った時点での ``.mainstaller`` ファイルの内容が用いられることに注意
+
+    - ``setup.sh`` を実行した時の情報ではないという意味
 
 インストール
 ============
 
--  各アプリケーションごとにinstall.shを実行する。
+-  各ソフトウェアのディレクトリに移動し、 ``install.sh`` を実行する。 ::
 
-    - 各アプリケーションのconfigサブフォルダの下にインストールに対応しているコンパイラ名でサブディレクトリがある(gcc, intelなど)。
-    - 該当するコンパイラを指定したい場合にはinstall.sh の後に, コンパイラ名を追加する。以下にgccでコンパイルする例を記載する。
-      
-      .. code-block:: bash
+    sh install.sh
 
-         sh install.sh gcc
+  - このスクリプトを実行すると、ソースコードのダウンロード(``download.sh``)・展開(``setup.sh``)を行った後に、ビルドおよびインストールが自動に行われる
+  - ソフトウェアによってはコンパイラやライブラリに対する設定が定義済みの場合があり、 ``config`` ディレクトリ以下にサブディレクトリとして収められている
 
+    - ``sh install.sh intel`` のように、引数で与えることで使用可能
+
+      - 存在しない設定ディレクトリを指定した場合、使用可能な設定の一覧を表示する ::
+
+	  $ sh install.sh help
+	  Error: unknown mode: help
+	  Available list:
+	  default
+	  intel
+
+    - ``default``
+
+      - 引数を省略した場合に使用される、基本的な設定
+
+    - ``intel``
+
+      - Intel コンパイラ、 Intel MKL、 Intel MPI を使用するための設定
+
+  - シェル変数を用いてコンパイラなどの指定が可能
+
+    - （例）デフォルト設定を使いつつ C コンパイラとして Intel コンパイラを使いたい場合 ::
+
+        CC=`which icc` sh install.sh
+
+    - 特に、 ``MA_EXTRA_FLAGS`` を設定することでコンパイラオプションを追加可能 ::
+
+        MA_EXTRA_FLAGS="-march=core-avx2" sh install.sh intel
+
+    - ``CMAKE`` を用いて ``cmake`` コマンドのパスを指定可能
+
+    - ``ISSP_UCOUNT`` は物性研スパコンにおける利用率測定スクリプトのパスであり、ほとんどのユーザは気にしなくて問題ない
+
+    - そのほか、利用可能な変数は ``install.sh`` のはじめの方を参照のこと
+
+- ``sh runtest.sh`` で簡易テストを実行可能
+
+  - インストールディレクトリの存在確認
+  - 設定ファイルの有効性確認
+  - ソフトウェアが実際に動作するかの確認
+
+- ソフトウェアは ``$MA_ROOT/NAME/NAME-VERSION-MA_REVISION`` ディレクトリにインストールされる
+
+  - ``NAME``, ``VERSION`` はそれぞれソフトウェア名とバージョンに置き換わる
+
+    - ``MA_REVISION`` は、ソフトウェアの同一バージョンに対して MateriApps Installer が改訂された場合に区別するための識別子
+    - 例: ``hphi/hphi-3.4.0-1``
+
+  - ソフトウェアと共に、環境変数などを設定する設定ファイル ``NAMEvars-VERSION-MA_REVISION.sh`` が ``$MA_ROOT/NAME/`` にインストールされる
+
+    - 例: ``hphivars-3.4.0-1.sh`` 
+
+    - ``sh link.sh`` を実行することで、 ``NAMEvars-VERSION.sh`` のシンボリックリンク ``NAMEvars.sh`` が作成される
+
+      - アプリの場合は ``NAME`` 以下に作成される
+      - ツールの場合は ``$MA_ROOT/env.d`` 以下に作成され、 ``$MA_ROOT/env.sh`` 内で読み込まれる
 
 ツール・アプリの利用方法
 ==========================
 
 -  ツール類(cmake, hdf5, python他)
    
-   - 以下のコマンドを実行する(もしくはshell の初期化スクリプトに同じ内容を書いておく)。
+   - 以下のコマンドを実行する(もしくはshell の初期化スクリプト (``.bashrc`` など)に同じ内容を書いておく)
 
      .. code-block:: bash
 
-	source $PREFIX_TOOL/env.sh
+	source $MA_ROOT/env.sh
 
--  アプリケーション(alps, openmx, modylas他)
+- アプリケーション(alps, openmx, modylas他)
 
-   -  アプリ毎にスクリプトを使って環境変数(``PATH`` など)を設定する。
+  - アプリ毎に設定ファイルを読み込んで環境変数(``PATH`` など)を設定する
     
-      例) alpsの場合:
+    例) alpsの場合::
 
-      .. code-block:: bash
-
-	 source $PREFIX_ALPS/alps/alpsvar.sh
-
--  インストールのテスト方法
-
-   -  整備中
-
--  サンプルバッチスクリプト
-
-   -  整備中
+        source $MA_ROOT/alps/alpsvars.sh
+  
+  - バージョンを固定したい場合は、そのバージョンの設定ファイルを用いる ::
+      
+      source $MA_ROOT/alps/alpsvar-20201106-r7860-1.sh

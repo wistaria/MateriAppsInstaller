@@ -7,7 +7,7 @@ CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
   echo "Available list:"
-  ls -1 config
+  ls -1 $SCRIPT_DIR/config
   exit 127
 fi
 
@@ -23,6 +23,8 @@ if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+
+. $SCRIPT_DIR/../../tools/openssl/find.sh; if [ ${MA_HAVE_OPENSSL} = "no" ]; then echo "Error: openssl not found"; exit 127; fi
 
 sh $SCRIPT_DIR/setup.sh
 rm -f $LOG

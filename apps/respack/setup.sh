@@ -12,7 +12,11 @@ if [ -d ${__NAME__}-${__VERSION__} ]; then :; else
   check mkdir -p ${__NAME__}-$__VERSION__
   tarfile=$SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz
   sc=`calc_strip_components $tarfile README.md`
-  check tar zxf $tarfile -C ${__NAME__}-${__VERSION__} --strip-components=$sc
+
+  # Archive file of RESPACK is broken (due to a metadata for logging of downloading),
+  # and so ignore the return code.
+  tar zxf $tarfile -C ${__NAME__}-${__VERSION__} --strip-components=$sc
+  echo 'INFO: "unexpected end of file" error can be ignored in the case of RESPACK'
   cd ${__NAME__}-$__VERSION__
   if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
     patch -p1 < $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch

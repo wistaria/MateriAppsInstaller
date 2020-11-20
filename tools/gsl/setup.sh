@@ -1,17 +1,18 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
-set_prefix
-. $PREFIX_TOOL/env.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
+set_prefix
+
+sh $SCRIPT_DIR/download.sh
 
 cd $BUILD_DIR
-if [ -d gsl-$GSL_VERSION ]; then :; else
-  if [ -f $SOURCE_DIR/gsl-$GSL_VERSION.tar.gz ]; then
-    check tar zxf $SOURCE_DIR/gsl-$GSL_VERSION.tar.gz
-  else
-    check wget http://ftp.jaist.ac.jp/pub/GNU/gsl/gsl-$GSL_VERSION.tar.gz
-    check tar zxf gsl-$GSL_VERSION.tar.gz
+if [ -d ${__NAME__}-${__VERSION__}-${__MA_REVISION__} ]; then :; else
+  check tar zxf $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz
+  mv -f ${__NAME__}-${__VERSION__} ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+  if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
+    cd ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+    cat $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch | patch -p1
   fi
 fi

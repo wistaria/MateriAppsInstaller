@@ -1,22 +1,17 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
-set_prefix
-. $PREFIX_TOOL/env.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
+set_prefix
+
+sh $SCRIPT_DIR/download.sh
 
 cd $BUILD_DIR
-cd $BUILD_DIR
-if [ -d lapack-$LAPACK_VERSION ]; then :; else
-  if [ -f $HOME/source/lapack-$LAPACK_VERSION.tgz ]; then
-    check tar zxf $HOME/source/lapack-$LAPACK_VERSION.tgz
-  else
-    check wget http://www.netlib.org/lapack/lapack-$LAPACK_VERSION.tgz
-    check tar zxf lapack-$LAPACK_VERSION.tgz
-  fi
-  if [ -f $SCRIPT_DIR/lapack-$LAPACK_VERSION.patch ]; then
-    cd lapack-$LAPACK_VERSION
-    patch -p1 < $SCRIPT_DIR/lapack-$LAPACK_VERSION.patch
+if [ -d ${__NAME__}-${__VERSION__}-${__MA_REVISION__} ]; then :; else
+  check tar xxf $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz
+  if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
+    cd ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+    cat $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch | patch -p1
   fi
 fi

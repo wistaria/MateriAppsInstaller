@@ -1,5 +1,6 @@
 set -u
-set -o pipefail
+
+. $UTIL_SH
 
 for exe in openmx; do
   if [ ! -e ${PREFIX}/bin/${exe} ]; then
@@ -12,4 +13,4 @@ DATAPATH=$(ls -1d ${PREFIX}/DFT_DATA*)
 
 echo DATA.PATH $DATAPATH >> Methane.dat
 
-${MPIEXEC_CMD} openmx Methane.dat | tee log || exit 127
+check ${MPIEXEC_CMD} openmx Methane.dat

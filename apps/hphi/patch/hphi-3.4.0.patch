@@ -1,0 +1,880 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 6859b036..210df3b0 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -11,7 +11,7 @@ include_directories(${STDFACE_DIR})
+ add_definitions(-D_HPhi)
+ add_definitions(-DDSFMT_MEXP=19937)
+ 
+-set(SOURCES FileIO.c HPhiMain.c HPhiTrans.c bitcalc.c check.c CheckMPI.c dSFMT.c diagonalcalc.c global.c log.c input.c output.c output_list.c readdef.c sz.c vec12.c xsetmem.c ErrorMessage.c LogMessage.c ProgressMessage.c wrapperMPI.c splash.c time.c eigenIO.c)
++set(SOURCES FileIO.c HPhiMain.c HPhiTrans.c bitcalc.c check.c CheckMPI.c dSFMT.c diagonalcalc.c global.c log.c input.c output.c output_list.c readdef.c sz.c vec12.c xsetmem.c ErrorMessage.c LogMessage.c ProgressMessage.c wrapperMPI.c splash.c time.c eigenIO.c struct.c)
+ 
+ set(SOURCES_MLTPLY Multiply.c mltply.c mltplySpin.c mltplyHubbard.c mltplyMPIHubbard.c mltplyMPISpin.c mltplyMPIBoost.c mltplyHubbardCore.c mltplySpinCore.c mltplyMPIHubbardCore.c mltplyMPISpinCore.c)
+ set(SOURCES_LANCZOS CalcByLanczos.c CG_EigenVector.c Lanczos_EigenValue.c Lanczos_EigenVector.c)
+diff --git a/src/global.c b/src/global.c
+index 2137a898..77fc6662 100644
+--- a/src/global.c
++++ b/src/global.c
+@@ -90,3 +90,61 @@ const char* cFileNameOutputRestartVec="%s_recalcvec_rank_%d.dat";
+ const char* cFileNameOutputExcitedVec="%s_excitedvec_rank_%d.dat";
+ //For Error
+ const char* cFileNameErrorSz="Err_sz.dat";
++
++double complex *v0 = 0;
++double complex *v1 = 0;
++double complex *v2 = 0;
++double complex *v1buf = 0;
++double complex *v1Org = 0;
++double complex *vg=0;
++double *alpha = 0;
++double *beta = 0;
++double complex **vec = 0;
++double *list_Diagonal = 0;
++long unsigned int *list_1 = 0;
++long unsigned int *list_1buf = 0;
++long unsigned int *list_2 = 0;
++long unsigned int *list_2_1 = 0;
++long unsigned int *list_2_2 = 0;
++
++/* Spectrum */
++long unsigned int *list_1_org = 0;
++long unsigned int *list_1buf_org = 0;
++long unsigned int *list_2_1_org = 0;
++long unsigned int *list_2_2_org = 0;
++
++/* Lanczos */
++int initial_mode = 0;
++
++/* TPQ */
++double LargeValue = 1.0e30;
++int NumAve = 1;
++int step_i = 1;
++double global_norm = 0.0;
++double global_1st_norm = 0.0;
++int step_spin = 1;
++
++/* All Diagonalization */
++double complex **Ham = 0;
++double complex **L_vec = 0;
++#ifdef _SCALAPACK
++double complex *Z_vec=0;
++int descZ_vec[9] = {0};
++#endif
++
++/* Timer */
++double *Timer = 0;
++double *TimerStart = 0;
++
++/* epsilons */
++double eps = 1e-10;
++double eps_CG = 1e-10;
++double eps_Lanczos = 1e-10;
++double eps_Energy = 1e-10;
++double eps_CheckImag0 = 1e-10;
++
++/* MPI */
++int nproc = 1;
++int myrank = 0;
++int nthreads = 1;
++FILE *stdoutMPI = 0;
+diff --git a/src/include/ErrorMessage.h b/src/include/ErrorMessage.h
+index d7661a7a..603f20f5 100644
+--- a/src/include/ErrorMessage.h
++++ b/src/include/ErrorMessage.h
+@@ -18,101 +18,101 @@
+ #define HPHI_ERRORMESSAGE_H
+ 
+ //! Error Message in HPhiMain.c
+-int iErrCodeMem;
++extern int iErrCodeMem;
+ 
+-char *cErrNameList;
+-char *cErrOutput;
+-char *cErrDefFile;
+-char *cErrNvec;
+-char *cErrnvec;
+-char *cErrnvecShow;
+-char *cErrIndices;
+-char *cErrArgv;
++extern char *cErrNameList;
++extern char *cErrOutput;
++extern char *cErrDefFile;
++extern char *cErrNvec;
++extern char *cErrnvec;
++extern char *cErrnvecShow;
++extern char *cErrIndices;
++extern char *cErrArgv;
+ 
+ //! Error Message in HPhiTrans.c
+-char *cErrTransfer;
+-char *cErrDoubleCounting;
+-char *cErrChemicalPotential;
+-char *cErrLargeMem;
++extern char *cErrTransfer;
++extern char *cErrDoubleCounting;
++extern char *cErrChemicalPotential;
++extern char *cErrLargeMem;
+ 
+ 
+ //! Error Message in readdef.c
+-char *cErrReadDefFile;
+-char *cErrDefFileFormat;
+-char *cErrNLoc;
+-char *cErrDefFileParam;
+-char *cErrCalcType;
+-char *cErrOutputMode;
+-char *cErrCalcModel;
+-char *cErrCalcEigenVec;
+-char *cErrSetIniVec;
+-char *cErrOutputHam;
+-char *cErrInputHam;
+-char *cErrInputOutputHam;
+-char *cErrOutputHamForFullDiag;
+-char *cErrRestart;
+-char *cErrFiniteTemp;
+-char *cErrCUDA;
+-char *cErrScaLAPACK;
+-
+-char *cErrKW;
+-char *cErrKW_ShowList;
+-char *cErrKW_Same;
+-char *cErrKW_InCorPair;
+-
+-char *cErrNsite;
+-char *cErrNcond;
+-char *cErrNumAve;
+-char *cErrExpecInterval;
+-char *cErrLanczos_max;
+-char *cErrLanczos_eps;
+-char *cErrLanczosTarget;
+-char *cErrLanczosExct;
+-
+-char *cErrMakeDef;
+-char *cErrIncorrectDef;
+-char *cErrNonHermiteTrans;
+-char *cErrNonHermiteTransForAll;
+-char *cErrNonHermiteInterAll;
+-char *cErrNonConservedInterAll;
+-char *cErrNonHermiteInterAllForAll;
+-char *cErrIncorrectFormatForKondoInt;
+-char *cErrIncorrectFormatForKondoTrans;
+-char *cErrIncorrectFormatInter;
+-char *cErrIncorrectSpinIndexForInter;
+-char *cErrIncorrectSpinIndexForTrans;
+-
+-char *cErrIncorrectFormatForSpinTrans;
+-char *cWarningIncorrectFormatForSpin;
+-char *cWarningIncorrectFormatForSpin2;
++extern char *cErrReadDefFile;
++extern char *cErrDefFileFormat;
++extern char *cErrNLoc;
++extern char *cErrDefFileParam;
++extern char *cErrCalcType;
++extern char *cErrOutputMode;
++extern char *cErrCalcModel;
++extern char *cErrCalcEigenVec;
++extern char *cErrSetIniVec;
++extern char *cErrOutputHam;
++extern char *cErrInputHam;
++extern char *cErrInputOutputHam;
++extern char *cErrOutputHamForFullDiag;
++extern char *cErrRestart;
++extern char *cErrFiniteTemp;
++extern char *cErrCUDA;
++extern char *cErrScaLAPACK;
++
++extern char *cErrKW;
++extern char *cErrKW_ShowList;
++extern char *cErrKW_Same;
++extern char *cErrKW_InCorPair;
++
++extern char *cErrNsite;
++extern char *cErrNcond;
++extern char *cErrNumAve;
++extern char *cErrExpecInterval;
++extern char *cErrLanczos_max;
++extern char *cErrLanczos_eps;
++extern char *cErrLanczosTarget;
++extern char *cErrLanczosExct;
++
++extern char *cErrMakeDef;
++extern char *cErrIncorrectDef;
++extern char *cErrNonHermiteTrans;
++extern char *cErrNonHermiteTransForAll;
++extern char *cErrNonHermiteInterAll;
++extern char *cErrNonConservedInterAll;
++extern char *cErrNonHermiteInterAllForAll;
++extern char *cErrIncorrectFormatForKondoInt;
++extern char *cErrIncorrectFormatForKondoTrans;
++extern char *cErrIncorrectFormatInter;
++extern char *cErrIncorrectSpinIndexForInter;
++extern char *cErrIncorrectSpinIndexForTrans;
++
++extern char *cErrIncorrectFormatForSpinTrans;
++extern char *cWarningIncorrectFormatForSpin;
++extern char *cWarningIncorrectFormatForSpin2;
+ 
+ 
+ //! Error Message in CheckMPI.c
+-char *cErrNProcNumberHubbard;
+-char *cErrNProcNumberSpin;
+-char *cErrNProcNumberGneralSpin;
+-char *cErrNProcNumber;
+-char *cErrNProcNumberSet;
++extern char *cErrNProcNumberHubbard;
++extern char *cErrNProcNumberSpin;
++extern char *cErrNProcNumberGneralSpin;
++extern char *cErrNProcNumber;
++extern char *cErrNProcNumberSet;
+ 
+ //! Error Message in diagonal calc.c
+-char *cErrNoModel;
+-char *cErrNoHilbertSpace;
++extern char *cErrNoModel;
++extern char *cErrNoHilbertSpace;
+ 
+ //! Error Message in bitcalc.c
+-char *cErrSiteNumber;
++extern char *cErrSiteNumber;
+ 
+ //! Error Message in mltiply.c
+-char *cErrMltiply;
++extern char *cErrMltiply;
+ 
+ 
+ //! Error Message in FileIO.c
+-char *cErrFIOpen;
++extern char *cErrFIOpen;
+ 
+ //! Error Message in sz.c
+-char* cErrSz;
+-char* cErrSz_NoFile;
+-char* cErrSz_NoFile_Show;
+-char* cErrSz_ShowDim;
+-char* cErrSz_OutFile;
++extern char* cErrSz;
++extern char* cErrSz_NoFile;
++extern char* cErrSz_NoFile_Show;
++extern char* cErrSz_ShowDim;
++extern char* cErrSz_OutFile;
+ 
+ #endif /* HPHI_ERRORMESSAGE_H */
+diff --git a/src/include/LogMessage.h b/src/include/LogMessage.h
+index 76b5f0e0..941ce61e 100644
+--- a/src/include/LogMessage.h
++++ b/src/include/LogMessage.h
+@@ -18,140 +18,137 @@
+ #define HPHI_LOGMESSAGE_H
+ 
+ //readdef.c
+-const char* cReadFileNamelist;
+-const char* cReadFile;
+-const char* cReadDefStart;
+-const char* cReadDefFinish;
++extern const char* cReadFileNamelist;
++extern const char* cReadFile;
++extern const char* cReadDefStart;
++extern const char* cReadDefFinish;
+ 
+ //sz.c
+-const char* cStateLocSpin;
+-const char* cStateNupNdown;
+-const char* cInitalSz;
+-const char* cOMPSzStart;
+-const char* cOMPSzMid;
+-const char* cOMPSzFinish;
+-const char* cReadSzStart;
+-const char* cReadSzEnd;
++extern const char* cStateLocSpin;
++extern const char* cStateNupNdown;
++extern const char* cInitalSz;
++extern const char* cOMPSzStart;
++extern const char* cOMPSzMid;
++extern const char* cOMPSzFinish;
++extern const char* cReadSzStart;
++extern const char* cReadSzEnd;
+ 
+ //CalcByLanczos.c
+-const char* cReadEigenVecStart;
+-const char* cReadEigenVecFinish;
+-const char* cOutputEigenVecStart;
+-const char* cOutputEigenVecFinish;
++extern const char* cReadEigenVecStart;
++extern const char* cReadEigenVecFinish;
++extern const char* cOutputEigenVecStart;
++extern const char* cOutputEigenVecFinish;
+ 
+ 
+ //CG_EigenVector.c
+-const char* cLogCG_EigenVecStart;
+-const char* cLogCG_EigenVecEnd;
+-const char* cCG_EigenVecStart;
+-const char* cCG_EigenVecFinish;
++extern const char* cLogCG_EigenVecStart;
++extern const char* cLogCG_EigenVecEnd;
++extern const char* cCG_EigenVecStart;
++extern const char* cCG_EigenVecFinish;
+ 
+ //diagonalcalc.c
+-const char* cDiagonalCalcStart;
+-const char* cDiagonalCalcFinish;
++extern const char* cDiagonalCalcStart;
++extern const char* cDiagonalCalcFinish;
+ 
+ //calcspectrum.c
+-const char* c_InputEigenVectorStart;
+-const char* c_InputEigenVectorEnd;
+-const char* c_CalcExcitedStateStart;
+-const char* c_CalcExcitedStateEnd;
+-const char* c_CalcSpectrumStart;
+-const char* c_CalcSpectrumEnd;
+-const char* c_GetTridiagonalStart;
+-const char* c_GetTridiagonalEnd;
+-const char* c_CalcSpectrumFromTridiagonalStart;
+-const char* c_CalcSpectrumFromTridiagonalEnd;
+-const char* c_OutputSpectrumRecalcvecStart;
+-const char* c_OutputSpectrumRecalcvecEnd;
+-const char* c_InputSpectrumRecalcvecStart;
+-const char* c_InputSpectrumRecalcvecEnd;
++extern const char* c_InputEigenVectorStart;
++extern const char* c_InputEigenVectorEnd;
++extern const char* c_CalcExcitedStateStart;
++extern const char* c_CalcExcitedStateEnd;
++extern const char* c_CalcSpectrumStart;
++extern const char* c_CalcSpectrumEnd;
++extern const char* c_GetTridiagonalStart;
++extern const char* c_GetTridiagonalEnd;
++extern const char* c_CalcSpectrumFromTridiagonalStart;
++extern const char* c_CalcSpectrumFromTridiagonalEnd;
++extern const char* c_OutputSpectrumRecalcvecStart;
++extern const char* c_OutputSpectrumRecalcvecEnd;
++extern const char* c_InputSpectrumRecalcvecStart;
++extern const char* c_InputSpectrumRecalcvecEnd;
+ 
+ //calcspectrum in Lanczos_Eigenvalue.c
+-const char* c_Lanczos_SpectrumStep;
+-
++extern const char* c_Lanczos_SpectrumStep;
+ 
+ //FirstMultiply.c, Multiply.c
+-const char* cTPQStep;
+-const char* cTPQStepEnd;
++extern const char* cTPQStep;
++extern const char* cTPQStepEnd;
+ 
+ //CalcByTEM.c
+-const char* cTEStep;
+-const char* cTEStepEnd;
+-
++extern const char* cTEStep;
++extern const char* cTEStepEnd;
+ 
+ //Lanczos_EigenValue.c
+-const char* cLogLanczos_EigenValueNotConverged;
+-const char* cLanczos_EigenValueStart;
+-const char* cLanczos_EigenValueStep;
+-const char* cLanczos_EigenValueFinish;
++extern const char* cLogLanczos_EigenValueNotConverged;
++extern const char* cLanczos_EigenValueStart;
++extern const char* cLanczos_EigenValueStep;
++extern const char* cLanczos_EigenValueFinish;
+ 
+ //Lanczos_EigenVector.c
+-const char* cLogLanczos_EigenVectorStart;
+-const char* cLogLanczos_EigenVectorEnd;
+-const char* cLanczos_EigenVectorStart;
+-const char* cLanczos_EigenVectorFinish;
++extern const char* cLogLanczos_EigenVectorStart;
++extern const char* cLogLanczos_EigenVectorEnd;
++extern const char* cLanczos_EigenVectorStart;
++extern const char* cLanczos_EigenVectorFinish;
+ 
+ //expec.c
+-const char* cExpecStart;
+-const char* cExpecEnd;
+-const char* cTPQExpecStart;
+-const char* cTPQExpecEnd;
++extern const char* cExpecStart;
++extern const char* cExpecEnd;
++extern const char* cTPQExpecStart;
++extern const char* cTPQExpecEnd;
+ 
+ //expec_cisajs.c
+-const char* cLogLanczosExpecOneBodyGStart;
+-const char* cLogCGExpecOneBodyGStart;
+-const char* cLogLanczosExpecOneBodyGEnd;
+-const char* cLogCGExpecOneBodyGEnd;
+-
+-const char* cLanczosExpecOneBodyGFinish;
+-const char* cLanczosExpecOneBodyGStart;
+-const char* cTPQExpecOneBodyGStart;
+-const char* cTPQExpecOneBodyGFinish;
+-const char* cCGExpecOneBodyGStart;
+-const char* cCGExpecOneBodyGFinish;
+-const char* cTEExpecOneBodyGStart;
+-const char* cTEExpecOneBodyGFinish;
++extern const char* cLogLanczosExpecOneBodyGStart;
++extern const char* cLogCGExpecOneBodyGStart;
++extern const char* cLogLanczosExpecOneBodyGEnd;
++extern const char* cLogCGExpecOneBodyGEnd;
++
++extern const char* cLanczosExpecOneBodyGFinish;
++extern const char* cLanczosExpecOneBodyGStart;
++extern const char* cTPQExpecOneBodyGStart;
++extern const char* cTPQExpecOneBodyGFinish;
++extern const char* cCGExpecOneBodyGStart;
++extern const char* cCGExpecOneBodyGFinish;
++extern const char* cTEExpecOneBodyGStart;
++extern const char* cTEExpecOneBodyGFinish;
+ 
+ //expec_cisajucktaltdc.c
+-const char*  cLogLanczosExpecTwoBodyGStart;
+-const char*  cLogLanczosExpecTwoBodyGFinish;
+-const char*  cLanczosExpecTwoBodyGStart;
+-const char*  cLogCGExpecTwoBodyGFinish;
+-const char*  cLanczosExpecTwoBodyGFinish;
+-const char*  cCGExpecTwoBodyGStart;
+-const char*  cCGExpecTwoBodyGFinish;
+-const char*  cTPQExpecTwoBodyGStart;
+-const char*  cTPQExpecTwoBodyGFinish;
+-const char*  cTEExpecTwoBodyGStart;
+-const char*  cTEExpecTwoBodyGFinish;
++extern const char*  cLogLanczosExpecTwoBodyGStart;
++extern const char*  cLogLanczosExpecTwoBodyGFinish;
++extern const char*  cLanczosExpecTwoBodyGStart;
++extern const char*  cLogCGExpecTwoBodyGFinish;
++extern const char*  cLanczosExpecTwoBodyGFinish;
++extern const char*  cCGExpecTwoBodyGStart;
++extern const char*  cCGExpecTwoBodyGFinish;
++extern const char*  cTPQExpecTwoBodyGStart;
++extern const char*  cTPQExpecTwoBodyGFinish;
++extern const char*  cTEExpecTwoBodyGStart;
++extern const char*  cTEExpecTwoBodyGFinish;
+ 
+ //expec_energy.c
+-const char* cLogExpecEnergyStart;
+-const char* cLogExpecEnergyEnd;
++extern const char* cLogExpecEnergyStart;
++extern const char* cLogExpecEnergyEnd;
+ 
+ //CalcByTPQ.c
+-const char* cLogTPQRand;
+-const char* cLogSSRand;
+-const char* cLogNormRand;
+-const char* cLogFlctRand;
+-const char* cLogTPQStep;
+-const char* cLogTPQEnd;
++extern const char* cLogTPQRand;
++extern const char* cLogSSRand;
++extern const char* cLogNormRand;
++extern const char* cLogFlctRand;
++extern const char* cLogTPQStep;
++extern const char* cLogTPQEnd;
+ 
+ //CalcByTEM.c
+-const char* cLogTEStep;
+-const char* cLogSS;
+-const char* cLogNorm;
+-const char* cLogFlct;
+-
+-const char* cLogInputVecStart;
+-const char* cLogInputVecFinish;
+-const char* cLogOutputVecStart;
+-const char* cLogOutputVecFinish;
+-const char* cOutputVecStart;
+-const char* cOutputVecFinish;
+-
++extern const char* cLogTEStep;
++extern const char* cLogSS;
++extern const char* cLogNorm;
++extern const char* cLogFlct;
++
++extern const char* cLogInputVecStart;
++extern const char* cLogInputVecFinish;
++extern const char* cLogOutputVecStart;
++extern const char* cLogOutputVecFinish;
++extern const char* cOutputVecStart;
++extern const char* cOutputVecFinish;
+ 
+ //FirstMultiply.c
+-const char* cLogCheckInitComplex;
+-const char* cLogCheckInitReal;
++extern const char* cLogCheckInitComplex;
++extern const char* cLogCheckInitReal;
+ #endif /* HPHI_LOGMESSAGE_H */
+diff --git a/src/include/ProgressMessage.h b/src/include/ProgressMessage.h
+index 44201833..7eed22d4 100644
+--- a/src/include/ProgressMessage.h
++++ b/src/include/ProgressMessage.h
+@@ -17,32 +17,32 @@
+ #ifndef HPHI_PROGRESS_MESSAGE_H
+ #define HPHI_PROGRESS_MESSAGE_H
+ 
+-const char* cProFinishAlloc;
+-const char* cProFinishDefFiles;
+-const char* cProFinishDefCheck;
+-const char* cProStartCalcSz;
+-const char* cProEndCalcSz;
+-const char* cProStartOutputList;
+-const char* cProEndOutputList;
+-const char* cProStartCalcDiag;
+-const char* cProEndCalcDiag;
+-const char* cLogLanczos_EigenValueStart;
+-const char* cLogLanczos_EigenValueEnd;
+-const char* cLogLanczos_EigenVecStart;
+-const char* cLogLanczos_EigenVecEnd;
+-const char* cLogTPQ_Start;
+-const char* cLogTPQ_End;
+-const char* cLogFullDiag_SetHam_Start;
+-const char* cLogFullDiag_SetHam_End;
+-const char* cLogFullDiag_InputHam_Start;
+-const char* cLogFullDiag_InputHam_End;
+-const char* cLogFullDiag_OutputHam_Start;
+-const char* cLogFullDiag_OutputHam_End;
+-const char* cLogFullDiag_Start;
+-const char* cLogFullDiag_End;
+-const char* cLogFullDiag_ExpecValue_Start;
+-const char* cLogFullDiag_ExpecValue_End;
+-const char* cLogFinish;
+-const char* cLogTEM_Start;
+-const char* cLogTEM_End;
++extern const char* cProFinishAlloc;
++extern const char* cProFinishDefFiles;
++extern const char* cProFinishDefCheck;
++extern const char* cProStartCalcSz;
++extern const char* cProEndCalcSz;
++extern const char* cProStartOutputList;
++extern const char* cProEndOutputList;
++extern const char* cProStartCalcDiag;
++extern const char* cProEndCalcDiag;
++extern const char* cLogLanczos_EigenValueStart;
++extern const char* cLogLanczos_EigenValueEnd;
++extern const char* cLogLanczos_EigenVecStart;
++extern const char* cLogLanczos_EigenVecEnd;
++extern const char* cLogTPQ_Start;
++extern const char* cLogTPQ_End;
++extern const char* cLogFullDiag_SetHam_Start;
++extern const char* cLogFullDiag_SetHam_End;
++extern const char* cLogFullDiag_InputHam_Start;
++extern const char* cLogFullDiag_InputHam_End;
++extern const char* cLogFullDiag_OutputHam_Start;
++extern const char* cLogFullDiag_OutputHam_End;
++extern const char* cLogFullDiag_Start;
++extern const char* cLogFullDiag_End;
++extern const char* cLogFullDiag_ExpecValue_Start;
++extern const char* cLogFullDiag_ExpecValue_End;
++extern const char* cLogFinish;
++extern const char* cLogTEM_Start;
++extern const char* cLogTEM_End;
+ #endif /* HPHI_PROGRESS_MESSAGE_H */
+diff --git a/src/include/global.h b/src/include/global.h
+index 5f95bb58..83341684 100644
+--- a/src/include/global.h
++++ b/src/include/global.h
+@@ -31,146 +31,146 @@
+ #define ITINERANT 0
+ #define LOCSPIN 1
+ 
+-double complex *v0;  /**< A vector after multiplying Hamiltonian, @f$ v_0 = H v_1@f$.*/
+-double complex *v1;  /**< A vector before multiplying Hamiltonian, @f$ v_0 = H v_1@f$.*/
+-double complex *v2;  /**< A temporary vector for time evolution calculation, @f$ v2 = H*v1 = H^coef |psi(t)>@f$.*/
+-double complex *v1buf; /**< A temporary vector for MPI. */
++extern double complex *v0;  /**< A vector after multiplying Hamiltonian, @f$ v_0 = H v_1@f$.*/
++extern double complex *v1;  /**< A vector before multiplying Hamiltonian, @f$ v_0 = H v_1@f$.*/
++extern double complex *v2;  /**< A temporary vector for time evolution calculation, @f$ v2 = H*v1 = H^coef |psi(t)>@f$.*/
++extern double complex *v1buf; /**< A temporary vector for MPI. */
+ 
+ //[s] For calcSpectrum
+-double complex *v1Org; /**< An input vector to calculate spectrum function.*/
+-double complex *vg; /**< A vector used in the CG mode.*/
++extern double complex *v1Org; /**< An input vector to calculate spectrum function.*/
++extern double complex *vg; /**< A vector used in the CG mode.*/
+ //[e] For calcSpectrum
+ 
+-double *alpha,*beta; /**< Tridiagonal components used in Lanczos mode.*/
+-double complex **vec; /**< Eigen vectors.*/
+-double *list_Diagonal; /**< list for diagonal components.*/
+-long unsigned int *list_1; /**< list of getting real-space configuration for canonical state*/
+-long unsigned int *list_1buf;/**< list of getting real-space configuration for canonical state across processes*/
+-long unsigned int *list_2_1;/**< list to get index of list_1*/
+-long unsigned int *list_2_2;/**< list to get index of list_1*/
++extern double *alpha,*beta; /**< Tridiagonal components used in Lanczos mode.*/
++extern double complex **vec; /**< Eigen vectors.*/
++extern double *list_Diagonal; /**< list for diagonal components.*/
++extern long unsigned int *list_1; /**< list of getting real-space configuration for canonical state*/
++extern long unsigned int *list_1buf;/**< list of getting real-space configuration for canonical state across processes*/
++extern long unsigned int *list_2_1;/**< list to get index of list_1*/
++extern long unsigned int *list_2_2;/**< list to get index of list_1*/
+ 
+ /*[s] For Spectrum */
+-long unsigned int *list_1_org; /**< list of getting real-space configuration for canonical state before excitation*/
+-long unsigned int *list_1buf_org;/**< list of getting real-space configuration for canonical state before excitation across processes*/
+-long unsigned int *list_2_1_org;/**< list to get index of list_1_org*/
+-long unsigned int *list_2_2_org;/**< list to get index of list_1_org*/
++extern long unsigned int *list_1_org; /**< list of getting real-space configuration for canonical state before excitation*/
++extern long unsigned int *list_1buf_org;/**< list of getting real-space configuration for canonical state before excitation across processes*/
++extern long unsigned int *list_2_1_org;/**< list to get index of list_1_org*/
++extern long unsigned int *list_2_2_org;/**< list to get index of list_1_org*/
+ /*[e] For Spectrum */
+ 
+ /*[s] For Lanczos */
+-int     initial_mode;/**< mode to get initial state (0: use same random generator for MPI, 1: use each random generator for MPI)*/
++extern int     initial_mode;/**< mode to get initial state (0: use same random generator for MPI, 1: use each random generator for MPI)*/
+ /*[e] For Lanczos */
+ 
+ /*[s] For TPQ*/
+-double LargeValue;/**< constant value l for TPQ calculation.*/
+-int    NumAve;/**< Average number for TPQ calculation*/
+-int step_i;/**< step for TPQ calculation*/
+-double global_norm;/**< norm before normalization for TPQ calculation*/
+-double global_1st_norm;/**< 1-st norm for TPQ calculation*/
+-int step_spin;/**< output step for TE calculation.*/
++extern double LargeValue;/**< constant value l for TPQ calculation.*/
++extern int    NumAve;/**< Average number for TPQ calculation*/
++extern int step_i;/**< step for TPQ calculation*/
++extern double global_norm;/**< norm before normalization for TPQ calculation*/
++extern double global_1st_norm;/**< 1-st norm for TPQ calculation*/
++extern int step_spin;/**< output step for TE calculation.*/
+ /*[e] For TPQ*/
+ 
+ /*[s] For All Diagonalization*/
+-double complex**Ham; /**> Hamiltonian for full diagonalization. */
+-double complex **L_vec;/**> eigen vectors*/
++extern double complex**Ham; /**> Hamiltonian for full diagonalization. */
++extern double complex **L_vec;/**> eigen vectors*/
+ #ifdef _SCALAPACK
+-double complex *Z_vec; /**> distributed matrix of eigen vector*/
+-int descZ_vec[9]; /*descriptor for Z_vec*/
++extern double complex *Z_vec; /**> distributed matrix of eigen vector*/
++extern int descZ_vec[9]; /*descriptor for Z_vec*/
+ #endif
+ /*[e] For All Diagonalization*/
+ 
+-const char* cParentOutputFolder; /**> Path to output results*/
++extern const char* cParentOutputFolder; /**> Path to output results*/
+ 
+ //For TimeKeep
+-const char* cFileNameTimeKeep; /**> Name of the file to output calculation processing time*/
+-const char* cFileNameSzTimeKeep;/**> Name of the file to output sz calculation time*/
++extern const char* cFileNameTimeKeep; /**> Name of the file to output calculation processing time*/
++extern const char* cFileNameSzTimeKeep;/**> Name of the file to output sz calculation time*/
+ 
+ //For Check
+-const char* cFileNameCheckCoulombIntra;/**> Name of the file to check Coulomb Intra interactions.*/
+-const char* cFileNameCheckChemi;/**> Name of the file to check Chemical potentials.*/
+-const char* cFileNameCheckInterU;/**> Name of the file to check Inter U.*/
+-const char* cFileNameCheckHund;/**>Name of the file to check Hund interactions. */
+-const char* cFileNameCheckInterAll;/**> Name of the file to check InterAll interactions.*/
+-const char* cFileNameCheckMemory;/**> Name of the file to check memory.*/
+-const char* cFileNameCheckSdim;/**> Name of the file to check dimension.*/
++extern const char* cFileNameCheckCoulombIntra;/**> Name of the file to check Coulomb Intra interactions.*/
++extern const char* cFileNameCheckChemi;/**> Name of the file to check Chemical potentials.*/
++extern const char* cFileNameCheckInterU;/**> Name of the file to check Inter U.*/
++extern const char* cFileNameCheckHund;/**>Name of the file to check Hund interactions. */
++extern const char* cFileNameCheckInterAll;/**> Name of the file to check InterAll interactions.*/
++extern const char* cFileNameCheckMemory;/**> Name of the file to check memory.*/
++extern const char* cFileNameCheckSdim;/**> Name of the file to check dimension.*/
+ 
+ //For EDTrans
+-const char* cFileNameWarningOnTransfer; /**> Name of the file to output warning of transfer integrals.*/
++extern const char* cFileNameWarningOnTransfer; /**> Name of the file to output warning of transfer integrals.*/
+ 
+ //For Lanczos
+-const char* cFileNameLanczosStep;/**> Name of the file to output Lanczos step.*/
+-const char* cFileNameEnergy_Lanczos;/**> Name of the file to output energies.*/
+-const char* cFileNameEigenvalue_Lanczos;/**> Name of the file to output eigen values.*/
+-const char* cFileNameEnergy_CG;/**> Name of the file to output energies obtained by CG method.*/
+-const char* cFileName1BGreen_Lanczos;/**> Name of the file to output One-Body Green's functions obtained by Lanczos method.*/
+-const char* cFileName1BGreen_CG;/**> Name of the file to output One-Body Green's functions obtained by CG method.*/
+-const char* cFileName2BGreen_Lanczos;/**> Name of the file to output Two-Body Green's functions obtained by Lanczos method.*/
+-const char* cFileName3BGreen_Lanczos;/**> Name of the file to output Two-Body Green's functions obtained by Lanczos method.*/
+-const char* cFileName4BGreen_Lanczos;/**> Name of the file to output Two-Body Green's functions obtained by Lanczos method.*/
+-const char* cFileName2BGreen_CG;/**> Name of the file to output Two-Body Green's functions obtained by CG method.*/
+-const char* cFileNameTimeEV_CG;/**> Name of the file to output time for getting eigen vector by CG method.*/
+-const char* cFileNameListModel;/**> Name of the file to output list.*/
+-const char* cFileNameOutputEigen;/**> Name of the file to output eigen vector.*/
+-const char* cFileNameInputEigen;/**> Name of the file to input eigen vector.*/
+-const char* cFileNameCalcDynamicalGreen;/**> Name of the file to output dynamical Green's function.*/
+-const char* cFileNameTridiagonalMatrixComponents;/**> Name of the file to output tridiagonal matrix components.*/
++extern const char* cFileNameLanczosStep;/**> Name of the file to output Lanczos step.*/
++extern const char* cFileNameEnergy_Lanczos;/**> Name of the file to output energies.*/
++extern const char* cFileNameEigenvalue_Lanczos;/**> Name of the file to output eigen values.*/
++extern const char* cFileNameEnergy_CG;/**> Name of the file to output energies obtained by CG method.*/
++extern const char* cFileName1BGreen_Lanczos;/**> Name of the file to output One-Body Green's functions obtained by Lanczos method.*/
++extern const char* cFileName1BGreen_CG;/**> Name of the file to output One-Body Green's functions obtained by CG method.*/
++extern const char* cFileName2BGreen_Lanczos;/**> Name of the file to output Two-Body Green's functions obtained by Lanczos method.*/
++extern const char* cFileName3BGreen_Lanczos;/**> Name of the file to output Two-Body Green's functions obtained by Lanczos method.*/
++extern const char* cFileName4BGreen_Lanczos;/**> Name of the file to output Two-Body Green's functions obtained by Lanczos method.*/
++extern const char* cFileName2BGreen_CG;/**> Name of the file to output Two-Body Green's functions obtained by CG method.*/
++extern const char* cFileNameTimeEV_CG;/**> Name of the file to output time for getting eigen vector by CG method.*/
++extern const char* cFileNameListModel;/**> Name of the file to output list.*/
++extern const char* cFileNameOutputEigen;/**> Name of the file to output eigen vector.*/
++extern const char* cFileNameInputEigen;/**> Name of the file to input eigen vector.*/
++extern const char* cFileNameCalcDynamicalGreen;/**> Name of the file to output dynamical Green's function.*/
++extern const char* cFileNameTridiagonalMatrixComponents;/**> Name of the file to output tridiagonal matrix components.*/
+ 
+ //For TPQ
+-const char* cFileNameSSRand;/**> Name of the SS_rand file.*/
+-const char* cFileNameTPQStep;/**> Name of the Time_TPQ_Step file.*/
+-const char* cFileNameNormRand;/**> Name of the NormRand file.*/
+-const char* cFileNameFlctRand;/**> Name of the Flct file.*/
+-const char* cFileName1BGreen_TPQ;/**> Name of the file to output one-body Green's functions for TPQ calculation.*/
+-const char* cFileName2BGreen_TPQ;/**> Name of the file to output two-body Green's functions for TPQ calculation.*/
+-const char* cFileName3BGreen_TPQ;/**> Name of the file to output two-body Green's functions for TPQ calculation.*/
+-const char* cFileName4BGreen_TPQ;/**> Name of the file to output two-body Green's functions for TPQ calculation.*/
+-const char* cFileName1BGreen_TE;/**> Name of the file to output one-body Green's functions for Time Evolution calculation.*/
+-const char* cFileName2BGreen_TE;/**> Name of the file to output two-body Green's functions for Time Evolution calculation.*/
+-const char* cFileName3BGreen_TE;/**> Name of the file to output two-body Green's functions for Time Evolution calculation.*/
+-const char* cFileName4BGreen_TE;/**> Name of the file to output two-body Green's functions for Time Evolution calculation.*/
+-const char* cFileNameOutputVector;/**> Name of the file to output TPQ vector.*/
+-const char* cFileNameInputVector;/**> Name of the file to input TPQ vector.*/
++extern const char* cFileNameSSRand;/**> Name of the SS_rand file.*/
++extern const char* cFileNameTPQStep;/**> Name of the Time_TPQ_Step file.*/
++extern const char* cFileNameNormRand;/**> Name of the NormRand file.*/
++extern const char* cFileNameFlctRand;/**> Name of the Flct file.*/
++extern const char* cFileName1BGreen_TPQ;/**> Name of the file to output one-body Green's functions for TPQ calculation.*/
++extern const char* cFileName2BGreen_TPQ;/**> Name of the file to output two-body Green's functions for TPQ calculation.*/
++extern const char* cFileName3BGreen_TPQ;/**> Name of the file to output two-body Green's functions for TPQ calculation.*/
++extern const char* cFileName4BGreen_TPQ;/**> Name of the file to output two-body Green's functions for TPQ calculation.*/
++extern const char* cFileName1BGreen_TE;/**> Name of the file to output one-body Green's functions for Time Evolution calculation.*/
++extern const char* cFileName2BGreen_TE;/**> Name of the file to output two-body Green's functions for Time Evolution calculation.*/
++extern const char* cFileName3BGreen_TE;/**> Name of the file to output two-body Green's functions for Time Evolution calculation.*/
++extern const char* cFileName4BGreen_TE;/**> Name of the file to output two-body Green's functions for Time Evolution calculation.*/
++extern const char* cFileNameOutputVector;/**> Name of the file to output TPQ vector.*/
++extern const char* cFileNameInputVector;/**> Name of the file to input TPQ vector.*/
+ 
+ //For Time evolution
+-const char* cFileNameTEStep; /**> Name of the Time_TE_Step file.*/
+-const char* cFileNameSS;/**> Name of the SS file.*/
+-const char* cFileNameNorm;/**> Name of the Norm file.*/
+-const char* cFileNameFlct;/**> Name of the Flct file.*/
++extern const char* cFileNameTEStep; /**> Name of the Time_TE_Step file.*/
++extern const char* cFileNameSS;/**> Name of the SS file.*/
++extern const char* cFileNameNorm;/**> Name of the Norm file.*/
++extern const char* cFileNameFlct;/**> Name of the Flct file.*/
+ 
+ //For FullDiag
+-const char* cFileNamePhys_FullDiag;/**> Name of the file to output physical values for canonical ensemble.*/
+-const char* cFileNamePhys_FullDiag_GC;/**> Name of the file to output physical values for grand canonical ensemble.*/
+-const char* cFileName1BGreen_FullDiag;/**> Name of the file to output one-body Green's functions for Full diagonalization.*/
+-const char* cFileName2BGreen_FullDiag;/**> Name of the file to output two-body Green's functions for Full diagonalization.*/
+-const char* cFileName3BGreen_FullDiag;/**> Name of the file to output two-body Green's functions for Full diagonalization.*/
+-const char* cFileName4BGreen_FullDiag;/**> Name of the file to output two-body Green's functions for Full diagonalization.*/
+-const char* cFileNamePhys_FullDiag_Ham;/**> Name of the file to output Hamiltonian for Full diagonalization.*/
++extern const char* cFileNamePhys_FullDiag;/**> Name of the file to output physical values for canonical ensemble.*/
++extern const char* cFileNamePhys_FullDiag_GC;/**> Name of the file to output physical values for grand canonical ensemble.*/
++extern const char* cFileName1BGreen_FullDiag;/**> Name of the file to output one-body Green's functions for Full diagonalization.*/
++extern const char* cFileName2BGreen_FullDiag;/**> Name of the file to output two-body Green's functions for Full diagonalization.*/
++extern const char* cFileName3BGreen_FullDiag;/**> Name of the file to output two-body Green's functions for Full diagonalization.*/
++extern const char* cFileName4BGreen_FullDiag;/**> Name of the file to output two-body Green's functions for Full diagonalization.*/
++extern const char* cFileNamePhys_FullDiag_Ham;/**> Name of the file to output Hamiltonian for Full diagonalization.*/
+ 
+ //For Spectrum
+-const char* cFileNameOutputRestartVec;/**> Name of the file to output restart vector for spectrum mode.*/
+-const char* cFileNameOutputExcitedVec;/**> Name of the file to output the excited vector for spectrum mode.*/
++extern const char* cFileNameOutputRestartVec;/**> Name of the file to output restart vector for spectrum mode.*/
++extern const char* cFileNameOutputExcitedVec;/**> Name of the file to output the excited vector for spectrum mode.*/
+ 
+ //For Error
+-const char* cFileNameErrorSz;/**> Name of the file to output Error message for Sz calculation.*/
++extern const char* cFileNameErrorSz;/**> Name of the file to output Error message for Sz calculation.*/
+ 
+ //For Timer
+-double *Timer; /**> The procedure execution time.*/
+-double *TimerStart;/**> Timer when the procedure starts.*/
++extern double *Timer; /**> The procedure execution time.*/
++extern double *TimerStart;/**> Timer when the procedure starts.*/
+ 
+ /********************************************************************/
+ /********************************************************************/
+-double eps; /**> epsilon used in getting spectrum by Lanczos method and Lanczos eigenvector by CG method.*/
+-double eps_CG;/**> epsilon used in getting Lanczos eigenvector by CG method.*/
+-double eps_Lanczos;/**> epsilon used in LOBPCG, BiCG and Lanczos eigen value.*/
+-double eps_Energy;/**> epsilon for energy*/
+-double eps_CheckImag0;/**> epsilon for checking values of one-body and two-body interactions.*/
++extern double eps; /**> epsilon used in getting spectrum by Lanczos method and Lanczos eigenvector by CG method.*/
++extern double eps_CG;/**> epsilon used in getting Lanczos eigenvector by CG method.*/
++extern double eps_Lanczos;/**> epsilon used in LOBPCG, BiCG and Lanczos eigen value.*/
++extern double eps_Energy;/**> epsilon for energy*/
++extern double eps_CheckImag0;/**> epsilon for checking values of one-body and two-body interactions.*/
+ 
+ /*
+  Variables for the MPI parallelism
+ */
+-int nproc;//!< Number of processors, defined in InitializeMPI()
+-int myrank;//!< Process ID, defined in InitializeMPI()
+-int nthreads;//!< Number of Threads, defined in InitializeMPI()
+-FILE *stdoutMPI;/**<@brief File pointer to the standard output
++extern int nproc;//!< Number of processors, defined in InitializeMPI()
++extern int myrank;//!< Process ID, defined in InitializeMPI()
++extern int nthreads;//!< Number of Threads, defined in InitializeMPI()
++extern FILE *stdoutMPI;/**<@brief File pointer to the standard output
+                 defined in InitializeMPI()*/
+ 
+ #endif /* HPHI_GLOBAL_H */
+diff --git a/src/include/struct.h b/src/include/struct.h
+index 19f0faa4..6d116b64 100644
+--- a/src/include/struct.h
++++ b/src/include/struct.h
+@@ -25,6 +25,8 @@
+ #ifndef HPHI_STRUCT_H
+ #define HPHI_STRUCT_H
+ 
++#include "Common.h"
++
+ /*=================================================================================================*/
+ //For TEM
+ struct ParamList {
+@@ -435,7 +437,7 @@ struct TimeKeepStruct {
+ };/*struct TimeKeepStruct*/
+ 
+ /*global variables---------------------------------------------*/
+-struct EDMainCalStruct X;
++extern struct EDMainCalStruct X;
+ /*-------------------------------------------------------------*/
+ 
+ #endif /* HPHI_STRUCT_H */
+diff --git a/src/komega/CMakeLists.txt b/src/komega/CMakeLists.txt
+index d1802b6b..0900defd 100644
+--- a/src/komega/CMakeLists.txt
++++ b/src/komega/CMakeLists.txt
+@@ -11,6 +11,13 @@ if(MPI_Fortran_FOUND)
+   link_directories(${MPI_Fortran_LIBRARY_DIRS})
+   include_directories(${MPI_Fortran_INCLUDE_PATH})
+ endif(MPI_Fortran_FOUND)
++
++if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
++  if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0)
++    add_definitions("-fallow-argument-mismatch")
++  endif()
++endif()
++
+ add_library(komega ${SOURCES_KOMEGA})
+ target_link_libraries(komega ${LAPACK_LIBRARIES} m)
+ if(MPI_Fortran_FOUND)
+diff --git a/src/struct.c b/src/struct.c
+new file mode 100644
+index 00000000..d88cabce
+--- /dev/null
++++ b/src/struct.c
+@@ -0,0 +1,20 @@
++/* HPhi  -  Quantum Lattice Model Simulator */
++/* Copyright (C) 2015 The University of Tokyo */
++
++/* This program is free software: you can redistribute it and/or modify */
++/* it under the terms of the GNU General Public License as published by */
++/* the Free Software Foundation, either version 3 of the License, or */
++/* (at your option) any later version. */
++
++/* This program is distributed in the hope that it will be useful, */
++/* but WITHOUT ANY WARRANTY; without even the implied warranty of */
++/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the */
++/* GNU General Public License for more details. */
++
++/* You should have received a copy of the GNU General Public License */
++/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */
++/*-------------------------------------------------------------*/
++
++#include "struct.h"
++
++struct EDMainCalStruct X={0};
