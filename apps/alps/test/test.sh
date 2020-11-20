@@ -1,5 +1,6 @@
 set -u
-set -o pipefail
+
+. $UTIL_SH
 
 for exe in dirloop_sse dmft fulldiag loop pconfig; do
   if [ ! -e ${PREFIX}/bin/${exe} ]; then
@@ -9,7 +10,7 @@ for exe in dirloop_sse dmft fulldiag loop pconfig; do
 done
 
 cp -rp ${PREFIX}/tutorials/ed-01-sparsediag .
-(cd ed-01-sparsediag && parameter2xml parm1a && sparsediag parm1a.in.xml) 2>&1 | tee -a log || exit 127
+check (cd ed-01-sparsediag && parameter2xml parm1a && sparsediag parm1a.in.xml)
 
 cp -rp ${PREFIX}/tutorials/mc-02-susceptibilities .
-(cd mc-02-susceptibilities && parameter2xml parm2c && loop parm2c.in.xml) 2>&1 | tee -a log || exit 127
+check (cd mc-02-susceptibilities && parameter2xml parm2c && loop parm2c.in.xml)

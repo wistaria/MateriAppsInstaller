@@ -1,8 +1,28 @@
 #!/bin/sh
-set -o pipefail
+set -e
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+echo configurations > config.txt
+eval "
+set -x
+
+# configurable variables (e.g. compiler)
+
+export CMAKE=${CMAKE:-cmake}
+export CXX=${CXX:-}
+export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
+export MAKE_J=${MAKE_J:-}
+
+" 2> config.txt
+if [ "$XTRACED" = "off" ]; then
+  set +x
+  SHFLAG=""
+else
+  SHFLAG="-x"
+fi
 
 mode=${1:-default}
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
@@ -10,49 +30,39 @@ if [ ! -d $CONFIG_DIR ]; then
   ls -1 $SCRIPT_DIR/config
   exit 127
 fi
+DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
 
-. $SCRIPT_DIR/../../scripts/util.sh
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 . $SCRIPT_DIR/version.sh
 set_prefix
 
 . ${MA_ROOT}/env.sh
-export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
-
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+mv config.txt $LOG
 
-. $SCRIPT_DIR/../../tools/boost/find.sh; if [ ${MA_HAVE_BOOST} = "no" ]; then echo "Error: boost not found"; exit 127; fi
-. $SCRIPT_DIR/../../tools/cmake/find.sh; if [ ${MA_HAVE_CMAKE} = "no" ]; then echo "Error: cmake not found"; exit 127; fi
-. $SCRIPT_DIR/../../tools/hdf5/find.sh; if [ ${MA_HAVE_HDF5} = "no" ]; then echo "Error: hdf5 not found"; exit 127; fi
+for toolname in boost cmake hdf5; do
+  pipefail check find_tool $toolname \| tee -a $LOG
+done
 
-sh ${SCRIPT_DIR}/setup.sh
-rm -rf $LOG
+pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-echo "[preprocess]" | tee -a $LOG
-if [ -f CMakeLists.txt ]; then
-  rm -rf build && mkdir -p build && cd build
-fi
-if [ -e $CONFIG_DIR/preprocess.sh ];then
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $CONFIG_DIR/preprocess.sh
-else
-  env SCRIPT_DIR=$SCRIPT_DIR PREFIX=$PREFIX LOG=$LOG sh $SCRIPT_DIR/config/default/preprocess.sh
-fi
-
-echo "[make]" | tee -a $LOG
-check make VERBOSE=1 2>&1 | tee -a $LOG || exit 1
-echo "[make install]" | tee -a $LOG
-check make install 2>&1 | tee -a $LOG || exit 1
-echo "[make check]" | tee -a $LOG
-make test 2>&1 | tee -a $LOG
-
-if [ -e $CONFIG_DIR/postprocess.sh ];then
-  check sh $CONFIG_DIR/postprocess.sh
-fi
+for process in preprocess build install postprocess; do
+  if [ -f $CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}.sh \| tee -a $LOG
+  elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
+  fi
+done
 
 finish_info | tee -a $LOG
 
@@ -63,8 +73,6 @@ cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 . ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
-export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
-export PYTHONPATH=\${${ROOTNAME}}/lib:\$PYTHONPATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH

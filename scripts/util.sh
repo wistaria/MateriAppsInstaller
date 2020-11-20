@@ -186,3 +186,26 @@ EOF
   rm -f $tmpfile.f90
   return $ret
 }
+
+find_tool() {
+  local toolname=$1
+  if [ -z "${SCRIPT_DIR:+UNDEF}" ]; then
+    echo "Error: SCRIPT_DIR is not defined"
+    return 127
+  fi
+
+  local findsh=$SCRIPT_DIR/../../tools/${toolname}/find.sh
+  if [ ! -f $findsh ]; then
+    echo "Error: $findsh is not found"
+    return 127
+  fi
+
+  . $findsh
+  local MA_HAVE_XXX=MA_HAVE_$(toupper ${toolname})
+  local res=$(eval echo \$$MA_HAVE_XXX)
+  if [ $res = "no" ]; then
+    echo "Error: ${toolname} not found"
+    return 127
+  fi
+  return 0
+}

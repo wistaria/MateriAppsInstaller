@@ -1,6 +1,8 @@
 #!/bin/sh
 
-. $SCRIPT_DIR/../../scripts/util.sh
+rm -rf build
+mkdir build
+cd build
 
 . $SCRIPT_DIR/../../tools/python3/find.sh
 if [ ${MA_HAVE_PYTHON3} = "yes" ]; then
