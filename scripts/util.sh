@@ -187,6 +187,16 @@ EOF
   return $ret
 }
 
+check_header() {
+  local ret=0
+  tmpfile=$(mktemp)
+  mv $tmpfile $tmpfile.cc
+  echo "#include <$1>" >> $tmpfile.cc
+  ${CXX:-cxx} -fsyntax-only $tmpfile.cc || ret=$?
+  rm -f $tmpfile.cc
+  return $ret
+}
+
 find_tool() {
   local toolname=$1
   if [ -z "${SCRIPT_DIR:+UNDEF}" ]; then
