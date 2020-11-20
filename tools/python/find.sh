@@ -1,12 +1,22 @@
 #!/bin/sh
 
 MA_HAVE_PYTHON2=no
-MA_PYTHON2=$(which python2)
-test -n "${MA_PYTHON2}" || MA_PYTHON2=$(which python)
 MA_PYTHON2_VERSION=
 MA_PYTHON2_VERSION_MAJOR=
 MA_PYTHON2_VERSION_MINOR=
 MA_PYTHON2_VERSION_PATCH=
+
+if [ -z "$MA_PYTHON2" ]; then
+  which python2 2>/dev/null && MA_PYTHON2=$(which python2)
+  if [ -z "$MA_PYTHON2" ]; then
+    which python 2>/dev/null && MA_PYTHON2=$(which python)
+  fi
+else
+  if [ ! -x "$MA_PYTHON2" ]; then
+    echo "MA_PYTHON2 is manually set but this looks not an executable"
+    exit 127
+  fi
+fi
 
 if [ -n "${MA_PYTHON2}" ]; then
   if [ $(${MA_PYTHON2} -c "import sys; print(sys.version_info.major)") = 2 ]; then
