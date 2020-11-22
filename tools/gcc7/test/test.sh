@@ -9,5 +9,5 @@ for exe in gcc g++ gfortran; do
   fi
 done
 
-${PREFIX}/bin/g++ hello.cpp -o hello
+check ${PREFIX}/bin/g++ hello.cpp -o hello
 ./hello
