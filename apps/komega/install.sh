@@ -32,6 +32,7 @@ if [ -d $PREFIX ]; then
 fi
 rm -rf $LOG
 
+rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail check sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG

@@ -50,7 +50,8 @@ for toolname in boost cmake hdf5; do
   pipefail check find_tool $toolname \| tee -a $LOG
 done
 
-pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
+pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
