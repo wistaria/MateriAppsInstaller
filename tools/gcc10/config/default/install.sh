@@ -1,4 +1,5 @@
 cd build
 make install
-ln -s gcc $PREFIX/bin/cc
-ln -s gfortran $PREFIX/bin/f95
+ln -s $PREFIX/bin/gcc $PREFIX/bin/cc
+ln -s $PREFIX/bin/g++ $PREFIX/bin/c++
+ln -s $PREFIX/bin/gfortran $PREFIX/bin/f95
