@@ -1,6 +1,5 @@
-#!/bin/sh
+set -u
 
-. $SCRIPT_DIR/../../scripts/util.sh
-
-check sh bootstrap.sh -with-toolset=intel-linux 2>&1 | tee -a $LOG
-check ./b2 --prefix=$PREFIX install 2>&1 | tee -a $LOG
+cd tools/build
+sh bootstrap.sh -with-toolset=intel-linux
+./b2 --prefix=$PREFIX install

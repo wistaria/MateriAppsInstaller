@@ -1,5 +1,4 @@
 set -u
-set -o pipefail
 
 for exe in cmake ctest; do
   if [ ! -e ${PREFIX}/bin/${exe} ]; then
@@ -8,4 +7,4 @@ for exe in cmake ctest; do
   fi
 done
 
-${PREFIX}/bin/cmake --version || exit 127
+${PREFIX}/bin/cmake --version
