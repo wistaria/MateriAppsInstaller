@@ -1,47 +1,73 @@
 #!/bin/sh
-set -o pipefail
+set -e
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+echo configurations > config.txt
+eval "
+set -x
+
+# configurable variables (e.g. compiler)
+
+export CXX=${CXX:-}
+export MAKE_J=${MAKE_J:-}
+
+" 2> config.txt
+if [ "$XTRACED" = "off" ]; then
+  set +x
+  SHFLAG=""
+else
+  SHFLAG="-x"
+fi
 
 mode=${1:-default}
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
+  echo "Available list:"
+  ls -1 $SCRIPT_DIR/config
   exit 127
 fi
+DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
 
-. $SCRIPT_DIR/../../scripts/util.sh
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $MA_ROOT/env.sh
-LOG=$BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
-PREFIX=$MA_ROOT/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-
+. ${MA_ROOT}/env.sh
+export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+mv config.txt $LOG
 
-sh $SCRIPT_DIR/setup.sh
-
+rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
+pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-mkdir $BUILD_DIR/${__NAME__}-${__VERSION__}/build
-cd $BUILD_DIR/${__NAME__}-${__VERSION__}/build
-echo "[cmake]" | tee -a $LOG
-check cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF \
-  $BUILD_DIR/${__NAME__}-${__VERSION__} 2>&1 | tee -a $LOG
-echo "[make install]" | tee -a $LOG
-make install 2>&1 | tee -a $LOG
+for process in preprocess build install postprocess; do
+  if [ -f $CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}.sh \| tee -a $LOG
+  elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
+  fi
+done
 
 finish_info | tee -a $LOG
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
-DIRNAME=$(capitalize ${__NAME__})_DIR
+
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export ${DIRNAME}=\${${ROOTNAME}}
+export ${ROOTNAME}_DIR=\${${ROOTNAME}}
+export PATH=\${${ROOTNAME}}/bin:\$PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
