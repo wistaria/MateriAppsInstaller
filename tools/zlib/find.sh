@@ -14,7 +14,7 @@ cat <<EOF > test-$$.c
 #include <stdio.h>
 int main() { printf("%s\n", ZLIB_VERSION); }
 EOF
-${__CC__} test-$$.c -o test-$$ -I${ZLIB_ROOT}/include -L${ZLIB_ROOT}/lib -lz > /dev/null 2>&1
+${__CC__} test-$$.c -o test-$$ -I${ZLIB_ROOT:-/usr}/include -L${ZLIB_ROOT:-/usr}/lib -lz > /dev/null 2>&1
 if [ $? = 0 ]; then
   MA_ZLIB_VERSION=$(./test-$$)
   MA_ZLIB_VERSION_MAJOR=$(echo ${MA_ZLIB_VERSION} | cut -d . -f 1)

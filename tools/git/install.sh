@@ -44,7 +44,7 @@ fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
-. $SCRIPT_DIR/../../tools/zlib/find.sh; if [ ${MA_HAVE_ZLIBL} = "no" ]; then echo "Error: zlib not found"; exit 127; fi
+. $SCRIPT_DIR/../../tools/zlib/find.sh; if [ $MA_HAVE_ZLIB = "no" ]; then echo "Error: zlib not found"; exit 127; fi
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
