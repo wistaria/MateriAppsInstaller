@@ -1,8 +1,6 @@
 set -u
 
-for exe in openssl; do
-  if [ ! -e ${PREFIX}/bin/${exe} ]; then
-    echo "Error: ${PREFIX}/bin/${exe} does not exist"
-    exit 127
-  fi
-done
+. $UTIL_SH
+
+check ${CC:-gcc} -o version -I${PREFIX}/include -L${PREFIX}/lib version.c -lz
+check ./version
