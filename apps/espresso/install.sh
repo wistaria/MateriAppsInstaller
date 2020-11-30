@@ -1,25 +1,21 @@
 #!/bin/sh
 set -e
 
-XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
+cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
-export CC=${CC:-}
-export FC=${FC:-}
-export MPIF90=${MPIF90:-}
-export CPP=${CPP:-}
-export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
-export MAKE_J=${MAKE_J:-}
+export CC="${CC:-}"
+export FC="${FC:-}"
+export MPIF90="${MPIF90:-}"
+export CPP="${CPP:-}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+export MAKE_J="${MAKE_J:-}"
 
-" 2> config.txt
-if [ "$XTRACED" = "off" ]; then
-  set +x
-  SHFLAG=""
-else
+EOF
+. ./config.txt
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+if [ "$XTRACED" = "on" ]; then
   SHFLAG="-x"
 fi
 
@@ -41,10 +37,10 @@ set_prefix
 
 . ${MA_ROOT}/env.sh
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
-if [ -d $PREFIX ]; then
-  echo "Error: $PREFIX exists"
-  exit 127
-fi
+# if [ -d $PREFIX ]; then
+#   echo "Error: $PREFIX exists"
+#   exit 127
+# fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
