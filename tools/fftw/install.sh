@@ -25,7 +25,9 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
+set +e
 . $SCRIPT_DIR/../../tools/cmake/find.sh; if [ ${MA_HAVE_CMAKE} = "no" ]; then echo "Error: cmake not found"; exit 127; fi
+set -e
 
 sh $SCRIPT_DIR/setup.sh
 

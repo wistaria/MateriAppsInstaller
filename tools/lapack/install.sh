@@ -25,7 +25,9 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 
+set +e
 . $SCRIPT_DIR/../../tools/openblas/find.sh; if [ ${MA_HAVE_BLAS} = "no" ]; then echo "Error: blas not found"; exit 127; fi
+set -e
 
 sh $SCRIPT_DIR/setup.sh
 

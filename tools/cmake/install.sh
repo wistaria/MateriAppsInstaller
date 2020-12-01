@@ -44,7 +44,9 @@ fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
+set +e
 . $SCRIPT_DIR/../../tools/openssl/find.sh; if [ ${MA_HAVE_OPENSSL} = "no" ]; then echo "Error: openssl not found"; exit 127; fi
+set -e
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
