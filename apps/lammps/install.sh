@@ -34,10 +34,10 @@ set_prefix
 
 . ${MA_ROOT}/env.sh
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
-# if [ -d $PREFIX ]; then
-#   echo "Error: $PREFIX exists"
-#   exit 127
-# fi
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
+fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
@@ -65,6 +65,7 @@ cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 . ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
+export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
