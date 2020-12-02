@@ -1,5 +1,3 @@
-cp -rp DFT_DATA* work $PREFIX
-
 set -u
 
 if [ -x $ISSP_UCOUNT ]; then
