@@ -39,7 +39,7 @@ MateriApps Installerの目標は下記の通りである。
 
 2. アプリ
 
-  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, mVMC, OpenMX, RESPACK, TeNeS
+  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
 
 
 3. 今後追加予定のアプリ

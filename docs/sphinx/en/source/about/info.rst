@@ -39,7 +39,7 @@ The following tools and apps are in place (12/2/2020):
 
 2. Apps
 
-  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, mVMC, OpenMX, RESPACK, TeNeS
+  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
 
 
 3. Apps to be added in the future
