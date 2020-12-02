@@ -1,0 +1,920 @@
+diff -uprN openmx-3.9.2.orig/CMakeLists.txt openmx-3.9.2/CMakeLists.txt
+--- openmx-3.9.2.orig/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/CMakeLists.txt	2020-12-02 15:30:22.000000000 +0900
+@@ -0,0 +1,54 @@
++cmake_minimum_required(VERSION 3.6...3.14)
++message(STATUS "CMake version: " ${CMAKE_VERSION})
++project(OpenMX C Fortran)
++
++find_package(BLAS REQUIRED)
++find_package(LAPACK REQUIRED)
++
++find_package(MPI REQUIRED)
++if(NOT MPI_C_INCLUDE_DIRS)
++    if(MPI_C_INCLUDE_PATH)
++        set(MPI_C_INCLUDE_DIRS ${MPI_C_INCLUDE_PATH})
++        set(MPI_Fortran_INCLUDE_DIRS ${MPI_Fortran_INCLUDE_PATH})
++    else(MPI_C_INCLUDE_PATH)
++        set(MPI_C_INCLUDE_DIRS ${MPI_INCLUDE_PATH})
++        set(MPI_Fortran_INCLUDE_DIRS ${MPI_INCLUDE_PATH})
++    endif(MPI_C_INCLUDE_PATH)
++endif(NOT MPI_C_INCLUDE_DIRS)
++if(NOT MPI_C_LIBRARIES)
++    set(MPI_C_LIBRARIES ${MPI_LIBRARIES})
++    set(MPI_Fortran_LIBRARIES ${MPI_LIBRARIES})
++endif(NOT MPI_C_LIBRARIES)
++
++list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
++find_package(ScaLAPACK REQUIRED)
++find_package(FFTW REQUIRED)
++
++include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/openmp.cmake)
++openmp()
++message(STATUS ${OMP_FLAG})
++if(NOT DEFINED OpenMP_C_FLAGS)
++    set(OpenMP_C_FLAGS "${OMP_FLAG}")
++endif()
++if(NOT DEFINED OpenMP_C_LIBRARIES)
++    set(OpenMP_C_LIBRARIES "${OMP_FLAG}")
++endif()
++string(REPLACE ";" " " _OpenMP_C_FLAGS "${OpenMP_C_FLAGS}")
++
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_OpenMP_C_FLAGS} -fcommon -Dkcomp")
++set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${_OpenMP_C_FLAGS}")
++
++include(CheckFortranCompilerFlag)
++check_fortran_compiler_flag("-fallow-argument-mismatch" FortranArgumentMismatchFlag)
++if(FortranArgumentMismatchFlag)
++    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
++endif()
++
++set(OpenMX_INCLUDE_DIRS ${MPI_C_INCLUDE_DIRS} ${FFTW_INCLUDE_DIRS})
++set(OpenMX_LIBS ${MPI_C_LIBRARIES} ${FFTW_LIBRARIES} ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES} ${SCALAPACK_LIBRARIES} ${OpenMP_C_LIBRARIES} -lpthread -lm)
++
++add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/source)
++add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/work)
++
++set(DFT_DATA DFT_DATA19)
++add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${DFT_DATA})
+diff -uprN openmx-3.9.2.orig/DFT_DATA19/CMakeLists.txt openmx-3.9.2/DFT_DATA19/CMakeLists.txt
+--- openmx-3.9.2.orig/DFT_DATA19/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/DFT_DATA19/CMakeLists.txt	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1 @@
++install(DIRECTORY . DESTINATION ${DFT_DATA} PATTERN CMakeLists.txt EXCLUDE)
+diff -uprN openmx-3.9.2.orig/cmake/FindFFTW.cmake openmx-3.9.2/cmake/FindFFTW.cmake
+--- openmx-3.9.2.orig/cmake/FindFFTW.cmake	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/FindFFTW.cmake	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,339 @@
++# - Find the FFTW library
++#
++# Original version of this file:
++#   Copyright (c) 2015, Wenzel Jakob
++#   https://github.com/wjakob/layerlab/blob/master/cmake/FindFFTW.cmake, commit 4d58bfdc28891b4f9373dfe46239dda5a0b561c6
++# Modifications:
++#   Copyright (c) 2017, Patrick Bos
++#
++# Usage:
++#   find_package(FFTW [REQUIRED] [QUIET] [COMPONENTS component1 ... componentX] )
++#
++# It sets the following variables:
++#   FFTW_FOUND                  ... true if fftw is found on the system
++#   FFTW_[component]_LIB_FOUND  ... true if the component is found on the system (see components below)
++#   FFTW_LIBRARIES              ... full paths to all found fftw libraries
++#   FFTW_[component]_LIB        ... full path to one of the components (see below)
++#   FFTW_INCLUDE_DIRS           ... fftw include directory paths
++#
++# The following variables will be checked by the function
++#   FFTW_USE_STATIC_LIBS        ... if true, only static libraries are found, otherwise both static and shared.
++#   FFTW_ROOT                   ... if set, the libraries are exclusively searched
++#                                   under this path
++#
++# This package supports the following components:
++#   FLOAT_LIB
++#   DOUBLE_LIB
++#   LONGDOUBLE_LIB
++#   FLOAT_THREADS_LIB
++#   DOUBLE_THREADS_LIB
++#   LONGDOUBLE_THREADS_LIB
++#   FLOAT_OPENMP_LIB
++#   DOUBLE_OPENMP_LIB
++#   LONGDOUBLE_OPENMP_LIB
++#
++
++# TODO (maybe): extend with ExternalProject download + build option
++# TODO: put on conda-forge
++
++
++if( NOT FFTW_ROOT AND DEFINED ENV{FFTWDIR} )
++  set( FFTW_ROOT $ENV{FFTWDIR} )
++endif()
++
++# Check if we can use PkgConfig
++find_package(PkgConfig)
++
++#Determine from PKG
++if( PKG_CONFIG_FOUND AND NOT FFTW_ROOT )
++  pkg_check_modules( PKG_FFTW QUIET "fftw3" )
++endif()
++
++#Check whether to search static or dynamic libs
++set( CMAKE_FIND_LIBRARY_SUFFIXES_SAV ${CMAKE_FIND_LIBRARY_SUFFIXES} )
++
++if( ${FFTW_USE_STATIC_LIBS} )
++  set( CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX} )
++else()
++  set( CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES_SAV} )
++endif()
++
++if( FFTW_ROOT )
++  # find libs
++
++  find_library(
++    FFTW_DOUBLE_LIB
++    NAMES "fftw3" libfftw3-3
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "lib" "lib64"
++    NO_DEFAULT_PATH
++  )
++
++  find_library(
++    FFTW_DOUBLE_THREADS_LIB
++    NAMES "fftw3_threads"
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "lib" "lib64"
++    NO_DEFAULT_PATH
++  )
++
++  find_library(
++          FFTW_DOUBLE_OPENMP_LIB
++          NAMES "fftw3_omp"
++          PATHS ${FFTW_ROOT}
++          PATH_SUFFIXES "lib" "lib64"
++          NO_DEFAULT_PATH
++  )
++
++  find_library(
++    FFTW_FLOAT_LIB
++    NAMES "fftw3f" libfftw3f-3
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "lib" "lib64"
++    NO_DEFAULT_PATH
++  )
++
++  find_library(
++    FFTW_FLOAT_THREADS_LIB
++    NAMES "fftw3f_threads"
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "lib" "lib64"
++    NO_DEFAULT_PATH
++  )
++
++  find_library(
++          FFTW_FLOAT_OPENMP_LIB
++          NAMES "fftw3f_omp"
++          PATHS ${FFTW_ROOT}
++          PATH_SUFFIXES "lib" "lib64"
++          NO_DEFAULT_PATH
++  )
++
++  find_library(
++    FFTW_LONGDOUBLE_LIB
++    NAMES "fftw3l" libfftw3l-3
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "lib" "lib64"
++    NO_DEFAULT_PATH
++  )
++
++  find_library(
++    FFTW_LONGDOUBLE_THREADS_LIB
++    NAMES "fftw3l_threads"
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "lib" "lib64"
++    NO_DEFAULT_PATH
++  )
++
++  find_library(
++          FFTW_LONGDOUBLE_OPENMP_LIB
++          NAMES "fftw3l_omp"
++          PATHS ${FFTW_ROOT}
++          PATH_SUFFIXES "lib" "lib64"
++          NO_DEFAULT_PATH
++  )
++
++  #find includes
++  find_path(FFTW_INCLUDE_DIRS
++    NAMES "fftw3.h"
++    PATHS ${FFTW_ROOT}
++    PATH_SUFFIXES "include"
++    NO_DEFAULT_PATH
++  )
++
++else()
++
++  find_library(
++    FFTW_DOUBLE_LIB
++    NAMES "fftw3"
++    PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++    FFTW_DOUBLE_THREADS_LIB
++    NAMES "fftw3_threads"
++    PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++          FFTW_DOUBLE_OPENMP_LIB
++          NAMES "fftw3_omp"
++          PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++    FFTW_FLOAT_LIB
++    NAMES "fftw3f"
++    PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++    FFTW_FLOAT_THREADS_LIB
++    NAMES "fftw3f_threads"
++    PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++          FFTW_FLOAT_OPENMP_LIB
++          NAMES "fftw3f_omp"
++          PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++    FFTW_LONGDOUBLE_LIB
++    NAMES "fftw3l"
++    PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(
++    FFTW_LONGDOUBLE_THREADS_LIB
++    NAMES "fftw3l_threads"
++    PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_library(FFTW_LONGDOUBLE_OPENMP_LIB
++          NAMES "fftw3l_omp"
++          PATHS ${PKG_FFTW_LIBRARY_DIRS} ${LIB_INSTALL_DIR}
++  )
++
++  find_path(FFTW_INCLUDE_DIRS
++    NAMES "fftw3.h"
++    PATHS ${PKG_FFTW_INCLUDE_DIRS} ${INCLUDE_INSTALL_DIR}
++  )
++
++endif( FFTW_ROOT )
++
++#--------------------------------------- components
++
++if (FFTW_DOUBLE_LIB)
++  set(FFTW_DOUBLE_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_DOUBLE_LIB})
++  add_library(FFTW::Double INTERFACE IMPORTED)
++  set_target_properties(FFTW::Double
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_DOUBLE_LIB}"
++  )
++else()
++  set(FFTW_DOUBLE_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_FLOAT_LIB)
++  set(FFTW_FLOAT_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_FLOAT_LIB})
++  add_library(FFTW::Float INTERFACE IMPORTED)
++  set_target_properties(FFTW::Float
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_FLOAT_LIB}"
++  )
++else()
++  set(FFTW_FLOAT_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_LONGDOUBLE_LIB)
++  set(FFTW_LONGDOUBLE_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_LONGDOUBLE_LIB})
++  add_library(FFTW::LongDouble INTERFACE IMPORTED)
++  set_target_properties(FFTW::LongDouble
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_LONGDOUBLE_LIB}"
++  )
++else()
++  set(FFTW_LONGDOUBLE_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_DOUBLE_THREADS_LIB)
++  set(FFTW_DOUBLE_THREADS_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_DOUBLE_THREADS_LIB})
++  add_library(FFTW::DoubleThreads INTERFACE IMPORTED)
++  set_target_properties(FFTW::DoubleThreads
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_DOUBLETHREADS_LIB}"
++  )
++else()
++  set(FFTW_DOUBLE_THREADS_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_FLOAT_THREADS_LIB)
++  set(FFTW_FLOAT_THREADS_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_FLOAT_THREADS_LIB})
++  add_library(FFTW::FloatThreads INTERFACE IMPORTED)
++  set_target_properties(FFTW::FloatThreads
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_FLOAT_THREADS_LIB}"
++  )
++else()
++  set(FFTW_FLOAT_THREADS_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_LONGDOUBLE_THREADS_LIB)
++  set(FFTW_LONGDOUBLE_THREADS_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_LONGDOUBLE_THREADS_LIB})
++  add_library(FFTW::LongDoubleThreads INTERFACE IMPORTED)
++  set_target_properties(FFTW::LongDoubleThreads
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_LONGDOUBLE_THREADS_LIB}"
++  )
++else()
++  set(FFTW_LONGDOUBLE_THREADS_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_DOUBLE_OPENMP_LIB)
++  set(FFTW_DOUBLE_OPENMP_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_DOUBLE_OPENMP_LIB})
++  add_library(FFTW::DoubleOpenMP INTERFACE IMPORTED)
++  set_target_properties(FFTW::DoubleOpenMP
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_DOUBLE_OPENMP_LIB}"
++  )
++else()
++  set(FFTW_DOUBLE_OPENMP_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_FLOAT_OPENMP_LIB)
++  set(FFTW_FLOAT_OPENMP_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_FLOAT_OPENMP_LIB})
++  add_library(FFTW::FloatOpenMP INTERFACE IMPORTED)
++  set_target_properties(FFTW::FloatOpenMP
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_FLOAT_OPENMP_LIB}"
++  )
++else()
++  set(FFTW_FLOAT_OPENMP_LIB_FOUND FALSE)
++endif()
++
++if (FFTW_LONGDOUBLE_OPENMP_LIB)
++  set(FFTW_LONGDOUBLE_OPENMP_LIB_FOUND TRUE)
++  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} ${FFTW_LONGDOUBLE_OPENMP_LIB})
++  add_library(FFTW::LongDoubleOpenMP INTERFACE IMPORTED)
++  set_target_properties(FFTW::LongDoubleOpenMP
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${FFTW_INCLUDE_DIRS}"
++               INTERFACE_LINK_LIBRARIES "${FFTW_LONGDOUBLE_OPENMP_LIB}"
++  )
++else()
++  set(FFTW_LONGDOUBLE_OPENMP_LIB_FOUND FALSE)
++endif()
++
++#--------------------------------------- end components
++
++set( CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES_SAV} )
++
++include(FindPackageHandleStandardArgs)
++
++find_package_handle_standard_args(FFTW
++        REQUIRED_VARS FFTW_INCLUDE_DIRS
++        HANDLE_COMPONENTS
++        )
++
++mark_as_advanced(
++        FFTW_INCLUDE_DIRS
++        FFTW_LIBRARIES
++        FFTW_FLOAT_LIB
++        FFTW_DOUBLE_LIB
++        FFTW_LONGDOUBLE_LIB
++        FFTW_FLOAT_THREADS_LIB
++        FFTW_DOUBLE_THREADS_LIB
++        FFTW_LONGDOUBLE_THREADS_LIB
++        FFTW_FLOAT_OPENMP_LIB
++        FFTW_DOUBLE_OPENMP_LIB
++        FFTW_LONGDOUBLE_OPENMP_LIB
++        )
+diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindScaLAPACK.cmake
+--- openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/FindScaLAPACK.cmake	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,142 @@
++# - Try to find ScaLAPACK
++# 
++# Original file is available at
++# https://github.com/t-sakashita/rokko/blob/master/config/FindScaLAPACK.cmake 
++# under the Boost  Software License 1.0
++#
++# Once done this will define
++#
++#  SCALAPACK_FOUND        - system has ScaLAPACK
++#  SCALAPACK_LIBRARIES     - libraries for ScaLAPACK
++
++if(DEFINED SCALAPACK_FOUND)
++  return()
++endif(DEFINED SCALAPACK_FOUND)
++  
++message(STATUS "Checking for ScaLAPACK library")
++
++if(DEFINED SCALAPACK_LIB)
++  set(SCALAPACK_FOUND TRUE)
++  set(SCALAPACK_LIBRARIES ${SCALAPACK_LIB})
++  message(STATUS "ScaLAPACK libraries: ${SCALAPACK_LIBRARIES}")
++  return()
++endif(DEFINED SCALAPACK_LIB)
++
++if(DEFINED BLAS_mkl_core_LIBRARY)
++
++  find_library(_SCALAPACK_LIBRARY
++    NAMES mkl_scalapack_lp64
++    PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++    DOC "The ScaLAPACK library")
++  if(_SCALAPACK_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARY})
++  else(_SCALAPACK_LIBRARY)
++    message(STATUS "ScaLAPACK library: not found")
++    set(SCALAPACK_FOUND FALSE)
++    return()
++  endif(_SCALAPACK_LIBRARY)
++
++  # Check whether SGI MPT is used
++  try_compile(_SGI_MPT
++    ${CMAKE_CURRENT_BINARY_DIR}
++    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_sgimpt.c
++    OUTPUT_VARIABLE LOG)
++  if(_SGI_MPT)
++    find_library(_SCALAPACK_BLACS_LIBRARY
++      NAMES mkl_blacs_sgimpt_lp64
++      PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++      DOC "The BLACS library")
++    MESSAGE(STATUS "SGI MPT is used")
++  else(_SGI_MPT)
++    try_compile(_OPENMPI
++      ${CMAKE_CURRENT_BINARY_DIR}
++      ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_openmpi.c
++      OUTPUT_VARIABLE LOG)
++    if(_OPENMPI)
++      find_library(_SCALAPACK_BLACS_LIBRARY
++        NAMES mkl_blacs_openmpi_lp64
++        PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++        DOC "The BLACS library")
++      MESSAGE(STATUS "OpenMPI is used")
++    else(_OPENMPI)
++      find_library(_SCALAPACK_BLACS_LIBRARY
++        NAMES mkl_blacs_intelmpi_lp64
++        PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++        DOC "The BLACS library")
++      MESSAGE(STATUS "Intel MPI/MPICH2/MVAPICH is used")
++    endif(_OPENMPI)
++  endif(_SGI_MPT)
++  if(_SCALAPACK_BLACS_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_SCALAPACK_BLACS_LIBRARY})
++  endif(_SCALAPACK_BLACS_LIBRARY)
++
++else(DEFINED BLAS_mkl_core_LIBRARY)
++
++  # Standard search path
++  set(_PATHS "")
++  if(SCALAPACK_DIR)
++    set(_PATHS ${SCALAPACK_DIR})
++  else(SCALAPACK_DIR)
++    list(APPEND _PATHS
++  	 ${SCALAPACK_ROOT}/${CMAKE_BUILD_TYPE}
++	 ${SCALAPACK_ROOT}
++  	 $ENV{SCALAPACK_ROOT}/${CMAKE_BUILD_TYPE}
++	 $ENV{SCALAPACK_ROOT}
++  	 $ENV{ROKKO_SOLVER_ROOT}/scalapack/${CMAKE_BUILD_TYPE}
++	 $ENV{ROKKO_SOLVER_ROOT}/scalapack
++	 ${CMAKE_INSTALL_PREFIX}/scalapack/${CMAKE_BUILD_TYPE}
++	 ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}
++	 /opt/local /opt
++	 )
++    list(APPEND _PATHS /usr/lib64/openmpi) # for CentOS
++  endif(SCALAPACK_DIR)
++
++  foreach (_PATH ${_PATHS})
++    list(APPEND _LIBPATHS "${_PATH}/lib")
++  endforeach()
++
++  find_library(_SCALAPACK_LIBRARY
++    NAMES scalapack scalapack-openmpi scalapack-mpich
++    PATHS ${_LIBPATHS}
++    DOC "The ScaLAPACK library")
++  if(_SCALAPACK_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARY})
++  else(_SCALAPACK_LIBRARY)
++    message(STATUS "ScaLAPACK library: not found")
++    set(SCALAPACK_FOUND FALSE)
++    return()
++  endif(_SCALAPACK_LIBRARY)
++
++  find_library(_BLACS_LIBRARY
++    NAMES blacs-openmpi blacs-mpich
++    PATHS ${_LIBPATHS}
++    DOC "The ScaLAPACK BLACS library")
++  find_library(_BLACSC_LIBRARY
++    NAMES blacsCinit-openmpi blacsCinit-mpich
++    PATHS ${_LIBPATHS}
++    DOC "The ScaLAPACK BLACS C library")
++  find_library(_BLACSF77_LIBRARY
++    NAMES blacsF77init-openmpi blacsF77init-mpich
++    PATHS ${_LIBPATHS}
++    DOC "The ScaLAPACK BLACS F77 library")
++  if(_BLACSF77_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSF77_LIBRARY})
++  endif(_BLACSF77_LIBRARY)
++  if(_BLACSC_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSC_LIBRARY})
++  endif(_BLACSC_LIBRARY)
++  if(_BLACS_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_BLACS_LIBRARY})
++  endif(_BLACS_LIBRARY)
++  if(_BLACSF77_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSF77_LIBRARY})
++  endif(_BLACSF77_LIBRARY)
++  if(_BLACSC_LIBRARY)
++    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSC_LIBRARY})
++  endif(_BLACSC_LIBRARY)
++
++endif(DEFINED BLAS_mkl_core_LIBRARY)
++
++set(SCALAPACK_FOUND TRUE)
++set(SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARIES})
++message(STATUS "ScaLAPACK libraries: ${SCALAPACK_LIBRARIES}")
+diff -uprN openmx-3.9.2.orig/cmake/check_omp.c openmx-3.9.2/cmake/check_omp.c
+--- openmx-3.9.2.orig/cmake/check_omp.c	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/check_omp.c	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,2 @@
++#include <omp.h>
++int main() { return 0; }
+diff -uprN openmx-3.9.2.orig/cmake/check_openmpi.c openmx-3.9.2/cmake/check_openmpi.c
+--- openmx-3.9.2.orig/cmake/check_openmpi.c	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/check_openmpi.c	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,12 @@
++/* This file is originally included in mptensor */
++/* https://github.com/smorita/mptensor */
++
++#include <mpi.h>
++
++#ifdef OMPI_MPI_H // OpenMPI
++int main(int argc, char** argv) {
++  return 0;
++}
++#else
++#error
++#endif
+diff -uprN openmx-3.9.2.orig/cmake/check_sgimpt.c openmx-3.9.2/cmake/check_sgimpt.c
+--- openmx-3.9.2.orig/cmake/check_sgimpt.c	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/check_sgimpt.c	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,13 @@
++/* This file is originally included in mptensor */
++/* https://github.com/smorita/mptensor */
++
++#include <mpi.h>
++
++#ifndef MPT_VERSION
++#error
++#endif
++
++int main(int argc, char** argv) {
++  return 0;
++}
++
+diff -uprN openmx-3.9.2.orig/cmake/openmp.cmake openmx-3.9.2/cmake/openmp.cmake
+--- openmx-3.9.2.orig/cmake/openmp.cmake	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/openmp.cmake	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,55 @@
++macro(openmp)
++  set(OMP_FLAG "")
++  if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
++    if("${CMAKE_C_COMPILER_VERSION}" VERSION_LESS "15.0.0.20140528")
++      set(OMP_FLAG "-openmp")
++    else()
++      set(OMP_FLAG "-qopenmp")
++    endif()
++    set(OPENMP_FOUND ON)
++  elseif(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
++    set(_OMP_FLAG "-Xpreprocessor -fopenmp -lomp")
++    if(NOT MA_OpenMP_INCLUDE_DIR)
++      set(_OMP_INCLUDE_DIR "/usr/local/include")
++    else()
++      set(_OMP_INCLUDE_DIR ${MA_OpenMP_INCLUDE_DIR})
++    endif()
++    if(NOT MA_OpenMP_LIBRARY_DIR)
++      set(_OMP_LIBRARY_DIR "/usr/local/lib")
++    else()
++      set(_OMP_LIBRARY_DIR ${MA_OpenMP_LIBRARY_DIR})
++    endif()
++    try_compile(_AppleClangOMP
++      ${CMAKE_CURRENT_BINARY_DIR}
++      SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_omp.c
++      CMAKE_FLAGS "-DCOMPILE_DEFINITIONS=${_OMP_FLAG}"
++      CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${_OMP_INCLUDE_DIR}"
++      CMAKE_FLAGS "-DLINK_DIRECTORIES=${_OMP_LIBRARY_DIR}"
++      OUTPUT_VARIABLE LOG)
++    if(_AppleClangOMP)
++      set(OMP_FLAG -Xpreprocessor -fopenmp)
++      message(STATUS "Found OpenMP: ${OMP_FLAG}")
++      set(OpenMP_C_FLAGS -Xpreprocessor -fopenmp)
++      set(OpenMP_C_LIBRARIES -lomp)
++      set(OpenMP_C_INCLUDE_DIRS ${_OMP_INCLUDE_DIR})
++      set(OpenMP_C_LIBRARY_DIRS ${_OMP_LIBRARY_DIR})
++      set(OPENMP_FOUND ON)
++    else()
++      message(STATUS "Could NOT find OpenMP")
++      set(OPENMP_FOUND OFF)
++    endif()
++  else()
++    find_package(OpenMP)
++    if(OPENMP_FOUND)
++      set(OMP_FLAG ${OpenMP_C_FLAGS})
++    endif(OPENMP_FOUND)
++  endif()
++
++  if(NOT DEFINED OpenMP_C_LIBRARIES)
++    set(OpenMP_C_LIBRARIES ${OMP_FLAG})
++  endif()
++
++  if(NOT OPENMP_FOUND)
++    message(FATAL "Cannot found OpenMP FLAG")
++  endif()
++endmacro()
+diff -uprN openmx-3.9.2.orig/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists.txt
+--- openmx-3.9.2.orig/source/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/source/CMakeLists.txt	2020-12-02 15:29:50.000000000 +0900
+@@ -0,0 +1,222 @@
++set(ELPA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/elpa-2018.05.001")
++
++set(openmx_sources
++  openmx_common.c Input_std.c init.c LU_inverse.c ReLU_inverse.c 
++  truncation.c readfile.c FT_PAO.c FT_NLP.c FT_ProExpn_VNA.c FT_VNA.c FT_ProductPAO.c 
++  Hamiltonian_Cluster.c Hamiltonian_Cluster_Hs.c Hamiltonian_Cluster_NC_Hs2.c Hamiltonian_Band_NC_Hs2.c 
++  Overlap_Cluster_NC_Ss2.c Overlap_Band_NC_Ss2.c Overlap_Cluster.c Overlap_Cluster_Ss.c 
++  Set_ContMat_Cluster_LNO.c Hamiltonian_Band.c Matrix_Band_LNO.c Overlap_Band.c Hamiltonian_Cluster_NC.c 
++  Hamiltonian_Band_NC.c Hamiltonian_Cluster_SO.c Get_OneD_HS_Col.c SetPara_DFT.c XC_Ceperly_Alder.c XC_CA_LSDA.c 
++  XC_PW92C.c XC_PBE.c XC_EX.c DFT.c Mixing_DM.c Mixing_H.c Mixing_V.c Force.c Stress.c Poisson.c Poisson_ESM.c 
++  Cluster_DFT_Col.c Cluster_DFT_NonCol.c Cluster_DFT_Dosout.c Cluster_DFT_ON2.c Cluster_DFT_LNO.c 
++  Band_DFT_Col.c Band_DFT_NonCol.c Band_DFT_NonCol_GB.c 
++  Band_DFT_kpath.c Band_DFT_kpath_LNO.c Band_DFT_MO.c 
++  Unfolding_Bands.c Band_DFT_Dosout.c Set_Density_Grid.c Set_Orbitals_Grid.c Set_Aden_Grid.c 
++  Gauss_Legendre.c zero_cfrac.c xyz2spherical.c AngularF.c RadialF.c Dr_RadialF.c PhiF.c 
++  VNAF.c Dr_VNAF.c VH_AtomF.c Dr_VH_AtomF.c RF_BesselF.c QuickSort.c Nonlocal_RadialF.c 
++  KumoF.c Dr_KumoF.c Mulliken_Charge.c Occupation_Number_LDA_U.c Eff_Hub_Pot.c Coulomb_Interaction.c 
++  EulerAngle_Spin.c Smoothing_Func.c Orbital_Moment.c Pot_NeutralAtom.c Simple_Mixing_DM.c 
++  DIIS_Mixing_DM.c ADIIS_Mixing_DM.c GR_Pulay_DM.c Kerker_Mixing_Rhok.c DIIS_Mixing_Rhok.c 
++  Total_Energy.c Contract_Hamiltonian.c Contract_iHNL.c Cont_Matrix0.c Cont_Matrix1.c Cont_Matrix2.c 
++  Cont_Matrix3.c Cont_Matrix4.c Opt_Contraction.c Initial_CntCoes.c Initial_CntCoes2.c Set_XC_Grid.c 
++  Get_Orbitals.c Get_dOrbitals.c Get_Cnt_Orbitals.c 
++  Get_Cnt_dOrbitals.c Gaunt.c Find_CGrids.c MD_pac.c 
++  RestartFileDFT.c Output_CompTime.c Merge_LogFile.c Make_FracCoord.c 
++  Make_InputFile_with_FinalCoord.c Output_Energy_Decomposition.c 
++  Divide_Conquer.c Divide_Conquer_LNO.c Krylov.c 
++  Divide_Conquer_Dosout.c EGAC_DFT.c LNO.c 
++  Eigen_lapack.c Eigen_lapack2.c Eigen_lapack3.c EigenBand_lapack.c 
++  Eigen_PReHH.c BroadCast_ReMatrix.c 
++  Eigen_PHH.c BroadCast_ComplexMatrix.c 
++  lapack_dstedc1.c lapack_dstedc2.c lapack_dstedc3.c
++  lapack_dstegr1.c lapack_dstegr2.c lapack_dstegr3.c 
++  lapack_dstevx1.c lapack_dstevx2.c lapack_dstevx3.c 
++  lapack_dstevx4.c lapack_dstevx5.c lapack_dsteqr1.c 
++  Nonlocal_Basis.c Set_OLP_Kin.c Set_Nonlocal.c Set_ProExpn_VNA.c 
++  Set_CoreHoleMatrix.c Set_OLP_p.c Set_Hamiltonian.c Set_Vpot.c 
++  Voronoi_Charge.c Voronoi_Orbital_Moment.c Fuzzy_Weight.c 
++  dampingF.c deri_dampingF.c Spherical_Bessel.c 
++  iterout.c iterout_md.c Allocate_Arrays.c Free_Arrays.c 
++  Init_List_YOUSO.c outputfile1.c 
++  PrintMemory.c PrintMemory_Fix.c 
++  dtime.c OutData.c OutData_Binary.c init_alloc_first.c File_CntCoes.c 
++  SCF2File.c mimic_sse.c Make_Comm_Worlds.c 
++  Set_Allocate_Atom2CPU.c Cutoff.c Generating_MP_Special_Kpt.c 
++  Maketest.c Runtest.c Memory_Leak_test.c 
++  Force_test.c Stress_test.c Show_DFT_DATA.c Generate_Wannier.c 
++  TRAN_Allocate.c TRAN_DFT.c TRAN_DFT_Dosout.c TRAN_Apply_Bias2e.c 
++  TRAN_Deallocate_Electrode_Grid.c TRAN_Deallocate_RestartFile.c 
++  TRAN_RestartFile.c TRAN_Calc_CentGreen.c TRAN_Input_std.c 
++  TRAN_Set_CentOverlap.c TRAN_Calc_CentGreenLesser.c 
++  TRAN_Input_std_Atoms.c TRAN_Set_Electrode_Grid.c 
++  TRAN_Calc_GridBound.c TRAN_Set_IntegPath.c TRAN_Output_HKS.c 
++  TRAN_Set_MP.c TRAN_Calc_SelfEnergy.c TRAN_Output_Trans_HS.c 
++  TRAN_Calc_Hopping_G.c TRAN_Calc_SurfGreen.c TRAN_Set_SurfOverlap.c 
++  TRAN_Add_Density_Lead.c TRAN_Add_ADensity_Lead.c TRAN_Set_Value.c 
++  TRAN_Poisson.c TRAN_adjust_Ngrid.c TRAN_Print.c TRAN_Print_Grid.c 
++  Lapack_LU_inverse.c TRAN_Distribute_Node.c TRAN_Output_HKS_Write_Grid.c 
++  TRAN_Credit.c TRAN_Check_Region_Lead.c TRAN_Check_Region.c TRAN_Check_Input.c 
++  DFTDvdW_init.c DFTD3vdW_init.c neb.c neb_run.c neb_check.c 
++  TRAN_Allocate_NC.c TRAN_DFT_NC.c TRAN_Set_CentOverlap_NC.c TRAN_Set_SurfOverlap_NC.c 
++  TRAN_Calc_OneTransmission.c TRAN_Main_Analysis.c TRAN_Main_Analysis_NC.c 
++  MTRAN_EigenChannel.c TRAN_Channel_Functions.c TRAN_Channel_Output.c 
++  TRAN_Calc_CurrentDensity.c TRAN_CDen_Main.c 
++  NBO_Cluster.c NBO_Krylov.c Population_Analysis_Wannier.c Population_Analysis_Wannier2.c 
++  NabraMatrixElements.c Set_dOrbitals_Grid.c Calc_optical.c 
++  Band_DFT_NonCol_Optical.c Cluster_DFT_Optical.c 
++  Band_DFT_Col_Optical_ScaLAPACK.c Cluster_DFT_Optical_ScaLAPACK.c 
++  )
++
++set(openmx_sources_f90
++  get_elpa_row_col_comms.f90
++  solve_evp_complex.f90
++  elpa1.f90
++  solve_evp_real.f90
++  )
++
++## OBJS
++
++add_library(openmx_ar STATIC ${openmx_sources})
++foreach(idir IN LISTS OpenMX_INCLUDE_DIRS)
++  target_include_directories(openmx_ar PUBLIC ${idir})
++endforeach()
++foreach(lib IN LISTS OpenMX_LIBS)
++  target_link_libraries(openmx_ar ${lib})
++endforeach()
++
++add_library(openmx_f90_ar STATIC ${openmx_sources_f90})
++target_include_directories(openmx_f90_ar PUBLIC "${MPI_C_INCLUDE_DIRS}")
++target_link_libraries(openmx_f90_ar "${BLAS_LIBRARIES}" "${LAPACK_LIBRARIES}" "${SCALAPACK_LIBRARIES}" "${MPI_Fortran_LIBRARIES}")
++
++add_library(Inputtools.o OBJECT Inputtools.c)
++
++add_library(malloc_multidimarray STATIC malloc_multidimarray.c)
++target_include_directories(malloc_multidimarray PUBLIC "${MPI_C_INCLUDE_DIRS}")
++target_link_libraries(malloc_multidimarray ${MPI_C_LIBRARIES})
++target_link_libraries(malloc_multidimarray m)
++
++add_library(read_scfout STATIC read_scfout.c)
++target_include_directories(read_scfout PUBLIC "${MPI_C_INCLUDE_DIRS}")
++target_link_libraries(read_scfout ${MPI_C_LIBRARIES})
++target_link_libraries(read_scfout m)
++
++add_subdirectory(${ELPA_DIR})
++
++## MAIN
++
++add_executable(openmx
++  $<TARGET_OBJECTS:Inputtools.o>
++  openmx.c
++  )
++
++target_link_libraries(openmx openmx_ar)
++target_link_libraries(openmx openmx_f90_ar)
++target_link_libraries(openmx elpa_ar)
++target_link_libraries(openmx malloc_multidimarray)
++install(TARGETS openmx RUNTIME DESTINATION bin)
++
++## UTILS
++
++add_executable(DosMain
++  $<TARGET_OBJECTS:Inputtools.o>
++  DosMain.c Tetrahedron_Blochl.c
++  )
++target_link_libraries(DosMain malloc_multidimarray)
++foreach(lib IN LISTS OpenMX_LIBS)
++  target_link_libraries(DosMain ${lib})
++endforeach()
++install(TARGETS DosMain RUNTIME DESTINATION bin)
++
++add_executable(jx
++  $<TARGET_OBJECTS:Inputtools.o>
++  jx_quicksort.c jx_LNO.c jx_config.c jx_tools.c jx_cluster.c jx_band_psum.c jx_band_indiv.c jx.c
++  )
++target_link_libraries(jx read_scfout)
++foreach(lib IN LISTS OpenMX_LIBS)
++  target_link_libraries(jx ${lib})
++endforeach()
++install(TARGETS jx RUNTIME DESTINATION bin)
++
++add_executable(OpticalConductivityMain
++  $<TARGET_OBJECTS:Inputtools.o>
++  OpticalConductivityMain.c
++  )
++target_link_libraries(OpticalConductivityMain malloc_multidimarray)
++foreach(lib IN LISTS OpenMX_LIBS)
++  target_link_libraries(OpticalConductivityMain ${lib})
++endforeach()
++install(TARGETS OpticalConductivityMain RUNTIME DESTINATION bin)
++
++foreach(util IN ITEMS esp check_lead)
++  add_executable(${util}
++    $<TARGET_OBJECTS:Inputtools.o>
++    "${util}.c"
++    )
++  target_include_directories(${util} PRIVATE ${MPI_C_INCLUDE_DIRS})
++  foreach(lib IN LISTS OpenMX_LIBS)
++    target_link_libraries(${util} ${lib})
++  endforeach()
++  install(TARGETS ${util} RUNTIME DESTINATION bin)
++endforeach()
++
++foreach(util IN ITEMS analysis_example polB calB Z2FH)
++  add_executable(${util}
++    "${util}.c"
++    )
++  target_link_libraries(${util} read_scfout)
++  foreach(lib IN LISTS OpenMX_LIBS)
++    target_link_libraries(${util} ${lib})
++  endforeach()
++  install(TARGETS ${util} RUNTIME DESTINATION bin)
++endforeach()
++
++foreach(util IN ITEMS bandgnu13 bin2txt cube2xsf intensity_map md2axsf gcube2oned)
++  add_executable(${util} "${util}.c")
++  foreach(lib IN LISTS OpenMX_LIBS)
++    target_link_libraries(${util} ${lib})
++  endforeach()
++  install(TARGETS ${util} RUNTIME DESTINATION bin)
++endforeach()
++
++add_library(kSpin_ar_1 STATIC Inputtools_kSpin.c Tools_BandCalc.c)
++target_include_directories(kSpin_ar_1 PUBLIC "${MPI_C_INCLUDE_DIRS}")
++foreach(lib IN LISTS OpenMX_LIBS)
++  target_link_libraries(kSpin_ar_1 ${lib})
++endforeach()
++
++add_library(kSpin_ar_2 STATIC GetOrbital.c EigenValue_Problem.c Eigen_HH.c)
++target_include_directories(kSpin_ar_2 PUBLIC "${MPI_C_INCLUDE_DIRS}")
++foreach(lib IN LISTS OpenMX_LIBS)
++  target_link_libraries(kSpin_ar_1 ${lib})
++endforeach()
++
++add_library(SigmaEK.o OBJECT SigmaEK.c)
++
++add_executable(kSpin
++  kSpin.c
++  Tools_Search.c
++  BandDispersion.c FermiLoop.c GridCalc.c MulPOnly.c
++  )
++target_compile_definitions(kSpin PRIVATE "SIGMAEK")
++target_link_libraries(kSpin read_scfout)
++target_link_libraries(kSpin kSpin_ar_1)
++target_link_libraries(kSpin kSpin_ar_2)
++target_link_libraries(kSpin m)
++install(TARGETS kSpin RUNTIME DESTINATION bin)
++
++foreach(util IN ITEMS ADenBand MulPCalc)
++  add_executable(${util} "${util}.c")
++  target_link_libraries(${util} kSpin_ar_1)
++  install(TARGETS ${util} RUNTIME DESTINATION bin)
++endforeach()
++
++foreach(util IN ITEMS BandDispersion FermiLoop GridCalc MulPOnly)
++  add_executable(${util}
++    $<TARGET_OBJECTS:SigmaEK.o>
++    "${util}.c"
++    )
++  target_link_libraries(${util} read_scfout)
++  target_link_libraries(${util} kSpin_ar_1)
++  target_link_libraries(${util} kSpin_ar_2)
++  install(TARGETS ${util} RUNTIME DESTINATION bin)
++endforeach()
+diff -uprN openmx-3.9.2.orig/source/check_lead.c openmx-3.9.2/source/check_lead.c
+--- openmx-3.9.2.orig/source/check_lead.c	2020-11-20 20:24:30.000000000 +0900
++++ openmx-3.9.2/source/check_lead.c	2020-12-02 15:03:07.000000000 +0900
+@@ -8,6 +8,9 @@
+ #define BohrR    0.529177249
+ #define print_std   0
+ 
++#define YOUSO10     500        /* length of a file name                           */
++char DFT_DATA_PATH[YOUSO10];
++
+ static void Input_NEGF(char *argv[]);
+ static void SpeciesString2int(int p);
+ static int Species2int(char Species[asize10]);
+diff -uprN openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt
+--- openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1,22 @@
++set(elpa_sources
++    mod_precision.F90 elpa_utilities.F90
++    elpa1_compute_real.F90 elpa1_compute_complex.F90
++    aligned_mem.F90 elpa2_determine_workload.F90
++    mod_redist_band_real.F90 mod_redist_band_complex.F90
++    mod_pack_unpack_cpu_real.F90 mod_pack_unpack_cpu_complex.F90
++    real.F90 complex.F90
++    mod_single_hh_trafo_real.F90 mod_compute_hh_trafo_real.F90 mod_compute_hh_trafo_complex.F90
++    elpa2_compute_real.F90 elpa2_compute_complex.F90 
++    elpa_solve_evp_real_2stage_double_impl.F90 elpa_solve_evp_complex_2stage_double_impl.F90
++)
++
++add_library(elpa_ar STATIC ${elpa_sources})
++foreach(mpidir IN LISTS MPI_Fortran_INCLUDE_DIRS)
++    target_include_directories(elpa_ar PRIVATE ${mpidir})
++endforeach()
++target_link_libraries(elpa_ar ${MPI_Fortran_LIBRARIES})
++
++if(FortranArgumentMismatchFlag)
++    target_compile_options(elpa_ar PRIVATE "-fallow-argument-mismatch")
++endif()
++target_compile_options(elpa_ar PRIVATE ${OMP_FLAG})
+diff -uprN openmx-3.9.2.orig/work/CMakeLists.txt openmx-3.9.2/work/CMakeLists.txt
+--- openmx-3.9.2.orig/work/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/work/CMakeLists.txt	2020-12-02 15:03:07.000000000 +0900
+@@ -0,0 +1 @@
++install(DIRECTORY . DESTINATION work PATTERN CMakeLists.txt EXCLUDE)
