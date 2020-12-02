@@ -1,23 +1,19 @@
 #!/bin/sh
 set -e
 
-XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
+cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
-export CMAKE=${CMAKE:-cmake}
-export CXX=${CXX:-}
-export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
-export MAKE_J=${MAKE_J:-}
+export CMAKE="${CMAKE:-cmake}"
+export CXX="${CXX:-}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+export MAKE_J="${MAKE_J:-}"
 
-" 2> config.txt
-if [ "$XTRACED" = "off" ]; then
-  set +x
-  SHFLAG=""
-else
+EOF
+. config.txt
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+if [ "$XTRACED" = "on" ]; then
   SHFLAG="-x"
 fi
 
@@ -45,6 +41,7 @@ if [ -d $PREFIX ]; then
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
+echo "mode = $mode" | tee -a $LOG
 
 for toolname in boost cmake hdf5; do
   pipefail check find_tool $toolname \| tee -a $LOG

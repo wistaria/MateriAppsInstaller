@@ -1,18 +1,14 @@
-cd source
+rm -rf build
+mkdir build
+cd build
 
-sh $(dirname $0)/../default/preprocess_common.sh
+CC=${CC:-icc}
+FC=${FC:-ifort}
 
-CC=${CC:-mpicc}
-FC=${FC:-mpif90}
-OMP_FLAG=${OMP_FLAG:-"-qopenmp"}
-
-echo CC=${CC}
-echo FC=${FC}
-
-cat << EOF > makefile_head
-CC = ${CC} ${MA_EXTRA_FLAGS} $OMP_FLAG -I${MKLROOT}/include/fftw $MKL_LIB -fcommon
-FC = ${FC} ${MA_EXTRA_FLAGS} $OMP_FLAG $MKL_LIB -fcommon
-LIB = $MKL_LIB -lifcore
-EOF
-
-cat makefile_head makefile.org > makefile
+cmake \
+  -DFFTW_ROOT=${MKLROOT}/include/fftw \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_VERBOSE_MAKEFILE=1 \
+  -DCMAKE_C_FLAGS="${MA_EXTRA_FLAGS}" \
+  -DCMAKE_Fortran_FLAGS="${MA_EXTRA_FLAGS}" \
+  ../

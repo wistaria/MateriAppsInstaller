@@ -1,10 +1,19 @@
 #!/bin/sh
 set -e
 
+cat << EOF > config.txt
 # configurable variables (e.g. compiler)
-export FC=${FC:-}
-export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
-export ISSP_UCOUNT=${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}
+export FC="${FC:-}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
+
+EOF
+. config.txt
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+if [ "$XTRACED" = "on" ]; then
+  SHFLAG="-x"
+fi
 
 mode=${1:-default}
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
@@ -23,27 +32,27 @@ export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
 set_prefix
 
 . ${MA_ROOT}/env.sh
-export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
-
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
-rm -rf $LOG
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+mv config.txt $LOG
+echo "mode = $mode" | tee -a $LOG
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
-pipefail check sh ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
 for process in preprocess build install postprocess; do
   if [ -f $CONFIG_DIR/${process}.sh ]; then
     echo "[${process}]" | tee -a $LOG
-    pipefail check sh $CONFIG_DIR/${process}.sh \| tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}.sh \| tee -a $LOG
   elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
     echo "[${process}]" | tee -a $LOG
-    pipefail check sh $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
   fi
 done
 
