@@ -2,15 +2,15 @@
 set -e
 
 cat << EOF > config.txt
-export CMAKE=\"${CMAKE:-cmake}\"
-export CC=\"${CC:-}\"
-export FC=\"${FC:-}\"
-export LIB=\"${LIB:-}\"
-export OMP_FLAG=${OMP_FLAG:-}
-export MKL_LIB=\"${MKL_LIB:-"-mkl=cluster"}\"
-export MA_EXTRA_FLAGS=\"${MA_EXTRA_FLAGS:-}\"
-export MAKE_J=\"${MAKE_J:-}\"
-export ISSP_UCOUNT=${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}
+export CMAKE="${CMAKE:-cmake}"
+export CC="${CC:-}"
+export FC="${FC:-}"
+export LIB="${LIB:-}"
+export OMP_FLAG="${OMP_FLAG:-}"
+export MKL_LIB="${MKL_LIB:-"-mkl=cluster"}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+export MAKE_J="${MAKE_J:-}"
+export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 
 EOF
 . config.txt
