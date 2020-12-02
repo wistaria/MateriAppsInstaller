@@ -9,7 +9,7 @@ export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 export MAKE_J="${MAKE_J:-}"
 
 EOF
-. ./config.txt
+. config.txt
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then
@@ -40,6 +40,7 @@ if [ -d $PREFIX ]; then
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
+echo "mode = $mode" | tee -a $LOG
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
