@@ -2,7 +2,7 @@ set -u
 
 . $UTIL_SH
 
-for exe in lmp; do
+for exe in lammps; do
   if [ ! -e ${PREFIX}/bin/${exe} ]; then
     echo "Error: ${PREFIX}/bin/${exe} does not exist"
     exit 127
@@ -11,4 +11,4 @@ done
 
 cp $PREFIX/share/lammps/examples/micelle/* .
 
-check ${MPIEXEC_CMD} lmp -in in.micelle
+check ${MPIEXEC_CMD} lammps -in in.micelle
