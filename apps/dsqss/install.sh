@@ -11,7 +11,7 @@ export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 export MAKE_J="${MAKE_J:-}"
 
 EOF
-. config.txt
+. ./config.txt
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then

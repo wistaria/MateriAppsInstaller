@@ -8,7 +8,7 @@ export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 
 EOF
-. config.txt
+. ./config.txt
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then

@@ -10,7 +10,7 @@ export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 export MAKE_J="${MAKE_J:-}"
 
 EOF
-. config.txt
+. ./config.txt
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then
