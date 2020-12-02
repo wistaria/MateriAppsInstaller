@@ -24,6 +24,30 @@ The goals of MateriApps Installer are as follows
 - Similarly, we will prepare scripts for installation on CentOS (RedHat), Debian (Ubuntu) and Mac OS X environments.
 
 
+
+List of tools and apps
+------------------------------------------
+
+The following tools and apps are in place (12/2/2020):
+
+1. Tools
+
+  boost, cmake, eigen3, fftw, gcc10, gcc7,
+  git, gsl, hdf5, lapack, libffi, openblas,
+  openmpi, openssl, python2, python3, scalapack, tcltk, zlib
+
+
+2. Apps
+
+  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, mVMC, OpenMX, RESPACK, TeNeS
+
+
+3. Apps to be added in the future
+
+  abICS, DCore, ALPS-Core, TRIQS
+
+
+
 Design Policies
 ------------------------------------------
 The design policy of MateriApps Installer is as follows:
