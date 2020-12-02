@@ -1,6 +1,6 @@
-diff -uprN openmx-3.9.2.org/CMakeLists.txt openmx-3.9.2/CMakeLists.txt
---- openmx-3.9.2.org/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/CMakeLists.txt	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/CMakeLists.txt openmx-3.9.2/CMakeLists.txt
+--- openmx-3.9.2.orig/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/CMakeLists.txt	2020-12-02 11:05:46.000000000 +0900
 @@ -0,0 +1,53 @@
 +cmake_minimum_required(VERSION 3.6...3.14)
 +message(STATUS "CMake version: " ${CMAKE_VERSION})
@@ -48,21 +48,21 @@ diff -uprN openmx-3.9.2.org/CMakeLists.txt openmx-3.9.2/CMakeLists.txt
 +endif()
 +
 +set(OpenMX_INCLUDE_DIRS ${MPI_C_INCLUDE_DIRS} ${FFTW_INCLUDE_DIRS})
-+set(OpenMX_LIBS ${MPI_C_LIBRARIES} ${FFTW_LIBRARIES} ${LAPACK_LIBRARIES} ${SCALAPACK_LIBRARIES} ${OpenMP_C_LIBRARIES})
++set(OpenMX_LIBS ${MPI_C_LIBRARIES} ${FFTW_LIBRARIES} ${LAPACK_LIBRARIES} ${SCALAPACK_LIBRARIES} ${OpenMP_C_LIBRARIES} -lm)
 +
 +add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/source)
 +add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/work)
 +
 +set(DFT_DATA DFT_DATA19)
 +add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${DFT_DATA})
-diff -uprN openmx-3.9.2.org/DFT_DATA19/CMakeLists.txt openmx-3.9.2/DFT_DATA19/CMakeLists.txt
---- openmx-3.9.2.org/DFT_DATA19/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/DFT_DATA19/CMakeLists.txt	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/DFT_DATA19/CMakeLists.txt openmx-3.9.2/DFT_DATA19/CMakeLists.txt
+--- openmx-3.9.2.orig/DFT_DATA19/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/DFT_DATA19/CMakeLists.txt	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1 @@
 +install(DIRECTORY . DESTINATION ${DFT_DATA} PATTERN CMakeLists.txt EXCLUDE)
-diff -uprN openmx-3.9.2.org/cmake/FindFFTW.cmake openmx-3.9.2/cmake/FindFFTW.cmake
---- openmx-3.9.2.org/cmake/FindFFTW.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/FindFFTW.cmake	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/cmake/FindFFTW.cmake openmx-3.9.2/cmake/FindFFTW.cmake
+--- openmx-3.9.2.orig/cmake/FindFFTW.cmake	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/FindFFTW.cmake	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,339 @@
 +# - Find the FFTW library
 +#
@@ -403,9 +403,9 @@ diff -uprN openmx-3.9.2.org/cmake/FindFFTW.cmake openmx-3.9.2/cmake/FindFFTW.cma
 +        FFTW_DOUBLE_OPENMP_LIB
 +        FFTW_LONGDOUBLE_OPENMP_LIB
 +        )
-diff -uprN openmx-3.9.2.org/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindScaLAPACK.cmake
---- openmx-3.9.2.org/cmake/FindScaLAPACK.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/FindScaLAPACK.cmake	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindScaLAPACK.cmake
+--- openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/FindScaLAPACK.cmake	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,142 @@
 +# - Try to find ScaLAPACK
 +# 
@@ -549,15 +549,15 @@ diff -uprN openmx-3.9.2.org/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindSca
 +set(SCALAPACK_FOUND TRUE)
 +set(SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARIES})
 +message(STATUS "ScaLAPACK libraries: ${SCALAPACK_LIBRARIES}")
-diff -uprN openmx-3.9.2.org/cmake/check_omp.c openmx-3.9.2/cmake/check_omp.c
---- openmx-3.9.2.org/cmake/check_omp.c	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/check_omp.c	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/cmake/check_omp.c openmx-3.9.2/cmake/check_omp.c
+--- openmx-3.9.2.orig/cmake/check_omp.c	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/check_omp.c	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,2 @@
 +#include <omp.h>
 +int main() { return 0; }
-diff -uprN openmx-3.9.2.org/cmake/check_openmpi.c openmx-3.9.2/cmake/check_openmpi.c
---- openmx-3.9.2.org/cmake/check_openmpi.c	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/check_openmpi.c	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/cmake/check_openmpi.c openmx-3.9.2/cmake/check_openmpi.c
+--- openmx-3.9.2.orig/cmake/check_openmpi.c	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/check_openmpi.c	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,12 @@
 +/* This file is originally included in mptensor */
 +/* https://github.com/smorita/mptensor */
@@ -571,9 +571,9 @@ diff -uprN openmx-3.9.2.org/cmake/check_openmpi.c openmx-3.9.2/cmake/check_openm
 +#else
 +#error
 +#endif
-diff -uprN openmx-3.9.2.org/cmake/check_sgimpt.c openmx-3.9.2/cmake/check_sgimpt.c
---- openmx-3.9.2.org/cmake/check_sgimpt.c	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/check_sgimpt.c	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/cmake/check_sgimpt.c openmx-3.9.2/cmake/check_sgimpt.c
+--- openmx-3.9.2.orig/cmake/check_sgimpt.c	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/check_sgimpt.c	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,13 @@
 +/* This file is originally included in mptensor */
 +/* https://github.com/smorita/mptensor */
@@ -588,9 +588,9 @@ diff -uprN openmx-3.9.2.org/cmake/check_sgimpt.c openmx-3.9.2/cmake/check_sgimpt
 +  return 0;
 +}
 +
-diff -uprN openmx-3.9.2.org/cmake/openmp.cmake openmx-3.9.2/cmake/openmp.cmake
---- openmx-3.9.2.org/cmake/openmp.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/openmp.cmake	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/cmake/openmp.cmake openmx-3.9.2/cmake/openmp.cmake
+--- openmx-3.9.2.orig/cmake/openmp.cmake	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/cmake/openmp.cmake	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,55 @@
 +macro(openmp)
 +  set(OMP_FLAG "")
@@ -647,10 +647,10 @@ diff -uprN openmx-3.9.2.org/cmake/openmp.cmake openmx-3.9.2/cmake/openmp.cmake
 +    message(FATAL "Cannot found OpenMP FLAG")
 +  endif()
 +endmacro()
-diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists.txt
---- openmx-3.9.2.org/source/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/source/CMakeLists.txt	2020-11-28 01:28:28.000000000 +0900
-@@ -0,0 +1,208 @@
+diff -uprN openmx-3.9.2.orig/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists.txt
+--- openmx-3.9.2.orig/source/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/source/CMakeLists.txt	2020-12-02 11:12:55.000000000 +0900
+@@ -0,0 +1,221 @@
 +# if(OpenMP_C_LIBRARY_DIRS)
 +#     link_directories(${OpenMP_C_LIBRARY_DIRS})
 +# endif()
@@ -746,10 +746,12 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +add_library(malloc_multidimarray STATIC malloc_multidimarray.c)
 +target_include_directories(malloc_multidimarray PUBLIC "${MPI_C_INCLUDE_DIRS}")
 +target_link_libraries(malloc_multidimarray ${MPI_C_LIBRARIES})
++target_link_libraries(malloc_multidimarray m)
 +
 +add_library(read_scfout STATIC read_scfout.c)
 +target_include_directories(read_scfout PUBLIC "${MPI_C_INCLUDE_DIRS}")
 +target_link_libraries(read_scfout ${MPI_C_LIBRARIES})
++target_link_libraries(read_scfout m)
 +
 +add_subdirectory(${ELPA_DIR})
 +
@@ -776,6 +778,7 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +    DosMain.c Tetrahedron_Blochl.c
 +    )
 +target_link_libraries(DosMain malloc_multidimarray)
++target_link_libraries(DosMain m)
 +install(TARGETS DosMain RUNTIME DESTINATION bin)
 +
 +add_executable(jx
@@ -784,6 +787,7 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +  )
 +target_link_libraries(jx read_scfout)
 +target_link_libraries(jx ${LAPACK_LIBRARIES})
++target_link_libraries(jx m)
 +install(TARGETS jx RUNTIME DESTINATION bin)
 +
 +add_executable(OpticalConductivityMain
@@ -791,6 +795,7 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +    OpticalConductivityMain.c
 +    )
 +target_link_libraries(OpticalConductivityMain malloc_multidimarray)
++target_link_libraries(OpticalConductivityMain m)
 +install(TARGETS OpticalConductivityMain RUNTIME DESTINATION bin)
 +
 +foreach(util IN ITEMS esp check_lead)
@@ -801,6 +806,7 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +    target_include_directories(${util} PRIVATE ${MPI_C_INCLUDE_DIRS})
 +    target_link_libraries(${util} ${LAPACK_LIBRARIES})
 +    target_link_libraries(${util} ${MPI_C_LIBRARIES})
++    target_link_libraries(${util} m)
 +    install(TARGETS ${util} RUNTIME DESTINATION bin)
 +endforeach()
 +
@@ -810,11 +816,13 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +        )
 +    target_link_libraries(${util} read_scfout)
 +    target_link_libraries(${util} ${LAPACK_LIBRARIES})
++    target_link_libraries(${util} m)
 +    install(TARGETS ${util} RUNTIME DESTINATION bin)
 +endforeach()
 +
 +foreach(util IN ITEMS bandgnu13 bin2txt cube2xsf intensity_map md2axsf gcube2oned)
 +    add_executable(${util} "${util}.c")
++    target_link_libraries(${util} m)
 +    install(TARGETS ${util} RUNTIME DESTINATION bin)
 +    install(TARGETS ${util} RUNTIME DESTINATION bin)
 +endforeach()
@@ -823,11 +831,13 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +target_include_directories(kSpin_ar_1 PUBLIC "${MPI_C_INCLUDE_DIRS}")
 +target_link_libraries(kSpin_ar_1 ${MPI_C_LIBRARIES})
 +target_link_libraries(kSpin_ar_1 ${LAPACK_LIBRARIES})
++target_link_libraries(kSpin_ar_1 m)
 +
 +add_library(kSpin_ar_2 STATIC GetOrbital.c EigenValue_Problem.c Eigen_HH.c)
 +target_include_directories(kSpin_ar_2 PUBLIC "${MPI_C_INCLUDE_DIRS}")
 +target_link_libraries(kSpin_ar_2 ${MPI_C_LIBRARIES})
 +target_link_libraries(kSpin_ar_2 ${LAPACK_LIBRARIES})
++target_link_libraries(kSpin_ar_2 m)
 +
 +add_library(SigmaEK.o OBJECT SigmaEK.c)
 +
@@ -840,11 +850,13 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +target_link_libraries(kSpin read_scfout)
 +target_link_libraries(kSpin kSpin_ar_1)
 +target_link_libraries(kSpin kSpin_ar_2)
++target_link_libraries(kSpin m)
 +install(TARGETS kSpin RUNTIME DESTINATION bin)
 +
 +foreach(util IN ITEMS ADenBand MulPCalc)
 +    add_executable(${util} "${util}.c")
 +    target_link_libraries(${util} kSpin_ar_1)
++    target_link_libraries(${util} m)
 +    install(TARGETS ${util} RUNTIME DESTINATION bin)
 +endforeach()
 +
@@ -857,11 +869,12 @@ diff -uprN openmx-3.9.2.org/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists
 +    target_link_libraries(${util} read_scfout)
 +    target_link_libraries(${util} kSpin_ar_1)
 +    target_link_libraries(${util} kSpin_ar_2)
++    target_link_libraries(${util} m)
 +    install(TARGETS ${util} RUNTIME DESTINATION bin)
 +endforeach()
-diff -uprN openmx-3.9.2.org/source/check_lead.c openmx-3.9.2/source/check_lead.c
---- openmx-3.9.2.org/source/check_lead.c	2020-08-13 22:08:15.000000000 +0900
-+++ openmx-3.9.2/source/check_lead.c	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/source/check_lead.c openmx-3.9.2/source/check_lead.c
+--- openmx-3.9.2.orig/source/check_lead.c	2019-12-02 13:59:59.000000000 +0900
++++ openmx-3.9.2/source/check_lead.c	2020-12-02 10:56:26.000000000 +0900
 @@ -8,6 +8,9 @@
  #define BohrR    0.529177249
  #define print_std   0
@@ -872,9 +885,9 @@ diff -uprN openmx-3.9.2.org/source/check_lead.c openmx-3.9.2/source/check_lead.c
  static void Input_NEGF(char *argv[]);
  static void SpeciesString2int(int p);
  static int Species2int(char Species[asize10]);
-diff -uprN openmx-3.9.2.org/source/elpa-2018.05.001/CMakeLists.txt openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt
---- openmx-3.9.2.org/source/elpa-2018.05.001/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt	2020-11-28 01:28:28.000000000 +0900
+diff -uprN openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt
+--- openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1,22 @@
 +set(elpa_sources
 +    mod_precision.F90 elpa_utilities.F90
@@ -898,8 +911,8 @@ diff -uprN openmx-3.9.2.org/source/elpa-2018.05.001/CMakeLists.txt openmx-3.9.2/
 +    target_compile_options(elpa_ar PRIVATE "-fallow-argument-mismatch")
 +endif()
 +target_compile_options(elpa_ar PRIVATE ${OMP_FLAG})
-diff -uprN openmx-3.9.2.org/work/CMakeLists.txt openmx-3.9.2/work/CMakeLists.txt
---- openmx-3.9.2.org/work/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/work/CMakeLists.txt	2020-11-28 01:28:30.000000000 +0900
+diff -uprN openmx-3.9.2.orig/work/CMakeLists.txt openmx-3.9.2/work/CMakeLists.txt
+--- openmx-3.9.2.orig/work/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
++++ openmx-3.9.2/work/CMakeLists.txt	2020-12-02 10:56:26.000000000 +0900
 @@ -0,0 +1 @@
 +install(DIRECTORY . DESTINATION work PATTERN CMakeLists.txt EXCLUDE)
