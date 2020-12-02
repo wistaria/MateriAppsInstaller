@@ -16,6 +16,7 @@
    README_espresso
    README_hphi
    README_komega
+   README_lammps
    README_mvmc
    README_openmx
    README_respack
