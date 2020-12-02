@@ -37,12 +37,13 @@ set_prefix
 
 . ${MA_ROOT}/env.sh
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
-# if [ -d $PREFIX ]; then
-#   echo "Error: $PREFIX exists"
-#   exit 127
-# fi
+if [ -d $PREFIX ]; then
+  echo "Error: $PREFIX exists"
+  exit 127
+fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
+echo "mode = $mode" | tee -a $LOG
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG

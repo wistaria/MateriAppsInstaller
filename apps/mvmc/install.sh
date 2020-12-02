@@ -1,26 +1,22 @@
 #!/bin/sh
 set -e
 
-XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
+cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
-export CMAKE=${CMAKE:-cmake}
-export CC=${CC:-}
-export FC=${FC:-}
-export SCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES:-}
-export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
-export MAKE_J=${MAKE_J:-}
-export ISSP_UCOUNT=${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}
+export CMAKE="${CMAKE:-cmake}"
+export CC="${CC:-}"
+export FC="${FC:-}"
+export SCALAPACK_LIBRARIES="${SCALAPACK_LIBRARIES:-}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+export MAKE_J="${MAKE_J:-}"
+export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 
-" 2> config.txt
-if [ "$XTRACED" = "off" ]; then
-  set +x
-  SHFLAG=""
-else
+EOF
+. ./config.txt
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+if [ "$XTRACED" = "on" ]; then
   SHFLAG="-x"
 fi
 
@@ -48,6 +44,7 @@ if [ -d $PREFIX ]; then
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
+echo "mode = $mode" | tee -a $LOG
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG

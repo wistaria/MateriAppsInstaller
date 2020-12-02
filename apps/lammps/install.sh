@@ -4,10 +4,8 @@ set -e
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
-export CMAKE="${CMAKE:-cmake}"
 export CXX="${CXX:-}"
 export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
-export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 export MAKE_J="${MAKE_J:-}"
 
 EOF
@@ -67,7 +65,8 @@ cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 . ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
-. \${${ROOTNAME}}/share/dsqss/dsqssvars-${__VERSION__}.sh
+export PATH=\${${ROOTNAME}}/bin:\$PATH
+export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib64:\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH

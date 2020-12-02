@@ -25,14 +25,26 @@ MateriApps Installerの目標は下記の通りである。
 -  同様にCentOS (RedHat), Debian (Ubuntu)の標準的な環境、Mac OS X環境にもインストールできるスクリプトを整備する。
 
 
-整備されているライブラリ・アプリ
+整備されているツールとアプリ
 ------------------------------------------
-- ライブラリ
 
-- アプリ
-  
+2020/12/2現在、以下のツール・アプリが整備されています。
+
+1. ツール
+
+  boost, cmake, eigen3, fftw, gcc10, gcc7,
+  git, gsl, hdf5, lapack, libffi, openblas,
+  openmpi, openssl, python2, python3, scalapack, tcltk, zlib
 
 
+2. アプリ
+
+  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
+
+
+3. 今後追加予定のアプリ
+
+  abICS, DCore, ALPS-Core, TRIQS
 
 
 設計ポリシー
