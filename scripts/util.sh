@@ -83,7 +83,7 @@ print_prefix() {
   echo "MA_ROOT=$MA_ROOT"
   echo "BUILD_DIR=$BUILD_DIR"
   echo "SOURCE_DIR=$SOURCE_DIR"
-  echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
+  # echo "MALIVE_REPOSITORY=$MALIVE_REPOSITORY"
 }
 
 start_info() {

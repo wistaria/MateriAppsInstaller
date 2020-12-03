@@ -46,7 +46,35 @@ version.sh
 install.sh
 ============
 
-T.B.A.
+ソフトウェアをインストールするスクリプト。
+
+- 引数として設定名(``mode``)をとる
+
+  - 省略した場合は ``default``
+  - 存在しない設定名を与えた場合、利用可能な設定名の一覧を返す
+
+- ``setup.sh`` を自動で呼び出し、ソースコードをダウンロード・展開する
+- ``config/$mode`` 以下にある ``preprocess.sh``, ``build.sh``, ``install.sh``, ``postprocess.sh`` を自動で呼び出す
+
+  - ``preprocess.sh``
+
+    - ``configure`` や ``cmake`` など、ビルドの前処理をする
+
+  - ``build.sh``
+
+    - ソフトウェアをコンパイルする
+
+  - ``install.sh``
+
+    - ソフトウェアをインストールする
+
+  - ``postprocess.sh``
+
+    - ラッパーの作成やリネームなどの後処理
+
+  - ``config/$mode`` 以下にスクリプトがない場合、 ``config/default`` 以下のものが実行される
+
+    - ``config/default`` にもない場合はスキップ
 
 download.sh
 ===========
@@ -192,21 +220,19 @@ README.md
 util.sh
 =================
 
-スクリプト内で使う関数を定義しているスクリプト。
+スクリプト内で使う関数を定義しているファイル
 
 check_prefix.sh
 ===================
 
-T.B.A.
-
+インストール先 (``MA_ROOT``)、ソースコードダウンロード先 (``SOURCE_DIR``)、ビルド作業用ディレクトリ (``BUILD_DIR``) を表示するスクリプト
 
 fix_dylib.sh
 ===================
 
-T.B.A.
-
+macOS で共有ライブラリの名前などを修正するスクリプト
 
 list_maversion.sh
 ===================
 
-T.B.A.
+MateriApps Installer でサポートされている各種アプリのバージョンを列挙するスクリプト
