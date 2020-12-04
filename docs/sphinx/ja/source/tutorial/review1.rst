@@ -30,23 +30,23 @@ toolsディレクトリにはいっているツール類は、Macのパッケー
 
    .. code:: prism
 
-       $ brew install gcc
-	   $ brew install boost
-	   $ brew install cmake
-	   $ brew install eigen
-	   $ brew install fftw
-	   $ brew install git
-	   $ brew install gsl
-	   $ brew install hdf5
-	   $ brew install lapack
-	   $ brew install libffi
-	   $ brew install openblas
-	   $ brew install openmpi
-	   $ brew install openssl
-	   $ brew install python@3
-	   $ brew install scalapack
-	   $ brew install tcl-tk
-	   $ brew install zlib
+	$ brew install gcc
+	$ brew install boost
+	$ brew install cmake
+	$ brew install eigen
+	$ brew install fftw
+	$ brew install git
+	$ brew install gsl
+	$ brew install hdf5
+	$ brew install lapack
+	$ brew install libffi
+	$ brew install openblas
+	$ brew install openmpi
+	$ brew install openssl
+	$ brew install python@3
+	$ brew install scalapack
+	$ brew install tcl-tk
+	$ brew install zlib
 
    .. raw:: html
 
@@ -60,11 +60,11 @@ toolsディレクトリにはいっているツール類は、Macのパッケー
 
    .. code:: prism
 
-     $ brew install svn
-	 $ brew install boost-python
-	 $ brew install boost-python3
-	 $ brew install boost-mpi
-	 $ brew install wget
+	$ brew install svn
+	$ brew install boost-python
+	$ brew install boost-python3
+	$ brew install boost-mpi
+	$ brew install wget
 
    .. raw:: html
 
