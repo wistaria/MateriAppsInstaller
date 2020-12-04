@@ -11,6 +11,4 @@
    :maxdepth: 2
    
    review1
-   review2
-   review3
 

@@ -1,54 +1,96 @@
-macOS 10.13 (High Sierra)へのインストール
+macOS 10.15 (Catalina)へのインストール
 ------------------------------------------------------------
 
-本節では、MacOS 10.13 (High Sierra)でMateriApps Installerを利用する方法を記載します。本チュートリアルは、MateriApps 開発チームにより執筆された記事をベースにしています。
+本節では、MacOS 10.15 (Catalina)でMateriApps Installerを利用する方法を記載します。
 
-基本情報
+ツールのインストール
 ****************************
 
-基本的な設定は以下のとおりです。
+toolsディレクトリにはいっているツール類は、Macのパッケージ管理ソフト(Homebrew, fink, macportsなど)を用いてインストールするほうが便利です。ここではHomebrewを用いる方法を紹介します。ここではアプリのインストール先はデフォルトのままであるとしています。インストール先は$HOME/materiapps, ビルドディレクトリは$HOME/buildになります。
 
--  インストール先 (PREFIX)
+まずhttps://brew.sh/にある情報に従ってインストールします。
 
-   -  $HOME/materiapps
+   .. raw:: html
 
--  ビルドディレクトリ
+      <div class="hcb_wrap">
 
-   -  $HOME/build
+   .. code:: prism
 
--  C++1yのサーポート: あり
--  コンパイラ
+       $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-   -  gcc 7.3 (from MacPorts)
+   .. raw:: html
 
--  MPI
+      </div>
 
-   -  OpenMPI (from MacPorts)
+次にツール類をHomebrewによってインストールします。他の方法でインストールがすでになされている場合は、Homebrewでインストールする必要はありません。以下のツールははじめにすべてインストールしてもいいですし、アプリのインストールで要求されたときにインストールするようにしても構いません。(python2はMacにあらかじめはいっています。)
 
--  CMake
+   .. raw:: html
 
-   -  version 3.11 (from MacPorts)
+      <div class="hcb_wrap">
 
--  BLAS/LAPACK
+   .. code:: prism
 
-   -  Accelerate Framework
+       $ brew install gcc
+	   $ brew install boost
+	   $ brew install cmake
+	   $ brew install eigen
+	   $ brew install fftw
+	   $ brew install git
+	   $ brew install gsl
+	   $ brew install hdf5
+	   $ brew install lapack
+	   $ brew install libffi
+	   $ brew install openblas
+	   $ brew install openmpi
+	   $ brew install openssl
+	   $ brew install python@3
+	   $ brew install scalapack
+	   $ brew install tcl-tk
+	   $ brew install zlib
 
--  HDF5
+   .. raw:: html
 
-   -  version 1.10
+      </div>
 
--  Python
+またアプリによっては、以下のツールもインストールしておく必要があります。
 
-   -  version 2.7 and version 3.6 (from MacPorts)
+   .. raw:: html
 
--  Git
+      <div class="hcb_wrap">
 
-   -  Use git 2.15 in macOS
+   .. code:: prism
 
-ディレクトリ
+     $ brew install svn
+	 $ brew install boost-python
+	 $ brew install boost-python3
+	 $ brew install boost-mpi
+	 $ brew install wget
+
+   .. raw:: html
+
+      </div>
+
+さらにアプリによってはpythonのライブラリのインストールが必要な場合があります。以下のコマンドによってインストールしておきます。
+
+   .. raw:: html
+
+      <div class="hcb_wrap">
+
+   .. code:: prism
+
+	$ pip3 install numpy --user
+	$ pip3 install scipy --user
+	$ pip3 install toml --user
+
+   .. raw:: html
+
+      </div>
+
+アプリのインストール
 **************************
 
--  $HOME/materiapps を作成
+まず最初のセットアップ(必要なディレクトリを作成するなど)を行います。
+MateriAppsInstallerのディレクトリにはいり、
 
    .. raw:: html
 
@@ -56,13 +98,13 @@ macOS 10.13 (High Sierra)へのインストール
 
    .. code:: prism
 
-       $ mkdir -p $HOME/materiapps
+	$ sh setup/setup.sh
 
    .. raw:: html
 
       </div>
 
--  $HOME/build を作成
+を実行します。次にインストールしたいアプリのディレクトリに入り、
 
    .. raw:: html
 
@@ -70,13 +112,13 @@ macOS 10.13 (High Sierra)へのインストール
 
    .. code:: prism
 
-       $ mkdir -p $HOME/build
+	$ CC=gcc-10 FC=gfortran-10 CPP=cpp-10 sh ./install.sh
 
    .. raw:: html
 
       </div>
 
--  $HOME/source を作成
+を実行すればインストールができるはずです。正しくインストールされているかどうかは、各アプリのディレクトリで
 
    .. raw:: html
 
@@ -84,34 +126,22 @@ macOS 10.13 (High Sierra)へのインストール
 
    .. code:: prism
 
-       $ mkdir -p $HOME/source
+	$ sh ./runtest.sh
 
    .. raw:: html
 
       </div>
 
-MateriApps Installer のダウンロード
-**********************************************************************
+を実行することで確認できます。(respackのruntest.shを実行する際には、予めquantum ESPRESSOをインストールしておく必要があります。また次の節で述べる方法により、quantum ESPRESSOの実行環境を設定しておく必要があります。)
 
-.. raw:: html
+アプリのダウンロード・インストールの途中で一時停止すると、ソースファイルが残ったままになり、再度インストールを行ったときにうまくいかないことがあります。その場合は、ソースファイル(デフォルトではホームディレクトリのmateriapps/source以下）にある対象アプリのディレクトリをすべて削除してください。
 
-   <div class="hcb_wrap">
+インストール時にエラーがでた場合は、エラーメッセージをよく見てください。多くの場合、必要なツール類がインストールされていないためにエラーが生じます。エラーメッセージから、必要となるツール類を読み取り、ツールのインストールを行ってください。
 
-.. code:: prism
+各アプリの実行環境の設定
+**************************
 
-    $ cd $HOME/build 
-        $ wget -O https://github.com/wistaria/MateriAppsInstaller/archive/master.tar.gz | tar zxvf - 
-        $ mv MateriAppsInstaller-master MateriAppsInstaller
-
-.. raw:: html
-
-   </div>
-
-Xcodeのインストール
-*******************
-
--  App Store から Xcode をインストール
--  Xcodeのライセンスに同意
+アプリを実行するためには、実行環境の設定を行う必要があります。以下のコマンドを入力することにより、各アプリの実行環境を整え、すぐにアプリが実行できる環境を整備することができます。例えば、HΦをインストールしてある場合(インストールディレクトリがデフォルトのmateriappsであったとする)は、
 
    .. raw:: html
 
@@ -119,13 +149,13 @@ Xcodeのインストール
 
    .. code:: prism
 
-       sudo xcodebuild -license
+	$ ls $HOME/materiapps/hphi
 
    .. raw:: html
 
       </div>
 
--  Xcodeコマンドラインツールをインストール
+でファイルを表示させたときに、hphivars-(バージョン番号).shという名前の設定ファイルがあるはずです。この設定ファイルを下記のように実行し、実行環境の設定を行います。
 
    .. raw:: html
 
@@ -133,208 +163,7 @@ Xcodeのインストール
 
    .. code:: prism
 
-       sudo xcode-select **install
-
-   .. raw:: html
-
-      </div>
-
-MacPortsのインストール
-**********************
-
--  https://www.macports.org/install.php からHigh
-   Sierra用のインストーラをダウンロード・インストール
--  必要なports (GCC, OpenMPI, Python, CMake, HDF5, wget,
-   git他)をインストール
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       sudo sh $HOME/build/MateriAppsInstaller/macosx/ports.sh
-
-   .. raw:: html
-
-      </div>
-
-MateriApps Installerによるツールのインストール
-*****************************************************************************************
-
--  00_env
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/00_env/default.sh
-
-   .. raw:: html
-
-      </div>
-
--  11_eigen3
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/11_eigen3/default.sh 
-       $ sh $HOME/build/MateriAppsInstaller/11_eigen3/link.sh
-
-   .. raw:: html
-
-      </div>
-
--  25_boost
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/25_boost/macos.sh 
-       $ sh $HOME/build/MateriAppsInstaller/25_boost/link.sh
-
-   .. raw:: html
-
-      </div>
-
--  40_alpscore
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/40_alpscore/default_cxx1y.sh 
-       $ sh $HOME/build/MateriAppsInstaller/40_alpscore/link.sh
-
-   .. raw:: html
-
-      </div>
-
--  70_alps
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/70_alps/macos.sh 
-       $ sh $HOME/build/MateriAppsInstaller/70_alps/link.sh
-
-   .. raw:: html
-
-      </div>
-
--  72_openmx
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/72_openmx/macos.sh 
-       $ sh $HOME/build/MateriAppsInstaller/72_openmx/link.sh
-
-   .. raw:: html
-
-      </div>
-
--  78_hphi
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ sh $HOME/build/MateriAppsInstaller/78_hphi/macos.sh 
-       $ sh $HOME/build/MateriAppsInstaller/78_hphi/link.sh
-
-   .. raw:: html
-
-      </div>
-
-使い方
-*******************
-
--  Tools (python, python3, etc) の設定を行う
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ source $HOME/materiapps/env.sh
-
-   .. raw:: html
-
-      </div>
-
-   Bashの設定ファイル($HOME/.bash_profile)に書いておくと良い
--  インストールされているバージョンの確認
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ check_maversion
-
-   .. raw:: html
-
-      </div>
-
--  ALPS の実行環境を設定
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ source $HOME/materiapps/alps/alpsvars.sh
-
-   .. raw:: html
-
-      </div>
-
--  HΦ の実行環境を設定
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ source $HOME/materiapps/hphi/hphivars.sh
-
-   .. raw:: html
-
-      </div>
-
--  OpenMX の実行環境を設定
-
-   .. raw:: html
-
-      <div class="hcb_wrap">
-
-   .. code:: prism
-
-       $ source $HOME/materiapps/openmx/openmxvars.sh
+	$ source $HOME/materiapps/hphi/hphivars-(バージョン番号).sh
 
    .. raw:: html
 
