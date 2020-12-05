@@ -1,9 +1,26 @@
 #!/bin/sh
+set -e
 
-set -o pipefail
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+echo configurations > config.txt
+eval "
+set -x
+
+# configurable variables (e.g. compiler)
+
+# export CC=${CC:-}
+export MAKE_J=${MAKE_J:-}
+
+" 2> config.txt
+if [ "$XTRACED" = "off" ]; then
+  set +x
+  SHFLAG=""
+else
+  SHFLAG="-x"
+fi
 
 mode=${1:-default}
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
@@ -11,38 +28,50 @@ if [ ! -d $CONFIG_DIR ]; then
   ls -1 $SCRIPT_DIR/config
   exit 127
 fi
+DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
 
-. $SCRIPT_DIR/../../scripts/util.sh
+export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
+. $UTIL_SH
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $MA_ROOT/env.sh
-LOG=$BUILD_DIR/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
-PREFIX=$MA_ROOT/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}
-
+. ${MA_ROOT}/env.sh
+export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
   exit 127
 fi
+export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
+mv config.txt $LOG
 
 set +e
-. $SCRIPT_DIR/../../tools/openblas/find.sh; if [ ${MA_HAVE_BLAS} = "no" ]; then echo "Error: blas not found"; exit 127; fi
+. $SCRIPT_DIR/../../tools/cmake/find.sh; if [ ${MA_HAVE_CMAKE} = "no" ]; then echo "Error: cmake not found"; exit 127; fi
 set -e
 
-sh $SCRIPT_DIR/setup.sh
-
+rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
+pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
-echo "[cmake]" | tee -a $LOG
-mkdir -p $BUILD_DIR/lapack-$LAPACK_VERSION/build
-cd $BUILD_DIR/lapack-$LAPACK_VERSION/build
-cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON -DUSE_OPTIMIZED_BLAS=ON -DCBLAS=ON -DLAPACKE=ON .. 2>&1 | tee -a ${LOG}
-echo "[make]" | tee -a $LOG
-check make 2>&1 | tee -a $LOG
-echo "[make test]" | tee -a $LOG
-check make test 2>&1 | tee -a $LOG
-echo "[make install]" | tee -a $LOG
-check make install 2>&1 | tee -a $LOG
+for process in preprocess build install postprocess; do
+  if [ -f $CONFIG_DIR/${process}-openblas.sh ]; then
+    echo "[${process}-openblas]" | tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}-openblas.sh \| tee -a $LOG
+  elif [ -f $DEFAULT_CONFIG_DIR/${process}-openblas.sh ]; then
+    echo "[${process}-openblas]" | tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}-openblas.sh \| tee -a $LOG
+  fi
+done
+
+for process in preprocess build install postprocess; do
+  if [ -f $CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $CONFIG_DIR/${process}.sh \| tee -a $LOG
+  elif [ -f $DEFAULT_CONFIG_DIR/${process}.sh ]; then
+    echo "[${process}]" | tee -a $LOG
+    pipefail check sh $SHFLAG $DEFAULT_CONFIG_DIR/${process}.sh \| tee -a $LOG
+  fi
+done
 
 finish_info | tee -a $LOG
 
