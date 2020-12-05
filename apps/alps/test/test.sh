@@ -10,7 +10,13 @@ for exe in dirloop_sse dmft fulldiag loop pconfig; do
 done
 
 cp -rp ${PREFIX}/tutorials/ed-01-sparsediag .
-check (cd ed-01-sparsediag && parameter2xml parm1a && sparsediag parm1a.in.xml)
+cd ed-01-sparsediag
+check parameter2xml parm1a
+check sparsediag parm1a.in.xml
+cd ..
 
 cp -rp ${PREFIX}/tutorials/mc-02-susceptibilities .
-check (cd mc-02-susceptibilities && parameter2xml parm2c && loop parm2c.in.xml)
+cd mc-02-susceptibilities
+check parameter2xml parm2c
+check loop parm2c.in.xml
+cd ..

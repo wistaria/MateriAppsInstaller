@@ -3,7 +3,7 @@ export MA_ROOT=$MA_ROOT
 export PATH=\$MA_ROOT/bin:\$PATH
 export LD_LIBRARY_PATH=\$MA_ROOT/lib:\$LD_LIBRARY_PATH
 unset i
-for i in \$(find \$MA_ROOT/env.d -name '*.sh'); do
+for i in \$(find \$MA_ROOT/env.d -name '*.sh' | sort); do
   if [ -r "\$i" ]; then
     if [ "\${-#*i}" != "\$-" ]; then
       . "\$i"
