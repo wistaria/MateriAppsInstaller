@@ -1,0 +1,3 @@
+mkdir -p build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_OPENMP=ON -DENABLE_THREADS=ON ..

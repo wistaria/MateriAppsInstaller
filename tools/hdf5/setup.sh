@@ -10,9 +10,9 @@ sh $SCRIPT_DIR/download.sh
 cd $BUILD_DIR
 if [ -d ${__NAME__}-${__VERSION__} ]; then :; else
   tar jxf $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.bz2
-  mv -f ${__NAME__}-${__VERSION__} ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+  mv -f ${__NAME__}-${__VERSION__}
   if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
-    cd ${__NAME__}-${__VERSION__}-${__MA_REVISION__}
+    cd ${__NAME__}-${__VERSION__}
     cat $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch | patch -p1
   fi
 fi
