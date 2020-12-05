@@ -181,24 +181,25 @@ Example ::
 Management file (``scripts/`` )
 ---------------------------------
 
+util.sh
+=================
+
+A script for defining the functions used.
+
 check_prefix.sh
 ===================
 
-A script that defines the functions used in the script.
+A script for defining the functions used.
 
 
 fix_dylib.sh
 ===================
 
-T.B.A.
+A script for modifying shared library name etc. on macOS
 
 
 list_maversion.sh
 ===================
 
-T.B.A.
+A script for showing the versions of the various apps supported by the MateriApps Installer.
 
-util.sh
-=================
-
-T.B.A.

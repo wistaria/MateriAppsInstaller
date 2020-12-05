@@ -249,11 +249,11 @@ How to use the tools and apps
 
    - Set environment variables (e.g. ``PATH``) for each application using scripts.
     
-      For example, in the case of ALPS:
+     For example, in the case of ALPS:
 
-      .. code-block:: bash
+     .. code-block:: bash
 
-	 source $PREFIX_ALPS/alps/alpsvar.sh
+	source $PREFIX_ALPS/alps/alpsvar.sh
 
    - If you want to fix the version, use the configuration file of that version. ::
       
