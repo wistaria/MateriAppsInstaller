@@ -28,7 +28,7 @@ The goals of MateriApps Installer are as follows
 List of tools and apps
 ------------------------------------------
 
-The following tools and apps are in place (12/2/2020):
+The following tools and apps are in place (12/4/2020):
 
 1. Tools
 
@@ -87,17 +87,17 @@ Main developers
 ------------------------------------------
 MateriApps Installer is developed by the following members.
 
-- ver. xxx
+- ver. 0.1
    - Shinji Todo (Graduate School of Science, The University of Tokyo)
    - Yuichi Motoyama (Institute for Solid State Physics, The University of Tokyo)
-   - Kazuyoshi YOSHIMI (Institute for Solid State Physics, The University of Tokyo)
+   - Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo)
    - Takeo Kato (Institute for Solid State Physics, The University of Tokyo)
 
    
 Version history
 ------------------------------------------
 
-- 2020/xx/yy ver. 1.0 was released.
+- 2020/12/04 ver. 1.0 was released.
 
 License
 --------------
