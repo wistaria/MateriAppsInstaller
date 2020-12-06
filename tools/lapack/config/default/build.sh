@@ -1,3 +1,3 @@
 cd build
 make ${MAKE_J}
-make test
+make -i test
