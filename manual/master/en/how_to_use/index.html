@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2. Usage &#8212; MateriApps Installer 1.0-beta documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Tutorial" href="../tutorial/index.html" />
+    <link rel="prev" title="1.1. Overview of MateriApps Installer" href="../about/info.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="usage">
+<h1><span class="section-number">2. </span>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="download">
+<h2><span class="section-number">2.1. </span>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>You can download MateriApps Installer by the following steps.</p>
+<ul>
+<li><p>Download the release version</p>
+<p>Go to the <a class="reference external" href="https://github.com/wistaria/MateriAppsInstaller/tags">MateriApps Installer release page</a> to download the zip file and then extract it.
+The zip file you download from the release page includes a pdf version of this manual.</p>
+</li>
+<li><p>Download with git</p>
+<p>You can download the MateriApps Installer by typing the following command.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/wistaria/MateriAppsInstaller.git
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="directory-structure">
+<h2><span class="section-number">2.2. </span>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>The structure of the directory after extraction is as follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="p">|</span>─ setup
+<span class="p">|</span>─ apps
+<span class="p">|</span>─ docs
+<span class="p">|</span>─ tools
+<span class="p">|</span>─ check
+<span class="p">|</span>   <span class="p">|</span>- k.sh
+<span class="p">|</span>   <span class="p">|</span>- macos.sh
+<span class="p">|</span>   <span class="p">|</span>- sekirei.sh
+<span class="p">|</span>   <span class="p">|</span>─ zetta-gcc.sh
+<span class="p">|</span>   <span class="p">|</span>- zetta-intel.sh
+<span class="p">|</span>─ check_prefix.sh
+<span class="p">|</span>─ fix_dylib.sh
+<span class="p">|</span>─ list_maversion.sh
+<span class="p">|</span>─ macosx
+<span class="p">|</span>   <span class="p">|</span>─ install.sh
+<span class="p">|</span>   <span class="p">|</span>─ ports.sh
+<span class="p">|</span>- README.md
+<span class="p">|</span>- util.sh
+</pre></div>
+</div>
+</li>
+<li><p>The directory structure in setup, tools, and apps is given as follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-- software_name
+      <span class="p">|</span>- README.md
+      <span class="p">|</span>- download.sh
+      <span class="p">|</span>- link.sh
+      <span class="p">|</span>- setup.sh
+      <span class="p">|</span>- version.sh
+      <span class="p">|</span>- install.sh
+      <span class="p">|</span>- patch
+      <span class="p">|</span>- config
+</pre></div>
+</div>
+<p>Each file and directory is described below (see File Format for details).
+Files marked with * indicate files that always exist in the directory.</p>
+<ul class="simple">
+<li><p>README.md (*)</p>
+<ul>
+<li><p>It includes a brief introduction of the software and the URLs of the official website.</p></li>
+</ul>
+</li>
+<li><p>download.sh (*)</p>
+<ul>
+<li><p>Download the source code archive</p></li>
+</ul>
+</li>
+<li><p>link.sh (*)</p>
+<ul>
+<li><p>Create symbolic links to installed directories and configuration files</p></li>
+</ul>
+</li>
+<li><p>setup.sh (*)</p>
+<ul>
+<li><p>Extract the prepared source code archive and apply the patch (if it exists)</p></li>
+</ul>
+</li>
+<li><p>version.sh (*)</p>
+<ul>
+<li><p>Specify the version to download</p></li>
+</ul>
+</li>
+<li><p>install.sh (*)</p>
+<ul>
+<li><p>Building and installing the program</p></li>
+</ul>
+</li>
+<li><p>patch</p>
+<ul>
+<li><p>The directory where the patches are stored</p></li>
+</ul>
+</li>
+<li><p>config</p>
+<ul>
+<li><p>Additional settings for installation other than the default settings, such as when using the Intel Compiler</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>In addition to the above, the following file directories are also available.</p>
+<ul class="simple">
+<li><p>check_prefix.sh</p>
+<ul>
+<li><p>Script to display variables that are commonly used in each script, such as the top installation directory</p></li>
+</ul>
+</li>
+<li><p>list_maversion.sh</p>
+<ul>
+<li><p>A script that summarizes the information of <code class="docutils literal notranslate"><span class="pre">version.sh</span></code> in each directory</p></li>
+</ul>
+</li>
+<li><p>check directory</p>
+<ul>
+<li><p>A script to run multiple installation scripts in sequence on various hosts</p></li>
+</ul>
+</li>
+<li><p>docs directory</p>
+<ul>
+<li><p>A directory containing the manual and its source code</p></li>
+</ul>
+</li>
+<li><p>macosx directory</p>
+<ul>
+<li><p>A directory containing scripts to install the necessary tools using Macports</p></li>
+</ul>
+</li>
+<li><p>scripts directory</p>
+<ul>
+<li><p>A directory containing a set of administrative scripts</p></li>
+</ul>
+</li>
+<li><p>setup directory</p>
+<ul>
+<li><p>A directory containing scripts to prepare for software installation (see Setup below for details)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="setup">
+<h2><span class="section-number">2.3. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">setup/setup.sh</span></code> before installing the software</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sh setup/setup.sh
+</pre></div>
+</div>
+<p>This script creates installation scripts, installation scripts and working scripts</p>
+</li>
+<li><p>Configuring the installation location for applications extracted by the MateriApps Installer</p>
+<blockquote>
+<div><ul>
+<li><p>You can change the installation location by setting the following options in <code class="docutils literal notranslate"><span class="pre">$HOME/.mainstaller</span></code>.</p>
+<p>The installation location can be set in the <code class="docutils literal notranslate"><span class="pre">$HOME/.mainstaller</span></code> file as follows (you have to create it yourself)</p>
+<blockquote>
+<div><p># Do not put spaces before or after = as it will be treated as a shell script</p>
+<p>MA_ROOT=$HOME/materiapps  # Software installation directory
+BUILD_DIR=$HOME/build     # Installation directory
+SOURCE_DIR=$HOME/source   # File download directory</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-number">Table 2.1 </span><span class="caption-text">Explanation of options
+ :header: “option”, “default”, “description”
+ :widths: 15, 15, 30</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MA_ROOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME/materiapps</span></code></p></td>
+<td><p>Software installation directory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUILD_DIR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME/build</span></code></p></td>
+<td><p>Installation directory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SOURCE_DIR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$HOME/source</span></code></p></td>
+<td><p>Source code archive file download directory</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>If this file does not exist, the software will be installed under <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">HOME</span> <span class="pre">materiapps</span></code></p></li>
+<li><p>(*) Note that the actual installation location uses the contents of the <code class="docutils literal notranslate"><span class="pre">.mainstaller</span></code> file at the time of the installation work described below.</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="install">
+<h2><span class="section-number">2.4. </span>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Move to each software directory and run `` install.sh``.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> sh install.sh
+
+
+- When this script is executed, the build and installation will be performed automatically after downloading (``download.sh``) and extracting (``setup.sh``) the source code.
+- Depending on the software, settings for the compiler and libraries may have been defined, and they are stored as subdirectories under the ``config`` directory.
+
+- If you want to specify the compiler, you can add the compiler name after ``install.sh``. The following is an example of compiling with ``intel``.
+
+  .. code-block:: bash
+
+     sh install.sh ``intel``
+
+    - If you specify a settings directory that does not exist, a list of available settings is displayed.::
+
+      $ sh install.sh help
+      Error: unknown mode: help
+      Available list:
+      default
+      intel
+
+  - ``default``
+
+    - Basic settings used when the argument is omitted
+
+  - ``intel``
+
+    - Settings for using Intel compiler, Intel MKL, Intel MPI
+
+-  The compiler etc. can be directly specified using shell variables
+
+  - ex.) A case of using the Intel compiler as the C compiler while using the default settings ::
+
+    CC=`which icc` sh install.sh
+
+  - Compiler options can be added by setting ``MA_EXTRA_FLAGS`` ::
+
+    MA_EXTRA_FLAGS=&quot;-march=core-avx2&quot; sh install.sh intel
+
+  - The path of the ``cmake`` command can be specified using ``CMAKE``
+
+  - ``ISSP_UCOUNT`` is the path of the utilization rate measurement script in Supercomputer on Institute for Solid State Physics, and most users do not have to worry about it
+
+  - For other variables available, see the beginning description of ``install.sh``.
+</pre></div>
+</div>
+</li>
+<li><p>Run a simple test with <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">runtest.sh</span></code></p>
+<ul class="simple">
+<li><p>Check the existence of the installation directory</p></li>
+<li><p>Check the validity of the configuration file</p></li>
+<li><p>Check if the software actually works</p></li>
+</ul>
+</li>
+<li><p>The software is installed in the <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">MA_ROOT/NAME/NAME-VERSION-MA_REVISION</span></code> directory</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NAME</span></code> and <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> are replaced with the software name and version respectively</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">MA_REVISION</span></code> is an identifier that distinguishes when the MateriApps Installer is revised for the same version of software.</p></li>
+<li><p>ex.) <code class="docutils literal notranslate"><span class="pre">hphi/hphi-3.4.0-1</span></code></p></li>
+</ul>
+</li>
+<li><p>Along with the software, the configuration file <code class="docutils literal notranslate"><span class="pre">NAMEvars-VERSION-MA_REVISION.sh</span></code> that sets environment variables etc. is installed in <code class="docutils literal notranslate"><span class="pre">$MA_ROOT/NAME/</span></code></p>
+<ul>
+<li><p>ex.) <code class="docutils literal notranslate"><span class="pre">hphivars-3.4.0-1.sh</span></code></p></li>
+<li><p>Running <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">link.sh</span></code> creates a symbolic link <code class="docutils literal notranslate"><span class="pre">NAMEvars.sh</span></code> for <code class="docutils literal notranslate"><span class="pre">NAMEvars-VERSION.sh</span></code></p>
+<ul>
+<li><p>For apps, it is created under <code class="docutils literal notranslate"><span class="pre">NAME</span></code></p></li>
+<li><p>For tools, it is created under <code class="docutils literal notranslate"><span class="pre">$MA_ROOT/env.d</span></code> and loaded in <code class="docutils literal notranslate"><span class="pre">$MA_ROOT/env.sh</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="how-to-use-the-tools-and-apps">
+<h2><span class="section-number">2.5. </span>How to use the tools and apps<a class="headerlink" href="#how-to-use-the-tools-and-apps" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Tools (cmake, hdf5, python, etc.)</p>
+<blockquote>
+<div><ul>
+<li><p>Run the following command (or write the same command in a shell initialization script)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> <span class="nv">$PREFIX_TOOL</span>/env.sh
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Applications (ALPS, OpenMX, MODYLAS, etc.)</p>
+<blockquote>
+<div><ul>
+<li><p>Set environment variables (e.g. <code class="docutils literal notranslate"><span class="pre">PATH</span></code>) for each application using scripts.</p>
+<p>For example, in the case of ALPS:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> <span class="nv">$PREFIX_ALPS</span>/alps/alpsvar.sh
+</pre></div>
+</div>
+</li>
+<li><p>If you want to fix the version, use the configuration file of that version.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>source $MA_ROOT/alps/alpsvar-20201106-r7860-1.sh
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">MateriApps Installer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about/index.html">1. What is MateriApps Installer ?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#download">2.1. Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">2.2. Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">2.3. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">2.4. Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-the-tools-and-apps">2.5. How to use the tools and apps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filespecification/index.html">4. File format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">5. Application list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contact/index.html">6. Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge/index.html">7. Acknowledgement</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../about/info.html" title="previous chapter"><span class="section-number">1.1. </span>Overview of MateriApps Installer</a></li>
+      <li>Next: <a href="../tutorial/index.html" title="next chapter"><span class="section-number">3. </span>Tutorial</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Institute for Solid State Physics, University of Tokyo.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/how_to_use/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

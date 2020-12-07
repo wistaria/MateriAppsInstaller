@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.1. Overview of MateriApps Installer &#8212; MateriApps Installer 1.0-beta documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Usage" href="../how_to_use/index.html" />
+    <link rel="prev" title="1. What is MateriApps Installer ?" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="overview-of-materiapps-installer">
+<h1><span class="section-number">1.1. </span>Overview of MateriApps Installer<a class="headerlink" href="#overview-of-materiapps-installer" title="Permalink to this headline">¶</a></h1>
+<p>MateriApps Installer is a collection of shell scripts to assist in the installation of computational material science applications for various computing environments. The MateriApps Installer includes shell scripts to be installed on Linux PCs, cluster workstations, and major supercomputer systems. MateriApps Installer is also used for pre-installation for domestic joint-use supercomputers (a list of installed software can be found in Chapter of Application List).</p>
+</div>
+<div class="section" id="background-of-the-development">
+<h1><span class="section-number">1.2. </span>Background of the Development<a class="headerlink" href="#background-of-the-development" title="Permalink to this headline">¶</a></h1>
+<p>Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, <a class="reference external" href="http://ma.cms-initiative.jp">MateriApps</a>, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.</p>
+<p>One of the obstacles for users to start using published applications in materials science is the installation of software. <a class="reference external" href="https://cmsi.github.io/MateriAppsLive/">MateriApps LIVE!</a> is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. MateriApps LIVE! is a Virtual Hard Disk Image (OVA) of VirtualBox that includes applications, OS (Debian GNU/Linux), editors, visualization tools, and other environments needed to get started with the tutorial. By using MateriApps LIVE!, it is possible to easily set up a computing environment for participants in classes and software training sessions.</p>
+<p>However, the calculation environment provided by MateriApps LIVE! is not sufficient for practical applications. To enable users to easily install applications of computational materials science in a wide range of computing environments, from major domestic joint-use supercomputers to clustered computers in laboratories and personal computers, the development of MateriApps Installer has been started.</p>
+</div>
+<div class="section" id="goal-of-materiapps-installer">
+<h1><span class="section-number">1.3. </span>Goal of MateriApps Installer<a class="headerlink" href="#goal-of-materiapps-installer" title="Permalink to this headline">¶</a></h1>
+<p>The goals of MateriApps Installer are as follows</p>
+<ul class="simple">
+<li><p>To install common applications (cf. <a class="reference external" href="http://ma.cms-initiative.jp">MateriApps</a>) on all major domestic and foreign supercomputers.</p></li>
+<li><p>Similarly, we will prepare scripts for installation on CentOS (RedHat), Debian (Ubuntu) and Mac OS X environments.</p></li>
+</ul>
+</div>
+<div class="section" id="list-of-tools-and-apps">
+<h1><span class="section-number">1.4. </span>List of tools and apps<a class="headerlink" href="#list-of-tools-and-apps" title="Permalink to this headline">¶</a></h1>
+<p>The following tools and apps are in place (12/4/2020):</p>
+<ol class="arabic simple">
+<li><p>Tools</p></li>
+</ol>
+<blockquote>
+<div><p>boost, cmake, eigen3, fftw, gcc10, gcc7,
+git, gsl, hdf5, lapack, libffi, openblas,
+openmpi, openssl, python2, python3, scalapack, tcltk, zlib</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Apps</p></li>
+</ol>
+<blockquote>
+<div><p>ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Apps to be added in the future</p></li>
+</ol>
+<blockquote>
+<div><p>abICS, DCore, ALPS-Core, TRIQS</p>
+</div></blockquote>
+</div>
+<div class="section" id="design-policies">
+<h1><span class="section-number">1.5. </span>Design Policies<a class="headerlink" href="#design-policies" title="Permalink to this headline">¶</a></h1>
+<p>The design policy of MateriApps Installer is as follows:</p>
+<ol class="arabic">
+<li><p>Do not depend on special tools (shell, make, tar, etc. are sufficient).</p></li>
+<li><p>Supercomputers are different from each other, so do not aim to make a universal installer, but make a separate script for exceptions.</p></li>
+<li><p>As for the tools, if the package is already available for Linux (RPM Package, Debian Package) or Mac OS X (MacPorts), use it.</p></li>
+<li><p>The version of the application should be the same as MateriApps LIVE! Necessary patches should also be the same as in Debian Package for MateriApps LIVE!</p></li>
+<li><p>Use a separate folder for each tool/application. Prepare a separate folder for each tool/application.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For example, in the case of cmake</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$PREFIX_TOOL</span>/cmake/cmake-3.2.1-1
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p>Prepare an environment variable setting script for each tool/application/version.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Example for cmake</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$PREFIX_TOOL</span>/cmake/cmakevars-3.2.1-1.sh.
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p>For the environment variables of the tools, link to <code class="docutils literal notranslate"><span class="pre">PREFIX_TOOL/env.d</span></code> so that we can keep the old version for collective setting in <code class="docutils literal notranslate"><span class="pre">PREFIX_TOOL/env.sh</span></code>.</p></li>
+<li><p>Separate installation and relinking (it does not affect anything else until the relinking is done).</p></li>
+<li><p>Install to a different location for testing.</p></li>
+</ol>
+</div>
+<div class="section" id="main-developers">
+<h1><span class="section-number">1.6. </span>Main developers<a class="headerlink" href="#main-developers" title="Permalink to this headline">¶</a></h1>
+<p>MateriApps Installer is developed by the following members.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>ver. 0.1</dt><dd><ul>
+<li><p>Shinji Todo (Graduate School of Science, The University of Tokyo)</p></li>
+<li><p>Yuichi Motoyama (Institute for Solid State Physics, The University of Tokyo)</p></li>
+<li><p>Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo)</p></li>
+<li><p>Takeo Kato (Institute for Solid State Physics, The University of Tokyo)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="version-history">
+<h1><span class="section-number">1.7. </span>Version history<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>2020/12/04 ver. 1.0 was released.</p></li>
+</ul>
+</div>
+<div class="section" id="license">
+<h1><span class="section-number">1.8. </span>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>The program package and source code set of this software is distributed under the GNU General Public License version 3 (GPL v3). However, the patch files for each software are distributed under the license of the software.</p>
+</div>
+<div class="section" id="copyright">
+<h1><span class="section-number">1.9. </span>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h1>
+<p><em>(c) 2020- The University of Tokyo. All rights reserved.</em></p>
+<p>This software has been developed under the Project for advancement of software usability in material science by Institute for Solid State Physics, The University of Tokyo, and the copyright of this software belongs to the University of Tokyo.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">MateriApps Installer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. What is MateriApps Installer ?</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.1. Overview of MateriApps Installer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#background-of-the-development">1.2. Background of the Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#goal-of-materiapps-installer">1.3. Goal of MateriApps Installer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-tools-and-apps">1.4. List of tools and apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#design-policies">1.5. Design Policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main-developers">1.6. Main developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-history">1.7. Version history</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">1.8. License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copyright">1.9. Copyright</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_use/index.html">2. Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filespecification/index.html">4. File format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">5. Application list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contact/index.html">6. Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge/index.html">7. Acknowledgement</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html"><span class="section-number">1. </span>What is MateriApps Installer ?</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter"><span class="section-number">1. </span>What is MateriApps Installer ?</a></li>
+      <li>Next: <a href="../how_to_use/index.html" title="next chapter"><span class="section-number">2. </span>Usage</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Institute for Solid State Physics, University of Tokyo.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/about/info.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
