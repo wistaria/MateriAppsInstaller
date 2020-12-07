@@ -1,0 +1,21 @@
+set -u
+
+rm -rf build
+mkdir build
+cd build
+
+if [ -z "${SCALAPACK_LIBRARIES}" ];then
+  USE_SCALAPACK=OFF
+else
+  USE_SCALAPACK=ON
+fi
+
+${CMAKE} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_C_FLAGS="${MA_EXTRA_FLAGS}" \
+  -DCMAKE_Fortran_FLAGS="${MA_EXTRA_FLAGS}" \
+  -DCMAKE_VERBOSE_MAKEFILE=1 \
+  -DUSE_SCALAPACK=${USE_SCALAPACK} \
+  -DSCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES} \
+  -DCONFIG=gcc \
+  ../

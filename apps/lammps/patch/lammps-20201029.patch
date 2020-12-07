@@ -1,0 +1,52 @@
+diff -crN lammps-stable_29Oct2020.orig/cmake/CMakeLists.txt lammps-stable_29Oct2020/cmake/CMakeLists.txt
+*** lammps-stable_29Oct2020.orig/cmake/CMakeLists.txt	Thu Oct 29 08:53:36 2020
+--- lammps-stable_29Oct2020/cmake/CMakeLists.txt	Thu Dec  3 07:51:18 2020
+***************
+*** 29,34 ****
+--- 29,47 ----
+    set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local" CACHE PATH "default install path" FORCE )
+  endif()
+  
++ # RPATH fix
++ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
++ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
++   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
++ else()
++   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
++ endif()
++ 
++ #policy update CMP0042
++ if(APPLE)
++   set(CMAKE_MACOSX_RPATH ON)
++ endif()
++ 
+  # Cmake modules/macros are in a subdirectory to keep this file cleaner
+  set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Modules)
+  
+***************
+*** 77,88 ****
+  ########################################################################
+  # User input options                                                   #
+  ########################################################################
+! set(LAMMPS_MACHINE "" CACHE STRING "Suffix to append to lmp binary (WON'T enable any features automatically")
+  mark_as_advanced(LAMMPS_MACHINE)
+  if(LAMMPS_MACHINE)
+    set(LAMMPS_MACHINE "_${LAMMPS_MACHINE}")
+  endif()
+! set(LAMMPS_BINARY lmp${LAMMPS_MACHINE})
+  
+  option(BUILD_SHARED_LIBS "Build shared library" OFF)
+  if(BUILD_SHARED_LIBS) # for all pkg libs, mpi_stubs and linalg
+--- 90,101 ----
+  ########################################################################
+  # User input options                                                   #
+  ########################################################################
+! set(LAMMPS_MACHINE "" CACHE STRING "Suffix to append to lammps binary (WON'T enable any features automatically")
+  mark_as_advanced(LAMMPS_MACHINE)
+  if(LAMMPS_MACHINE)
+    set(LAMMPS_MACHINE "_${LAMMPS_MACHINE}")
+  endif()
+! set(LAMMPS_BINARY lammps${LAMMPS_MACHINE})
+  
+  option(BUILD_SHARED_LIBS "Build shared library" OFF)
+  if(BUILD_SHARED_LIBS) # for all pkg libs, mpi_stubs and linalg

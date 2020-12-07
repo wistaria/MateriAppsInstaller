@@ -1,0 +1,26 @@
+[System]
+solver = PMWA
+[Hamiltonian]
+model_type = spin
+Jxy = -1.0
+Jz = -1.0
+Gamma = 0.1
+[Lattice]
+lattice_type = square
+D = 2
+L = 4, 4
+Beta = 10.0
+[Parameter]
+RUNTYPE = 0
+CB = 1
+SEED = 31415
+NSET = 10
+NMCS = 10000
+NPRE = 10000
+NTHERM = 10000
+NDECOR = 10000
+latfile = lattice.xml
+outfile = sample.log
+sfinpfile = ""
+cfinpfile = ""
+ckinpfile = ""
