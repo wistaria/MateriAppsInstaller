@@ -1,7 +1,6 @@
 . $UTIL_SH
 
 export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
-
 PIP=$PREFIX/bin/pip2
 
 check $PREFIX/bin/python2 -m ensurepip
