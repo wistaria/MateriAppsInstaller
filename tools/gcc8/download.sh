@@ -22,5 +22,5 @@ if [ -f $SOURCE_DIR/mpc-${MPC_VERSION}.tar.gz ]; then :; else
 fi
 
 if [ -f $SOURCE_DIR/isl-${ISL_VERSION}.tar.bz2 ]; then :; else
-  check wget -O $SOURCE_DIR/isl-${ISL_VERSION}.tar.bz2 https://${__NAME__}.gnu.org/pub/${__NAME__}/infrastructure/isl-${ISL_VERSION}.tar.bz2
+  check wget -O $SOURCE_DIR/isl-${ISL_VERSION}.tar.bz2 http://isl.gforge.inria.fr/isl-${ISL_VERSION}.tar.bz2
 fi

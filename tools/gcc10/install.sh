@@ -8,8 +8,6 @@ set -x
 
 # configurable variables (e.g. compiler)
 
-export CC=${CC:-}
-export MA_EXTRA_FLAGS=${MA_EXTRA_FLAGS:-}
 export MAKE_J=${MAKE_J:-}
 
 " 2> config.txt
