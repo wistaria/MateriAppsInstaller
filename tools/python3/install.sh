@@ -7,9 +7,7 @@ eval "
 set -x
 
 # configurable variables (e.g. compiler)
-export CC=${CC:-}
 export MAKE_J=${MAKE_J:-}
-export OPENSSL_ROOT=${OPENSSL_ROOT:-}
 export MKLROOT=${MKLROOT:-}
 
 " 2> config.txt

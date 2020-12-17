@@ -10,15 +10,15 @@ sh $TOP_DIR/setup/setup.sh
 for tool in $TOOLS; do
   name=$(echo $tool | cut -d: -f1)
   conf=$(echo $tool | cut -d: -f2)
-  bash $TOP_DIR/tools/$name/install.sh $conf
-  bash $TOP_DIR/tools/$name/link.sh
+  sh $TOP_DIR/tools/$name/install.sh $conf
+  sh $TOP_DIR/tools/$name/link.sh
 done
 
 for app in $APPS; do
   name=$(echo $app | cut -d: -f1)
   conf=$(echo $app | cut -d: -f2)
-  bash $TOP_DIR/apps/$name/install.sh $conf
-  bash $TOP_DIR/apps/$name/link.sh
+  sh $TOP_DIR/apps/$name/install.sh $conf
+  sh $TOP_DIR/apps/$name/link.sh
 done
 
 for tool in $TOOLS; do
