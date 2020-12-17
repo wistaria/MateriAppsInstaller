@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOOLS="gcc10 openssl cmake zlib git openmpi lapack libffi tcltk python2 python3 boost eigen3 fftw gsl hdf5"
+TOOLS="gcc10 openssl cmake zlib git openmpi lapack libffi tcltk python2 python3 boost eigen3 fftw gsl hdf5 scalapack"
 
 TOP_DIR=$(cd "$(dirname $0)"; cd ..; pwd)
 

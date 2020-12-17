@@ -1,12 +1,12 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
-. $SCRIPT_DIR/../util.sh
+. $SCRIPT_DIR/../../scripts/util.sh
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-. $PREFIX_TOOL/env.sh
+. $MA_ROOT/env.sh
 
-SCALAPACKVARS_SH=$PREFIX_TOOL/scalapack/scalapackvars-$SCALAPACK_VERSION-$SCALAPACK_MA_REVISION.sh
-rm -f $PREFIX_TOOL/env.d/scalapackvars.sh
-ln -s $SCALAPACKVARS_SH $PREFIX_TOOL/env.d/scalapackvars.sh
+VARS_SH=$MA_ROOT/${__NAME__}/${__NAME__}vars-$__VERSION__-$__MA_REVISION__.sh
+rm -f $MA_ROOT/env.d/${__NAME__}vars.sh
+ln -s $VARS_SH $MA_ROOT/env.d/${__NAME__}vars.sh
