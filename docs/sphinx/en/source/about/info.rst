@@ -28,10 +28,17 @@ The goals of MateriApps Installer are as follows
 List of tools and apps
 ------------------------------------------
 
-The following tools and apps are in place (12/4/2020):
+The following tools and apps are in place (12/4/2020).
+``default.sh`` is prepared in the ``config`` directory of each tool or application. In the following table, the supported compilers except ``default.sh`` are listed. :
 
 1. Tools
 
+.. csv-table::
+   :file: ../../../table/tool.csv
+   :encoding: euc-jp
+   :header-rows: 1
+  
+..
   boost, cmake, eigen3, fftw, gcc10, gcc7,
   git, gsl, hdf5, lapack, libffi, openblas,
   openmpi, openssl, python2, python3, scalapack, tcltk, zlib
@@ -39,7 +46,12 @@ The following tools and apps are in place (12/4/2020):
 
 2. Apps
 
-  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
+.. csv-table::
+   :file: ../../../table/apps.csv
+   :encoding: euc-jp
+   :header-rows: 1
+   
+..  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
 
 
 3. Apps to be added in the future

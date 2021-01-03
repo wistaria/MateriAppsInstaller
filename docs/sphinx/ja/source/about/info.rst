@@ -28,18 +28,28 @@ MateriApps Installerの目標は下記の通りである。
 整備されているツールとアプリ
 ------------------------------------------
 
-2020/12/4現在、以下のツール・アプリが整備されています。
+2020/12/4現在、以下のツール・アプリが整備されています (``config`` で ``default.sh`` 以外に用意されているものも一緒に記載しています)。
 
 1. ツール
 
+..
   boost, cmake, eigen3, fftw, gcc10, gcc7,
-  git, gsl, hdf5, lapack, libffi, openblas,
-  openmpi, openssl, python2, python3, scalapack, tcltk, zlib
+  git, gsl, hdf5, lapack, libffi, openmpi, openssl,
+  python2, python3, scalapack, tcltk, zlib
 
+.. csv-table::
+   :file: ../../../table/tool.csv
+   :encoding: euc-jp
+   :header-rows: 1
 
 2. アプリ
 
-  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
+.. csv-table::
+   :file: ../../../table/apps.csv
+   :encoding: euc-jp
+   :header-rows: 1
+
+..  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
 
 
 3. 今後追加予定のアプリ
