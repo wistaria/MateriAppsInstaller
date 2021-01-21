@@ -7,8 +7,10 @@ eval "
 set -x
 
 # configurable variables (e.g. compiler)
+
+# export CC=${CC:-}
+# export FC=${FC:-}
 export MAKE_J=${MAKE_J:-}
-export MKLROOT=${MKLROOT:-}
 
 " 2> config.txt
 if [ "$XTRACED" = "off" ]; then
@@ -43,12 +45,6 @@ fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
 
-set +e
-. $SCRIPT_DIR/../../tools/libffi/find.sh; if [ ${MA_HAVE_LIBFFI} = "no" ]; then echo "Error: libffi not found"; exit 127; fi
-. $SCRIPT_DIR/../../tools/openssl/find.sh; if [ ${MA_HAVE_OPENSSL} = "no" ]; then echo "Error: openssl not found"; exit 127; fi
-. $SCRIPT_DIR/../../tools/tcltk/find.sh; if [ ${MA_HAVE_TCLTK} = "no" ]; then echo "Error: tcltk not found"; exit 127; fi
-set -e
-
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
@@ -68,14 +64,10 @@ finish_info | tee -a $LOG
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
 
-MAJOR_VERSION=$(echo $__VERSION__ | cut -d'.' -f1)
-MINOR_VERSION=$(echo $__VERSION__ | cut -d'.' -f2)
-
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
-export PATH=\${${ROOTNAME}}/bin:\$PATH
-export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib64:\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH

@@ -1,25 +1,23 @@
 #!/bin/sh
 set -e
 
-XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
+cat << EOF > config.txt
 # configurable variables (e.g. compiler)
-export MAKE_J=${MAKE_J:-}
-export MKLROOT=${MKLROOT:-}
 
-" 2> config.txt
-if [ "$XTRACED" = "off" ]; then
-  set +x
-  SHFLAG=""
-else
+export CMAKE="${CMAKE:-cmake}"
+export CXX="${CXX:-}"
+export MAKE_J="${MAKE_J:-}"
+
+EOF
+. ./config.txt
+
+XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
+if [ "$XTRACED" = "on" ]; then
   SHFLAG="-x"
 fi
 
 mode=${1:-default}
-export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
@@ -42,15 +40,10 @@ if [ -d $PREFIX ]; then
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
-
-set +e
-. $SCRIPT_DIR/../../tools/libffi/find.sh; if [ ${MA_HAVE_LIBFFI} = "no" ]; then echo "Error: libffi not found"; exit 127; fi
-. $SCRIPT_DIR/../../tools/openssl/find.sh; if [ ${MA_HAVE_OPENSSL} = "no" ]; then echo "Error: openssl not found"; exit 127; fi
-. $SCRIPT_DIR/../../tools/tcltk/find.sh; if [ ${MA_HAVE_TCLTK} = "no" ]; then echo "Error: tcltk not found"; exit 127; fi
-set -e
+echo "mode = $mode" | tee -a $LOG
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
-pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
@@ -68,13 +61,10 @@ finish_info | tee -a $LOG
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
 
-MAJOR_VERSION=$(echo $__VERSION__ | cut -d'.' -f1)
-MINOR_VERSION=$(echo $__VERSION__ | cut -d'.' -f2)
-
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
+. ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
-export PATH=\${${ROOTNAME}}/bin:\$PATH
 export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
