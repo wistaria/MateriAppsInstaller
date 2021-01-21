@@ -1,11 +1,11 @@
-name,intel,macos,gcc,amd,fujitsu
-ALPS,o,o,o,x,x
-DSQSS,o,x,o,x,x
-QUANTUM ESPRESSO,o,x,x,o,x
-HPhi,o,x,o,x,o
-KOmega,o,x,x,x,x
-LAMMPS,o,x,o,x,x
-mVMC,o,x,o,x,x
-OpenMX,o,x,x,x,x
-RESPACK,o,x,x,x,x
-TeNeS,o,x,x,x,x
+name,intel,macos,gcc,amd
+ALPS,o,o,o,x
+DSQSS,o,x,o,x
+QUANTUM ESPRESSO,o,x,x,o
+HPhi,o,x,o,x
+KOmega,o,x,x,x
+LAMMPS,o,x,o,x
+mVMC,o,x,o,x
+OpenMX,o,x,x,x
+RESPACK,o,x,x,x
+TeNeS,o,x,x,x
