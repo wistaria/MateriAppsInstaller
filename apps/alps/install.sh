@@ -5,8 +5,8 @@ cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
 export CMAKE="${CMAKE:-cmake}"
+export CC="${CC:-}"
 export CXX="${CXX:-}"
-export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 export MAKE_J="${MAKE_J:-}"
 
 EOF
