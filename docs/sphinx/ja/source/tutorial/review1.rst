@@ -6,7 +6,7 @@ macOS 10.15 (Catalina)へのインストール
 ツールのインストール
 ****************************
 
-toolsディレクトリにはいっているツール類は、Macのパッケージ管理ソフト(Homebrew, fink, macportsなど)を用いてインストールするほうが便利です。ここではHomebrewを用いる方法を紹介します。ここではアプリのインストール先はデフォルトのままであるとしています。インストール先は$HOME/materiapps, ビルドディレクトリは$HOME/buildになります。
+toolsディレクトリにはいっているツール類は、Macのパッケージ管理ソフト(Homebrew, fink, macportsなど)を用いてインストールするほうが便利です。ここではHomebrewを用いる方法を紹介します。アプリのインストール先はデフォルトのままであるとします。インストール先は$HOME/materiapps, ビルドディレクトリは$HOME/buildになります。
 
 まずhttps://brew.sh/にある情報に従ってインストールします。
 
@@ -22,7 +22,7 @@ toolsディレクトリにはいっているツール類は、Macのパッケー
 
       </div>
 
-次にツール類をHomebrewによってインストールします。他の方法でインストールがすでになされている場合は、Homebrewでインストールする必要はありません。以下のツールははじめにすべてインストールしてもいいですし、アプリのインストールで要求されたときにインストールするようにしても構いません。(python2はMacにあらかじめはいっています。)
+次にツール類をHomebrewによってインストールします。他の方法でインストールがすでになされている場合は、Homebrewでインストールする必要はありません。以下のツールははじめにすべてインストールしてもいいですし、アプリのインストールで要求されたときにインストールするようにしても構いません。
 
    .. raw:: html
 
@@ -112,7 +112,7 @@ MateriAppsInstallerのディレクトリにはいり、
 
    .. code:: prism
 
-	$ CC=gcc-10 FC=gfortran-10 CPP=cpp-10 sh ./install.sh
+	$ CC=gcc-10 CXX=g++-10 FC=gfortran-10 CPP=cpp-10 sh install.sh
 
    .. raw:: html
 
@@ -126,7 +126,7 @@ MateriAppsInstallerのディレクトリにはいり、
 
    .. code:: prism
 
-	$ sh ./runtest.sh
+	$ sh runtest.sh
 
    .. raw:: html
 
@@ -155,7 +155,7 @@ MateriAppsInstallerのディレクトリにはいり、
 
       </div>
 
-でファイルを表示させたときに、hphivars-(バージョン番号).shという名前の設定ファイルがあるはずです。この設定ファイルを下記のように実行し、実行環境の設定を行います。
+でファイルを表示させたときに、hphivars.shという名前の設定ファイルがあるはずです。この設定ファイルを下記のように実行し、実行環境の設定を行います。
 
    .. raw:: html
 
@@ -163,7 +163,7 @@ MateriAppsInstallerのディレクトリにはいり、
 
    .. code:: prism
 
-	$ source $HOME/materiapps/hphi/hphivars-(バージョン番号).sh
+	$ source $HOME/materiapps/hphi/hphivars.sh
 
    .. raw:: html
 
