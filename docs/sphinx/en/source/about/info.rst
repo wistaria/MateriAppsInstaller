@@ -50,8 +50,6 @@ The following tools and apps are in place (12/4/2020).
    :file: ../../../table/apps.csv
    :encoding: euc-jp
    :header-rows: 1
-   
-..  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
 
 
 3. Apps to be added in the future

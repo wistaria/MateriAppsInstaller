@@ -1,16 +1,16 @@
-HΦ
-==
+:math:`{\rm H}\Phi`
+=====================
 
 SUMMARY
 -------
 
 An exact diagonalization package for a wide range of quantum lattice
 models (e.g. multi-orbital Hubbard model, Heisenberg model, Kondo
-lattice model). HΦ also supports the massively parallel computations.
+lattice model). :math:`{\rm H}\Phi` also supports the massively parallel computations.
 The Lanczos algorithm for obtaining the ground state and thermal pure
 quantum state method for finite-temperature calculations are
 implemented. In addition, dynamical Green’s functions can be calculated
-using , Kω which is a library of the shifted Krylov subspace method. It
+using , :math:`{\rm K}\omega` which is a library of the shifted Krylov subspace method. It
 is possible to perform simulations for real-time evolution from ver.
 3.0.
 

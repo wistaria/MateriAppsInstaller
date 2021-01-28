@@ -1,11 +1,11 @@
-Kω
-==
+..math:`{\rm K}\omega`
+========================
 
 SUMMARY
 -------
 
-Kω implements large-scale parallel computing of the shifted Krylov
-subspace method. Using Kω, dynamical correlation functions can be
+..math:`{\rm K}\omega` implements large-scale parallel computing of the shifted Krylov
+subspace method. Using ..math:`{\rm K}\omega`, dynamical correlation functions can be
 efficiently calculated. This application includes a mini-application for
 calculating dynamical correlation functions of quantum lattice models
 such as the Hubbard model, the Kondo model, and the Heisenberg model in
