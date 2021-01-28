@@ -10,7 +10,7 @@ MateriApps Installer is a collection of shell scripts to assist in the installat
 
 Background of the Development
 ------------------------------------------
-Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, `MateriApps <http://ma.cms-initiative.jp>`_, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.
+Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, `MateriApps <https://ma.issp.u-tokyo.ac.jp>`_, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.
 
 One of the obstacles for users to start using published applications in materials science is the installation of software. `MateriApps LIVE! <https://cmsi.github.io/MateriAppsLive/>`_ is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. MateriApps LIVE! is a Virtual Hard Disk Image (OVA) of VirtualBox that includes applications, OS (Debian GNU/Linux), editors, visualization tools, and other environments needed to get started with the tutorial. By using MateriApps LIVE!, it is possible to easily set up a computing environment for participants in classes and software training sessions.
 
@@ -20,8 +20,8 @@ Goal of MateriApps Installer
 ------------------------------------------
 The goals of MateriApps Installer are as follows
 
-- To install common applications (cf. `MateriApps <http://ma.cms-initiative.jp>`_) on all major domestic and foreign supercomputers.
-- Similarly, we will prepare scripts for installation on CentOS (RedHat), Debian (Ubuntu) and Mac OS X environments.
+- To install common applications (cf. `MateriApps <https://ma.issp.u-tokyo.ac.jp>`_) on all major domestic and foreign supercomputers.
+- Similarly, we will prepare scripts for installation on CentOS (RedHat), Debian (Ubuntu) and macOS environments.
 
 
 
@@ -66,7 +66,7 @@ The design policy of MateriApps Installer is as follows:
 
 2. Supercomputers are different from each other, so do not aim to make a universal installer, but make a separate script for exceptions.
 
-3. As for the tools, if the package is already available for Linux (RPM Package, Debian Package) or Mac OS X (MacPorts), use it.
+3. As for the tools, if the package is already available for Linux (RPM Package, Debian Package) or macOS (Homebrew, Fink, MacPorts), use it.
 
 4. The version of the application should be the same as MateriApps LIVE! Necessary patches should also be the same as in Debian Package for MateriApps LIVE!
 
@@ -98,7 +98,7 @@ Main developers
 MateriApps Installer is developed by the following members.
 
 - ver. 0.1
-   - Shinji Todo (Graduate School of Science, The University of Tokyo)
+   - Synge Todo (Department of Physics/Institute for Solid State Physics, The University of Tokyo)
    - Yuichi Motoyama (Institute for Solid State Physics, The University of Tokyo)
    - Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo)
    - Takeo Kato (Institute for Solid State Physics, The University of Tokyo)

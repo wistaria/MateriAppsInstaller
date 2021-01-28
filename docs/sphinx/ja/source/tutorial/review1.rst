@@ -1,12 +1,14 @@
+
+
 macOS 10.15 (Catalina)へのインストール
 ------------------------------------------------------------
 
-本節では、MacOS 10.15 (Catalina)でMateriApps Installerを利用する方法を記載します。
+本節では、macOS 10.15 (Catalina)でMateriApps Installerを利用する方法を記載します。
 
 ツールのインストール
 ****************************
 
-toolsディレクトリにはいっているツール類は、Macのパッケージ管理ソフト(Homebrew, fink, macportsなど)を用いてインストールするほうが便利です。ここではHomebrewを用いる方法を紹介します。アプリのインストール先はデフォルトのままであるとします。インストール先は$HOME/materiapps, ビルドディレクトリは$HOME/buildになります。
+toolsディレクトリにはいっているツール類は、macOSのパッケージ管理ソフト(Homebrew, Fink, MacPortsなど)を用いてインストールするほうが便利です。ここではHomebrewを用いる方法を紹介します。アプリのインストール先はデフォルトのままであるとします。インストール先は$HOME/materiapps, ビルドディレクトリは$HOME/buildになります。
 
 まずhttps://brew.sh/にある情報に従ってインストールします。
 

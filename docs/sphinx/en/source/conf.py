@@ -48,7 +48,7 @@ master_doc = 'index'
 # General information about the project.
 project = u'MateriApps Installer'
 copyright = u'2020, Institute for Solid State Physics, University of Tokyo'
-author = u'MateriApps Installer Developer team'
+author = u'MateriApps Installer Development Team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -147,8 +147,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MAInstaller.tex', u'MateriApps Installer\'s Documentation',
-     u'MateriApps Installer\'s developer team', 'manual', 'True'),
+    (master_doc, 'MAInstaller.tex', u'MateriApps Installer Documentation',
+     u'MateriApps Installer Development Team', 'manual', 'True'),
 ]
 
 
@@ -157,7 +157,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'MateriApps Installer', u'MateriApps Installer\'s Documentation',
+    (master_doc, 'MateriApps Installer', u'MateriApps Installer Documentation',
      [author], 1)
 ]
 
@@ -169,7 +169,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MateriApps Installer', u'MateriApps Installer\'s Documentation',
+    (master_doc, 'MateriApps Installer', u'MateriApps Installer Documentation',
      author, 'MateriApps Installer', 'One line description of project.',
      'Miscellaneous'),
 ]
