@@ -115,7 +115,7 @@ The program package and source code set of this software is distributed under th
 
 Copyright
 ------------------
-The University of Tokyo holds the copyright of MateriApps Installer, and it is distributee under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.
+The University of Tokyo holds the copyright of MateriApps Installer, and it is distributed under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.
 
 *(c) 2013-2021 The University of Tokyo. All rights reserved.*
 
