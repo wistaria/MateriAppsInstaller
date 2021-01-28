@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'MateriApps Installer'
-copyright = u'2020, Institute for Solid State Physics, University of Tokyo'
+copyright = u'2013-2021, the University of Tokyo'
 author = u'MateriApps Installer Development Team'
 
 # The version info for the project you're documenting, acts as replacement for

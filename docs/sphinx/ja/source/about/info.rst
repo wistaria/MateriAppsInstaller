@@ -111,8 +111,8 @@ MateriApps Installerは以下のメンバーで開発している。
 
 ライセンス
 --------------
-本ソフトウェアのプログラムパッケージおよびソースコード一式はGNU General Public License version 3（GPL v3）に準じて配布されています。ただし、各ソフトウェアのパッチファイルについては、各ソフトウェアのライセンスに準ずるものとしています。
+MateriApps Installerの著作権は東京大学が所持しており、GNU General Public License version 3 (GPLv3)準じて配布しています。ただし、インストールされるソフトウェアへのパッチファイルについては、それぞれのソフトウェアのライセンスに準ずるものとします。
 
-*(c) 2020- The University of Tokyo. All rights reserved.*
+*(c) 2013-2021 The University of Tokyo. All rights reserved.*
 
-本ソフトウェアは2020年度 東京大学物性研究所 ソフトウェア高度化プロジェクトの支援を受け開発されており、その著作権は東京大学が所持しています。
+MateriApps Installerの開発については、2020年度東京大学物性研究所ソフトウェア高度化プロジェクトから多大なる支援をいただきました。
