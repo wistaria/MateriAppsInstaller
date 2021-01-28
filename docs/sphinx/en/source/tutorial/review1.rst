@@ -141,7 +141,7 @@ If you get errors during installation, take a closer look at the error messages.
 Setting the execution environment
 **************************
 
-In order to run the application, you need to set the execution environment. By entering the following commands, you can create an environment in which each application can be executed. For example, if you want to run ..math:`{\rm H}\Phi` that is already installed, then output the filenames for the setting file as follows.
+In order to run the application, you need to set the execution environment. By entering the following commands, you can create an environment in which each application can be executed. For example, if you want to run ::math:`{\rm H}\Phi` that is already installed, then output the filenames for the setting file as follows.
 
    .. raw:: html
 
