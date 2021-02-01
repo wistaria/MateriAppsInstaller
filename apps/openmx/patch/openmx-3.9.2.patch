@@ -1,6 +1,6 @@
 diff -uprN openmx-3.9.2.orig/CMakeLists.txt openmx-3.9.2/CMakeLists.txt
 --- openmx-3.9.2.orig/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/CMakeLists.txt	2020-12-02 15:30:22.000000000 +0900
++++ openmx-3.9.2/CMakeLists.txt	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,54 @@
 +cmake_minimum_required(VERSION 3.6...3.14)
 +message(STATUS "CMake version: " ${CMAKE_VERSION})
@@ -58,12 +58,12 @@ diff -uprN openmx-3.9.2.orig/CMakeLists.txt openmx-3.9.2/CMakeLists.txt
 +add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${DFT_DATA})
 diff -uprN openmx-3.9.2.orig/DFT_DATA19/CMakeLists.txt openmx-3.9.2/DFT_DATA19/CMakeLists.txt
 --- openmx-3.9.2.orig/DFT_DATA19/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/DFT_DATA19/CMakeLists.txt	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/DFT_DATA19/CMakeLists.txt	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1 @@
 +install(DIRECTORY . DESTINATION ${DFT_DATA} PATTERN CMakeLists.txt EXCLUDE)
 diff -uprN openmx-3.9.2.orig/cmake/FindFFTW.cmake openmx-3.9.2/cmake/FindFFTW.cmake
 --- openmx-3.9.2.orig/cmake/FindFFTW.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/FindFFTW.cmake	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/cmake/FindFFTW.cmake	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,339 @@
 +# - Find the FFTW library
 +#
@@ -406,14 +406,12 @@ diff -uprN openmx-3.9.2.orig/cmake/FindFFTW.cmake openmx-3.9.2/cmake/FindFFTW.cm
 +        )
 diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindScaLAPACK.cmake
 --- openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/FindScaLAPACK.cmake	2020-12-02 15:03:07.000000000 +0900
-@@ -0,0 +1,142 @@
++++ openmx-3.9.2/cmake/FindScaLAPACK.cmake	2021-02-01 11:15:39.000000000 +0900
+@@ -0,0 +1,139 @@
++## This file is originally included in mptensor
++## https://github.com/smorita/mptensor
++
 +# - Try to find ScaLAPACK
-+# 
-+# Original file is available at
-+# https://github.com/t-sakashita/rokko/blob/master/config/FindScaLAPACK.cmake 
-+# under the Boost  Software License 1.0
-+#
 +# Once done this will define
 +#
 +#  SCALAPACK_FOUND        - system has ScaLAPACK
@@ -432,53 +430,14 @@ diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindSc
 +  return()
 +endif(DEFINED SCALAPACK_LIB)
 +
++unset(_SCALAPACK_LIBRARY)
++
 +if(DEFINED BLAS_mkl_core_LIBRARY)
 +
 +  find_library(_SCALAPACK_LIBRARY
 +    NAMES mkl_scalapack_lp64
 +    PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
 +    DOC "The ScaLAPACK library")
-+  if(_SCALAPACK_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARY})
-+  else(_SCALAPACK_LIBRARY)
-+    message(STATUS "ScaLAPACK library: not found")
-+    set(SCALAPACK_FOUND FALSE)
-+    return()
-+  endif(_SCALAPACK_LIBRARY)
-+
-+  # Check whether SGI MPT is used
-+  try_compile(_SGI_MPT
-+    ${CMAKE_CURRENT_BINARY_DIR}
-+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_sgimpt.c
-+    OUTPUT_VARIABLE LOG)
-+  if(_SGI_MPT)
-+    find_library(_SCALAPACK_BLACS_LIBRARY
-+      NAMES mkl_blacs_sgimpt_lp64
-+      PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
-+      DOC "The BLACS library")
-+    MESSAGE(STATUS "SGI MPT is used")
-+  else(_SGI_MPT)
-+    try_compile(_OPENMPI
-+      ${CMAKE_CURRENT_BINARY_DIR}
-+      ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_openmpi.c
-+      OUTPUT_VARIABLE LOG)
-+    if(_OPENMPI)
-+      find_library(_SCALAPACK_BLACS_LIBRARY
-+        NAMES mkl_blacs_openmpi_lp64
-+        PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
-+        DOC "The BLACS library")
-+      MESSAGE(STATUS "OpenMPI is used")
-+    else(_OPENMPI)
-+      find_library(_SCALAPACK_BLACS_LIBRARY
-+        NAMES mkl_blacs_intelmpi_lp64
-+        PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
-+        DOC "The BLACS library")
-+      MESSAGE(STATUS "Intel MPI/MPICH2/MVAPICH is used")
-+    endif(_OPENMPI)
-+  endif(_SGI_MPT)
-+  if(_SCALAPACK_BLACS_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_SCALAPACK_BLACS_LIBRARY})
-+  endif(_SCALAPACK_BLACS_LIBRARY)
 +
 +else(DEFINED BLAS_mkl_core_LIBRARY)
 +
@@ -492,10 +451,18 @@ diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindSc
 +	 ${SCALAPACK_ROOT}
 +  	 $ENV{SCALAPACK_ROOT}/${CMAKE_BUILD_TYPE}
 +	 $ENV{SCALAPACK_ROOT}
++  	 ${ROKKO_SOLVER_ROOT}/scalapack/${CMAKE_BUILD_TYPE}
++	 ${ROKKO_SOLVER_ROOT}/scalapack
 +  	 $ENV{ROKKO_SOLVER_ROOT}/scalapack/${CMAKE_BUILD_TYPE}
 +	 $ENV{ROKKO_SOLVER_ROOT}/scalapack
 +	 ${CMAKE_INSTALL_PREFIX}/scalapack/${CMAKE_BUILD_TYPE}
 +	 ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}
++	 $ENV{HOME}/rokko/scalapack/${CMAKE_BUILD_TYPE}
++	 $ENV{HOME}/rokko/scalapack
++	 /opt/rokko/scalapack/${CMAKE_BUILD_TYPE}
++	 /opt/rokko/scalapack
++	 /opt/rokko/${CMAKE_BUILD_TYPE}
++	 /opt/rokko
 +	 /opt/local /opt
 +	 )
 +    list(APPEND _PATHS /usr/lib64/openmpi) # for CentOS
@@ -509,56 +476,86 @@ diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindSc
 +    NAMES scalapack scalapack-openmpi scalapack-mpich
 +    PATHS ${_LIBPATHS}
 +    DOC "The ScaLAPACK library")
-+  if(_SCALAPACK_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARY})
-+  else(_SCALAPACK_LIBRARY)
-+    message(STATUS "ScaLAPACK library: not found")
-+    set(SCALAPACK_FOUND FALSE)
-+    return()
-+  endif(_SCALAPACK_LIBRARY)
-+
-+  find_library(_BLACS_LIBRARY
-+    NAMES blacs-openmpi blacs-mpich
-+    PATHS ${_LIBPATHS}
-+    DOC "The ScaLAPACK BLACS library")
-+  find_library(_BLACSC_LIBRARY
-+    NAMES blacsCinit-openmpi blacsCinit-mpich
-+    PATHS ${_LIBPATHS}
-+    DOC "The ScaLAPACK BLACS C library")
-+  find_library(_BLACSF77_LIBRARY
-+    NAMES blacsF77init-openmpi blacsF77init-mpich
-+    PATHS ${_LIBPATHS}
-+    DOC "The ScaLAPACK BLACS F77 library")
-+  if(_BLACSF77_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSF77_LIBRARY})
-+  endif(_BLACSF77_LIBRARY)
-+  if(_BLACSC_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSC_LIBRARY})
-+  endif(_BLACSC_LIBRARY)
-+  if(_BLACS_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_BLACS_LIBRARY})
-+  endif(_BLACS_LIBRARY)
-+  if(_BLACSF77_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSF77_LIBRARY})
-+  endif(_BLACSF77_LIBRARY)
-+  if(_BLACSC_LIBRARY)
-+    list(APPEND _SCALAPACK_LIBRARIES ${_BLACSC_LIBRARY})
-+  endif(_BLACSC_LIBRARY)
-+
 +endif(DEFINED BLAS_mkl_core_LIBRARY)
 +
-+set(SCALAPACK_FOUND TRUE)
-+set(SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARIES})
-+message(STATUS "ScaLAPACK libraries: ${SCALAPACK_LIBRARIES}")
++find_package_handle_standard_args(ScaLAPACK
++  FOUND_VAR SCALAPACK_FOUND
++  REQUIRED_VARS _SCALAPACK_LIBRARY
++  )
++
++unset(_SCALAPACK_LIBRARIES)
++
++if(SCALAPACK_FOUND)
++  list(APPEND SCALAPACK_LIBRARIES ${_SCALAPACK_LIBRARY})
++  if(DEFINED BLAS_mkl_core_LIBRARY)
++    # Check whether SGI MPT is used
++    try_compile(_SGI_MPT
++      ${CMAKE_CURRENT_BINARY_DIR}
++      SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_sgimpt.cpp
++      CMAKE_FLAGS
++	"-DINCLUDE_DIRECTORIES:STRING=${MPI_CXX_INCLUDE_DIRS}"
++      LINK_LIBRARIES ${MPI_CXX_LIBRARIES}
++      OUTPUT_VARIABLE LOG)
++    if(_SGI_MPT)
++      find_library(_SCALAPACK_BLACS_LIBRARY
++	NAMES mkl_blacs_sgimpt_lp64
++	PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++	DOC "The BLACS library")
++      MESSAGE(STATUS "SGI MPT is used")
++    else(_SGI_MPT)
++       try_compile(_OPENMPI
++	 ${CMAKE_CURRENT_BINARY_DIR}
++	 SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_openmpi.cpp
++	 CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:STRING=${MPI_CXX_INCLUDE_DIRS}"
++	 OUTPUT_VARIABLE LOG)
++      if(_OPENMPI)
++	find_library(_SCALAPACK_BLACS_LIBRARY
++	  NAMES mkl_blacs_openmpi_lp64
++	  PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++	  DOC "The BLACS library")
++	MESSAGE(STATUS "OpenMPI is used")
++      else(_OPENMPI)
++	find_library(_SCALAPACK_BLACS_LIBRARY
++	  NAMES mkl_blacs_intelmpi_lp64
++	  PATHS $ENV{MKLROOT}/lib/intel64 $ENV{MKLROOT}/lib/em64t
++	  DOC "The BLACS library")
++	MESSAGE(STATUS "Intel MPI/MPICH2/MVAPICH is used")
++      endif(_OPENMPI)
++    endif(_SGI_MPT)
++    if(_SCALAPACK_BLACS_LIBRARY)
++      list(APPEND SCALAPACK_LIBRARIES ${_SCALAPACK_BLACS_LIBRARY})
++    endif(_SCALAPACK_BLACS_LIBRARY)
++
++
++  else(DEFINED BLAS_mkl_core_LIBRARY)
++    find_library(_BLACS_LIBRARY
++      NAMES blacs blacs-openmpi blacs-mpich
++      PATHS ${_LIBPATHS}
++      DOC "The ScaLAPACK BLACS library")
++    if(_BLACS_LIBRARY)
++      list(APPEND SCALAPACK_LIBRARIES ${_BLACS_LIBRARY})
++    endif(_BLACS_LIBRARY)
++
++    find_library(_BLACSCINIT_LIBRARY
++      NAMES blacsCinit blacsCinit-openmpi blacsCinit-mpich
++      PATHS ${_LIBPATHS}
++      DOC "The ScaLAPACK BLACS Cinit library")
++    if(_BLACSCINIT_LIBRARY)
++      list(APPEND SCALAPACK_LIBRARIES ${_BLACSCINIT_LIBRARY})
++    endif(_BLACSCINIT_LIBRARY)
++
++  endif(DEFINED BLAS_mkl_core_LIBRARY)
++endif(SCALAPACK_FOUND)
++
 diff -uprN openmx-3.9.2.orig/cmake/check_omp.c openmx-3.9.2/cmake/check_omp.c
 --- openmx-3.9.2.orig/cmake/check_omp.c	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/check_omp.c	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/cmake/check_omp.c	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,2 @@
 +#include <omp.h>
 +int main() { return 0; }
 diff -uprN openmx-3.9.2.orig/cmake/check_openmpi.c openmx-3.9.2/cmake/check_openmpi.c
 --- openmx-3.9.2.orig/cmake/check_openmpi.c	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/check_openmpi.c	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/cmake/check_openmpi.c	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,12 @@
 +/* This file is originally included in mptensor */
 +/* https://github.com/smorita/mptensor */
@@ -574,7 +571,7 @@ diff -uprN openmx-3.9.2.orig/cmake/check_openmpi.c openmx-3.9.2/cmake/check_open
 +#endif
 diff -uprN openmx-3.9.2.orig/cmake/check_sgimpt.c openmx-3.9.2/cmake/check_sgimpt.c
 --- openmx-3.9.2.orig/cmake/check_sgimpt.c	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/check_sgimpt.c	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/cmake/check_sgimpt.c	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,13 @@
 +/* This file is originally included in mptensor */
 +/* https://github.com/smorita/mptensor */
@@ -591,7 +588,7 @@ diff -uprN openmx-3.9.2.orig/cmake/check_sgimpt.c openmx-3.9.2/cmake/check_sgimp
 +
 diff -uprN openmx-3.9.2.orig/cmake/openmp.cmake openmx-3.9.2/cmake/openmp.cmake
 --- openmx-3.9.2.orig/cmake/openmp.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/cmake/openmp.cmake	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/cmake/openmp.cmake	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,55 @@
 +macro(openmp)
 +  set(OMP_FLAG "")
@@ -650,7 +647,7 @@ diff -uprN openmx-3.9.2.orig/cmake/openmp.cmake openmx-3.9.2/cmake/openmp.cmake
 +endmacro()
 diff -uprN openmx-3.9.2.orig/source/CMakeLists.txt openmx-3.9.2/source/CMakeLists.txt
 --- openmx-3.9.2.orig/source/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/source/CMakeLists.txt	2020-12-02 15:29:50.000000000 +0900
++++ openmx-3.9.2/source/CMakeLists.txt	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,222 @@
 +set(ELPA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/elpa-2018.05.001")
 +
@@ -876,7 +873,7 @@ diff -uprN openmx-3.9.2.orig/source/CMakeLists.txt openmx-3.9.2/source/CMakeList
 +endforeach()
 diff -uprN openmx-3.9.2.orig/source/check_lead.c openmx-3.9.2/source/check_lead.c
 --- openmx-3.9.2.orig/source/check_lead.c	2020-11-20 20:24:30.000000000 +0900
-+++ openmx-3.9.2/source/check_lead.c	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/source/check_lead.c	2020-12-02 15:56:40.000000000 +0900
 @@ -8,6 +8,9 @@
  #define BohrR    0.529177249
  #define print_std   0
@@ -889,7 +886,7 @@ diff -uprN openmx-3.9.2.orig/source/check_lead.c openmx-3.9.2/source/check_lead.
  static int Species2int(char Species[asize10]);
 diff -uprN openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt
 --- openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/source/elpa-2018.05.001/CMakeLists.txt	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1,22 @@
 +set(elpa_sources
 +    mod_precision.F90 elpa_utilities.F90
@@ -915,6 +912,6 @@ diff -uprN openmx-3.9.2.orig/source/elpa-2018.05.001/CMakeLists.txt openmx-3.9.2
 +target_compile_options(elpa_ar PRIVATE ${OMP_FLAG})
 diff -uprN openmx-3.9.2.orig/work/CMakeLists.txt openmx-3.9.2/work/CMakeLists.txt
 --- openmx-3.9.2.orig/work/CMakeLists.txt	1970-01-01 09:00:00.000000000 +0900
-+++ openmx-3.9.2/work/CMakeLists.txt	2020-12-02 15:03:07.000000000 +0900
++++ openmx-3.9.2/work/CMakeLists.txt	2020-12-02 15:56:40.000000000 +0900
 @@ -0,0 +1 @@
 +install(DIRECTORY . DESTINATION work PATTERN CMakeLists.txt EXCLUDE)
