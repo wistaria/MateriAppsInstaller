@@ -44,3 +44,6 @@ $PREFIX/bin/pip3 install Cython
 
 echo "[mpi4py]"
 $PREFIX/bin/pip3 install mpi4py
+
+echo "[mako]"
+$PREFIX/bin/pip3 install mako
