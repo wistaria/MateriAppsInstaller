@@ -13,11 +13,15 @@ EOF
 
 cp numpy-site.cfg ~/numpy-site.cfg
 
+echo "[pip]"
+$PREFIX/bin/python3 -m ensurepip
+$PREFIX/bin/python3 -m pip -U pip
+
 echo "[setuptools]"
 $PREFIX/bin/pip3 install sphinx setuptools wheel
 
-echo "[jupyter]"
-$PREFIX/bin/pip3 install sphinx jupyter
+echo "[Cython]"
+$PREFIX/bin/pip3 install Cython
 
 echo "[numpy]"
 $PREFIX/bin/pip3 install --install-option="config" --install-option="--compiler=intelem build_clib" --install-option="--compiler=intelem build_ext" --install-option="--compiler=intelem" numpy
@@ -38,9 +42,6 @@ $PREFIX/bin/pip3 install mock
 
 echo "[toml]"
 $PREFIX/bin/pip3 install toml
-
-echo "[Cython]"
-$PREFIX/bin/pip3 install Cython
 
 echo "[mpi4py]"
 $PREFIX/bin/pip3 install mpi4py

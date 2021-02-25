@@ -4,10 +4,13 @@ set -e
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
+# use default if not defined
 export CMAKE="${CMAKE:-cmake}"
-export CC="${CC:-}"
-export CXX="${CXX:-}"
-export MAKE_J="${MAKE_J:-}"
+export MAKE_J="${MAKE_J:-"-j1"}"
+
+# export explicitly if defined
+test -n "${CC+defined}" && export CC="$CC"
+test -n "${CXX+defined}" && export CXX="$CXX"
 
 EOF
 . ./config.txt

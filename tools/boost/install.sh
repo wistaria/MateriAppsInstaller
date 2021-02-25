@@ -2,15 +2,7 @@
 set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
-# configurable variables (e.g. compiler)
-
-" 2> config.txt
 if [ "$XTRACED" = "off" ]; then
-  set +x
   SHFLAG=""
 else
   SHFLAG="-x"

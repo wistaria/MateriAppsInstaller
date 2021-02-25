@@ -3,9 +3,13 @@ set -e
 
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
-export FC="${FC:-}"
-export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+
+# use default value if not defined
 export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
+
+# export explicitly if defined
+test -n "${FC+defined}" && export FC="$FC"
 
 EOF
 . ./config.txt

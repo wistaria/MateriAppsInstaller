@@ -4,12 +4,15 @@ set -e
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
-export CC="${CC:-}"
-export FC="${FC:-}"
-export MPIF90="${MPIF90:-}"
-export CPP="${CPP:-}"
+# use default if not defined
 export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
-export MAKE_J="${MAKE_J:-}"
+export MAKE_J="${MAKE_J:-"-j1"}"
+
+# export explicitly if defined
+test -n "${CC+defined}" && export CC="$CC"
+test -n "${FC+defined}" && export FC="$FC"
+test -n "${MPIF90+defined}" && export MPIF90="$MPIF90"
+test -n "${CPP+defined}" && export CPP="$CPP"
 
 EOF
 . ./config.txt
