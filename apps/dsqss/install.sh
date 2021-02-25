@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
@@ -15,6 +13,8 @@ test -n "${CXX+defined}" && export CXX="$CXX"
 
 EOF
 . ./config.txt
+
+set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then

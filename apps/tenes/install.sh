@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
@@ -14,6 +12,8 @@ export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 test -n "${CXX+defined}" && export CXX="$CXX"
 EOF
 . ./config.txt
+
+set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then
