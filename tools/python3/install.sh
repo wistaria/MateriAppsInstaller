@@ -1,18 +1,21 @@
 #!/bin/sh
+cat << EOF > config.txt
+# configurable variables (e.g. compiler)
+
+# use default if not defined
+export MAKE_J="${MAKE_J:-"-j1"}"
+
+# export explicitly if defined
+test -n "${CC+defined}" && export CC="$CC"
+test -n "${CC+defined}" && export MKLROOT="$MKLROOT"
+
+EOF
+. config.txt
+
 set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
-# configurable variables (e.g. compiler)
-export MAKE_J=${MAKE_J:-}
-export MKLROOT=${MKLROOT:-}
-
-" 2> config.txt
 if [ "$XTRACED" = "off" ]; then
-  set +x
   SHFLAG=""
 else
   SHFLAG="-x"

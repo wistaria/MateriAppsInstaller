@@ -1,15 +1,18 @@
 #!/bin/sh
-set -e
-
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
-export CXX="${CXX:-}"
+# use default if not defined
 export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
-export MAKE_J="${MAKE_J:-}"
+export MAKE_J="${MAKE_J:-"-j1"}"
+
+# export explicitly if defined
+test -n "${CXX+defined}" && export CXX="$CXX"
 
 EOF
 . ./config.txt
+
+set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then

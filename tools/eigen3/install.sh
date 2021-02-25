@@ -1,17 +1,20 @@
 #!/bin/sh
+cat << EOF > config.txt
+# configurable variables (e.g. compiler)
+
+# use default if not defined
+export CMAKE="${CMAKE:-cmake}"
+export MAKE_J="${MAKE_J:-"-j1"}"
+
+# export explicitly if defined
+test -n "${CXX+defined}" && export CXX="${CXX}"
+
+EOF
+. ./config.txt
+
 set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-echo configurations > config.txt
-eval "
-set -x
-
-# configurable variables (e.g. compiler)
-
-export CXX=${CXX:-}
-export MAKE_J=${MAKE_J:-}
-
-" 2> config.txt
 if [ "$XTRACED" = "off" ]; then
   set +x
   SHFLAG=""

@@ -1,17 +1,20 @@
 #!/bin/sh
-set -e
-
 cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
+# use default if not defined
 export CMAKE="${CMAKE:-cmake}"
-export CXX="${CXX:-}"
 export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
-export MAKE_J="${MAKE_J:-}"
+export MAKE_J="${MAKE_J:-"-j1"}"
+
+# export explicitly if defined
+test -n "${CXX+defined}" && export CXX="$CXX"
 
 EOF
 . ./config.txt
+
+set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
 if [ "$XTRACED" = "on" ]; then
