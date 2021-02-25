@@ -7,7 +7,7 @@ export CMAKE="${CMAKE:-cmake}"
 export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 export MAKE_J="${MAKE_J:-"-j1"}"
 export SCALAPACK_LIBRARIES="${SCALAPACK_LIBRARIES:-""}"
-export MA_EXTRA_FALGS="${MA_EXTRA_FLAGS:-""}"
+export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-""}"
 
 # export explicitly if defined
 test -n "${CC+defined}" && export CC="$CC"
