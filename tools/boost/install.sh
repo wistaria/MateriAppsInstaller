@@ -31,7 +31,6 @@ if [ -d $PREFIX ]; then
   exit 127
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
-mv config.txt $LOG
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG

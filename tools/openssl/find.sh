@@ -11,7 +11,7 @@ MA_OPENSSL_VERSION_PATCH=
 
 if [ -n "${MA_OPENSSL}" ]; then
   for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
-  echo "void SSL_CTX_new(); int main() { SSL_CTX_new(); }" > test-$$.c
+  echo "void SSL_CTX_new(); int main() { SSL_CTX_new(); return 0; }" > test-$$.c
   ${__CC__} test-$$.c -o test-$$ -L${OPENSSL_ROOT}/lib -L/opt/local/lib -lssl > /dev/null 2>&1
   if [ $? = 0 ]; then
     MA_OPENSSL_VERSION=$(${MA_OPENSSL} version | awk '{print $2}')

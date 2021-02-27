@@ -9,7 +9,7 @@ MA_GSL_VERSION_MINOR=
 MA_GSL_VERSION_PATCH=
 
 for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
-echo "void gsl_version(); int main() { gsl_version(); }" > test-$$.c
+echo "void gsl_version(); int main() { gsl_version(); return 0; }" > test-$$.c
 ${__CC__} test-$$.c -o test-$$ -L${GSL_ROOT}/lib -lgsl -lgslcblas > /dev/null 2>&1
 if [ $? = 0 ]; then
   MA_GSL_VERSION=$(gsl-config --version)

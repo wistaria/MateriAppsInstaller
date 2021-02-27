@@ -10,7 +10,7 @@ test -n "${CC+defined}" && export CC="$CC"
 test -n "${CC+defined}" && export MKLROOT="$MKLROOT"
 
 EOF
-. config.txt
+. ./config.txt
 
 set -e
 

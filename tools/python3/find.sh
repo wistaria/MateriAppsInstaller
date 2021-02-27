@@ -18,7 +18,7 @@ if [ -n "${MA_PYTHON3}" ]; then
       for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
       cat <<EOF > test-$$.c
 #include <pyconfig.h>
-int main() {}
+int main() { return 0; }
 EOF
       ${__CC__} test-$$.c -o test-$$ $(${MA_PYTHON3_CONFIG} --include) > /dev/null 2>&1 && MA_HAVE_PYTHON3_PYCONFIG=yes
       rm -f test-$$.c test-$$

@@ -11,7 +11,7 @@ test -n "${CXX+defined}" && export CXX="$CXX"
 test -n "${FC+defined}" && export FC="$FC"
 
 EOF
-. config.txt
+. ./config.txt
 
 set -e
 

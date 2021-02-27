@@ -9,7 +9,7 @@ export MAKE_J="${MAKE_J:-"-j1"}"
 test -n "${CC+defined}" && export CC="$CC"
 
 EOF
-. config.txt
+. ./config.txt
 
 set -e
 
