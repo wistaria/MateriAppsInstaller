@@ -1,5 +1,14 @@
 . $UTIL_SH
 
+if [ -z ${CC} ]; then
+  CC=icc
+fi
+if [ -z ${CXX} ]; then
+  CXX=icpc
+fi
+export CC
+export CXX
+
 export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 PIP=$PREFIX/bin/pip3
 
