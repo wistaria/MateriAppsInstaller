@@ -491,7 +491,7 @@ diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindSc
 +    # Check whether SGI MPT is used
 +    try_compile(_SGI_MPT
 +      ${CMAKE_CURRENT_BINARY_DIR}
-+      SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_sgimpt.cpp
++      SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_sgimpt.c
 +      CMAKE_FLAGS
 +	"-DINCLUDE_DIRECTORIES:STRING=${MPI_CXX_INCLUDE_DIRS}"
 +      LINK_LIBRARIES ${MPI_CXX_LIBRARIES}
@@ -505,7 +505,7 @@ diff -uprN openmx-3.9.2.orig/cmake/FindScaLAPACK.cmake openmx-3.9.2/cmake/FindSc
 +    else(_SGI_MPT)
 +       try_compile(_OPENMPI
 +	 ${CMAKE_CURRENT_BINARY_DIR}
-+	 SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_openmpi.cpp
++	 SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_openmpi.c
 +	 CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:STRING=${MPI_CXX_INCLUDE_DIRS}"
 +	 OUTPUT_VARIABLE LOG)
 +      if(_OPENMPI)
