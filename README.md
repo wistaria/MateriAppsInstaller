@@ -23,9 +23,8 @@ Install script collection for MateriApps Software
 
 # License and Copyright
 
-MA Installer scripts are available under the GNU GPL v3, except for patch files for each software package (`patch/*.patch`).
-Each patch file is distributed under the license of the original OSS project.
+The University of Tokyo holds the copyright of MateriApps Installer, and it is distributed under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.
 
-(c) 2020- The University of Tokyo. All rights reserved.
+(c) 2013-2021 The University of Tokyo. All rights reserved.
 
-This software has been developed under the Project for advancement of software usability in material science by Institute for Solid State Physics, The University of Tokyo, and the copyright of this software belongs to the University of Tokyo.
+The development of the MateriApps Installer has been supported greatly by PASMUS software development project in FY2020 by Institute for Solid State Physics, the University of Tokyo.
