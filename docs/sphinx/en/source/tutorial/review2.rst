@@ -85,7 +85,7 @@ Once you've successfully completed the test, use the following command to make a
 $ sh link.sh
 
 Setting the execution environment for each application
-**************************
+******************************************************
 
 In order to run the application, you need to set the execution environment. By entering the following commands, you can create an environment in which each application can be executed and the application can be executed immediately. For example, if you have installed HPhi (the installation directory is assumed to be the default, i.e., $HOME/materiapps), you should see a configuration file named hphivars.sh when you execute the following command: ::
 
