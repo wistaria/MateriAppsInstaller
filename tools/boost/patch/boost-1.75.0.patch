@@ -1,0 +1,53 @@
+diff -urN boost_1_75_0.orig/tools/build/src/tools/darwin.jam boost_1_75_0/tools/build/src/tools/darwin.jam
+--- boost_1_75_0.orig/tools/build/src/tools/darwin.jam	2020-12-03 14:02:49.000000000 +0900
++++ boost_1_75_0/tools/build/src/tools/darwin.jam	2021-03-13 12:21:58.000000000 +0900
+@@ -503,7 +503,7 @@
+             if $(instruction-set) {
+                 options = -arch$(_)$(instruction-set) ;
+             } else {
+-                options = -arch arm ;
++                options = -arch arm64 ;
+             }
+         }
+     }
+diff -urN boost_1_75_0.orig/tools/build/src/tools/mpi.jam boost_1_75_0/tools/build/src/tools/mpi.jam
+--- boost_1_75_0.orig/tools/build/src/tools/mpi.jam	2020-12-03 14:02:49.000000000 +0900
++++ boost_1_75_0/tools/build/src/tools/mpi.jam	2021-03-13 12:21:54.000000000 +0900
+@@ -368,7 +368,8 @@
+       result = [ SHELL "$(command) -showme" ] ;
+     }
+     # Look for MPICH
+-    else if [ safe-shell-command "$(command) -show" ]
++    else if [ safe-shell-command "$(command) -show" ] &&
++              [ safe-shell-command "$(command) -compile_info" ]
+     {
+       if $(.debug-configuration)
+       {
+@@ -377,6 +378,27 @@
+       compile_flags = [ SHELL "$(command) -compile_info" ] ;
+       link_flags = [ SHELL "$(command) -link_info" ] ;
+     }
++    # Look for MPT
++    else if [ safe-shell-command "$(command) -show" ]
++    {
++      if $(.debug-configuration)
++      {
++        ECHO "Found MPT wrapper compiler: $(command)" ;
++      }
++
++      # 
++      compile_flags = [ SHELL "$(command) -show -c -v 2>/dev/null" ] ;
++      local front = [ MATCH "(.*)-v" :  $(compile_flags) ] ;
++      local back = [ MATCH "-v(.*)" :  $(compile_flags) ] ;
++      compile_flags = "$(front) $(back)" ;
++      front = [ MATCH "(.*)-c" :  $(compile_flags) ] ;
++      back = [ MATCH "-c(.*)" :  $(compile_flags) ] ;
++      compile_flags = "$(front) $(back)" ;
++      link_flags = [ SHELL "$(command) -show -v 2>/dev/null" ] ;
++      front = [ MATCH "(.*)-v" :  $(link_flags) ] ;
++      back = [ MATCH "-v(.*)" :  $(link_flags) ] ;
++      link_flags = "$(front) $(back)" ;
++    }
+     # Sun HPC and Ibm POE
+     else if [ SHELL "$(command) -v 2>/dev/null" ]
+     {
