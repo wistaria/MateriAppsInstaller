@@ -41,6 +41,7 @@ templates_path = ['_templates']
 #
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
+html_static_path = ["../../_static"]
 
 # The master toctree document.
 master_doc = 'index'
@@ -84,12 +85,14 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+html_log = "logo.png"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
 html_theme_options = {
+    'logo': 'logo.png',
     'font_family': 'Helvetica',
     'sidebar_search_button': 'pink_1'
 }
@@ -162,6 +165,7 @@ man_pages = [
 ]
 
 latex_docclass =  {'manual': 'jsbook'}
+latex_logo = "../../_static/logo.png"
 
 # -- Options for Texinfo output -------------------------------------------
 
