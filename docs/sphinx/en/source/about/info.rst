@@ -36,13 +36,7 @@ The following tools and apps are in place (12/4/2020).
 .. csv-table::
    :file: ../../../table/tool.csv
    :encoding: euc-jp
-   :header-rows: 1
-  
-..
-  boost, cmake, eigen3, fftw, gcc10, gcc7,
-  git, gsl, hdf5, lapack, libffi, openblas,
-  openmpi, openssl, python2, python3, scalapack, tcltk, zlib
-
+   :header-rows: 1  
 
 2. Apps
 
@@ -54,7 +48,7 @@ The following tools and apps are in place (12/4/2020).
 
 3. Apps to be added in the future
 
-  abICS, DCore, ALPS-Core, TRIQS
+   abICS, DCore, TRIQS
 
 
 
@@ -97,7 +91,7 @@ Main developers
 ------------------------------------------
 MateriApps Installer is developed by the following members.
 
-- ver. 0.1
+- ver. 0.1 -
    - Synge Todo (Department of Physics/Institute for Solid State Physics, The University of Tokyo)
    - Yuichi Motoyama (Institute for Solid State Physics, The University of Tokyo)
    - Kazuyoshi Yoshimi (Institute for Solid State Physics, The University of Tokyo)
@@ -107,7 +101,8 @@ MateriApps Installer is developed by the following members.
 Version history
 ------------------------------------------
 
-- 2020/12/04 ver. 1.0 was released.
+- 2021/03/13 ver. 1.0 was released.
+- 2020/12/04 ver. 0.1 was released.
 
 License
 --------------

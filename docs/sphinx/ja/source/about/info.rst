@@ -28,14 +28,9 @@ MateriApps Installerの目標は下記の通りである。
 整備されているツールとアプリ
 ------------------------------------------
 
-2020/12/4現在、以下のツール・アプリが整備されています (``config`` で ``default.sh`` 以外に用意されているものも一緒に記載しています)。
+2021/3/13現在、以下のツール・アプリが整備されています (``config`` で ``default.sh`` 以外に用意されているものも一緒に記載しています)。
 
 1. ツール
-
-..
-  boost, cmake, eigen3, fftw, gcc10, gcc7,
-  git, gsl, hdf5, lapack, libffi, openmpi, openssl,
-  python2, python3, scalapack, tcltk, zlib
 
 .. csv-table::
    :file: ../../../table/tool.csv
@@ -49,12 +44,9 @@ MateriApps Installerの目標は下記の通りである。
    :encoding: euc-jp
    :header-rows: 1
 
-..  ALPS, DSQSS, QUANTUM ESPRESSO, HΦ, Kω, LAMMPS, mVMC, OpenMX, RESPACK, TeNeS
-
-
 3. 今後追加予定のアプリ
 
-  abICS, DCore, ALPS-Core, TRIQS
+  abICS, DCore, TRIQS
 
 
 設計ポリシー
@@ -97,7 +89,7 @@ MateriApps Installerの設計ポリシーは下記の通りである。
 ------------------------------------------
 MateriApps Installerは以下のメンバーで開発している。
 
-- ver. 0.1
+- ver. 0.1 -
    - 藤堂 眞治 (東京大学 大学院理学系研究科/物性研究所)
    - 本山 裕一 (東京大学 物性研究所)
    - 吉見 一慶 (東京大学 物性研究所)
@@ -107,6 +99,7 @@ MateriApps Installerは以下のメンバーで開発している。
 バージョン履歴
 ------------------------------------------
 
+- 2021/03/14 ver. 1.0 リリース.
 - 2020/12/04 ver. 0.1 リリース. 
 
 ライセンス

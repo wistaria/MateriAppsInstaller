@@ -11,7 +11,7 @@ Application list
    :maxdepth: 1
 
    README_alps
-   README_dcore
+   README_alpscore
    README_dsqss
    README_espresso
    README_hphi
@@ -21,5 +21,3 @@ Application list
    README_openmx
    README_respack
    README_tenes
-   README_triqs
-
