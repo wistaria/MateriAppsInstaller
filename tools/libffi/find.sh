@@ -7,7 +7,7 @@ MA_HAVE_LIBFFI=no
 for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
 cat <<EOF > test-$$.c
 #include <ffi.h>
-int main() { ffi_closure_free((void*)0); }
+int main() { ffi_closure_free((void*)0); return 0; }
 EOF
 ${__CC__} test-$$.c -o test-$$ -I${LIBFFI_ROOT}/include -L${LIBFFI_ROOT}/lib64 -L${LIBFFI_ROOT}/lib -lffi > /dev/null 2>&1
 if [ $? = 0 ]; then

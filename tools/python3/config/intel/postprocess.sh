@@ -1,9 +1,28 @@
+. $UTIL_SH
+
+if [ -z ${CC} ]; then
+  CC=icc
+fi
+if [ -z ${CXX} ]; then
+  CXX=icpc
+fi
+export CC
+export CXX
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
+PIP=$PREFIX/bin/pip3
+
+check $PREFIX/bin/python3 -m ensurepip
+check ${PIP} install --upgrade pip
+
+echo "[setuptools]"
+check ${PIP} install setuptools wheel
+
 rm -f numpy-site.cfg.org
 if [ -e ~/numpy-site.cfg ]; then
   cp ~/numpy-site.cfg ./numpy-site.cfg.org
 fi
-
-cat <<EOF > numpy-site.cfg
+cat << EOF > ~/numpy-site.cfg
 [mkl]
 library_dirs = $(echo $MKLROOT | cut -d: -f1)/lib/intel64
 include_dirs = $(echo $MKLROOT | cut -d: -f1)/include
@@ -11,39 +30,31 @@ mkl_libs = mkl_rt
 lapack_libs = 
 EOF
 
-cp numpy-site.cfg ~/numpy-site.cfg
-
-echo "[setuptools]"
-$PREFIX/bin/pip3 install sphinx setuptools wheel
-
-echo "[jupyter]"
-$PREFIX/bin/pip3 install sphinx jupyter
-
 echo "[numpy]"
-$PREFIX/bin/pip3 install --install-option="config" --install-option="--compiler=intelem build_clib" --install-option="--compiler=intelem build_ext" --install-option="--compiler=intelem" numpy
+check ${PIP} install --install-option="config" --install-option="--compiler=intelem build_clib" --install-option="--compiler=intelem build_ext" --install-option="--compiler=intelem" numpy
 
 echo "[scipy]"
-$PREFIX/bin/pip3 install --install-option="config" --install-option="--compiler=intelem" --install-option="--fcompiler=intelem build_clib" --install-option="--compiler=intelem" --install-option="--fcompiler=intelem build_ext" --install-option="--compiler=intelem" --install-option="--fcompiler=intelem" scipy
+check ${PIP} install --install-option="config" --install-option="--compiler=intelem" --install-option="--fcompiler=intelem build_clib" --install-option="--compiler=intelem" --install-option="--fcompiler=intelem build_ext" --install-option="--compiler=intelem" --install-option="--fcompiler=intelem" scipy
 
 echo "[matplotlib]"
-$PREFIX/bin/pip3 install matplotlib
-# echo "change backend of matplotlib to Agg" | tee -a $LOG
+check ${PIP} install matplotlib
+# echo "change backend of matplotlib to Agg"
 # sed -i 's/backend\s*:\s*TkAgg/backend : Agg/' $PREFIX/lib/python$PVERSION/site-packages/matplotlib/mpl-data/matplotlibrc
 
 echo "[jupyter]" 
-$PREFIX/bin/pip3 install sphinx jupyter
+check ${PIP} install sphinx jupyter
 
 echo "[mock]"
-$PREFIX/bin/pip3 install mock
+check ${PIP} install mock
 
 echo "[toml]"
-$PREFIX/bin/pip3 install toml
+check ${PIP} install toml
 
 echo "[Cython]"
-$PREFIX/bin/pip3 install Cython
+check ${PIP} install Cython
 
 echo "[mpi4py]"
-$PREFIX/bin/pip3 install mpi4py
+check ${PIP} install mpi4py
 
 echo "[mako]"
-$PREFIX/bin/pip3 install mako
+check ${PIP} install mako

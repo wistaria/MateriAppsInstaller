@@ -1,4 +1,4 @@
 set -u
 
 rm -rf build && mkdir -p build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF ..
+${CMAKE} -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=OFF ..

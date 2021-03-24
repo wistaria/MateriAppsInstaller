@@ -12,7 +12,7 @@ for cc in cc gcc icc; do __CC__=$(which ${cc}); test -n ${__CC__} && break; done
 cat <<EOF > test-$$.c
 #include <zlib.h>
 #include <stdio.h>
-int main() { printf("%s\n", ZLIB_VERSION); }
+int main() { printf("%s\n", ZLIB_VERSION); return 0; }
 EOF
 ${__CC__} test-$$.c -o test-$$ -I${ZLIB_ROOT:-/usr}/include -L${ZLIB_ROOT:-/usr}/lib -lz > /dev/null 2>&1
 if [ $? = 0 ]; then

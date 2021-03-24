@@ -69,7 +69,7 @@ If you pause in the middle of downloading, the source files may remain, which ma
 If you get errors during installation, take a closer look at the error messages. Errors often occur because the necessary tools are not installed. Read the required tools from the error message and install the tools.
 
 Setting the execution environment
-**************************
+*********************************
 
 In order to run the application, you need to set the execution environment. By entering the following commands, you can create an environment in which each application can be executed. For example, if you want to run :math:`{\rm H}\Phi` that is already installed, then output the filenames for the setting file as follows. ::
 

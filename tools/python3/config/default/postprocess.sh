@@ -29,7 +29,7 @@ check ${PIP} install mock
 echo "[toml]"
 check ${PIP} install toml
 
-echo "[Cython]" 
+echo "[Cython]"
 check ${PIP} install Cython
 
 echo "[mpi4py]"

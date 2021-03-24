@@ -2,8 +2,22 @@ rm -rf build
 mkdir build
 cd build
 
-CC=${CC:-icc}
-FC=${FC:-ifort}
+if [ -z ${CC+defined} ]; then
+  for m in mpicc mpiicc; do
+    CC=$(which $m 2> /dev/null)
+    test "$($CC --version 2> /dev/null | head -1 | cut -d ' ' -f 1)" = "icc" && break
+    CC=icc
+  done
+fi
+if [ -z ${FC+defined} ]; then
+  for m in mpifort mpiifort; do
+    FC=$(which $m 2> /dev/null)
+    test "$($FC --version 2> /dev/null | head -1 | cut -d ' ' -f 1)" = "ifort" && break
+    FC=ifort
+  done
+fi
+export CC
+export FC
 
 cmake \
   -DFFTW_ROOT=${MKLROOT}/include/fftw \
