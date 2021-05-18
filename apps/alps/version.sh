@@ -1,4 +1,4 @@
-ALPS_VERSION="20210518-r7864"
+ALPS_VERSION="20210518-r7865"
 ALPS_MA_REVISION=1
 ALPS_URL=https://alps.comp-phys.org/svn/alps1/trunk/alps
 
