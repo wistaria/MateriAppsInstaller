@@ -16,7 +16,7 @@ fi
 echo "using mpi : $mc ;" > user-config.jam
 . $SCRIPT_DIR/../python3/find.sh
 if [ ${MA_HAVE_PYTHON3} = "yes" ]; then
-  echo "using python : ${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR} : $(${MA_PYTHON3}-config --prefix) : $(${MA_PYTHON3}-config --includes | sed 's/-I//g') ;" >> user-config.jam
+  echo "using python : ${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR} : ${MA_PYTHON3} : $(${MA_PYTHON3}-config --includes | sed 's/-I//g') ;" >> user-config.jam
 fi
 
 # build
