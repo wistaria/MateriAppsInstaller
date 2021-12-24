@@ -1,0 +1,12 @@
+diff -uprN triqs-3.0.0.orig/deps/CMakeLists.txt triqs-3.0.0/deps/CMakeLists.txt
+--- triqs-3.0.0.orig/deps/CMakeLists.txt	2021-07-07 21:28:43.000000000 +0900
++++ triqs-3.0.0/deps/CMakeLists.txt	2021-07-07 21:28:59.000000000 +0900
+@@ -51,7 +51,7 @@ endif()
+ external_dependency(Cpp2Py
+   GIT_REPO https://github.com/TRIQS/cpp2py
+   VERSION 2.0
+-  GIT_TAG master
++  GIT_TAG 2.0.x
+ )
+ execute_process(COMMAND ${CPP2PY_PYTHON_EXECUTABLE} -c "import mpi4py" RESULT_VARIABLE failed ERROR_QUIET)
+ if(failed)
