@@ -55,3 +55,6 @@ check ${PIP} install Cython
 
 echo "[mpi4py]"
 check ${PIP} install mpi4py
+
+echo "[mako]"
+check ${PIP} install mako
