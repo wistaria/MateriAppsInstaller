@@ -1,0 +1,12 @@
+diff -urN ALPSCore-2.3.1-alpha.orig/gf/test/CMakeLists.txt ALPSCore-2.3.1-alpha/gf/test/CMakeLists.txt
+--- ALPSCore-2.3.1-alpha.orig/gf/test/CMakeLists.txt	2020-07-31 02:33:18.000000000 +0900
++++ ALPSCore-2.3.1-alpha/gf/test/CMakeLists.txt	2022-03-01 23:17:58.000000000 +0900
+@@ -14,7 +14,7 @@
+   four_index_gf_pn_test 
+   seven_index_gf_test
+   itime_gf_test
+-  fourier_test
++  # fourier_test
+   grid_test
+   piecewise_polynomial_test
+     )
