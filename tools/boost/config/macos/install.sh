@@ -11,4 +11,10 @@ else
   PYTHON_OPTION="--without-python"
 fi
 
-env BOOST_BUILD_PATH=. ${BJAM} --user-config=user-config.jam ${PYTHON_OPTION} --prefix=$PREFIX install
+# pch and coroutine are not supported for Apple Silicon
+EXTRA_OPTIONS=
+if [ $(arch) = "arm64" ]; then
+  EXTRA_OPTIONS="pch=off --without-coroutine"
+fi
+
+env BOOST_BUILD_PATH=. ${BJAM} --toolset=gcc --user-config=user-config.jam ${PYTHON_OPTION} ${EXTRA_OPTIONS} --prefix=$PREFIX install
