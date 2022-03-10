@@ -22,7 +22,7 @@ fi
 # build
 
 if [ ${MA_HAVE_PYTHON3} = "yes" ]; then
-  env BOOST_BUILD_PATH=. ${BJAM} --user-config=user-config.jam python=${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR}
+  env BOOST_BUILD_PATH=. ${BJAM} --user-config=user-config.jam python=${MA_PYTHON3_VERSION_MAJOR}.${MA_PYTHON3_VERSION_MINOR} pch=off
 else
-  env BOOST_BUILD_PATH=. ${BJAM} --user-config=user-config.jam --without-python
+  env BOOST_BUILD_PATH=. ${BJAM} --user-config=user-config.jam --without-python pch=off
 fi
