@@ -6,7 +6,7 @@ SUMMARY
 
 MODYLAS is a highly parallelized general-purpose molecular dynamics (MD)
 simulation program appropriate for very large physical, chemical, and
-biological systems. It is equipped most standard MD techniques including
+biological systems. It is equipped with most standard MD techniques including
 free energy calculations based on thermodynamic integration method.
 Long-range forces are evaluated rigorously by the fast multipole method
 (FMM) without using the fast Fourier transform (FFT) in order to realize
