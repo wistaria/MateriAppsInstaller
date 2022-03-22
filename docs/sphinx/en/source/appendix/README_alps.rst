@@ -6,7 +6,7 @@ SUMMARY
 
 ALPS is a numerical simulation library for strongly correlated systems
 such as magnetic materials or correlated electrons. It contains
-typicalsolvers for strongly correlated systems: Monte Carlo methods,
+typical solvers for strongly correlated systems: Monte Carlo methods,
 exact diagonalization, the density matrix renormalization group, etc. It
 can be used to calculate heat capacities, susceptibilities,
 magnetization processes in interacting spin systems, the density of
