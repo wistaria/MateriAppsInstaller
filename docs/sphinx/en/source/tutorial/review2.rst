@@ -3,7 +3,7 @@ Installation to Linux (using gcc)
 
 This section describes how to use the MateriApps Installer on Linux OS.
 We have checked it on CentOS 7 and Ubuntu 20. (You should be able to install other distributions using the same procedure.)
-Tools (gcc, cmake, etc.) preinstalled in Linux OS may be used, but if any trouble occurs, you have to estimate its reason from the error message and have to solve the trouble by your self.
+Tools (gcc, cmake, etc.) preinstalled in Linux OS may be used, but if any trouble occurs, you have to estimate its reason from the error message and have to solve the trouble by yourself.
 If you are not sure of doing this, we recommend that you install all the tools through MateriApps Installer.
 
 Initial setup
