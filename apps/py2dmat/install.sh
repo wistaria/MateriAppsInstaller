@@ -65,7 +65,6 @@ ROOTNAME=$(toupper ${__NAME__})_ROOT
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 . ${MA_ROOT}/env.sh
-. ${MA_ROOT}/triqs/triqsvars.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
 export PYTHONPATH=\${${ROOTNAME}}/lib/python${PYTHON_VERSION}/site-packages:\$PYTHONPATH
