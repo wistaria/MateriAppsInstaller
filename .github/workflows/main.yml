@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        app: [tenes, komega, hphi, mvmc, openmx, dsqss, espresso_respack, lammps, py2dmat]
+        app: [tenes, komega, hphi, mvmc, openmx, dsqss, espresso_respack, lammps, py2dmat, physbo]
       fail-fast: false
 
     steps:
