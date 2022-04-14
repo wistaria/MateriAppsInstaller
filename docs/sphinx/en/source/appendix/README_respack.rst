@@ -10,7 +10,7 @@ maximally localized Wannier functions, the RPA response functions, and
 frequency-dependent electronic interaction parameters. RESPACK receives
 its input data from a band calculation using norm-conserving
 pseudopotentials with plane-wave basis sets. Utilities which convert a
-result of xTAPP or Quantum ESPRESSO to an input for RESPACK are
+result of xTAPP or Quantum ESPRESSO to input for RESPACK are
 prepared. The software has been used successfully for a wide range of
 materials such as metals, semiconductors, transition-metal compounds,
 and organic compounds. It supports OpenMP / MPI parallelization.
