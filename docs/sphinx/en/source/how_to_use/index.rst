@@ -31,15 +31,7 @@ Directory Structure
 		  |─ apps
 		  |─ docs
 		  |─ tools
-		  |─ check
-		  |   |- k.sh
-		  |   |- macos.sh
-		  |   |- sekirei.sh
-		  |   |─ zetta-gcc.sh
-		  |   |- zetta-intel.sh
 		  |─ check_prefix.sh
-		  |─ fix_dylib.sh
-		  |─ list_maversion.sh
 		  |─ macosx
 		  |   |─ install.sh
 		  |   |─ ports.sh
@@ -103,14 +95,6 @@ Directory Structure
 
     - Script to display variables that are commonly used in each script, such as the top installation directory
     
-  - list_maversion.sh
-
-    - A script that summarizes the information of ``version.sh`` in each directory
-
-  - check directory
-
-    - A script to run multiple installation scripts in sequence on various hosts
-
   - docs directory
 
     - A directory containing the manual and its source code
