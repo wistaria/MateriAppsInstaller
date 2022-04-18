@@ -25,6 +25,6 @@ Install script collection for MateriApps Software
 
 The University of Tokyo holds the copyright of MateriApps Installer, and it is distributed under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.
 
-(c) 2013-2021 The University of Tokyo. All rights reserved.
+(c) 2013- The University of Tokyo. All rights reserved.
 
 The development of the MateriApps Installer has been supported greatly by PASMUS software development project in FY2020 by Institute for Solid State Physics, the University of Tokyo.
