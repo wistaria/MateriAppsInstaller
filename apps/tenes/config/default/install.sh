@@ -1,3 +1,3 @@
 cd build
 make install
-ln -s $PREFIX/share/tenes/sample $PREFIX/sample
+cp -r $PREFIX/share/tenes/sample $PREFIX/sample
