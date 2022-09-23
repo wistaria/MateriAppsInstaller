@@ -33,4 +33,7 @@ if [ $(arch) = "arm64" ]; then
   EXTRA_OPTIONS="pch=off --without-coroutine"
 fi
 
+# json does not compile with gcc-12
+EXTRA_OPTIONS="${EXTRA_OPTIONS} --without-json"
+
 env BOOST_BUILD_PATH=. ${BJAM} --toolset=gcc --user-config=user-config.jam ${PYTHON_OPTION} ${EXTRA_OPTIONS}
