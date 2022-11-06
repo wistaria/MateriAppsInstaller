@@ -1,17 +1,14 @@
-rm -f make.inc
-set -e
+set -u
 
-. $UTIL_SH
-if check_fc ${FC:-gfortran} -fallow-argument-mismatch; then
-  FFLAGS="${FFLAGS} -fallow-argument-mismatch"
-fi
+rm -rf build
+mkdir build
+cd build
 
-CFLAGS="-O3 ${CFLAGS} ${MA_EXTRA_FLAGS}" \
-FFLAGS="-O3 ${FFLAGS} ${MA_EXTRA_FLAGS}" \
-./configure \
-  --prefix=${PREFIX} \
-  --enable-openmp \
-  --with-scalapack=yes \
-  CC=${CC} FC=${FC} F77=${FC} F90=${FC} CPP=${CPP}
-
-sed -i.bak "s@^[ ]*F90[ ]*=.*\$@F90 = ${FC}@" make.inc
+${CMAKE} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_C_FLAGS="${MA_EXTRA_FLAGS}" \
+  -DCMAKE_Fortran_FLAGS="${MA_EXTRA_FLAGS}" \
+  -DQE_ENABLE_OPENMP=ON \
+  -DQE_ENABLE_SCALAPACK=ON \
+  -DSCALAPACK_LIBRARIES=${SCALAPACK_LIBRARIES} \
+  ..
