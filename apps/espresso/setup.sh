@@ -19,4 +19,5 @@ if [ -d $NV ]; then :; else
   if [ -f $SCRIPT_DIR/patch/${NV}.patch ]; then
     patch -p1 < $SCRIPT_DIR/patch/${NV}.patch
   fi
+  rm -f cmake/FindSCALAPACK.cmake
 fi
