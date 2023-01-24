@@ -150,7 +150,7 @@ Setup
 Install
 ============
 
-- Move to each software directory and run `` install.sh``. ::
+- Move to each software directory and run ``install.sh``. ::
 
      sh install.sh
 
