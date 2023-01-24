@@ -155,8 +155,8 @@ Install
      sh install.sh
 
   
-    - When this script is executed, the build and installation will be performed automatically after downloading (``download.sh``) and extracting (``setup.sh``) the source code.
-    - Depending on the software, settings for the compiler and libraries may have been defined, and they are stored as subdirectories under the ``config`` directory.
+  - When this script is executed, the build and installation will be performed automatically after downloading (``download.sh``) and extracting (``setup.sh``) the source code.
+  - Depending on the software, settings for the compiler and libraries may have been defined, and they are stored as subdirectories under the ``config`` directory.
 
     - If you want to specify the compiler, you can add the compiler name after ``install.sh``. The following is an example of compiling with ``intel``.
       
