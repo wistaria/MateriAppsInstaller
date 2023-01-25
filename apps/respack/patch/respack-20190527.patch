@@ -1,9 +1,27 @@
-diff -uprN respack-20200113.orig/util/qe2respack/qe2respack.py respack-20200113/util/qe2respack/qe2respack.py
---- respack-20200113.orig/util/qe2respack/qe2respack.py	2020-11-19 23:03:23.000000000 +0900
-+++ respack-20200113/util/qe2respack/qe2respack.py	2020-11-19 23:03:37.000000000 +0900
+diff -uprN respack-20190527.orig/util/qe2respack/qe2respack.py respack-20190527/util/qe2respack/qe2respack.py
+--- respack-20190527.orig/util/qe2respack/qe2respack.py	2023-01-25 09:39:57.000000000 +0900
++++ respack-20190527/util/qe2respack/qe2respack.py	2023-01-25 09:40:31.000000000 +0900
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env python
 +#!/usr/bin/env python3
  #Copyright (c) 2018 Yuichi Motoyama, 2019 Terumasa Tadano
  
  '''
+@@ -205,7 +205,7 @@ def symmetry(root, oldxml=False):
+         child = root.find('SYMMETRIES')
+         n_sym = int(child.find('NUMBER_OF_SYMMETRIES').text)
+         ftau = np.zeros((3,n_sym))
+-        mat_sym = np.zeros((3, 3, n_sym), np.int)
++        mat_sym = np.zeros((3, 3, n_sym), np.int64)
+         for i in range(n_sym):
+             sym = child.find('SYMM.{0}'.format(i+1))
+             rot = sym.find('ROTATION').text.strip().split('\n')
+@@ -217,7 +217,7 @@ def symmetry(root, oldxml=False):
+         child = root.find('output').find('symmetries')
+         n_sym = int(child.find('nsym').text)
+         ftau = np.zeros((3,n_sym))
+-        mat_sym = np.zeros((3, 3, n_sym), np.int)
++        mat_sym = np.zeros((3, 3, n_sym), np.int64)
+         for i,sym in enumerate(child.iter('symmetry')):
+             ftau[:,i] = [float(x) for x in sym.find('fractional_translation').text.split()]
+             rot = sym.find('rotation').text.strip().split('\n')
