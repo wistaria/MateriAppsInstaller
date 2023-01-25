@@ -4,16 +4,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1.1. Overview of MateriApps Installer &#8212; MateriApps Installer 1.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.1. Overview of MateriApps Installer &#8212; MateriApps Installer 1.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="2. Usage" href="../how_to_use/index.html" />
@@ -34,25 +33,25 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="overview-of-materiapps-installer">
+  <section id="overview-of-materiapps-installer">
 <h1><span class="section-number">1.1. </span>Overview of MateriApps Installer<a class="headerlink" href="#overview-of-materiapps-installer" title="Permalink to this headline">¶</a></h1>
 <p>MateriApps Installer is a collection of shell scripts to assist in the installation of computational material science applications for various computing environments. The MateriApps Installer includes shell scripts to be installed on Linux PCs, cluster workstations, and major supercomputer systems. MateriApps Installer is also used for pre-installation for domestic joint-use supercomputers (a list of installed software can be found in Chapter of Application List).</p>
-</div>
-<div class="section" id="background-of-the-development">
+</section>
+<section id="background-of-the-development">
 <h1><span class="section-number">1.2. </span>Background of the Development<a class="headerlink" href="#background-of-the-development" title="Permalink to this headline">¶</a></h1>
 <p>Nowadays, computer numerical computation is indispensable to promote theoretical research in materials science. For advancement of computational materials science, the development of algorithms to solve equations of materials science efficiently plays an important role, and many excellent applications with efficient algorithms, excellent parallel performance, and state-of-the-art functions have been created. In 2013, we launched a portal site for materials science simulations, <a class="reference external" href="https://ma.issp.u-tokyo.ac.jp">MateriApps</a>, in order to disseminate information about the developed software to experimentalists and corporate researchers. I have been disseminating information about the application.</p>
 <p>One of the obstacles for users to start using published applications in materials science is the installation of software. <a class="reference external" href="https://cmsi.github.io/MateriAppsLive/">MateriApps LIVE!</a> is an environment that allows users to easily try out computational materials science applications on their laptops and other devices. MateriApps LIVE! is a Virtual Hard Disk Image (OVA) of VirtualBox that includes applications, OS (Debian GNU/Linux), editors, visualization tools, and other environments needed to get started with the tutorial. By using MateriApps LIVE!, it is possible to easily set up a computing environment for participants in classes and software training sessions.</p>
 <p>However, the calculation environment provided by MateriApps LIVE! is not sufficient for practical applications. To enable users to easily install applications of computational materials science in a wide range of computing environments, from major domestic joint-use supercomputers to clustered computers in laboratories and personal computers, the development of MateriApps Installer has been started.</p>
-</div>
-<div class="section" id="goal-of-materiapps-installer">
+</section>
+<section id="goal-of-materiapps-installer">
 <h1><span class="section-number">1.3. </span>Goal of MateriApps Installer<a class="headerlink" href="#goal-of-materiapps-installer" title="Permalink to this headline">¶</a></h1>
 <p>The goals of MateriApps Installer are as follows</p>
 <ul class="simple">
 <li><p>To install common applications (cf. <a class="reference external" href="https://ma.issp.u-tokyo.ac.jp">MateriApps</a>) on all major domestic and foreign supercomputers.</p></li>
 <li><p>Similarly, we will prepare scripts for installation on CentOS (RedHat), Debian (Ubuntu) and macOS environments.</p></li>
 </ul>
-</div>
-<div class="section" id="list-of-tools-and-apps">
+</section>
+<section id="list-of-tools-and-apps">
 <h1><span class="section-number">1.4. </span>List of tools and apps<a class="headerlink" href="#list-of-tools-and-apps" title="Permalink to this headline">¶</a></h1>
 <p>The following tools and apps are in place (12/4/2020).
 <code class="docutils literal notranslate"><span class="pre">default.sh</span></code> is prepared in the <code class="docutils literal notranslate"><span class="pre">config</span></code> directory of each tool or application. In the following table, the supported compilers except <code class="docutils literal notranslate"><span class="pre">default.sh</span></code> are listed. :</p>
@@ -246,8 +245,8 @@
 <p>abICS, DCore, TRIQS</p>
 </li>
 </ol>
-</div>
-<div class="section" id="design-policies">
+</section>
+<section id="design-policies">
 <h1><span class="section-number">1.5. </span>Design Policies<a class="headerlink" href="#design-policies" title="Permalink to this headline">¶</a></h1>
 <p>The design policy of MateriApps Installer is as follows:</p>
 <ol class="arabic">
@@ -283,8 +282,8 @@
 <li><p>Separate installation and relinking (it does not affect anything else until the relinking is done).</p></li>
 <li><p>Install to a different location for testing.</p></li>
 </ol>
-</div>
-<div class="section" id="main-developers">
+</section>
+<section id="main-developers">
 <h1><span class="section-number">1.6. </span>Main developers<a class="headerlink" href="#main-developers" title="Permalink to this headline">¶</a></h1>
 <p>MateriApps Installer is developed by the following members.</p>
 <ul class="simple">
@@ -299,24 +298,25 @@
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="version-history">
+</section>
+<section id="version-history">
 <h1><span class="section-number">1.7. </span>Version history<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
+<li><p>2021/04/18 ver. 1.1 was released.</p></li>
 <li><p>2021/03/13 ver. 1.0 was released.</p></li>
 <li><p>2020/12/04 ver. 0.1 was released.</p></li>
 </ul>
-</div>
-<div class="section" id="license">
+</section>
+<section id="license">
 <h1><span class="section-number">1.8. </span>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
 <p>The program package and source code set of this software is distributed under the GNU General Public License version 3 (GPL v3). However, the patch files for each software are distributed under the license of the software.</p>
-</div>
-<div class="section" id="copyright">
+</section>
+<section id="copyright">
 <h1><span class="section-number">1.9. </span>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h1>
 <p>The University of Tokyo holds the copyright of MateriApps Installer, and it is distributed under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.</p>
-<p><em>(c) 2013-2021 The University of Tokyo. All rights reserved.</em></p>
+<p><em>(c) 2013- The University of Tokyo. All rights reserved.</em></p>
 <p>The development of the MateriApps Installer has been supported greatly by PASMUS software development project in FY2020 by Institute for Solid State Physics, the University of Tokyo.</p>
-</div>
+</section>
 
 
           </div>
@@ -376,7 +376,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -395,10 +395,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2013-2021, the University of Tokyo.
+      &copy;2013-, the University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

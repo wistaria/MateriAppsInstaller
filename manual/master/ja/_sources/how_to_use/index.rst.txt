@@ -29,10 +29,8 @@
 
 		  |- README.md
 		  |─ apps
-		  |─ check
 		  |─ check_prefix.sh
 		  |─ docs
-		  |─ list_maversion.sh
 		  |─ macos
 		  |- scripts
 		  |─ setup
@@ -96,14 +94,6 @@
   - check_prefix.sh
 
     - インストール先のトップディレクトリなど、各スクリプト共通で用いられる変数を表示するスクリプト
-
-  - list_maversion.sh
-
-    - 各ディレクトリ中にある version.sh の情報をまとめるスクリプト
-
-  - checkディレクトリ
-
-    - 各種ホストで複数のインストールスクリプトを順番に走らせるためのスクリプト
 
   - docsディレクトリ
 

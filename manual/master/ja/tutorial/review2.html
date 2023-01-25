@@ -4,15 +4,15 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3.2. Linuxへのインストール(gcc利用) &#8212; MateriApps Installer 1.0 ドキュメント</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3.2. Linuxへのインストール(gcc利用) &#8212; MateriApps Installer 1.1 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
@@ -34,12 +34,12 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="linux-gcc">
+  <section id="linux-gcc">
 <h1><span class="section-number">3.2. </span>Linuxへのインストール(gcc利用)<a class="headerlink" href="#linux-gcc" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p>本節では、LinuxOS上でMateriApps Installerを利用する方法を記載します。
 動作確認はCentOS 7, Ubuntu 20 で行っています。(他のディストリビューションでも同じ手順でインストール可能のはずです。)
 ツール類(gcc,cmakeなど)はあらかじめOSにインストールされているものを用いても構いませんが、万一何らかのトラブルが生じたときにエラーメッセージから原因を推測し適切に対応する必要があります。この作業に自信がない方は、すべてのツールをMateriApps Installerによってインストールすることをお勧めします。</p>
-<div class="section" id="id1">
+<section id="id1">
 <h2><span class="section-number">3.2.1. </span>初期セットアップ<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>まず最初のセットアップ(必要なディレクトリを作成するなど)を行います。
 MateriApps Installerのディレクトリにはいり、</p>
@@ -47,8 +47,8 @@ MateriApps Installerのディレクトリにはいり、</p>
 </pre></div>
 </div>
 <p>を実行します。この作業は最初に一回だけ行えば十分です。</p>
-</div>
-<div class="section" id="gcc">
+</section>
+<section id="gcc">
 <h2><span class="section-number">3.2.2. </span>gccのインストール<a class="headerlink" href="#gcc" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>まずコンパイラをインストールします。(あらかじめLinuxOSにインストールされているgccコンパイラを用いて以降のツール・アプリをインストールすることも可能ですが、一部のアプリは古いgccコンパイラではうまくインストールできません。トラブルの処理に慣れていない方以外は、MateriAppsInstallerでgccコンパイラを導入することをお勧めします。)
 以下の手順でgcc10をインストールします。</p>
@@ -71,8 +71,8 @@ $ sh install.sh
 </pre></div>
 </div>
 <p>gcc10がうまくインストールできた場合は、gcc8はインストールする必要はありません。まれに古いLinux OSではgcc10のインストールに失敗する場合があります。その場合にのみ、gcc8をインストールしてください。インストール方法は最初にtools/gcc8に入る以外は上述と同じです。</p>
-</div>
-<div class="section" id="cmake">
+</section>
+<section id="cmake">
 <h2><span class="section-number">3.2.3. </span>cmakeのインストール<a class="headerlink" href="#cmake" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>一部のアプリはcmakeを利用してインストールを行います。cmakeはあらかじめLinuxのディストリビューションに含まれることが多いですが、古いバージョンのcmakeを用いると、一部アプリのインストールに失敗する場合があります。バージョン3.6以降であれば問題ありません。cmakeをインストールするには、gccコンパイラをインストールした直後の状況で以下のコマンドを実行します。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../cmake
@@ -81,8 +81,8 @@ $ sh link.sh
 $ source $HOME/materiapps/env.sh
 </pre></div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h2><span class="section-number">3.2.4. </span>その他のツールのインストール<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>同様の方法で残りのツールのインストールも行います。例えば、cmakeのインストール直後に、引き続いてgitをインストールする場合は、以下のコマンドを実行します。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../git
@@ -92,8 +92,8 @@ $ source $HOME/materiapps/env.sh
 </pre></div>
 </div>
 <p>すべてのツールをインストールする場合には、まずgit,python3,libffiを先にインストールし、残りのツールをアルファベット順(boost, eigen3, fftw, gsl, hdf5, lapack, libffi, openmpi, openssl, scalapack, tcltk, zlib)にインストールするとよいでしょう。(scalapackのインストールを行う前にopenmpiを先にインストールする必要があります。)コマンドは最初にはいるディレクトリ名をインストールしたツール名に変更する以外全く同じです。</p>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h2><span class="section-number">3.2.5. </span>アプリのインストール<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>ツール類のインストールが終了したら、下記のようにインストールしたいアプリのディレクトリに入り、ツールの実行環境設定を行ったあとに、インストールスクリプトを実行します。</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sh $HOME/materiapps/env.sh
@@ -111,8 +111,8 @@ $ sh install.sh
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sh link.sh
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h2><span class="section-number">3.2.6. </span>各アプリの実行環境の設定<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>アプリを実行するためには、実行環境の設定を行う必要があります。以下のコマンドを入力することにより、各アプリの実行環境を整え、すぐにアプリが実行できる環境を整備することができます。例えば、HΦをインストールしてある場合(インストールディレクトリがデフォルトのmateriappsであったとする)は、</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls $HOME/materiapps/hphi
@@ -122,8 +122,8 @@ $ sh install.sh
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source $HOME/materiapps/hphi/hphivars.sh
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -176,7 +176,7 @@ $ sh install.sh
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="検索" />
     </form>
     </div>
@@ -195,10 +195,10 @@ $ sh install.sh
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2013-2021, the University of Tokyo.
+      &copy;2013-, the University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

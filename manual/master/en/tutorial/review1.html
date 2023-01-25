@@ -4,16 +4,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3.1. Installation to MacOS 10.15 (Catalina) &#8212; MateriApps Installer 1.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3.1. Installation to MacOS 10.15 (Catalina) &#8212; MateriApps Installer 1.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="3.2. Installation to Linux (using gcc)" href="review2.html" />
@@ -34,10 +34,10 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="installation-to-macos-10-15-catalina">
+  <section id="installation-to-macos-10-15-catalina">
 <h1><span class="section-number">3.1. </span>Installation to MacOS 10.15 (Catalina)<a class="headerlink" href="#installation-to-macos-10-15-catalina" title="Permalink to this headline">¶</a></h1>
 <p>This section describes how to use the MateriApps Installer on MacOS 10.15 (Catalina).</p>
-<div class="section" id="installing-tools">
+<section id="installing-tools">
 <h2><span class="section-number">3.1.1. </span>Installing Tools<a class="headerlink" href="#installing-tools" title="Permalink to this headline">¶</a></h2>
 <p>It is more convenient to install the tools in the tools directory using the MacOS package management software (Homebrew, find, macports, etc.). Here, we show examples using Homebrew. In this case, we use the default setting for directory of the application. The install directory is $HOME/materiapps and the build directory is $HOME/build.</p>
 <p>Follow the instructions at <a class="reference external" href="https://brew.sh/">https://brew.sh/</a> to install Homebrew.</p>
@@ -78,8 +78,8 @@ $ pip3 install scipy --user
 $ pip3 install toml --user
 </pre></div>
 </div>
-</div>
-<div class="section" id="installing-applications">
+</section>
+<section id="installing-applications">
 <h2><span class="section-number">3.1.2. </span>Installing Applications<a class="headerlink" href="#installing-applications" title="Permalink to this headline">¶</a></h2>
 <p>Perform initial setup (Create required directories, etc.).
 Go to the MateriAppsInstaller directory, and run the following command.</p>
@@ -97,8 +97,8 @@ Go to the MateriAppsInstaller directory, and run the following command.</p>
 <p>(You must install quantum ESPRESSO before running runtest.sh for respack. You must also set up an execution environment for quantum ESPRESSO as described in the next section.)</p>
 <p>If you pause in the middle of downloading, the source files may remain, which may not work when you reinstall. In this case, delete all the target application directories in the source file (see the directory $HOME/materiapps/source in the default setting).</p>
 <p>If you get errors during installation, take a closer look at the error messages. Errors often occur because the necessary tools are not installed. Read the required tools from the error message and install the tools.</p>
-</div>
-<div class="section" id="setting-the-execution-environment">
+</section>
+<section id="setting-the-execution-environment">
 <h2><span class="section-number">3.1.3. </span>Setting the execution environment<a class="headerlink" href="#setting-the-execution-environment" title="Permalink to this headline">¶</a></h2>
 <p>In order to run the application, you need to set the execution environment. By entering the following commands, you can create an environment in which each application can be executed. For example, if you want to run <span class="math notranslate nohighlight">\({\rm H}\Phi\)</span> that is already installed, then output the filenames for the setting file as follows.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls $HOME/materiapps/hphi
@@ -109,8 +109,8 @@ Go to the MateriAppsInstaller directory, and run the following command.</p>
 </pre></div>
 </div>
 <p>Then, you are now ready to run the applications.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -163,7 +163,7 @@ Go to the MateriAppsInstaller directory, and run the following command.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -182,10 +182,10 @@ Go to the MateriAppsInstaller directory, and run the following command.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2013-2021, the University of Tokyo.
+      &copy;2013-, the University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -99,6 +99,7 @@ MateriApps Installerは以下のメンバーで開発している。
 バージョン履歴
 ------------------------------------------
 
+- 2021/04/18 ver. 1.1 リリース.
 - 2021/03/14 ver. 1.0 リリース.
 - 2020/12/04 ver. 0.1 リリース. 
 
@@ -106,6 +107,6 @@ MateriApps Installerは以下のメンバーで開発している。
 --------------
 MateriApps Installerの著作権は東京大学が所持しており、GNU General Public License version 3 (GPLv3)に準じて配布しています。ただし、インストールされるソフトウェアへのパッチファイルについては、それぞれのソフトウェアのライセンスに準ずるものとします。
 
-*(c) 2013-2021 The University of Tokyo. All rights reserved.*
+*(c) 2013- The University of Tokyo. All rights reserved.*
 
 MateriApps Installerの開発については、2020年度東京大学物性研究所ソフトウェア高度化プロジェクトから多大なる支援をいただきました。
