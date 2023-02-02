@@ -31,13 +31,13 @@ jobs:
       with:
         python-version: 3.9
 
-    - name: Prepare LaTeX env
-      run: |
-        sudo apt update
-        sudo apt install \
-          texlive-latex-recommended texlive-latex-extra texlive-xetex \
-          texlive-lang-japanese texlive-fonts-recommended texlive-fonts-extra latexmk
-        kanji-config-updmap-sys ipaex
+    # - name: Prepare LaTeX env
+    #   run: |
+    #     sudo apt update
+    #     sudo apt install \
+    #       texlive-latex-recommended texlive-latex-extra texlive-xetex \
+    #       texlive-lang-japanese texlive-fonts-recommended texlive-fonts-extra latexmk
+    #     kanji-config-updmap-sys ipaex
 
     - name: Install python packages
       run: |
@@ -47,9 +47,9 @@ jobs:
     - name: Build
       run: |
         for lang in ja en; do
-          cd ${GITHUB_WORKSPACE}/main/doc/${lang}
+          cd ${GITHUB_WORKSPACE}/main/docs/sphinx/${lang}
           make html
-          make latexpdf
+          # make latexpdf
         done
 
     - name: Deploy Configuration
