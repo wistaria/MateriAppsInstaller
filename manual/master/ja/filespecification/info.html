@@ -4,15 +4,14 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>4.1. インストール関連ファイル &#8212; MateriApps Installer 1.1 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
@@ -35,10 +34,10 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1><span class="section-number">4.1. </span>インストール関連ファイル<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">4.1. </span>インストール関連ファイル<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
 <p>ここでは、ソフトウェアのインストールに必要な各ファイルに関するフォーマットやルールなどを説明します。</p>
 <section id="version-sh">
-<h2><span class="section-number">4.1.1. </span>version.sh<a class="headerlink" href="#version-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.1. </span>version.sh<a class="headerlink" href="#version-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>ソフトウェアのバージョンを指定するためのスクリプト。</p>
 <p>アンダースコア2つずつに挟まれた変数は他のスクリプト中で用いるための変数。</p>
 <ul class="simple">
@@ -80,7 +79,7 @@
 </div>
 </section>
 <section id="install-sh">
-<h2><span class="section-number">4.1.2. </span>install.sh<a class="headerlink" href="#install-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.2. </span>install.sh<a class="headerlink" href="#install-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>ソフトウェアをインストールするスクリプト。</p>
 <ul class="simple">
 <li><p>引数として設定名(<code class="docutils literal notranslate"><span class="pre">mode</span></code>)をとる</p>
@@ -122,7 +121,7 @@
 </ul>
 </section>
 <section id="download-sh">
-<h2><span class="section-number">4.1.3. </span>download.sh<a class="headerlink" href="#download-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.3. </span>download.sh<a class="headerlink" href="#download-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>ソースコードをインターネットから入手するためのスクリプト。</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">$SOURCE_DIR</span></code> にダウンロードする</p>
@@ -142,19 +141,19 @@
 </li>
 </ul>
 <p>例</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>
-. <span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
-. <span class="nv">$SCRIPT_DIR</span>/version.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">pwd</span><span class="k">)</span>
+.<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
+.<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/version.sh
 set_prefix
 
-<span class="k">if</span> <span class="o">[</span> -f <span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz <span class="o">]</span><span class="p">;</span> <span class="k">then</span> :<span class="p">;</span> <span class="k">else</span>
-  check wget https://github.com/issp-center-dev/TeNeS/archive/v<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz -O <span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="k">else</span>
+<span class="w">  </span>check<span class="w"> </span>wget<span class="w"> </span>https://github.com/issp-center-dev/TeNeS/archive/v<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz<span class="w"> </span>-O<span class="w"> </span><span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz
 <span class="k">fi</span>
 </pre></div>
 </div>
 </section>
 <section id="setup-sh">
-<h2><span class="section-number">4.1.4. </span>setup.sh<a class="headerlink" href="#setup-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.4. </span>setup.sh<a class="headerlink" href="#setup-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>アーカイブファイルを展開するためのスクリプト。</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">download.sh</span></code> を実行してアーカイブファイルを取得する</p>
@@ -170,29 +169,29 @@ set_prefix
 <li><p><code class="docutils literal notranslate"><span class="pre">patch</span></code> ディレクトリ内にパッチファイルがある場合にはそれを適用する</p></li>
 </ul>
 <p>例</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>
-. <span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
-. <span class="nv">$SCRIPT_DIR</span>/version.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">pwd</span><span class="k">)</span>
+.<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
+.<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/version.sh
 set_prefix
 
-sh <span class="si">${</span><span class="nv">SCRIPT_DIR</span><span class="si">}</span>/download.sh
+sh<span class="w"> </span><span class="si">${</span><span class="nv">SCRIPT_DIR</span><span class="si">}</span>/download.sh
 
-<span class="nb">cd</span> <span class="nv">$BUILD_DIR</span>
-<span class="k">if</span> <span class="o">[</span> -d <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> :<span class="p">;</span> <span class="k">else</span>
-  check mkdir -p <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="nv">$__VERSION__</span>
-  <span class="nv">tarfile</span><span class="o">=</span><span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz
-  <span class="nv">sc</span><span class="o">=</span><span class="sb">`</span>calc_strip_components <span class="nv">$tarfile</span> README.md<span class="sb">`</span>
-  check tar zxf <span class="nv">$tarfile</span> -C <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span> --strip-components<span class="o">=</span><span class="nv">$sc</span>
-  <span class="nb">cd</span> <span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="nv">$__VERSION__</span>
-  <span class="k">if</span> <span class="o">[</span> -f <span class="nv">$SCRIPT_DIR</span>/patch/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.patch <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    patch -p1 &lt; <span class="nv">$SCRIPT_DIR</span>/patch/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.patch
-  <span class="k">fi</span>
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$BUILD_DIR</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>:<span class="p">;</span><span class="w"> </span><span class="k">else</span>
+<span class="w">  </span>check<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="nv">$__VERSION__</span>
+<span class="w">  </span><span class="nv">tarfile</span><span class="o">=</span><span class="nv">$SOURCE_DIR</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.tar.gz
+<span class="w">  </span><span class="nv">sc</span><span class="o">=</span><span class="sb">`</span>calc_strip_components<span class="w"> </span><span class="nv">$tarfile</span><span class="w"> </span>README.md<span class="sb">`</span>
+<span class="w">  </span>check<span class="w"> </span>tar<span class="w"> </span>zxf<span class="w"> </span><span class="nv">$tarfile</span><span class="w"> </span>-C<span class="w"> </span><span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span><span class="w"> </span>--strip-components<span class="o">=</span><span class="nv">$sc</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="nv">$__VERSION__</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/patch/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.patch<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span>patch<span class="w"> </span>-p1<span class="w"> </span>&lt;<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/patch/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>-<span class="si">${</span><span class="nv">__VERSION__</span><span class="si">}</span>.patch
+<span class="w">  </span><span class="k">fi</span>
 <span class="k">fi</span>
 </pre></div>
 </div>
 </section>
 <section id="link-sh">
-<h2><span class="section-number">4.1.5. </span>link.sh<a class="headerlink" href="#link-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.5. </span>link.sh<a class="headerlink" href="#link-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>設定ファイルのシンボリックリンクを作成するスクリプト。</p>
 <ul class="simple">
 <li><p>アプリケーションの場合とツールの場合でシンボリックリンクの作成先が異なる</p>
@@ -203,21 +202,21 @@ sh <span class="si">${</span><span class="nv">SCRIPT_DIR</span><span class="si">
 </li>
 </ul>
 <p>例</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>
-. <span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
-. <span class="nv">$SCRIPT_DIR</span>/version.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="nv">$0</span><span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">pwd</span><span class="k">)</span>
+.<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/../../scripts/util.sh
+.<span class="w"> </span><span class="nv">$SCRIPT_DIR</span>/version.sh
 set_prefix
 
-. <span class="nv">$MA_ROOT</span>/env.sh
+.<span class="w"> </span><span class="nv">$MA_ROOT</span>/env.sh
 
 <span class="nv">VARS_SH</span><span class="o">=</span><span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars-<span class="nv">$__VERSION__</span>-<span class="nv">$__MA_REVISION__</span>.sh
-rm -f <span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars.sh
-ln -s <span class="nv">$VARS_SH</span> <span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars.sh
+rm<span class="w"> </span>-f<span class="w"> </span><span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars.sh
+ln<span class="w"> </span>-s<span class="w"> </span><span class="nv">$VARS_SH</span><span class="w"> </span><span class="nv">$MA_ROOT</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>/<span class="si">${</span><span class="nv">__NAME__</span><span class="si">}</span>vars.sh
 </pre></div>
 </div>
 </section>
 <section id="readme-md">
-<h2><span class="section-number">4.1.6. </span>README.md<a class="headerlink" href="#readme-md" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.1.6. </span>README.md<a class="headerlink" href="#readme-md" title="この見出しへのパーマリンク">¶</a></h2>
 <p>ソフトウェアの情報について記載してあります。具体的には、</p>
 <ul class="simple">
 <li><p>アプリ名</p></li>
@@ -246,14 +245,14 @@ SUMMARY
 LICENSE
 -------
 
-GNU GPL version <span class="m">3</span>
+GNU<span class="w"> </span>GPL<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>
 
-OFFICIAL PAGE
+OFFICIAL<span class="w"> </span>PAGE
 -------------
 
 http://www.pasums.issp.u-tokyo.ac.jp/hphi/
 
-MateriApps URL
+MateriApps<span class="w"> </span>URL
 --------------
 
 https://ma.issp.u-tokyo.ac.jp/app/339
@@ -262,21 +261,21 @@ https://ma.issp.u-tokyo.ac.jp/app/339
 </section>
 </section>
 <section id="scripts">
-<h1><span class="section-number">4.2. </span>管理用ファイル (<code class="docutils literal notranslate"><span class="pre">scripts/</span></code> )<a class="headerlink" href="#scripts" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">4.2. </span>管理用ファイル (<code class="docutils literal notranslate"><span class="pre">scripts/</span></code> )<a class="headerlink" href="#scripts" title="この見出しへのパーマリンク">¶</a></h1>
 <section id="util-sh">
-<h2><span class="section-number">4.2.1. </span>util.sh<a class="headerlink" href="#util-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.1. </span>util.sh<a class="headerlink" href="#util-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>スクリプト内で使う関数を定義しているファイル</p>
 </section>
 <section id="check-prefix-sh">
-<h2><span class="section-number">4.2.2. </span>check_prefix.sh<a class="headerlink" href="#check-prefix-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.2. </span>check_prefix.sh<a class="headerlink" href="#check-prefix-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>インストール先 (<code class="docutils literal notranslate"><span class="pre">MA_ROOT</span></code>)、ソースコードダウンロード先 (<code class="docutils literal notranslate"><span class="pre">SOURCE_DIR</span></code>)、ビルド作業用ディレクトリ (<code class="docutils literal notranslate"><span class="pre">BUILD_DIR</span></code>) を表示するスクリプト</p>
 </section>
 <section id="fix-dylib-sh">
-<h2><span class="section-number">4.2.3. </span>fix_dylib.sh<a class="headerlink" href="#fix-dylib-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.3. </span>fix_dylib.sh<a class="headerlink" href="#fix-dylib-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>macOS で共有ライブラリの名前などを修正するスクリプト</p>
 </section>
 <section id="list-maversion-sh">
-<h2><span class="section-number">4.2.4. </span>list_maversion.sh<a class="headerlink" href="#list-maversion-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><span class="section-number">4.2.4. </span>list_maversion.sh<a class="headerlink" href="#list-maversion-sh" title="この見出しへのパーマリンク">¶</a></h2>
 <p>MateriApps Installer でサポートされている各種アプリのバージョンを列挙するスクリプト</p>
 </section>
 </section>
@@ -337,7 +336,7 @@ https://ma.issp.u-tokyo.ac.jp/app/339
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -354,8 +353,8 @@ https://ma.issp.u-tokyo.ac.jp/app/339
       &copy;2013-, the University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="../_sources/filespecification/info.rst.txt"

@@ -4,15 +4,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>3.2. Installation to Linux (using gcc) &#8212; MateriApps Installer 1.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4. File format" href="../filespecification/index.html" />
@@ -34,13 +33,13 @@
           <div class="body" role="main">
             
   <section id="installation-to-linux-using-gcc">
-<h1><span class="section-number">3.2. </span>Installation to Linux (using gcc)<a class="headerlink" href="#installation-to-linux-using-gcc" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3.2. </span>Installation to Linux (using gcc)<a class="headerlink" href="#installation-to-linux-using-gcc" title="Permalink to this heading">¶</a></h1>
 <p>This section describes how to use the MateriApps Installer on Linux OS.
 We have checked it on CentOS 7 and Ubuntu 20. (You should be able to install other distributions using the same procedure.)
 Tools (gcc, cmake, etc.) preinstalled in Linux OS may be used, but if any trouble occurs, you have to estimate its reason from the error message and have to solve the trouble by yourself.
 If you are not sure of doing this, we recommend that you install all the tools through MateriApps Installer.</p>
 <section id="initial-setup">
-<h2><span class="section-number">3.2.1. </span>Initial setup<a class="headerlink" href="#initial-setup" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2.1. </span>Initial setup<a class="headerlink" href="#initial-setup" title="Permalink to this heading">¶</a></h2>
 <p>Perform initial setup.
 Enter the root directory of MateriApps Installer and run the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sh setup/setup.sh
@@ -49,7 +48,7 @@ Enter the root directory of MateriApps Installer and run the following command:<
 <p>You only need to do this once at the beginning.</p>
 </section>
 <section id="installing-gcc">
-<h2><span class="section-number">3.2.2. </span>Installing gcc<a class="headerlink" href="#installing-gcc" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2.2. </span>Installing gcc<a class="headerlink" href="#installing-gcc" title="Permalink to this heading">¶</a></h2>
 <p>Install the compiler first. (It is also possible to use the gcc compiler already installed in Linux OS to install subsequent tools, but some applications may not install well with the older gcc compiler. If you are not familiar with troubleshooting, it is recommended that you use the gcc compiler with MateriApps Installer.) To install gcc 10, execute the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd tools/gcc10
 $ sh install.sh
@@ -72,7 +71,7 @@ Finally, run the copied configuration file and make it available for subsequent 
 <p>If you have successfully installed gcc 10, you do not need to install gcc 8. Rarely, installation of gcc 10 may fail on older Linux OSs. Install gcc8 only in this case. The installation procedure is the same as gcc10, except that you first enter tools/gcc8 directory.</p>
 </section>
 <section id="installing-cmake">
-<h2><span class="section-number">3.2.3. </span>Installing cmake<a class="headerlink" href="#installing-cmake" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2.3. </span>Installing cmake<a class="headerlink" href="#installing-cmake" title="Permalink to this heading">¶</a></h2>
 <p>Some applications use cmake to install. Major Linux distributions already include cmake, but older versions of cmake may fail to install some applications. Versions 3.6 and later are fine. To install cmake, run the following command immediately after installing the gcc compiler:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../cmake
 $ sh install.sh
@@ -82,7 +81,7 @@ $ source $HOME/materiapps/env.sh
 </div>
 </section>
 <section id="installing-other-tools">
-<h2><span class="section-number">3.2.4. </span>Installing other tools<a class="headerlink" href="#installing-other-tools" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2.4. </span>Installing other tools<a class="headerlink" href="#installing-other-tools" title="Permalink to this heading">¶</a></h2>
 <p>Install the remaining tools in the same way. For example, if you want to install git immediately after you install cmake, run the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ../git
 $ sh install.sh
@@ -93,7 +92,7 @@ $ source $HOME/materiapps/env.sh
 <p>To install all the tools, please first install git, libffi, and python3 in this order, and then install the remaining tools in alphabetical order (boost, eigen3, fftw, gsl, hdf5, lapack, libffi, openmpi, openssl, scalapack, tcltk, zlib). (You must install openmpi first before installing scalapack.) The command for installation is identical except that you first enter the directory, which is the name of the tool to be installed.</p>
 </section>
 <section id="installing-applications">
-<h2><span class="section-number">3.2.5. </span>Installing applications<a class="headerlink" href="#installing-applications" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2.5. </span>Installing applications<a class="headerlink" href="#installing-applications" title="Permalink to this heading">¶</a></h2>
 <p>After installing the tools, enter the directory of the application you want to install, set the execution environment of the tools, and execute the installation script:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sh $HOME/materiapps/env.sh
 $ sh install.sh
@@ -112,7 +111,7 @@ $ sh install.sh
 </div>
 </section>
 <section id="setting-the-execution-environment-for-each-application">
-<h2><span class="section-number">3.2.6. </span>Setting the execution environment for each application<a class="headerlink" href="#setting-the-execution-environment-for-each-application" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2.6. </span>Setting the execution environment for each application<a class="headerlink" href="#setting-the-execution-environment-for-each-application" title="Permalink to this heading">¶</a></h2>
 <p>In order to run the application, you need to set the execution environment. By entering the following commands, you can create an environment in which each application can be executed and the application can be executed immediately. For example, if you have installed HPhi (the installation directory is assumed to be the default, i.e., $HOME/materiapps), you should see a configuration file named hphivars.sh when you execute the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls $HOME/materiapps/hphi
 </pre></div>
@@ -181,7 +180,7 @@ $ sh install.sh
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -198,8 +197,8 @@ $ sh install.sh
       &copy;2013-, the University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="../_sources/tutorial/review2.rst.txt"
