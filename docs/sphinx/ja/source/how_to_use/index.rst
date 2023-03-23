@@ -129,7 +129,7 @@
 
       MA_ROOT=$HOME/materiapps  # ソフトウェアのインストール先
       BUILD_DIR=$HOME/build     # インストール作業場所
-      SOURCE_DIT=$HOME/source   # ファイルダウンロード場所
+      SOURCE_DIR=$HOME/source   # ファイルダウンロード場所
 
     .. csv-table:: 
       :header: "オプション", "デフォルト", "説明"
