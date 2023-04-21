@@ -1,47 +1,51 @@
 diff -urN itensor-3.1.11.orig/CMakeLists.txt itensor-3.1.11/CMakeLists.txt
 --- itensor-3.1.11.orig/CMakeLists.txt	1970-01-01 09:00:00
-+++ itensor-3.1.11/CMakeLists.txt	2023-04-15 17:51:46
++++ itensor-3.1.11/CMakeLists.txt	2023-04-21 11:38:15
 @@ -0,0 +1,15 @@
-+cmake_minimum_required(VERSION 3.14)
-+project(itensor CXX)
++cmake_minimum_required(VERSION 3.15)
++project(ITensor VERSION 3.1.11 LANGUAGES CXX)
 +if(NOT CMAKE_BUILD_TYPE)
 +  set(CMAKE_BUILD_TYPE Release)
 +endif()
 +enable_testing()
-+
-+set(CMAKE_CXX_STANDARD 17)
-+set(CMAKE_CXX_EXTENSIONS OFF)
 +
 +find_package(LAPACK)
 +find_package(OpenMP)
 +
 +add_subdirectory(itensor)
 +add_subdirectory(sample)
++install(DIRECTORY ${CMAKE_SOURCE_DIR}/tutorial
++  DESTINATION share/itensor
++  FILES_MATCHING PATTERN "*.txt" PATTERN "*.cc" PATTERN "*.h" PATTERN "inputfile_*")
 diff -urN itensor-3.1.11.orig/itensor/CMakeLists.txt itensor-3.1.11/itensor/CMakeLists.txt
 --- itensor-3.1.11.orig/itensor/CMakeLists.txt	1970-01-01 09:00:00
-+++ itensor-3.1.11/itensor/CMakeLists.txt	2023-04-15 17:57:05
-@@ -0,0 +1,29 @@
++++ itensor-3.1.11/itensor/CMakeLists.txt	2023-04-21 11:14:47
+@@ -0,0 +1,33 @@
 +set(ITENSOR_PLATFORM lapack)
 +configure_file(config.h.in config.h @ONLY)
-+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/config.h DESTINATION include/itensor/)
 +
-+add_library(itensor SHARED
++add_library(ITensor SHARED)
++set_target_properties(ITensor PROPERTIES OUTPUT_NAME itensor)
++target_compile_features(ITensor PUBLIC cxx_std_17)
++target_sources(ITensor PRIVATE
 +  util/args.cc util/input.cc util/cputime.cc
 +  tensor/lapack_wrap.cc tensor/vec.cc tensor/mat.cc tensor/gemm.cc tensor/algs.cc tensor/contract.cc
 +  itdata/dense.cc itdata/combiner.cc itdata/diag.cc itdata/qdense.cc itdata/qcombiner.cc itdata/qdiag.cc itdata/scalar.cc
 +  qn.cc tagset.cc index.cc indexset.cc itensor.cc spectrum.cc decomp.cc hermitian.cc svd.cc global.cc
 +  mps/mps.cc mps/mpsalgs.cc mps/mpo.cc mps/mpoalgs.cc mps/autompo.cc)
-+target_include_directories(itensor PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-+  $<INSTALL_INTERFACE:include>)
-+target_link_libraries(itensor PUBLIC LAPACK::LAPACK)
++target_include_directories(ITensor PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> $<INSTALL_INTERFACE:include>)
++target_link_libraries(ITensor PUBLIC LAPACK::LAPACK BLAS::BLAS)
 +if(OpenMP_CXX_FOUND)
-+  target_compile_definitions(itensor PUBLIC ITENSOR_USE_OMP)
-+  target_link_libraries(itensor PUBLIC OpenMP::OpenMP_CXX)
++  target_compile_definitions(ITensor PUBLIC ITENSOR_USE_OMP)
++  target_link_libraries(ITensor PUBLIC OpenMP::OpenMP_CXX)
 +endif()
-+install(TARGETS itensor
++
++install(TARGETS ITensor
 +  EXPORT itensor-targets
 +  ARCHIVE DESTINATION lib
 +  LIBRARY DESTINATION lib)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/config.h
++  DESTINATION include/itensor)
 +install(DIRECTORY ${CMAKE_SOURCE_DIR}/itensor
 +  DESTINATION include
 +  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
@@ -52,7 +56,7 @@ diff -urN itensor-3.1.11.orig/itensor/CMakeLists.txt itensor-3.1.11/itensor/CMak
 +  DESTINATION lib/cmake/itensor)
 diff -urN itensor-3.1.11.orig/itensor/config.h.in itensor-3.1.11/itensor/config.h.in
 --- itensor-3.1.11.orig/itensor/config.h.in	1970-01-01 09:00:00
-+++ itensor-3.1.11/itensor/config.h.in	2023-04-15 17:51:46
++++ itensor-3.1.11/itensor/config.h.in	2023-04-21 11:14:47
 @@ -0,0 +1,8 @@
 +#ifndef __ITENSOR_CONFIG_H
 +#define __ITENSOR_CONFIG_H
@@ -64,23 +68,22 @@ diff -urN itensor-3.1.11.orig/itensor/config.h.in itensor-3.1.11/itensor/config.
 +#endif
 diff -urN itensor-3.1.11.orig/itensor/itensor-config.cmake itensor-3.1.11/itensor/itensor-config.cmake
 --- itensor-3.1.11.orig/itensor/itensor-config.cmake	1970-01-01 09:00:00
-+++ itensor-3.1.11/itensor/itensor-config.cmake	2023-04-15 18:06:00
-@@ -0,0 +1,7 @@
++++ itensor-3.1.11/itensor/itensor-config.cmake	2023-04-21 11:14:47
+@@ -0,0 +1,6 @@
 +include(CMakeFindDependencyMacro)
 +
 +find_dependency(LAPACK REQUIRED)
 +find_dependency(OpenMP)
 +
 +include("${CMAKE_CURRENT_LIST_DIR}/itensor-targets.cmake")
-+add_library(ITensor::ITensor ALIAS ITensor::itensor)
 diff -urN itensor-3.1.11.orig/sample/CMakeLists.txt itensor-3.1.11/sample/CMakeLists.txt
 --- itensor-3.1.11.orig/sample/CMakeLists.txt	1970-01-01 09:00:00
-+++ itensor-3.1.11/sample/CMakeLists.txt	2023-04-15 17:54:13
++++ itensor-3.1.11/sample/CMakeLists.txt	2023-04-21 11:14:47
 @@ -0,0 +1,15 @@
 +set(PROGS dmrg dmrg_table dmrgj1j2 exthubbard trg ctmrg mixedspin hubbard_2d hubbard_2d_conserve_momentum)
 +foreach(p ${PROGS})
 +  add_executable(${p} ${p}.cc)
-+  target_link_libraries(${p} PUBLIC itensor)
++  target_link_libraries(${p} PRIVATE ITensor)
 +endforeach(p)
 +
 +set(PROGS dmrg trg ctmrg mixedspin hubbard_2d hubbard_2d_conserve_momentum)
@@ -92,3 +95,102 @@ diff -urN itensor-3.1.11.orig/sample/CMakeLists.txt itensor-3.1.11/sample/CMakeL
 +foreach(p ${PROGS})
 +  add_test(NAME ${p} COMMAND ${p} ${CMAKE_CURRENT_SOURCE_DIR}/inputfile_${p})
 +endforeach(p)
+diff -urN itensor-3.1.11.orig/tutorial/01_one_site/CMakeLists.txt itensor-3.1.11/tutorial/01_one_site/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/01_one_site/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/01_one_site/CMakeLists.txt	2023-04-21 11:38:29
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(one one.cc)
++target_link_libraries(one ITensor::ITensor)
+diff -urN itensor-3.1.11.orig/tutorial/02_two_site/CMakeLists.txt itensor-3.1.11/tutorial/02_two_site/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/02_two_site/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/02_two_site/CMakeLists.txt	2023-04-21 11:30:08
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(two two.cc)
++target_link_libraries(two ITensor::ITensor)
+diff -urN itensor-3.1.11.orig/tutorial/03_svd/CMakeLists.txt itensor-3.1.11/tutorial/03_svd/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/03_svd/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/03_svd/CMakeLists.txt	2023-04-21 11:30:14
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(svd svd.cc)
++target_link_libraries(svd ITensor::ITensor)
+diff -urN itensor-3.1.11.orig/tutorial/04_mps/CMakeLists.txt itensor-3.1.11/tutorial/04_mps/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/04_mps/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/04_mps/CMakeLists.txt	2023-04-21 11:30:20
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(mps mps.cc)
++target_link_libraries(mps ITensor::ITensor)
+diff -urN itensor-3.1.11.orig/tutorial/05_gates/CMakeLists.txt itensor-3.1.11/tutorial/05_gates/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/05_gates/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/05_gates/CMakeLists.txt	2023-04-21 11:30:25
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(gates gates.cc)
++target_link_libraries(gates ITensor::ITensor)
+diff -urN itensor-3.1.11.orig/tutorial/06_DMRG/CMakeLists.txt itensor-3.1.11/tutorial/06_DMRG/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/06_DMRG/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/06_DMRG/CMakeLists.txt	2023-04-21 11:30:29
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(dmrg dmrg.cc)
++target_link_libraries(dmrg ITensor::ITensor)
+diff -urN itensor-3.1.11.orig/tutorial/finiteT/CMakeLists.txt itensor-3.1.11/tutorial/finiteT/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/finiteT/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/finiteT/CMakeLists.txt	2023-04-21 11:35:09
+@@ -0,0 +1,11 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++set(PROGS ancilla metts metts_solution)
++foreach(p ${PROGS})
++  add_executable(${p} ${p}.cc)
++  target_link_libraries(${p} ITensor::ITensor)
++endforeach(p ${PROGS})
+diff -urN itensor-3.1.11.orig/tutorial/project_template/CMakeLists.txt itensor-3.1.11/tutorial/project_template/CMakeLists.txt
+--- itensor-3.1.11.orig/tutorial/project_template/CMakeLists.txt	1970-01-01 09:00:00
++++ itensor-3.1.11/tutorial/project_template/CMakeLists.txt	2023-04-21 11:30:44
+@@ -0,0 +1,8 @@
++cmake_minimum_required(VERSION 3.15)
++project(tutorial CXX)
++if(NOT CMAKE_BUILD_TYPE)
++  set(CMAKE_BUILD_TYPE Release)
++endif()
++find_package(ITensor REQUIRED)
++add_executable(myappname myappname.cc)
++target_link_libraries(myappname ITensor::ITensor)
