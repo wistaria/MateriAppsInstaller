@@ -64,12 +64,15 @@ finish_info | tee -a $LOG
 
 ROOTNAME=$(toupper ${__NAME__})_ROOT
 
+PPATH=$(cd $PREFIX; find lib -name 'site-packages')
+
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 . ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
 export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib64:\${${ROOTNAME}}/lib:\$LD_LIBRARY_PATH
+export PYTHONPATH=\${${ROOTNAME}}/${PPATH}:\$PYTHONPATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
