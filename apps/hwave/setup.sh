@@ -19,4 +19,6 @@ if [ -d $NV ]; then :; else
   if [ -f $SCRIPT_DIR/patch/${NV}.patch ]; then
     patch -p1 < $SCRIPT_DIR/patch/${NV}.patch
   fi
+
+  check tar zxf $SOURCE_DIR/hwave-gallery-main.tar.gz
 fi
