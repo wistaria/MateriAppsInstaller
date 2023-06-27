@@ -10,4 +10,8 @@ if [ $(which sinfo 2> /dev/null) ]; then
   fi
 fi
 
-./configure --prefix=$PREFIX --with-hwloc $SLURM_OPT CC=icc CXX=icpc FC=ifort
+if [ $(which icx 2> /dev/null) ]; then
+  ./configure --prefix=$PREFIX --with-hwloc $SLURM_OPT CC=icx CXX=icpx FC=ifx
+else
+  ./configure --prefix=$PREFIX --with-hwloc $SLURM_OPT CC=icc CXX=icpc FC=ifort
+fi
