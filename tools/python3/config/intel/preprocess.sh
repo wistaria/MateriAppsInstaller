@@ -1,8 +1,8 @@
 set -u
 
-test -z ${CC+defined} && CC=icc
-test -z ${CXX+defined} && CXX=icpc
-test -z ${FC+defined} && FC=ifort
+test -z ${CC+defined} && CC=$(which icx || which icc)
+test -z ${CXX+defined} && CXX=$(which icpx || which icpc)
+test -z ${FC+defined} && FC=$(which ifx || which ifort)
 
 test -z ${CPPFLAGS+defined} && CPPFLAGS=
 test -z ${LDFLAGS+defined} && LDFLAGS=
