@@ -1,0 +1,57 @@
+diff -urN alps-20220304-r7871.orig/CMakeLists.txt alps-20220304-r7871/CMakeLists.txt
+--- alps-20220304-r7871.orig/CMakeLists.txt	2022-03-04 23:27:52.000000000 +0900
++++ alps-20220304-r7871/CMakeLists.txt	2023-06-29 12:43:40.092694418 +0900
+@@ -162,6 +162,14 @@
+     endif(NOT ${CMAKE_CXX_FLAGS} MATCHES "-(std=c\\+\\+11|stdlib=)")
+ endif(IS_CLANG)
+ 
++# For Intel oneAPI
++if(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-function-declaration")
++endif()
++if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-macro-redefined -Wno-self-assign-field")
++endif()
++
+ # For gfortran 10 (see https://gcc.gnu.org/gcc-10/changes.html)
+ if(ALPS_BUILD_FORTRAN AND CMAKE_COMPILER_IS_GNUCC AND CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER 9.99)
+   SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+diff -urN alps-20220304-r7871.orig/config/FindLapack.cmake alps-20220304-r7871/config/FindLapack.cmake
+--- alps-20220304-r7871.orig/config/FindLapack.cmake	2016-11-24 22:02:22.000000000 +0900
++++ alps-20220304-r7871/config/FindLapack.cmake	2023-06-29 12:26:07.786709167 +0900
+@@ -105,9 +105,9 @@
+     if(NOT _mkl_h_content MATCHES "__INTEL_MKL__")
+       file( STRINGS "${mkl_home}/include/mkl_version.h" _mkl_h_content REGEX "__INTEL_MKL" )
+     endif()
+-    string(REGEX REPLACE ".*#define __INTEL_MKL__ ([0-9]+).*"        "\\1" MKL_VERSION_MAJOR  "${_mkl_h_content}")
+-    string(REGEX REPLACE ".*#define __INTEL_MKL_MINOR__ ([0-9]+).*"  "\\1" MKL_VERSION_MINOR  "${_mkl_h_content}")
+-    string(REGEX REPLACE ".*#define __INTEL_MKL_UPDATE__ ([0-9]+).*" "\\1" MKL_VERSION_UPDATE "${_mkl_h_content}")
++    string(REGEX REPLACE ".*#define __INTEL_MKL__[ ]+([0-9]+).*"        "\\1" MKL_VERSION_MAJOR  "${_mkl_h_content}")
++    string(REGEX REPLACE ".*#define __INTEL_MKL_MINOR__[ ]+([0-9]+).*"  "\\1" MKL_VERSION_MINOR  "${_mkl_h_content}")
++    string(REGEX REPLACE ".*#define __INTEL_MKL_UPDATE__[ ]+([0-9]+).*" "\\1" MKL_VERSION_UPDATE "${_mkl_h_content}")
+     set(MKL_VERSION "${MKL_VERSION_MAJOR}.${MKL_VERSION_MINOR}.${MKL_VERSION_UPDATE}")
+     
+     # STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MKL_VERSION ${mkl_home})
+@@ -133,7 +133,10 @@
+     # MKL core
+     if(OPENMP_FOUND AND ALPS_USE_MKL_PARALLEL)
+       # No parallel mode support for MKL < 10.0
+-      if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
++      if(${CMAKE_CXX_COMPILER_ID} STREQUAL "IntelLLVM")
++        # Intel oneAPI
++        set(MKL_CORE -qmkl=parallel)
++      elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+         # Intel with Intel OpenMP
+         set(MKL_CORE -lmkl_intel_thread -lmkl_core -liomp5)
+       elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+@@ -142,7 +145,9 @@
+         set(MKL_CORE -lmkl_gnu_thread -lmkl_core -lgfortran)
+       endif()
+     else()
+-      if(${MKL_VERSION} MATCHES "1[0-1]\\.[0-3]\\.[0-9]+")
++      if(${CMAKE_CXX_COMPILER_ID} STREQUAL "IntelLLVM")
++        set(MKL_CORE -qmkl=sequential)
++      elseif(${MKL_VERSION} MATCHES "1[0-1]\\.[0-3]\\.[0-9]+")
+         set(MKL_CORE -lmkl_sequential -lmkl_core)
+       else() # MKL < 10.0
+         set(MKL_CORE -lmkl_lapack -lmkl -lguide)

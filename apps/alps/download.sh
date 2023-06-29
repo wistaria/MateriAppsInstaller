@@ -6,8 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ]; then :; else
-  rm -rf $SOURCE_DIR/${__NAME__}_${__VERSION__}
-  svn export --non-interactive --trust-server-cert -r ${__VERSION_REVISION__} ${__URL__} ${__NAME__}-${__VERSION__}
-  tar zcvf $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ${__NAME__}-${__VERSION__}
-  rm -rf ${__NAME__}-${__VERSION__}
+  wget https://exa.phys.s.u-tokyo.ac.jp/archive/MateriApps/src/${__NAME__}_$(echo ${__VERSION__} | sed 's/-/~/').orig.tar.gz -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz
 fi
