@@ -1,18 +1,20 @@
-diff -crN scalapack-2.1.0.orig/CMakeLists.txt scalapack-2.1.0/CMakeLists.txt
-*** scalapack-2.1.0.orig/CMakeLists.txt	Wed Nov 27 05:37:04 2019
---- scalapack-2.1.0/CMakeLists.txt	Thu Dec 17 21:51:46 2020
-***************
-*** 16,21 ****
---- 16,27 ----
-     endif ()
-  endif ()
-  
-+ if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-+   if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0)
-+     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
-+   endif()
-+ endif()
-+ 
-  #
-  #   MPI
-  #
+diff -urN scalapack-2.1.0.orig/CMakeLists.txt scalapack-2.1.0/CMakeLists.txt
+--- scalapack-2.1.0.orig/CMakeLists.txt	2019-11-27 05:37:04.000000000 +0900
++++ scalapack-2.1.0/CMakeLists.txt	2023-06-29 10:26:16.398049710 +0900
+@@ -16,6 +16,16 @@
+    endif ()
+ endif ()
+ 
++if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
++  if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0)
++    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
++  endif()
++endif()
++
++if(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-function-declaration -Wno-deprecated-non-prototype -Wno-macro-redefined -Wno-implicit-int")
++endif()
++
+ #
+ #   MPI
+ #
