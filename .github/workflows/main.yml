@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   apps:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -17,8 +17,8 @@ jobs:
 
       - name: apt
         run: |
-          sudo apt update
-          sudo apt install openmpi-bin libopenmpi-dev libscalapack-openmpi-dev libfftw3-dev
+          sudo apt-get update
+          sudo apt-get -y install openmpi-bin libopenmpi-dev libscalapack-openmpi-dev libfftw3-dev
 
       - name: pip
         run: |
