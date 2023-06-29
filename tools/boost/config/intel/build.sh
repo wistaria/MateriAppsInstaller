@@ -6,6 +6,7 @@ BJAM="./tools/build/b2 --layout=system --ignore-site-config toolset=intel"
 
 for m in mpicxx mpic++ mpiicpc; do
   mc=$(which $m 2> /dev/null)
+  test "$($mc --version 2> /dev/null | head -1 | cut -d ' ' -f 2)" = "oneAPI" && break
   test "$($mc --version 2> /dev/null | head -1 | cut -d ' ' -f 1)" = "icpc" && break
   mc=""
 done
