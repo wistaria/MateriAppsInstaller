@@ -27,10 +27,10 @@ else
   PYTHON_OPTION="--without-python"
 fi
 
-# pch and coroutine are not supported for Apple Silicon
+# pch, coroutine, fiber are not supported for Apple Silicon
 EXTRA_OPTIONS=
 if [ $(arch) = "arm64" ]; then
-  EXTRA_OPTIONS="pch=off --without-coroutine"
+  EXTRA_OPTIONS="pch=off --without-coroutine --without-fiber"
 fi
 
 # json does not compile with gcc-12
