@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.1. MateriApps Installerの概要 &#8212; MateriApps Installer 1.1 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=e6880748" />
+    <script src="../_static/documentation_options.js?v=cfc60c16"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="2. 利用方法" href="../how_to_use/index.html" />
@@ -33,17 +33,17 @@
           <div class="body" role="main">
             
   <section id="materiapps-installer">
-<h1><span class="section-number">1.1. </span>MateriApps Installerの概要<a class="headerlink" href="#materiapps-installer" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.1. </span>MateriApps Installerの概要<a class="headerlink" href="#materiapps-installer" title="Link to this heading">¶</a></h1>
 <p>MateriApps Installerは様々な計算機環境に対応した計算物質科学アプリケーションのインストール補助を行うシェルスクリプト集である。MateriApps Installerには、オープンソースの計算物質科学アプリケーションやツール類を、macOSをはじめ、Linux PCやクラスタワークステーション、さらには国内の主要なスパコンシステムにインストールするためのシェルスクリプトが含まれる。MateriApps Installerは、東京大学物性研究所の全国共同利用スパコンにおいて、主要アプリケーションのプレインストールにも利用されている(インストールされているソフトウェア一覧はアプリ一覧に記載されている)。</p>
 </section>
 <section id="id1">
-<h1><span class="section-number">1.2. </span>開発の背景<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.2. </span>開発の背景<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
 <p>今日では物質科学の理論研究を推し進めていく上でコンピュータを用いた数値計算は必要不可欠な存在となっている。計算物質科学を進めていくためには、物質科学の方程式を効率的に解くためのアルゴリズムの開発が重要な役割を果たしており、効率的なアルゴリズム・優れた並列性能・最先端の機能などを有する優れたアプリケーションが数多く生まれている。我々は開発されたソフトウェアについての情報を実験家・企業研究者などにも広く伝えるため、2013年より物質科学シミュレーションのポータルサイト <a class="reference external" href="https://ma.issp.u-tokyo.ac.jp">MateriApps</a> を公開し、国内外で開発された物質科学アプリケーションの情報を発信してきた。</p>
 <p>利用者が物質科学の公開アプリケーションを使い始めようとする際に障害となるのは、ソフトウェアのインストール作業である。そこで手持ちのノートPCなどを用いて、気軽に計算物質科学アプリケーションを試せすことができる環境 <a class="reference external" href="https://cmsi.github.io/MateriAppsLive/">MateriApps LIVE!</a> の開発・公開も行っている。MateriApps LIVE!は、MateriAppsアプリケーション、OS (Debian GNU/Linux)、エディタ、可視化ツールなど、チュートリアルを始めるのに必要な環境がVirtualBoxの仮想ハードディスクイメージ(OVA)としてまとめられている。MateriApps LIVE!を用いることで、授業やソフトウェア講習会などで参加者の計算機環境を簡単に構築することが可能である。</p>
 <p>しかしながら、実用向けの計算を行うにはMateriApps LIVE!の計算環境では非力である。物性研スーパーコンピュータなどの国内の主要なスーパーコンピュータから各研究室のクラスター計算機、個人のPCなど、幅広い計算環境において計算物質科学アプリケーションを利用者が手軽にインストールできるよう、MateriApps Installerの開発が開始された。</p>
 </section>
 <section id="id2">
-<h1><span class="section-number">1.3. </span>目標<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.3. </span>目標<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h1>
 <p>MateriApps Installerの目標は下記の通りである。</p>
 <ul class="simple">
 <li><p>計算物質科学分野に共通するアプリ(cf. <a class="reference external" href="https://ma.issp.u-tokyo.ac.jp">MateriApps</a>)を国内(外)の主要なスパコン全てにインストールする。</p></li>
@@ -51,7 +51,7 @@
 </ul>
 </section>
 <section id="id4">
-<h1><span class="section-number">1.4. </span>整備されているツールとアプリ<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.4. </span>整備されているツールとアプリ<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h1>
 <p>2021/3/13現在、以下のツール・アプリが整備されています (<code class="docutils literal notranslate"><span class="pre">config</span></code> で <code class="docutils literal notranslate"><span class="pre">default.sh</span></code> 以外に用意されているものも一緒に記載しています)。</p>
 <ol class="arabic simple">
 <li><p>ツール</p></li>
@@ -234,7 +234,7 @@
 </div></blockquote>
 </section>
 <section id="id5">
-<h1><span class="section-number">1.5. </span>設計ポリシー<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.5. </span>設計ポリシー<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
 <p>MateriApps Installerの設計ポリシーは下記の通りである。</p>
 <ol class="arabic">
 <li><p>特殊なツールに依存しないようにする (shell, make, tarなどがあればOK)。</p></li>
@@ -269,7 +269,7 @@
 </ol>
 </section>
 <section id="id7">
-<h1><span class="section-number">1.6. </span>開発者<a class="headerlink" href="#id7" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.6. </span>開発者<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h1>
 <p>MateriApps Installerは以下のメンバーで開発している。</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -285,7 +285,7 @@
 </ul>
 </section>
 <section id="id8">
-<h1><span class="section-number">1.7. </span>バージョン履歴<a class="headerlink" href="#id8" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.7. </span>バージョン履歴<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>2021/04/18 ver. 1.1 リリース.</p></li>
 <li><p>2021/03/14 ver. 1.0 リリース.</p></li>
@@ -293,7 +293,7 @@
 </ul>
 </section>
 <section id="id9">
-<h1><span class="section-number">1.8. </span>ライセンス<a class="headerlink" href="#id9" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.8. </span>ライセンス<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h1>
 <p>MateriApps Installerの著作権は東京大学が所持しており、GNU General Public License version 3 (GPLv3)に準じて配布しています。ただし、インストールされるソフトウェアへのパッチファイルについては、それぞれのソフトウェアのライセンスに準ずるものとします。</p>
 <p><em>(c) 2013- The University of Tokyo. All rights reserved.</em></p>
 <p>MateriApps Installerの開発については、2020年度東京大学物性研究所ソフトウェア高度化プロジェクトから多大なる支援をいただきました。</p>
@@ -378,7 +378,7 @@
       &copy;2013-, the University of Tokyo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
