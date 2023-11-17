@@ -1,0 +1,10 @@
+diff -uprN tenes-2.0.0.orig/sample/03_finite_temperature/calcspec.py tenes-2.0.0/sample/03_finite_temperature/calcspec.py
+--- tenes-2.0.0.orig/sample/03_finite_temperature/calcspec.py	2023-11-17 15:22:43.000000000 +0900
++++ tenes-2.0.0/sample/03_finite_temperature/calcspec.py	2023-11-17 15:37:17.000000000 +0900
+@@ -13,5 +13,5 @@ def spec(name):
+             f.write(f"{b} {C}\n")
+ 
+ 
+-for name in ("weak", "middle", "strong"):
++for name in ("weak", "middle", "strong", "zero"):
+     spec(name)
