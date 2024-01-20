@@ -1,6 +1,6 @@
-diff -urN alps-20220304-r7871.orig/CMakeLists.txt alps-20220304-r7871/CMakeLists.txt
---- alps-20220304-r7871.orig/CMakeLists.txt	2022-03-04 23:27:52.000000000 +0900
-+++ alps-20220304-r7871/CMakeLists.txt	2023-06-29 12:43:40.092694418 +0900
+diff -urN alps-20220304~r7871.orig/CMakeLists.txt alps-20220304~r7871/CMakeLists.txt
+--- alps-20220304~r7871.orig/CMakeLists.txt	2022-03-04 23:27:52
++++ alps-20220304~r7871/CMakeLists.txt	2024-01-20 19:00:32
 @@ -162,6 +162,14 @@
      endif(NOT ${CMAKE_CXX_FLAGS} MATCHES "-(std=c\\+\\+11|stdlib=)")
  endif(IS_CLANG)
@@ -16,9 +16,34 @@ diff -urN alps-20220304-r7871.orig/CMakeLists.txt alps-20220304-r7871/CMakeLists
  # For gfortran 10 (see https://gcc.gnu.org/gcc-10/changes.html)
  if(ALPS_BUILD_FORTRAN AND CMAKE_COMPILER_IS_GNUCC AND CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER 9.99)
    SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
-diff -urN alps-20220304-r7871.orig/config/FindLapack.cmake alps-20220304-r7871/config/FindLapack.cmake
---- alps-20220304-r7871.orig/config/FindLapack.cmake	2016-11-24 22:02:22.000000000 +0900
-+++ alps-20220304-r7871/config/FindLapack.cmake	2023-06-29 12:26:07.786709167 +0900
+diff -urN alps-20220304~r7871.orig/applications/mc/spins/spinsim.h alps-20220304~r7871/applications/mc/spins/spinsim.h
+--- alps-20220304~r7871.orig/applications/mc/spins/spinsim.h	2012-03-13 13:15:04
++++ alps-20220304~r7871/applications/mc/spins/spinsim.h	2024-01-20 19:00:56
+@@ -275,8 +275,8 @@
+   
+   this->measurements.template get<alps::RealObservable>("Energy") << en;
+   this->measurements.template get<alps::RealObservable>("Energy Density") << en/this->num_sites();
+-  this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy") << bt_en;
+-  this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy Density") << bt_en_density;
++  // this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy") << bt_en;
++  // this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy Density") << bt_en_density;
+   this->measurements.template get<alps::RealObservable>("Energy^2") << en*en;
+   this->measurements.template get<alps::RealObservable>("beta * Energy / sqrt(N)") << this->beta_ *en/sqrt(static_cast<double>(this->num_sites()));
+   this->measurements.template get<alps::RealObservable>("(beta * Energy)^2 / N") << this->beta_*this->beta_*en*en/this->num_sites();;
+@@ -402,8 +402,8 @@
+   
+   this->measurements.template get<alps::RealObservable>("Energy") << en;
+   this->measurements.template get<alps::RealObservable>("Energy Density") << en/this->num_sites();
+-  this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy") << bt_en;
+-  this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy Density") << bt_en_density;
++  // this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy") << bt_en;
++  // this->measurements.template get<alps::RealVectorObservable>("Bond-type Energy Density") << bt_en_density;
+   this->measurements.template get<alps::RealObservable>("Energy^2") << en*en;
+   this->measurements.template get<alps::RealObservable>("beta * Energy / sqrt(N)") << this->beta_ *en/sqrt(static_cast<double>(this->num_sites()));
+   this->measurements.template get<alps::RealObservable>("(beta * Energy)^2 / N") << this->beta_*this->beta_*en*en/this->num_sites();;
+diff -urN alps-20220304~r7871.orig/config/FindLapack.cmake alps-20220304~r7871/config/FindLapack.cmake
+--- alps-20220304~r7871.orig/config/FindLapack.cmake	2016-11-24 22:02:22
++++ alps-20220304~r7871/config/FindLapack.cmake	2024-01-20 19:00:32
 @@ -105,9 +105,9 @@
      if(NOT _mkl_h_content MATCHES "__INTEL_MKL__")
        file( STRINGS "${mkl_home}/include/mkl_version.h" _mkl_h_content REGEX "__INTEL_MKL" )
@@ -55,3 +80,172 @@ diff -urN alps-20220304-r7871.orig/config/FindLapack.cmake alps-20220304-r7871/c
          set(MKL_CORE -lmkl_sequential -lmkl_core)
        else() # MKL < 10.0
          set(MKL_CORE -lmkl_lapack -lmkl -lguide)
+diff -urN alps-20220304~r7871.orig/example/ietl/jacobidavidson2.cpp alps-20220304~r7871/example/ietl/jacobidavidson2.cpp
+--- alps-20220304~r7871.orig/example/ietl/jacobidavidson2.cpp	2012-10-04 13:46:17
++++ alps-20220304~r7871/example/ietl/jacobidavidson2.cpp	2024-01-20 19:00:51
+@@ -33,6 +33,9 @@
+ #include <ietl/interface/ublas.h>
+ #include <boost/random.hpp>
+ #include <boost/limits.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ 
+ #include <cassert>
+diff -urN alps-20220304~r7871.orig/src/alps/ngs/lib/parapack.cpp alps-20220304~r7871/src/alps/ngs/lib/parapack.cpp
+--- alps-20220304~r7871.orig/src/alps/ngs/lib/parapack.cpp	2013-11-11 23:20:38
++++ alps-20220304~r7871/src/alps/ngs/lib/parapack.cpp	2024-01-20 19:00:51
+@@ -53,6 +53,9 @@
+ #include <boost/filesystem/operations.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/regex.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ 
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/src/alps/parapack/parapack.C alps-20220304~r7871/src/alps/parapack/parapack.C
+--- alps-20220304~r7871.orig/src/alps/parapack/parapack.C	2015-08-20 14:13:53
++++ alps-20220304~r7871/src/alps/parapack/parapack.C	2024-01-20 19:00:51
+@@ -49,6 +49,9 @@
+ #include <boost/filesystem/operations.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/regex.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ 
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/test/fixed_capacity/timing_queue.C alps-20220304~r7871/test/fixed_capacity/timing_queue.C
+--- alps-20220304~r7871.orig/test/fixed_capacity/timing_queue.C	2004-03-17 00:12:31
++++ alps-20220304~r7871/test/fixed_capacity/timing_queue.C	2024-01-20 19:00:51
+@@ -28,6 +28,9 @@
+ /* $Id: timing_queue.C 691 2004-03-16 15:12:31Z wistaria $ */
+ 
+ #include <alps/fixed_capacity_deque.h>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <deque>
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/test/fixed_capacity/timing_stack.C alps-20220304~r7871/test/fixed_capacity/timing_stack.C
+--- alps-20220304~r7871.orig/test/fixed_capacity/timing_stack.C	2004-03-17 00:12:31
++++ alps-20220304~r7871/test/fixed_capacity/timing_stack.C	2024-01-20 19:00:51
+@@ -28,6 +28,9 @@
+ /* $Id: timing_stack.C 691 2004-03-16 15:12:31Z wistaria $ */
+ 
+ #include <alps/fixed_capacity_vector.h>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <deque>
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/test/fixed_capacity/timing_vector.C alps-20220304~r7871/test/fixed_capacity/timing_vector.C
+--- alps-20220304~r7871.orig/test/fixed_capacity/timing_vector.C	2004-03-17 00:12:31
++++ alps-20220304~r7871/test/fixed_capacity/timing_vector.C	2024-01-20 19:00:51
+@@ -29,6 +29,9 @@
+ 
+ #include <alps/fixed_capacity_vector.h>
+ #include <iostream>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <vector>
+ 
+diff -urN alps-20220304~r7871.orig/test/parapack/clone_mpi.C alps-20220304~r7871/test/parapack/clone_mpi.C
+--- alps-20220304~r7871.orig/test/parapack/clone_mpi.C	2009-12-18 04:25:37
++++ alps-20220304~r7871/test/parapack/clone_mpi.C	2024-01-20 19:00:51
+@@ -34,6 +34,9 @@
+ #include <iostream>
+ #include <boost/filesystem/path.hpp>
+ #include <boost/filesystem/operations.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ 
+ namespace mpi = boost::mpi;
+diff -urN alps-20220304~r7871.orig/test/parapack/filelock_mpi.C alps-20220304~r7871/test/parapack/filelock_mpi.C
+--- alps-20220304~r7871.orig/test/parapack/filelock_mpi.C	2010-01-07 11:26:17
++++ alps-20220304~r7871/test/parapack/filelock_mpi.C	2024-01-20 19:00:51
+@@ -30,6 +30,9 @@
+ #include <iostream>
+ #include <boost/filesystem/path.hpp>
+ #include <boost/filesystem/operations.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ 
+ namespace mpi = boost::mpi;
+diff -urN alps-20220304~r7871.orig/test/parapack/worker_mpi.C alps-20220304~r7871/test/parapack/worker_mpi.C
+--- alps-20220304~r7871.orig/test/parapack/worker_mpi.C	2009-12-18 04:25:37
++++ alps-20220304~r7871/test/parapack/worker_mpi.C	2024-01-20 19:00:51
+@@ -32,6 +32,9 @@
+ #include <iostream>
+ #include <boost/filesystem/path.hpp>
+ #include <boost/filesystem/operations.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ 
+ namespace mpi = boost::mpi;
+diff -urN alps-20220304~r7871.orig/tutorials/alpsize-05-boost/wolff.C alps-20220304~r7871/tutorials/alpsize-05-boost/wolff.C
+--- alps-20220304~r7871.orig/tutorials/alpsize-05-boost/wolff.C	2013-05-01 13:45:03
++++ alps-20220304~r7871/tutorials/alpsize-05-boost/wolff.C	2024-01-20 19:00:51
+@@ -30,6 +30,9 @@
+ 
+ #include <boost/array.hpp>
+ #include <boost/random.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <cmath>
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/tutorials/alpsize-06-parameters/wolff.C alps-20220304~r7871/tutorials/alpsize-06-parameters/wolff.C
+--- alps-20220304~r7871.orig/tutorials/alpsize-06-parameters/wolff.C	2013-05-01 13:45:03
++++ alps-20220304~r7871/tutorials/alpsize-06-parameters/wolff.C	2024-01-20 19:00:51
+@@ -31,6 +31,9 @@
+ #include <alps/parameter.h>
+ #include <boost/array.hpp>
+ #include <boost/random.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <cmath>
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/tutorials/alpsize-07-alea/wolff.C alps-20220304~r7871/tutorials/alpsize-07-alea/wolff.C
+--- alps-20220304~r7871.orig/tutorials/alpsize-07-alea/wolff.C	2013-05-01 13:45:03
++++ alps-20220304~r7871/tutorials/alpsize-07-alea/wolff.C	2024-01-20 19:00:51
+@@ -32,6 +32,9 @@
+ #include <alps/parameter.h>
+ #include <boost/array.hpp>
+ #include <boost/random.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <cmath>
+ #include <iostream>
+diff -urN alps-20220304~r7871.orig/tutorials/alpsize-08-lattice/wolff.C alps-20220304~r7871/tutorials/alpsize-08-lattice/wolff.C
+--- alps-20220304~r7871.orig/tutorials/alpsize-08-lattice/wolff.C	2013-05-01 13:45:03
++++ alps-20220304~r7871/tutorials/alpsize-08-lattice/wolff.C	2024-01-20 19:00:51
+@@ -33,6 +33,9 @@
+ #include <alps/lattice.h>
+ #include <boost/foreach.hpp>
+ #include <boost/random.hpp>
++#if !defined(BOOST_TIMER_ENABLE_DEPRECATED)
++#  define BOOST_TIMER_ENABLE_DEPRECATED
++#endif
+ #include <boost/timer.hpp>
+ #include <cmath>
+ #include <iostream>
