@@ -1,0 +1,10 @@
+# configurable variables (e.g. compiler)
+
+# use default if not defined
+export CMAKE="cmake"
+export ISSP_UCOUNT="/home/issp/materiapps/bin/issp-ucount"
+export MAKE_J="-j1"
+export MA_EXTRA_FLAGS=""
+
+# export explicitly if defined
+test -n "" && export CXX=""
