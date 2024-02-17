@@ -1,0 +1,14 @@
+diff -urN ALPSCore-2.3.1.orig/common/cmake/ALPSCommonModuleDefinitions.cmake ALPSCore-2.3.1/common/cmake/ALPSCommonModuleDefinitions.cmake
+--- ALPSCore-2.3.1.orig/common/cmake/ALPSCommonModuleDefinitions.cmake	2023-09-16 04:45:38
++++ ALPSCore-2.3.1/common/cmake/ALPSCommonModuleDefinitions.cmake	2024-01-27 11:10:57
+@@ -163,8 +163,8 @@
+   if (ALPS_BUILD_SHARED)
+     set(HDF5_USE_STATIC_LIBRARIES OFF)
+   endif()
+-  set(HDF5_NO_FIND_PACKAGE_CONFIG_FILE TRUE)
+-  find_package (HDF5 1.10.2 REQUIRED)
++  # set(HDF5_NO_FIND_PACKAGE_CONFIG_FILE TRUE)
++  find_package (HDF5 REQUIRED)
+   message(STATUS "HDF5 includes: ${HDF5_INCLUDE_DIRS}" )
+   message(STATUS "HDF5 libs: ${HDF5_LIBRARIES}" )
+   message(STATUS "HDF5 version: ${HDF5_VERSION}" )
