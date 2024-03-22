@@ -6,5 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ]; then :; else
-  check wget "http://www.mns.kyutech.ac.jp/cgi-bin/respack.cgi?f=RESPACK-${__VERSION__}.tar.gz" -O ${SOURCE_DIR}/${__NAME__}-${__VERSION__}.tar.gz
+  check wget "http://www.mns.kyutech.ac.jp/~kazuma/downloads/RESPACK-${__VERSION__}.tar.gz" -O ${SOURCE_DIR}/${__NAME__}-${__VERSION__}.tar.gz
 fi
