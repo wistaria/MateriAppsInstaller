@@ -1,0 +1,26 @@
+diff -crN boost_1_86_0.orig/libs/python/src/numpy/dtype.cpp boost_1_86_0/libs/python/src/numpy/dtype.cpp
+*** boost_1_86_0.orig/libs/python/src/numpy/dtype.cpp	Thu Aug  8 07:07:40 2024
+--- boost_1_86_0/libs/python/src/numpy/dtype.cpp	Thu Aug 22 00:41:23 2024
+***************
+*** 98,104 ****
+    return python::detail::new_reference(reinterpret_cast<PyObject*>(obj));
+  }
+  
+! int dtype::get_itemsize() const { return reinterpret_cast<PyArray_Descr*>(ptr())->elsize;}
+  
+  bool equivalent(dtype const & a, dtype const & b) {
+      // On Windows x64, the behaviour described on 
+--- 98,110 ----
+    return python::detail::new_reference(reinterpret_cast<PyObject*>(obj));
+  }
+  
+! int dtype::get_itemsize() const {
+! #if NPY_ABI_VERSION < 0x02000000
+!   return reinterpret_cast<PyArray_Descr*>(ptr())->elsize;
+! #else
+!   return PyDataType_ELSIZE(reinterpret_cast<PyArray_Descr*>(ptr()));
+! #endif
+! }
+  
+  bool equivalent(dtype const & a, dtype const & b) {
+      // On Windows x64, the behaviour described on 
