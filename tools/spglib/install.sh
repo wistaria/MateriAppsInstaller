@@ -3,15 +3,10 @@ cat << EOF > config.txt
 # configurable variables (e.g. compiler)
 
 # use default if not defined
-export CMAKE="${CMAKE:-cmake}"
-export ISSP_UCOUNT="${ISSP_UCOUNT:-/home/issp/materiapps/bin/issp-ucount}"
 export MAKE_J="${MAKE_J:-"-j1"}"
-export SCALAPACK_LIBRARIES="${SCALAPACK_LIBRARIES:-""}"
-export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-""}"
 
 # export explicitly if defined
 test -n "${CC+defined}" && export CC="$CC"
-test -n "${FC+defined}" && export FC="$FC"
 
 EOF
 . ./config.txt
@@ -19,12 +14,14 @@ EOF
 set -e
 
 XTRACED=$(set -o | awk '/xtrace/{ print $2 }')
-if [ "$XTRACED" = "on" ]; then
+if [ "$XTRACED" = "off" ]; then
+  SHFLAG=""
+else
   SHFLAG="-x"
 fi
 
 mode=${1:-default}
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+export SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 CONFIG_DIR=$SCRIPT_DIR/config/$mode
 if [ ! -d $CONFIG_DIR ]; then
   echo "Error: unknown mode: $mode"
@@ -47,10 +44,13 @@ if [ -d $PREFIX ]; then
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
 mv config.txt $LOG
-echo "mode = $mode" | tee -a $LOG
+
+set +e
+. $SCRIPT_DIR/../../tools/openssl/find.sh; if [ ${MA_HAVE_OPENSSL} = "no" ]; then echo "Error: openssl not found"; exit 127; fi
+set -e
 
 rm -rf ${BUILD_DIR}/${__NAME__}-${__VERSION__}
-pipefail check sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
+pipefail sh $SHFLAG ${SCRIPT_DIR}/setup.sh \| tee -a $LOG
 cd ${BUILD_DIR}/${__NAME__}-${__VERSION__}
 start_info | tee -a $LOG
 
@@ -66,26 +66,13 @@ done
 
 finish_info | tee -a $LOG
 
-PYTHON_VERSION=$(python3 --version | cut -d' ' -f2 | cut -d. -f1,2)
-
 ROOTNAME=$(toupper ${__NAME__})_ROOT
-
-if [ -d ${PREFIX}/local ]; then
-  PREFIX=${PREFIX}/local
-fi
-
-if [ -d ${PREFIX}/lib/python${PYTHON_VERSION}/dist-packages ]; then
-  SITE_PACKAGES=dist-packages
-else
-  SITE_PACKAGES=site-packages
-fi
 
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
-. ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
-export PATH=\${${ROOTNAME}}/bin:\$PATH
-export PYTHONPATH=\${${ROOTNAME}}/lib/python${PYTHON_VERSION}/${SITE_PACKAGES}:\$PYTHONPATH
+export LD_LIBRARY_PATH=\${${ROOTNAME}}/lib64:\$LD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=\${${ROOTNAME}}/lib64:\$DYLD_LIBRARY_PATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH

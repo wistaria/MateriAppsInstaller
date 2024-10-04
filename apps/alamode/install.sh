@@ -66,26 +66,13 @@ done
 
 finish_info | tee -a $LOG
 
-PYTHON_VERSION=$(python3 --version | cut -d' ' -f2 | cut -d. -f1,2)
-
 ROOTNAME=$(toupper ${__NAME__})_ROOT
-
-if [ -d ${PREFIX}/local ]; then
-  PREFIX=${PREFIX}/local
-fi
-
-if [ -d ${PREFIX}/lib/python${PYTHON_VERSION}/dist-packages ]; then
-  SITE_PACKAGES=dist-packages
-else
-  SITE_PACKAGES=site-packages
-fi
 
 cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 . ${MA_ROOT}/env.sh
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
-export PYTHONPATH=\${${ROOTNAME}}/lib/python${PYTHON_VERSION}/${SITE_PACKAGES}:\$PYTHONPATH
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f $VARS_SH
