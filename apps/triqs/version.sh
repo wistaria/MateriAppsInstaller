@@ -1,4 +1,13 @@
-TRIQS_VERSION="3.0.0"
+# USE_RELEASED=ON
+USE_RELEASED=OFF
+
+if [ "_${USE_RELEASED}" = "_ON" ]; then
+  TRIQS_VERSION="3.0.0"
+else
+  TRIQS_SHA="5aa3e1af6b6a580e486c40e64b37dfbfb62118fe"
+  TRIQS_VERSION=$(echo ${TRIQS_SHA} | cut -c 1-8)
+fi
+
 TRIQS_MA_REVISION=0
 
 __NAME__=triqs

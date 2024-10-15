@@ -33,6 +33,16 @@ export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
 set_prefix
 
 . ${MA_ROOT}/env.sh
+
+if [ -n "${TRIQS_VARS_FILE}" ]; then
+  if [ -f ${MA_ROOT}/triqs/${TRIQS_VARS_FILE} ]; then
+    . ${MA_ROOT}/triqs/${TRIQS_VARS_FILE}
+  else
+    echo "Error: ${MA_ROOT}/triqs/${TRIQS_VARS_FILE} not found"
+    exit 127
+  fi
+fi
+
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
