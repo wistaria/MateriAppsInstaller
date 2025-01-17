@@ -1,5 +1,6 @@
 cd build
 make ${MAKE_J} install
+make install-python
 if [ ! -e $PREFIX/bin/lammps ]; then
   ln -s $PREFIX/bin/lmp $PREFIX/bin/lammps
 fi
