@@ -9,10 +9,11 @@ on:
 
 jobs:
   apps:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
+        os: [ubuntu-24.04, ubuntu-22.04]
         app: [tenes, komega, hphi, mvmc, openmx, dsqss, espresso, respack, lammps, py2dmat, physbo]
       fail-fast: false
 
