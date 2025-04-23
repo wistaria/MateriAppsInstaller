@@ -1,10 +1,15 @@
 name: main
 
-on: [push]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 1,15 * *' # JST 9:00 on 1st and 15th every month
+
 
 jobs:
   apps:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -23,7 +28,7 @@ jobs:
       - name: apt
         run: |
           sudo apt-get update
-          sudo apt-get -y install openmpi-bin libopenmpi-dev libscalapack-openmpi-dev libfftw3-dev
+          sudo apt-get -y install libblas-dev liblapack-dev openmpi-bin libopenmpi-dev libscalapack-openmpi-dev libfftw3-dev
           if [ ${{ matrix.app }} = "respack" ]; then
             sudo apt-get -y install quantum-espresso
           fi
@@ -35,6 +40,6 @@ jobs:
 
       - name: setup
         run: sh setup/setup.sh
-      
+
       - name: test
         run: sh .github/scripts/test.sh ${{matrix.app}}
