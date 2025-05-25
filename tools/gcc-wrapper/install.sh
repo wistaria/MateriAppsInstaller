@@ -23,7 +23,7 @@ fi
 
 FOUND=0
 if [ -n ${HOMEBREW_PREFIX} ]; then
-  VERSIONS="15 14 13 12 11 10 9 8"
+  VERSIONS="20 19 18 17 16 15 14 13 12 11 10 9 8"
   for v in ${VERSIONS}; do
     if [ -f ${HOMEBREW_PREFIX}/bin/gcc-${v} ]; then
       FOUND=1
