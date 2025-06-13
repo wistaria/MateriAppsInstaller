@@ -1,0 +1,8 @@
+#!/bin/sh
+
+XTL_VERSION="0.8.0"
+XTL_MA_REVISION="1"
+
+__NAME__=xtl
+__VERSION__=${XTL_VERSION}
+__MA_REVISION__=${XTL_MA_REVISION}
