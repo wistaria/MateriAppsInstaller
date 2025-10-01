@@ -1,1 +1,1 @@
-python3 $PREFIX/examples/simple.py
+python3 $PREFIX/examples/single_objective/bayes_search.py
