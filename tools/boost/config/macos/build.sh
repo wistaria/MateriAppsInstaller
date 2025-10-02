@@ -4,6 +4,7 @@ BJAM="./tools/build/b2 --layout=system --ignore-site-config"
 
 # setup config files
 
+echo "using gcc : 15 : /opt/homebrew/bin/g++-15 : <cxxflags>-std=c++17 <linkflags> ;" > user-config.jam
 for m in mpicxx mpic++; do
   mc=$(which $m 2> /dev/null)
   test -n "$mc"; break
@@ -27,10 +28,10 @@ else
   PYTHON_OPTION="--without-python"
 fi
 
-# pch, context, coroutine, fiber are not supported for Apple Silicon
+# pch, context, coroutine, fiber, process are not supported for Apple Silicon
 EXTRA_OPTIONS=
 if [ $(arch) = "arm64" ]; then
-  EXTRA_OPTIONS="pch=off --without-context --without-coroutine --without-fiber"
+  EXTRA_OPTIONS="pch=off --without-context --without-coroutine --without-fiber --without-process"
 fi
 
-env BOOST_BUILD_PATH=. ${BJAM} --toolset=gcc --user-config=user-config.jam ${PYTHON_OPTION} ${EXTRA_OPTIONS}
+env BOOST_BUILD_PATH=. ${BJAM} --toolset=gcc-15 --user-config=user-config.jam ${PYTHON_OPTION} ${EXTRA_OPTIONS}
