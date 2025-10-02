@@ -27,13 +27,10 @@ else
   PYTHON_OPTION="--without-python"
 fi
 
-# pch, coroutine, fiber are not supported for Apple Silicon
+# pch, context, coroutine, fiber are not supported for Apple Silicon
 EXTRA_OPTIONS=
 if [ $(arch) = "arm64" ]; then
-  EXTRA_OPTIONS="pch=off --without-coroutine --without-fiber"
+  EXTRA_OPTIONS="pch=off --without-context --without-coroutine --without-fiber"
 fi
-
-# json does not compile with gcc-12
-EXTRA_OPTIONS="${EXTRA_OPTIONS} --without-json"
 
 env BOOST_BUILD_PATH=. ${BJAM} --toolset=gcc --user-config=user-config.jam ${PYTHON_OPTION} ${EXTRA_OPTIONS}
