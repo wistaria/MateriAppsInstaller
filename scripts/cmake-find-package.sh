@@ -21,7 +21,7 @@ WORK_DIR="${TMPDIR}find-package.$$"
 mkdir -p ${WORK_DIR}
 
 cat << EOF > ${WORK_DIR}/CMakeLists.txt
-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 project(find)
 find_package(${PACKAGE})
 message(STATUS "find-package-found: \${${PACKAGE}_FOUND}")

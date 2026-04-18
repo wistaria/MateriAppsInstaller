@@ -14,7 +14,7 @@ fi
 # pch, context, coroutine, fiber, process are not supported for Apple Silicon
 EXTRA_OPTIONS=
 if [ $(arch) = "arm64" ]; then
-  EXTRA_OPTIONS="pch=off --without-context --without-coroutine --without-fiber --without-process"
+  EXTRA_OPTIONS="architecture=arm address-model=64 pch=off --without-context --without-fiber --without-coroutine --without-cobalt --without-process"
 fi
 
 env BOOST_BUILD_PATH=. ${BJAM} --toolset=gcc-15 --user-config=user-config.jam ${PYTHON_OPTION} ${EXTRA_OPTIONS} --prefix=$PREFIX install

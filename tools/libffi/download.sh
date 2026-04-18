@@ -6,5 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ]; then :; else
-  check wget -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz ftp://sourceware.org/pub/${__NAME__}/${__NAME__}-${__VERSION__}.tar.gz
+  check wget -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tar.gz https://github.com/${__NAME__}/${__NAME__}/releases/download/v${__VERSION__}/${__NAME__}-${__VERSION__}.tar.gz
 fi

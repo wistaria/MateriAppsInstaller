@@ -14,4 +14,5 @@ if [ -d ${__NAME__}-${__VERSION__} ]; then :; else
   if [ -f $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch ]; then
     (cd ${__NAME__}-${__VERSION__} && patch -p1 < $SCRIPT_DIR/patch/${__NAME__}-${__VERSION__}.patch)
   fi
+  rm -f ${__NAME__}-${__VERSION__}/config/FindLapack.cmake
 fi

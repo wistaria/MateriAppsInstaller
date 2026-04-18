@@ -22,11 +22,13 @@ if [ -z ${HOMEBREW_PREFIX} ]; then
 fi
 
 FOUND=0
+GCC_VERSION=""
 if [ -n ${HOMEBREW_PREFIX} ]; then
   VERSIONS="20 19 18 17 16 15 14 13 12 11 10 9 8"
   for v in ${VERSIONS}; do
     if [ -f ${HOMEBREW_PREFIX}/bin/gcc-${v} ]; then
       FOUND=1
+      GCC_VERSION=${v}
       mkdir -p ${PREFIX}/bin
       PROGS="c++ cpp g++ gcc gcc-ar gcc-nm gcc-ranlib gcov gcov-dump gcov-tool gdc gfortran lto-dump"
       for p in ${PROGS}; do
@@ -49,6 +51,16 @@ cat << EOF > ${BUILD_DIR}/${__NAME__}vars.sh
 # ${__NAME__} $(basename $0 .sh) ${__VERSION__} ${__MA_REVISION__} $(date +%Y%m%d-%H%M%S)
 export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
+export OMPI_CC=gcc-${GCC_VERSION}
+export OMPI_CXX=g++-${GCC_VERSION}
+export OMPI_FC=gfortran-${GCC_VERSION}
+
+# workaround for bug in Xcode 26.4.1
+SDK_PATH="/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/"
+if pkgutil --pkg-info com.apple.pkg.Xcode 2>/dev/null | grep -q '26\.4\.1\.0\.1\.1775746635' \
+   && [ -d "\$SDK_PATH" ]; then
+    export SDKROOT="\$SDK_PATH"
+fi
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
 rm -f ${VARS_SH}

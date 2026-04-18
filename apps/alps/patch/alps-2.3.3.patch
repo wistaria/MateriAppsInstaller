@@ -1,0 +1,740 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -185,7 +185,7 @@
+ endif(NOT WIN32)
+ 
+ #set default compiler flags
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive  -DBOOST_NO_AUTO_PTR -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF -DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -DBOOST_TIMER_ENABLE_DEPRECATED" )
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive  -DBOOST_NO_AUTO_PTR -DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF -DBOOST_TIMER_ENABLE_DEPRECATED -DBOOST_BIND_GLOBAL_PLACEHOLDERS" )
+ 
+ # set convenient warning flags for clang
+ STRING(REGEX MATCH "clang" IS_CLANG "${ALPS_COMPILER_VERSION}")
+@@ -389,7 +389,7 @@
+ # Lapack
+ # For parallel MKL, this section should be executed after OpenMP check.
+ if (NOT LAPACK_FOUND)
+-  find_package(Lapack)
++  find_package(LAPACK)
+ endif (NOT LAPACK_FOUND)
+ if (LAPACK_FOUND)
+   set(ALPS_HAVE_LAPACK 1)
+@@ -514,14 +514,10 @@
+ ENDIF (PYTHONLIBS_FOUND AND ALPS_BUILD_PYTHON)
+ 
+ # Boost Libraries
+-find_package(BoostForALPS REQUIRED)
+-if(Boost_ROOT_DIR)
+-  message(STATUS "Adding Boost dir: ${Boost_ROOT_DIR} " )
+-  include_directories(${Boost_ROOT_DIR})
+-else(Boost_ROOT_DIR)
+-  message(STATUS "Adding Boost dir: ${Boost_INCLUDE_DIR} " )
+-  include_directories(${Boost_INCLUDE_DIR})
+-endif(Boost_ROOT_DIR)
++set(BP_VER "${Python_VERSION_MAJOR}${Python_VERSION_MINOR}")
++find_package(Boost COMPONENTS date_time chrono timer filesystem iostreams program_options regex serialization thread python${BP_VER} numpy${BP_VER} mpi REQUIRED NO_MODULE)
++set(ALPS_HAVE_BOOST_NUMPY true)
++set(BOOST_DYNAMIC_LIBS Boost::headers Boost::date_time Boost::chrono Boost::timer Boost::filesystem Boost::iostreams Boost::program_options Boost::regex Boost::serialization Boost::thread Boost::python${BP_VER} Boost::numpy${BP_VER} Boost::mpi)
+ 
+ # XML Path
+ set(ALPS_XML_PATH "lib" CACHE STRING "Directory to install ALPS XML directory in")
+--- a/applications/qmc/looper/looper/lapack.h
++++ b/applications/qmc/looper/looper/lapack.h
+@@ -54,7 +54,7 @@
+ {
+   using namespace boost::numeric;
+ 
+-  BOOST_STATIC_ASSERT((boost::is_same<typename R::orientation_category,
++  BOOST_STATIC_ASSERT((std::is_same<typename R::orientation_category,
+     ublas::column_major_tag>::value));
+ 
+   const char jobz = (need_eigenvectors ? 'V' : 'N');
+@@ -73,7 +73,7 @@
+ {
+   using namespace boost::numeric;
+ 
+-  BOOST_STATIC_ASSERT((boost::is_same<typename R::orientation_category,
++  BOOST_STATIC_ASSERT((std::is_same<typename R::orientation_category,
+     ublas::column_major_tag>::value));
+ 
+   const char jobz = (need_eigenvectors ? 'V' : 'N');
+@@ -102,7 +102,7 @@
+   using ublas::norm_inf; using ublas::norm_2; using ublas::prod;
+ #endif
+ 
+-  BOOST_STATIC_ASSERT((boost::is_same<typename R::orientation_category,
++  BOOST_STATIC_ASSERT((std::is_same<typename R::orientation_category,
+     ublas::column_major_tag>::value));
+ 
+   typedef T value_type;
+--- a/config/FindLapack.cmake
++++ /dev/null
+@@ -1,531 +0,0 @@
+-# - FindLapack.cmake
+-# Find LAPACK/BLAS (and compatible) numerical libraries
+-#
+-# This module will define the following values:
+-# LAPACK_LIBRARY
+-# BLAS_LIBRARY
+-#
+-# 0) check if BLAS_LIBRARY and LAPACK_LIBRARY have already been set on command line, if so: take these values.
+-# 1) use ENV MKL
+-# 2) if Intel compiler pick MKL (-mkl)
+-# 3) search MKL in usual paths
+-# 4) search ENV ATLAS
+-# 5) search generic lapack/blas using CMake-provided FindLAPACK.cmake
+-#     if BLA_VENDOR is set, try to use that vendor's LAPACK implementation
+-# 6) if build is on cray use hardcoded path
+-# 7) give up
+-
+-#  Copyright (C)  2009-2010 Matthias Troyer <troyer@comp-phys.org>
+-#  Copyright (C)  2009-2010 Synge Todo <wistaria@comp-phys.org>
+-#  Copyright (C)  2009-2010 Bela Bauer
+-#  Copyright (C)  2009-2010 Brigitte Surer
+-#  Copyright (C)  2009-2010 Lukas Gamper
+-#  Copyright (C)  2009-2012 Ryo IGARASHI <rigarash@issp.u-tokyo.ac.jp>
+-#  Copyright (C)       2010 Emanuel Gull <gull@phys.columbia.edu>
+-#  Copyright (C)       2012 Michele Dolfi <dolfim@phys.ethz.ch>
+-#
+-#   Permission is hereby granted, free of charge, to any person obtaining
+-#   a copy of this software and associated documentation files (the “Software”),
+-#   to deal in the Software without restriction, including without limitation
+-#   the rights to use, copy, modify, merge, publish, distribute, sublicense,
+-#   and/or sell copies of the Software, and to permit persons to whom the
+-#   Software is furnished to do so, subject to the following conditions:
+-#  
+-#   The above copyright notice and this permission notice shall be included
+-#   in all copies or substantial portions of the Software.
+-#  
+-#   THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+-#   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-#   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-#   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-#   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+-#   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+-#   DEALINGS IN THE SOFTWARE.
+-#
+-# TODO: - look for MKL on Windows
+-#       - look for goto2
+-
+-# Includes
+-include(CheckFunctionExists)
+-
+-
+-###################################################
+-# BLAS_LIBRARY, LAPACK_LIBRARY manually defined.
+-###################################################
+-
+-IF(BLAS_LIBRARY AND LAPACK_LIBRARY)
+- SET(LAPACK_LIBRARY_INIT 1)
+- SET(BLAS_LIBRARY_INIT 1)
+-ENDIF(BLAS_LIBRARY AND LAPACK_LIBRARY)
+-
+-########################################################################################################
+-# Looking for MKL.
+-#   For parallel MKL, OpenMP check has to be done beforehand.
+-# 0) $ENV{MKL} can be defined from http://software.intel.com/en-us/articles/intel-mkl-link-line-advisor
+-#    if specified, this settings are chosen
+-# 1) If compiler is Intel >= 12 (Intel Composer XE 2011/2013, Intel Compiler Pro)
+-# 1.1) When OPENMP_FOUND=ON and ALPS_USE_MKL_PARALLEL=ON, use -mkl=parallel
+-# 1.2) When OPENMP_FOUND=OFF or ALPS_USE_MKL_PARALLEL=OFF, use -mkl=sequential
+-# 2) If $ENV{MKLROOT} / $ENV{MKL_HOME} defined (done by MKL tools/environment scripts), use the linking from advisor
+-# 3) Look for MKL libraries in MKL_PATHS
+-########################################################################################################
+-
+-SET(MKL_PATHS "/usr/local/lib /usr/lib")
+-
+-# 0) $ENV{MKL} can be set for explicit linking
+-if($ENV{MKL} MATCHES "mkl")
+-  set(LAPACK_LIBRARY $ENV{MKL})
+-  set(BLAS_LIBRARY "")
+-  set(HAVE_MKL TRUE)
+-endif($ENV{MKL} MATCHES "mkl")
+-
+-# 1) Intel compiler >= 12
+-if(NOT HAVE_MKL AND NOT LAPACK_LIBRARY_INIT)
+-  if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+-    set(INTEL_WITH_MKL FALSE)
+-    if(DEFINED CMAKE_CXX_COMPILER_VERSION)
+-      if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 12
+-         OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 12)
+-        set(INTEL_WITH_MKL TRUE)
+-      endif()
+-    endif()
+-    if($ENV{MKLROOT} MATCHES "composer")
+-      set(INTEL_WITH_MKL TRUE)
+-    endif()
+-    
+-    if(INTEL_WITH_MKL)
+-      if(OPENMP_FOUND AND ALPS_USE_MKL_PARALLEL)
+-        set(LAPACK_LIBRARY "-mkl=parallel")
+-      else(OPENMP_FOUND AND ALPS_USE_MKL_PARALLEL)
+-        set(LAPACK_LIBRARY "-mkl=sequential")
+-      endif(OPENMP_FOUND AND ALPS_USE_MKL_PARALLEL)
+-      set(BLAS_LIBRARY "")
+-      set(HAVE_MKL TRUE)
+-    endif(INTEL_WITH_MKL)
+-  endif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+-endif(NOT HAVE_MKL AND NOT LAPACK_LIBRARY_INIT)
+-
+-# 2) Use MKLROOT / MKL_HOME and standard linking
+-if(NOT HAVE_MKL AND NOT LAPACK_LIBRARY_INIT)
+-  set(mkl_home "")
+-  if($ENV{MKLROOT} MATCHES "mkl")
+-    set(mkl_home $ENV{MKLROOT})
+-  elseif($ENV{MKL_HOME} MATCHES "mkl")
+-    set(mkl_home $ENV{MKL_HOME})
+-  endif()
+-
+-  if(mkl_home MATCHES "mkl")
+-    file( STRINGS "${mkl_home}/include/mkl.h" _mkl_h_content REGEX "__INTEL_MKL" )
+-    if(NOT _mkl_h_content MATCHES "__INTEL_MKL__")
+-      file( STRINGS "${mkl_home}/include/mkl_version.h" _mkl_h_content REGEX "__INTEL_MKL" )
+-    endif()
+-    string(REGEX REPLACE ".*#define __INTEL_MKL__ ([0-9]+).*"        "\\1" MKL_VERSION_MAJOR  "${_mkl_h_content}")
+-    string(REGEX REPLACE ".*#define __INTEL_MKL_MINOR__ ([0-9]+).*"  "\\1" MKL_VERSION_MINOR  "${_mkl_h_content}")
+-    string(REGEX REPLACE ".*#define __INTEL_MKL_UPDATE__ ([0-9]+).*" "\\1" MKL_VERSION_UPDATE "${_mkl_h_content}")
+-    set(MKL_VERSION "${MKL_VERSION_MAJOR}.${MKL_VERSION_MINOR}.${MKL_VERSION_UPDATE}")
+-    
+-    # STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MKL_VERSION ${mkl_home})
+-    # set(MKL_VERSION_RAW ${MKL_VERSION})
+-    # if((DEFINED MKL_VERSION OR MKL_VERSION VERSION_LESS 10 OR MKL_VERSION VERSION_GREATER 2000) AND ${mkl_home} MATCHES "composer")
+-    #   set(MKL_VERSION "10.3.1") # set to arbitrary 10.3 version (they should behave all the same)
+-    # endif((DEFINED MKL_VERSION OR MKL_VERSION VERSION_LESS 10 OR MKL_VERSION VERSION_GREATER 2000) AND ${mkl_home} MATCHES "composer")
+-    # if((DEFINED MKL_VERSION OR MKL_VERSION VERSION_LESS 10 OR MKL_VERSION VERSION_GREATER 2000) AND ${mkl_home} MATCHES "Compiler")
+-    #   set(MKL_VERSION "10.2.4") # set to arbitrary 10.2 version (they should behave all the same)
+-    # endif((DEFINED MKL_VERSION OR MKL_VERSION VERSION_LESS 10 OR MKL_VERSION VERSION_GREATER 2000) AND ${mkl_home} MATCHES "Compiler")
+-    
+-    message(STATUS "LAPACK DEBUG::Compiler id ${CMAKE_CXX_COMPILER_ID}")
+-    message(STATUS "LAPACK DEBUG::Compiler version ${CMAKE_CXX_COMPILER_VERSION}")
+-    message(STATUS "LAPACK DEBUG::Processor ${CMAKE_SYSTEM_PROCESSOR}")
+-    message(STATUS "LAPACK DEBUG::ENV{MKL} $ENV{MKL}")
+-    message(STATUS "LAPACK DEBUG::ENV{MKLROOT} $ENV{MKLROOT}")
+-    message(STATUS "LAPACK DEBUG::ENV{MKL_HOME} $ENV{MKL_HOME}")
+-    # message(STATUS "LAPACK DEBUG::MKL_VERSION (raw) ${MKL_VERSION_RAW}")
+-    message(STATUS "LAPACK DEBUG::MKL_VERSION ${MKL_VERSION}")
+-    
+-    # OS thread library (pthread required by MKL)
+-    find_package(Threads REQUIRED)
+-    # MKL core
+-    if(OPENMP_FOUND AND ALPS_USE_MKL_PARALLEL)
+-      # No parallel mode support for MKL < 10.0
+-      if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+-        # Intel with Intel OpenMP
+-        set(MKL_CORE -lmkl_intel_thread -lmkl_core -liomp5)
+-      elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+-        # GCC with GNU OpenMP
+-        # MKL with g++ needs gfortran
+-        set(MKL_CORE -lmkl_gnu_thread -lmkl_core -lgfortran)
+-      endif()
+-    else()
+-      if(${MKL_VERSION} MATCHES "1[0-1]\\.[0-3]\\.[0-9]+")
+-        set(MKL_CORE -lmkl_sequential -lmkl_core)
+-      else() # MKL < 10.0
+-        set(MKL_CORE -lmkl_lapack -lmkl -lguide)
+-      endif()
+-    endif()
+-    # basic data type model interface
+-    # - assuming ILP32 or LP64
+-    if(${MKL_VERSION} MATCHES "1[0-1]\\.[0-3]\\.[0-9]+")
+-      if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "ia64")
+-        set(MKL_INTERFACE -lmkl_intel_lp64)
+-      elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "i386" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "i686")
+-        set(MKL_INTERFACE -lmkl_intel)
+-      else()
+-        message(SEND_ERROR "MKL: the processor type of this system is not supported")
+-      endif()
+-    else() # MKL < 10.0
+-      set(MKL_INTERFACE "")
+-    endif()
+-    # MKL library path
+-    if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-      if(${MKL_VERSION} MATCHES "11\\.[0-9]\\.[0-9]+" OR ${MKL_VERSION} MATCHES "10\\.3\\.[0-9]+")
+-        set(MKL_LIBRARY_PATH -L${mkl_home}/lib)
+-      else() # MKL < 10.3
+-        if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/em64t)
+-        elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "i386" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "i686")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/32)
+-        else()
+-          message(SEND_ERROR "MKL: the processor type of this system is not supported")
+-        endif()
+-      endif()
+-    elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+-      if(${MKL_VERSION} MATCHES "11\\.[0-9]\\.[0-9]+" OR ${MKL_VERSION} MATCHES "10\\.3\\.[0-9]+")
+-        if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/intel64)
+-        elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "i386" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "i686")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/ia32)
+-        else()
+-          message(SEND_ERROR "MKL: the processor type of this system is not supported")
+-        endif()
+-      else() # MKL < 10.3 have the same PATH
+-        if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/em64t)
+-        elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "i386" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "i686")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/32)
+-        elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "ia64")
+-          set(MKL_LIBRARY_PATH -L${mkl_home}/lib/64)
+-        else()
+-          message(SEND_ERROR "MKL: the processor type of this system is not supported")
+-        endif()
+-      endif()
+-    endif()
+-    # combine together
+-    set(LAPACK_LIBRARY ${MKL_LIBRARY_PATH} ${MKL_INTERFACE} ${MKL_CORE} ${CMAKE_THREAD_LIBS_INIT} -lm)
+-
+-    # unset local variables
+-    unset(MKL_LIBRARY_PATH)
+-    unset(MKL_INTERFACE)
+-    unset(MKL_CORE)
+-
+-    set(BLAS_LIBRARY "")
+-    set(HAVE_MKL TRUE)
+-  endif(mkl_home MATCHES "mkl")
+-endif(NOT HAVE_MKL AND NOT LAPACK_LIBRARY_INIT)
+-
+-IF(HAVE_MKL)
+-  # Checking if it works
+-  set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARY} ${LAPACK_LIBRARY})
+-  check_function_exists("sgemm" _libraries_work)
+-  set(CMAKE_REQUIRED_LIBRARIES)
+-  
+-  if(NOT _libraries_work)
+-    message(WARNING "MKL was detected but I'm not able to use it.")
+-    message(STATUS "MKL settings were:")
+-    message(STATUS "   BLAS_LIBRARY = ${BLAS_LIBRARY}")
+-    message(STATUS "   LAPACK_LIBRARY = ${LAPACK_LIBRARY}")
+-    set(BLAS_LIBRARY)
+-    set(LAPACK_LIBRARY)
+-    set(HAVE_MKL)
+-  else()
+-    message(STATUS "Found intel/mkl library")
+-    set(LAPACK_LIBRARY_INIT 1)
+-    set(BLAS_LIBRARY_INIT 1)
+-    set(MKL_INC_PATHS $ENV{MKLROOT}/include $ENV{mkl_home}/include ${MKL_PATHS}) 
+-    find_path(MKL_INCLUDE_DIR mkl.h ${MKL_INC_PATHS})
+-    include_directories(${MKL_INCLUDE_DIR})
+-    set(ALPS_HAVE_MKL 1) # MKL flag set in alps/config.h
+-    if(APPLE)
+-      list(APPEND LAPACK_LDFLAGS "-Wl,-rpath,${mkl_home}/lib")
+-      if(OPENMP_FOUND AND ALPS_USE_MKL_PARALLEL AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+-        # Add path to libomp5
+-        list(APPEND LAPACK_LDFLAGS "-Wl,-rpath,${mkl_home}/..compiler/lib")
+-      endif()
+-      message(STATUS "MKL on Mac: forcing Rpath to libdir")
+-    endif(APPLE)
+-  endif(NOT _libraries_work)
+-ENDIF(HAVE_MKL)
+-
+-
+-# SET(MKL_PATHS 
+-#   $ENV{MKL_HOME}/lib/intel64
+-#   $ENV{MKL_HOME}/lib/em${QMC_BITS}t
+-#   $ENV{MKL_HOME}/lib/${QMC_BITS}
+-#   $ENV{MKL_HOME}/lib
+-#   ${MKL_PATHS} 
+-#   ) 
+-# #MESSAGE(STATUS "Looking for intel/mkl library in ${MKL_PATHS}")
+-# 
+-# IF(NOT LAPACK_LIBRARY_INIT)
+-#   IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-#     IF(LINK_LAPACK_OLD)
+-#       FIND_LIBRARY(LAPACK_LIBRARY NAMES mkl_lapack PATHS ${MKL_PATHS})
+-#       FIND_LIBRARY(BLAS_LIBRARY NAMES mkl PATHS ${MKL_PATHS})
+-#     ELSE(LINK_LAPACK_OLD)
+-#       FIND_LIBRARY(LAPACK_LIBRARY STATIC NAMES mkl_lapack PATHS ${MKL_PATHS})
+-#       FIND_LIBRARY(BLAS_LIBRARY  NAMES mkl_em64t PATHS ${MKL_PATHS})
+-#       MESSAGE("-- mkl 10.0.[0-2] warning for EM64T")
+-#       MESSAGE("-- Replace libmkl_lapack.so in CMakeCache.txt by libmkl_lapack.a")
+-#     ENDIF(LINK_LAPACK_OLD)
+-#   ELSE(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-#     FIND_LIBRARY(LAPACK_LIBRARY 
+-#       NAMES mkl_lapack 
+-#       PATHS ${MKL_PATHS}
+-#       )
+-#     FIND_LIBRARY(BLAS_LIBRARY
+-#       NAMES mkl
+-#       PATHS ${MKL_PATHS}
+-#     )
+-#   ENDIF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-# 
+-#   FIND_LIBRARY(INTEL_GUIDE_LIBRARY
+-#     NAMES guide
+-#     PATHS ${MKL_PATHS}
+-#   )
+-#   MARK_AS_ADVANCED(INTEL_GUIDE_LIBRARY)
+-#   IF(NOT INTEL_GUIDE_LIBRARY MATCHES "NOTFOUND")
+-#     SET(REQUIRE_PTHREAD TRUE)
+-#     FIND_LIBRARY(PTHREAD_LIBRARY NAMES pthread)
+-#   ENDIF(NOT INTEL_GUIDE_LIBRARY MATCHES "NOTFOUND")
+-#   IF(NOT BLAS_guide_LIBRARY MATCHES "NOTFOUND")
+-#     SET(REQUIRE_PTHREAD TRUE)
+-#     FIND_LIBRARY(PTHREAD_LIBRARY NAMES pthread)
+-#   ENDIF(NOT BLAS_guide_LIBRARY MATCHES "NOTFOUND")
+-# 
+-#   IF(LAPACK_LIBRARY MATCHES "mkl")
+-#     MESSAGE(STATUS "Found intel/mkl library")
+-#     SET(LAPACK_LIBRARY_INIT 1)
+-#     SET(BLAS_LIBRARY_INIT 1)
+-#     SET(HAVE_MKL 1) # CACHE BOOL "HAVE_MKL is set to 1")
+-#     SET(MKL_INC_PATHS $ENV{MKL_HOME}/include ${MKL_PATHS}) 
+-#     FIND_PATH(MKL_INCLUDE_DIR mkl.h ${MKL_INC_PATHS})
+-#     INCLUDE_DIRECTORIES(${MKL_INCLUDE_DIR})
+-#   ENDIF(LAPACK_LIBRARY MATCHES "mkl")
+-# 
+-# ENDIF(NOT LAPACK_LIBRARY_INIT)
+-
+-
+-###################################################
+-# Looking for Veclib.
+-# (in case MKL was not found)
+-###################################################
+-
+-IF(NOT LAPACK_LIBRARY_INIT)
+-  IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-    
+-    set(BLAS_LAPACK_MAC_FRAMEWORK "")
+-    # Checking if veclib works CMAKE_REQUIRED_FLAGS
+-    set(CMAKE_REQUIRED_LIBRARIES "-framework vecLib")
+-    check_function_exists("sgemm" _framework_veclib_works)
+-    set(CMAKE_REQUIRED_LIBRARIES)
+-    if(_framework_veclib_works)
+-      set(BLAS_LAPACK_MAC_FRAMEWORK "vecLib")
+-    endif(_framework_veclib_works)
+-    
+-    if(NOT BLAS_LAPACK_MAC_FRAMEWORK)
+-      set(CMAKE_REQUIRED_LIBRARIES "-framework Accelerate")
+-      check_function_exists("sgemm" _framework_accelerate_work)
+-      set(CMAKE_REQUIRED_LIBRARIES)
+-      if(_framework_accelerate_work)
+-        set(BLAS_LAPACK_MAC_FRAMEWORK "Accelerate")
+-      endif(_framework_accelerate_work)
+-    endif(NOT BLAS_LAPACK_MAC_FRAMEWORK)
+-    
+-    if(BLAS_LAPACK_MAC_FRAMEWORK)
+-      SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -framework ${BLAS_LAPACK_MAC_FRAMEWORK}")
+-      SET(MAC_VECLIB 1 CACHE BOOL "use Mac Framework")
+-      SET(LAPACK_LIBRARY_INIT 1)
+-      SET(BLAS_LIBRARY_INIT 1)
+-      SET(BLAS_LIBRARY "")
+-      SET(LAPACK_LIBRARY "")
+-      MESSAGE(STATUS "Using Framework '${BLAS_LAPACK_MAC_FRAMEWORK}' on Darwin.")
+-    else()
+-      MESSAGE(STATUS "Both VecLib and Accelerate failed.")
+-    endif(BLAS_LAPACK_MAC_FRAMEWORK)
+-    
+-  ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-ENDIF(NOT LAPACK_LIBRARY_INIT)
+-
+-
+-###################################################
+-# Looking for ATLAS.
+-###################################################
+-
+-IF(NOT LAPACK_LIBRARY_INIT)
+-  IF($ENV{ATLAS} MATCHES "atlas")
+-    IF($ENV{ATLAS} MATCHES "lapack") 
+-      SET(LAPACK_LIBRARY_INIT 1)
+-    ENDIF($ENV{ATLAS} MATCHES "lapack") 
+-    SET(BLAS_LIBRARY $ENV{ATLAS})
+-    SET(BLAS_LIBRARY_INIT 1)
+-  ENDIF($ENV{ATLAS} MATCHES "atlas")
+-
+-  IF($ENV{LAPACK} MATCHES "lapack")
+-    SET(LAPACK_LIBRARY $ENV{LAPACK})
+-    SET(LAPACK_LIBRARY_INIT 1)
+-  ENDIF($ENV{LAPACK} MATCHES "lapack")
+-
+-  IF(${CMAKE_SYSTEM_NAME} MATCHES "AIX")
+-    SET(ELIB essl)
+-    IF(ENABLE_OMP)
+-      SET(ELIB esslsmp)
+-    ENDIF(ENABLE_OMP)
+-   
+-    IF(NOT LAPACK_LIBRARY_INIT)
+-      SET(LLIB lapack-SP4_${QMC_BITS} lapack)
+-      FIND_LIBRARY(LAPACK_LIBRARY  
+-        NAMES ${LLIB}
+-        PATHS /usr/apps/math/lapack/LAPACK
+-        lib
+-        )
+-      FIND_LIBRARY(BLAS_LIBRARY ${ELIB}
+-                   /usr/lib
+-                  )
+-    ENDIF(NOT LAPACK_LIBRARY_INIT)
+-
+-    SET(LAPACK_LIBRARY_INIT 1)
+-    SET(BLAS_LIBRARY_INIT 1)
+-    MESSAGE(STATUS "Found lapack/blas on AIX system")
+-  ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "AIX")
+-ENDIF(NOT LAPACK_LIBRARY_INIT)
+-
+-
+-###################################################
+-# Looking for CLAPACK on Windows.
+-###################################################
+-
+-IF(NOT LAPACK_LIBRARY_INIT)
+-  if(WIN32 AND NOT UNIX)
+-    set(TRIAL_PATHS "$ENV{HOMEDRIVE}$ENV{HOMEPATH}/opt/lib")
+-    find_library(LAPACK_LIBRARY lapack ${TRIAL_PATHS})
+-    find_library(BLAS_LIBRARY blas ${TRIAL_PATHS})
+-    if(LAPACK_LIBRARY AND BLAS_LIBRARY)
+-      SET(LAPACK_LIBRARY_INIT 1)
+-      SET(BLAS_LIBRARY_INIT 1)
+-      set(LAPACK_DEFINITIONS "-DBOOST_NUMERIC_BINDINGS_USE_CLAPACK=1" CACHE STRING "Lapack definitions")
+-      MARK_AS_ADVANCED(LAPACK_DEFINITIONS)
+-      MESSAGE(STATUS "Found Lapack: ${LAPACK_LIBRARY} ${BLAS_LIBRARY}")
+-    endif(LAPACK_LIBRARY AND BLAS_LIBRARY)
+-  endif(WIN32 AND NOT UNIX)
+-ENDIF(NOT LAPACK_LIBRARY_INIT)
+-
+-
+-###################################################
+-# Falling back to CMake FindBLAS / LAPACK.
+-# (Fortran compiler is needed)
+-###################################################
+-
+-IF(NOT BLAS_LIBRARY_INIT AND NOT LAPACK_LIBRARY_INIT)
+-  message(STATUS "Falling back to CMake provied LAPACK/BLAS detection.")
+-  find_package(BLAS)
+-  if(BLAS_FOUND)
+-    SET(BLAS_LIBRARY_INIT 1)
+-    SET(BLAS_LIBRARY ${BLAS_LIBRARIES})
+-    find_package(LAPACK)
+-    if(LAPACK_FOUND)
+-      SET(LAPACK_LIBRARY_INIT 1)
+-      SET(LAPACK_LIBRARY ${LAPACK_LIBRARIES})
+-    endif(LAPACK_FOUND)
+-  endif(BLAS_FOUND)
+-  if(NOT BLAS_LIBRARY_INIT AND NOT LAPACK_LIBRARY_INIT)
+-    message(STATUS "Enabling Fortran for LAPACK/BLAS detection.")
+-    enable_language(Fortran)
+-    find_package(BLAS)
+-    if(BLAS_FOUND)
+-      SET(BLAS_LIBRARY_INIT 1)
+-      SET(BLAS_LIBRARIES ${BLAS_LIBRARIES} -lgfortran)
+-      SET(BLAS_LIBRARY ${BLAS_LIBRARIES})
+-      find_package(LAPACK)
+-      if(LAPACK_FOUND)
+-        SET(LAPACK_LIBRARY_INIT 1)
+-        SET(LAPACK_LIBRARY ${LAPACK_LIBRARIES})
+-      endif(LAPACK_FOUND)
+-    endif(BLAS_FOUND)
+-  endif(NOT BLAS_LIBRARY_INIT AND NOT LAPACK_LIBRARY_INIT)
+-ENDIF(NOT BLAS_LIBRARY_INIT AND NOT LAPACK_LIBRARY_INIT)
+-
+-
+-###################################################
+-# Looking for SCALAPACK.
+-###################################################
+-
+-IF(USE_SCALAPACK)
+-  SET(PNPATHS 
+-    ${MKL_PATHS}
+-    ${BLACS_HOME}/lib
+-    ${SCALAPACK_HOME}/lib
+-    /usr/lib
+-    /opt/lib
+-    /usr/local/lib
+-    /sw/lib
+-    )
+-
+-  IF(INTEL_MKL)
+-    FIND_LIBRARY(BLACSLIB mkl_blacs_${PLAT}_lp${QMC_BITS} PATHS  ${PNPATHS})
+-    FIND_LIBRARY(SCALAPACKLIB mkl_scalapack PATHS  ${PNPATHS})
+-  ENDIF(INTEL_MKL)
+-
+-  IF(NOT SCALAPACKLIB)
+-    FIND_LIBRARY(BLACSLIB blacs_MPI-${PLAT}-{BLACSDBGLVL} PATHS  ${PNPATHS})
+-    FIND_LIBRARY(BLACSCINIT blacsCinit_MPI-${PLAT}-{BLACSDBGLVL} PATHS  ${PNPATHS})
+-    FIND_LIBRARY(SCALAPACKLIB scalapack PATHS  ${PNPATHS})
+-  ENDIF(NOT SCALAPACKLIB)
+-
+-  IF(BLACSLIB AND SCALAPACKLIB)
+-    SET(FOUND_SCALAPACK 1 CACHE BOOL "Found scalapack library")
+-  ELSE(BLACSLIB AND SCALAPACKLIB)
+-    SET(FOUND_SCALAPACK 0 CACHE BOOL "Mising scalapack library")
+-  ENDIF(BLACSLIB AND SCALAPACKLIB)
+-
+-  MARK_AS_ADVANCED(
+-    BLACSCINIT
+-    BLACSLIB
+-    SCALAPACKLIB
+-    FOUND_SCALAPACK
+-    )
+-ENDIF(USE_SCALAPACK)
+-
+-
+-
+-###################################################
+-# Finalize (setting some variables).
+-###################################################
+-
+-# message(STATUS "LAPACK DEBUG::LAPACK_LIBRARY = ${LAPACK_LIBRARY}")
+-
+-if(BLAS_LIBRARY)
+-  SET(BLAS_LIBRARIES ${BLAS_LIBRARY})
+-endif(BLAS_LIBRARY)
+-if(LAPACK_LIBRARY)
+-  SET(LAPACK_LIBRARIES ${LAPACK_LIBRARY})
+-endif(LAPACK_LIBRARY)
+-
+-MARK_AS_ADVANCED(
+-  LAPACK_LIBRARY 
+-  BLAS_LIBRARY 
+-)
+-
+-if(BLAS_LIBRARY_INIT)
+-  set(BLAS_FOUND TRUE)
+-endif(BLAS_LIBRARY_INIT)
+-if(LAPACK_LIBRARY_INIT)
+-  set(LAPACK_FOUND TRUE)
+-endif(LAPACK_LIBRARY_INIT)
+-
+-IF(ALPS_BUILD_ON_CRAY)
+-  MARK_AS_ADVANCED(
+-    BLAS_FOUND
+-    LAPACK_FOUND
+-  )
+-  SET(BLAS_FOUND TRUE)
+-  SET(LAPACK_FOUND TRUE)
+-ENDIF(ALPS_BUILD_ON_CRAY)
+--- a/config/FindPythonMod.cmake
++++ b/config/FindPythonMod.cmake
+@@ -227,6 +227,9 @@
+         EXEC_PYTHON_SCRIPT ("${PYFUNC_NORMALIZE_FLAGS}from sysconfig import * ;print( normalize_flags( str(get_config_var('LOCALMODLIBS')) + ' ' + str(get_config_var('LIBS')) + ' ' + str(get_config_var('LDFLAGS')) ))"
+                   PYTHON_EXTRA_LIBS)
+       endif()
++      # workaround for Python 3.11 and 3.12
++      # see https://github.com/python/cpython/issues/116043
++      string(REPLACE "Modules/_hacl/libHacl_Hash_SHA2.a" "" PYTHON_EXTRA_LIBS "${PYTHON_EXTRA_LIBS}")
+       MESSAGE(STATUS "PYTHON_EXTRA_LIBS =${PYTHON_EXTRA_LIBS}" )
+       mark_as_advanced(PYTHON_EXTRA_LIBS)
+ 
+--- a/src/alps/CMakeLists.txt
++++ b/src/alps/CMakeLists.txt
+@@ -136,7 +136,7 @@
+       set(ALPS_LINK_LIBS ${ALPS_LINK_LIBS} ${MPI_EXTRA_LIBRARY})
+     endif(MPI_EXTRA_LIBRARY)
+   endif(MPI_FOUND)
+-  target_link_libraries(alps ${ALPS_LINK_LIBS})
++  target_link_libraries(alps PUBLIC ${ALPS_LINK_LIBS} ${BOOST_DYNAMIC_LIBS} LAPACK::LAPACK)
+ else (Boost_FOUND)
+   # "boost" target available when Boost libraries are built from source
+   target_link_libraries(alps ${ALPS_BOOST_LIBRARY_NAME} ${HDF5_LIBRARIES}) # ${SZIP_LIBRARIES} ${ZLIB_LIBRARIES})
+@@ -255,4 +255,4 @@
+           ARCHIVE DESTINATION pyalps/lib
+           LIBRARY DESTINATION pyalps/lib
+           RUNTIME DESTINATION pyalps/bin)
+-endif()
+\ No newline at end of file
++endif()
+--- a/src/alps/numeric/matrix/matrix_element_iterator.hpp
++++ b/src/alps/numeric/matrix/matrix_element_iterator.hpp
+@@ -51,8 +51,8 @@
+             : m(m), i(row_p), j(col_p)
+         {
+             // The value_type of the iterator must be the value_type of the matrix or const Matrix::value_type
+-            BOOST_STATIC_ASSERT( (boost::is_same<typename Matrix::value_type, T>::value
+-                                 || boost::is_same<const typename Matrix::value_type,T>::value) );
++            BOOST_STATIC_ASSERT( (std::is_same<typename Matrix::value_type, T>::value
++                                 || std::is_same<const typename Matrix::value_type,T>::value) );
+ #ifndef ALPS_DISABLE_MATRIX_ELEMENT_ITERATOR_WARNING
+             std::cerr<<"WARNING: matrix_element_iterators are very slow!"<<std::endl;
+             std::cerr<<"You should use strided_iterators (eg. row_iterator) instead, unless you really don't care."<<std::endl;
+@@ -64,9 +64,9 @@
+         matrix_element_iterator(matrix_element_iterator<Matrix2,U> const& r)
+             : m(r.m), i(r.i), j(r.j)
+         {
+-            BOOST_STATIC_ASSERT( (boost::is_same<
+-                        typename boost::add_const<Matrix>::type,
+-                        typename boost::add_const<Matrix2>::type
++            BOOST_STATIC_ASSERT( (std::is_same<
++                        typename std::add_const<Matrix>::type,
++                        typename std::add_const<Matrix2>::type
+                         >::value ));
+         }
+ 
+@@ -80,9 +80,9 @@
+         template <typename Matrix2,typename U>
+         bool equal(matrix_element_iterator<Matrix2,U> const& y) const
+         {
+-            BOOST_STATIC_ASSERT( (boost::is_same<
+-                        typename boost::add_const<Matrix>::type,
+-                        typename boost::add_const<Matrix2>::type
++            BOOST_STATIC_ASSERT( (std::is_same<
++                        typename std::add_const<Matrix>::type,
++                        typename std::add_const<Matrix2>::type
+                         >::value ));
+             if( i == y.i && j == y.j )
+                 return true;
+--- a/src/alps/numeric/matrix/strided_iterator.hpp
++++ b/src/alps/numeric/matrix/strided_iterator.hpp
+@@ -32,6 +32,7 @@
+ #include <boost/iterator/iterator_facade.hpp>
+ #include <boost/static_assert.hpp>
+ #include <cassert>
++#include <type_traits>
+ 
+ namespace alps {
+ namespace numeric {
+@@ -57,17 +58,17 @@
+             : ptr(ptr), stride(stride)
+         {
+             // The value_type of the iterator must be the value_type of the matrix or const Matrix::value_type
+-            BOOST_STATIC_ASSERT( (boost::is_same<typename Matrix::value_type, T>::value
+-                                 || boost::is_same<const typename Matrix::value_type,T>::value) );
++            BOOST_STATIC_ASSERT( (std::is_same<typename Matrix::value_type, T>::value
++                                 || std::is_same<const typename Matrix::value_type,T>::value) );
+         }
+ 
+         template<typename Matrix2, typename U>
+         strided_iterator(strided_iterator<Matrix2,U> const& r)
+             : ptr(r.ptr), stride(r.stride)
+         {
+-            BOOST_STATIC_ASSERT( (boost::is_same<
+-                        typename boost::add_const<Matrix>::type,
+-                        typename boost::add_const<Matrix2>::type
++            BOOST_STATIC_ASSERT( (std::is_same<
++                        typename std::add_const<Matrix>::type,
++                        typename std::add_const<Matrix2>::type
+                         >::value ));
+         }
+ 
+@@ -84,9 +85,9 @@
+         template <typename Matrix2,typename U>
+         bool equal(strided_iterator<Matrix2,U> const& y) const
+         {
+-            BOOST_STATIC_ASSERT( (boost::is_same<
+-                        typename boost::add_const<Matrix>::type,
+-                        typename boost::add_const<Matrix2>::type
++            BOOST_STATIC_ASSERT( (std::is_same<
++                        typename std::add_const<Matrix>::type,
++                        typename std::add_const<Matrix2>::type
+                         >::value ));
+             return (ptr == y.ptr);
+         }
+--- a/src/alps/python/numpy_import.hpp
++++ b/src/alps/python/numpy_import.hpp
+@@ -39,6 +39,9 @@
+ #endif
+ 
+ // this should be set to the latest numpy version we have tested
++#ifdef NPY_NO_DEPRECATED_API
++    #undef NPY_NO_DEPRECATED_API
++#endif
+ #define NPY_NO_DEPRECATED_API NPY_1_11_API_VERSION
+ #include <numpy/arrayobject.h>
+ 
+--- a/applications/dmrg/tebd/CMakeLists.txt
++++ b/applications/dmrg/tebd/CMakeLists.txt
+@@ -28,7 +28,7 @@
+               core/PropOps.f90 core/Hdf5Interface.f90 tebd.f90)
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}")
+   add_executable(tebd ${SOURCES})
+-  target_link_libraries(tebd ${HDF5_Fortran_LIBRARIES} ${HDF5_LIBRARIES} ${LAPACK_LIBRARY} ${BLAS_LIBRARY})
++  target_link_libraries(tebd ${HDF5_Fortran_LIBRARIES} ${HDF5_LIBRARIES} LAPACK::LAPACK)
+   if(HDF5_DEFINITIONS)
+     foreach (_hdf5_def ${HDF5_DEFINITIONS})
+       string(REPLACE "-D" "" _escaped_def ${_hdf5_def})
