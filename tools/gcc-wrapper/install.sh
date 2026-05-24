@@ -55,9 +55,9 @@ export OMPI_CC=gcc-${GCC_VERSION}
 export OMPI_CXX=g++-${GCC_VERSION}
 export OMPI_FC=gfortran-${GCC_VERSION}
 
-# workaround for bug in Xcode 26.4.1
+# workaround for bug in Xcode 26
 SDK_PATH="/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/"
-if pkgutil --pkg-info com.apple.pkg.CLTools_Executables 2>/dev/null | grep -q '26\.4\.1' \
+if pkgutil --pkg-info com.apple.pkg.CLTools_Executables 2>/dev/null | grep -q 'version: 26\.' \
    && [ -d "\$SDK_PATH" ]; then
     export SDKROOT="\$SDK_PATH"
 fi
