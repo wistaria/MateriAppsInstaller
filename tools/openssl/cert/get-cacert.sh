@@ -1,3 +1,3 @@
 #!/bin/sh
 
-wget http://curl.haxx.se/ca/cacert.pem
+wget https://curl.se/ca/cacert.pem
