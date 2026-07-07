@@ -11,6 +11,7 @@ Install script collection for MateriApps Software
 
 1. Specify install direcoty
     - `echo MA_ROOT=$HOME/materiapps > ~/.mainstaller`
+    - See [`dot.mainstaller.example`](dot.mainstaller.example) for all configurable variables (`MA_ROOT`, `BUILD_DIR`, `SOURCE_DIR`, ...); `sh check_prefix.sh` prints the directories currently in effect.
 2. Setup
     - `(cd setup; sh setup.sh)`
 3. Install application(s) you desire (e.g., HPhi)

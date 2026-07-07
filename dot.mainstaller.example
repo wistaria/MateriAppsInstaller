@@ -1,0 +1,30 @@
+# Example configuration for MateriApps Installer.
+#
+# Copy this file to ~/.mainstaller and edit the values:
+#     cp dot.mainstaller.example ~/.mainstaller
+#
+# This file is sourced as a POSIX shell script, so:
+#   - put NO spaces around '='   (MA_ROOT=... , not MA_ROOT = ...)
+#   - none of the directory paths may contain whitespace
+#
+# Every variable is optional; the default (shown after '=' below) is
+# used when a variable is unset. Run `sh check_prefix.sh` to print the
+# directories that are actually in effect.
+
+# Directory where the software is installed.
+MA_ROOT=$HOME/materiapps
+
+# Working directory used while building (can be deleted afterwards).
+BUILD_DIR=$HOME/build
+
+# Directory where downloaded source archives are cached.
+SOURCE_DIR=$HOME/source
+
+# Base URL of the MateriApps LIVE! Debian repository. Most users never
+# need this; it is only used by a few Debian-packaged applications.
+# MALIVE_REPOSITORY=https://download.sourceforge.net/project/materiappslive/Debian/archive/buster
+
+# You can keep several configuration files (e.g. one per machine) and
+# select one at run time with the MAINSTALLER_CONFIG environment
+# variable instead of ~/.mainstaller:
+#     MAINSTALLER_CONFIG=$HOME/.mainstaller.ohtaka sh install.sh

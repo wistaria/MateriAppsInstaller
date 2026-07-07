@@ -146,6 +146,7 @@ Setup
 
    - If this file does not exist, the software will be installed under ``$ HOME materiapps``
    - (*) Note that the actual installation location uses the contents of the ``.mainstaller`` file at the time of the installation work described below.
+   - A ready-to-copy template with all variables is provided as ``dot.mainstaller.example`` at the top of the repository (``cp dot.mainstaller.example ~/.mainstaller``). Run ``sh check_prefix.sh`` to print the directories currently in effect.
 
 Install
 ============

@@ -141,6 +141,7 @@
 
   - このファイルがない場合は ``$HOME/materiapps`` の下にソフトウェアがインストールされる
   - (注) 実際のインストール場所は、 ``setup.sh`` を実行した時の情報ではなく、以降で説明するインストール作業を行った時点での ``.mainstaller`` ファイルの内容が用いられる.
+  - 全変数を記載したひな形 ``dot.mainstaller.example`` をリポジトリ直下に用意している（ ``cp dot.mainstaller.example ~/.mainstaller`` でコピーして編集する）。 ``sh check_prefix.sh`` を実行すると現在有効なディレクトリが表示される。
 
 インストール
 ============
