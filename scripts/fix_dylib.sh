@@ -1,7 +1,12 @@
 #!/bin/sh
 
-DIR=$(cd $1 && pwd)
-LIBS=$(find $DIR -name "*.dylib" -o -name "*.so")
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 DIR"
+  exit 1
+fi
+DIR=$(cd "$1" && pwd) || exit 1
+
+LIBS=$(find "$DIR" -name "*.dylib" -o -name "*.so")
 for t in $LIBS; do
   echo "fixing install names for $t"
   install_name_tool -id $t $t
