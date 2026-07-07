@@ -6,7 +6,7 @@ import h5py
 
 def get_retry(url, retry_times, errs):
     for t in range(retry_times + 1):
-        r = requests.get(url)
+        r = requests.get(url, timeout=30)
         if t < retry_times:
             if r.status_code in errs:
                 time.sleep(2)
@@ -32,7 +32,7 @@ select_str_dict = {"name": "#top > header > div.inner.app-header__inner > div > 
 with h5py.File("materiapps_info_ja.h5", "a") as fw:
     for idx, url in enumerate(url_list):
         print("Read {}".format(idx))
-        res = requests.get(url)
+        res = get_retry(url, 3, [500, 502, 503, 504])
         soup = BeautifulSoup(res.text, "html.parser")
         #Get App's URL
         elems = soup.find_all(href=re.compile("/app/[0-9]+"), text=re.compile("アプリ詳細へ"))
