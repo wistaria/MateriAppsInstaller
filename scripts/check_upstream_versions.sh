@@ -19,9 +19,21 @@
 
 set -u
 
+case "${1:-}" in
+  -h|--help)
+    echo "Usage: $0 [--create-issues]"
+    echo "Compare version.sh pins with the latest upstream GitHub releases."
+    echo "  --create-issues  open an issue per outdated package (needs gh auth;"
+    echo "                   at most MAX_ISSUES=${MAX_ISSUES:-10} new issues per run)"
+    exit 0
+    ;;
+esac
+
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 ROOT_DIR=$(dirname "$SCRIPT_DIR")
 CREATE_ISSUES=${1:-}
+# cap new issues per run to avoid flooding watchers on the first runs
+MAX_ISSUES=${MAX_ISSUES:-10}
 
 open_titles=""
 if [ "$CREATE_ISSUES" = "--create-issues" ]; then
@@ -34,6 +46,7 @@ fi
 
 outdated=0
 errors=0
+created=0
 for dir in "$ROOT_DIR"/apps/* "$ROOT_DIR"/tools/*; do
   [ -d "$dir" ] || continue
   [ -f "$dir/version.sh" ] || continue
@@ -100,6 +113,8 @@ for dir in "$ROOT_DIR"/apps/* "$ROOT_DIR"/tools/*; do
     title="[$name] New upstream version $latest_norm"
     if printf '%s\n' "$open_titles" | grep -Fxq "$title"; then
       echo "         issue already open: $title"
+    elif [ "$created" -ge "$MAX_ISSUES" ]; then
+      echo "         issue NOT created (MAX_ISSUES=$MAX_ISSUES reached): $title"
     elif gh issue create --title "$title" --body "The upstream release of \`$name\` (https://github.com/$ownerrepo) is now **$latest_norm**, while \`version.sh\` pins **$pinned**.
 
 To update:
@@ -109,6 +124,7 @@ To update:
 
 _Opened automatically by the version watch workflow._"; then
       echo "         issue created: $title"
+      created=$((created + 1))
       open_titles=$(printf '%s\n%s' "$open_titles" "$title")
     else
       echo "ERROR    $name: gh issue create failed"
@@ -119,5 +135,8 @@ done
 
 echo "-----"
 echo "$outdated package(s) outdated, $errors API error(s)"
+if [ "$CREATE_ISSUES" = "--create-issues" ]; then
+  echo "$created issue(s) created (cap: MAX_ISSUES=$MAX_ISSUES)"
+fi
 [ "$errors" -eq 0 ] || exit 1
 exit 0
