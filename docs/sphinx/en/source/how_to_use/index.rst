@@ -131,7 +131,7 @@ Setup
        # Do not put spaces before or after = as it will be treated as a shell script
 
        MA_ROOT=$HOME/materiapps  # Software installation directory
-       BUILD_DIR=$HOME/build     # Installation directory
+       BUILD_DIR=$HOME/build     # Build working directory
        SOURCE_DIR=$HOME/source   # File download directory
 
 
@@ -141,7 +141,7 @@ Setup
        :widths: 15, 15, 30
 
        ``MA_ROOT`` , ``$HOME/materiapps``,  Software installation directory
-       ``BUILD_DIR`` , ``$HOME/build`` , Installation directory
+       ``BUILD_DIR`` , ``$HOME/build`` , Build working directory
        ``SOURCE_DIR`` , ``$HOME/source`` , Source code archive file download directory
 
    - If this file does not exist, the software will be installed under ``$ HOME materiapps``
