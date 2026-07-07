@@ -43,6 +43,7 @@ fi
 
 if [ ${FOUND} = 0 ]; then
   echo "Error: Homebrew GCC compiler not found"
+  echo "Install it with: brew install gcc (Homebrew itself: https://brew.sh)"
   exit 127
 fi
 
