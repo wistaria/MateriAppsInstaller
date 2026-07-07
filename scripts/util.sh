@@ -74,9 +74,14 @@ check() {
   "$@" 2>&1 || result=$?
   if [ $result -ne 0 ]; then
     echo "Failed: $@"
-    if [ -n "$LOG" ]; then
-      echo "See log for details: $LOG"
-    fi
+    # hint only at installer-written logs, not at an inherited $LOG
+    case "${LOG:-}" in
+      "${BUILD_DIR:-/nonexistent}"/*)
+        if [ -f "$LOG" ]; then
+          echo "See log for details: $LOG"
+        fi
+        ;;
+    esac
     exit $result
   fi
   return 0
