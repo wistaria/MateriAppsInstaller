@@ -1,5 +1,14 @@
 #!/bin/sh
 
+reject_whitespace() {
+  case "$2" in
+    *[' 	']*)
+      echo "Fatal: $1 ($2) must not contain whitespace"
+      exit 127
+      ;;
+  esac
+}
+
 set_prefix() {
   if [ -n "$__MAINSTALLER__SET_PREFIX__" ]; then
     return 0
@@ -27,6 +36,7 @@ set_prefix() {
   if [ -z "$MA_ROOT" ]; then
     MA_ROOT="$MA_ROOT_DEF"
   fi
+  reject_whitespace MA_ROOT "$MA_ROOT"
   if [ -d "$MA_ROOT" ]; then :; else
     mkdir -p $MA_ROOT || exit 127
     echo "Notice: target directory $MA_ROOT has been created"
@@ -39,6 +49,7 @@ set_prefix() {
   if [ -z "$BUILD_DIR" ]; then
     BUILD_DIR="$BUILD_DIR_DEF"
   fi
+  reject_whitespace BUILD_DIR "$BUILD_DIR"
   if [ -d "$BUILD_DIR" ]; then :; else
     mkdir -p $BUILD_DIR || exit 127
     echo "Notice: build directory $BUILD_DIR has been created"
@@ -55,6 +66,7 @@ set_prefix() {
   if [ -z "$SOURCE_DIR" ]; then
     SOURCE_DIR="$SOURCE_DIR_DEF"
   fi
+  reject_whitespace SOURCE_DIR "$SOURCE_DIR"
   if [ -d "$SOURCE_DIR" ]; then :; else
     mkdir -p $SOURCE_DIR || exit 127
     echo "Notice: source directory $SOURCE_DIR has been created"
@@ -73,7 +85,7 @@ check() {
   local result=0
   "$@" 2>&1 || result=$?
   if [ $result -ne 0 ]; then
-    echo "Failed: $@"
+    echo "Failed: $*"
     exit $result
   fi
   return 0
@@ -98,19 +110,19 @@ calc_strip_components() {
   if [ $# -lt 2 ];then
     echo "usage: calc_strip_components tarfile file_in_rootdir"
   fi
-  tar tf $1 | grep $2 | awk -F / 'BEGIN {res=99999}; {if (NF<res) res=NF}; END{print res-1}'
+  tar tf "$1" | grep -E "(^|/)$2\$" | awk -F / 'BEGIN {res=99999}; {if (NF<res) res=NF}; END{print res-1}'
 }
 
 toupper() {
-  echo $@ | tr '[a-z]' '[A-Z]'
+  echo "$@" | tr '[a-z]' '[A-Z]'
 }
 
 tolower() {
-  echo $@ | tr '[A-Z]' '[a-z]'
+  echo "$@" | tr '[A-Z]' '[a-z]'
 }
 
 capitalize() {
-  echo $@ | awk '{ print toupper(substr($0, 1, 1)) substr($0, 2, length($0) - 1) }'
+  echo "$@" | awk '{ print toupper(substr($0, 1, 1)) substr($0, 2, length($0) - 1) }'
 }
 
 finish_test() {
@@ -125,12 +137,12 @@ finish_test() {
 }
 
 is_macos() {
-  test $(uname -s | cut -d' ' -f1) = "Darwin"
+  test "$(uname -s | cut -d' ' -f1)" = "Darwin"
 }
 
 # https://qiita.com/opiliones/items/e6d75237bf8650313c56
 pipefail() {
-  local cmd= i=1 ret1 ret2
+  local cmd='' i=1 ret1 ret2
   pipe_parse "$@" || {
     eval "$cmd"
     return
@@ -169,7 +181,7 @@ check_cc() {
   tmpfile=$(mktemp)
   mv $tmpfile $tmpfile.c
   echo 'int main(int, char**){return 0;}' >> $tmpfile.c
-  $@ -fsyntax-only $tmpfile.c || ret=$?
+  "$@" -fsyntax-only $tmpfile.c || ret=$?
   rm -f $tmpfile.c
   return $ret
 }
@@ -182,7 +194,7 @@ check_fc() {
       program main
       end program
 EOF
-  $@ -fsyntax-only $tmpfile.f90 || ret=$?
+  "$@" -fsyntax-only $tmpfile.f90 || ret=$?
   rm -f $tmpfile.f90
   return $ret
 }
@@ -192,7 +204,7 @@ check_header() {
   tmpfile=$(mktemp)
   mv $tmpfile $tmpfile.cc
   echo "#include <$1>" >> $tmpfile.cc
-  ${CXX:-cxx} -fsyntax-only $tmpfile.cc || ret=$?
+  ${CXX:-c++} -fsyntax-only $tmpfile.cc || ret=$?
   rm -f $tmpfile.cc
   return $ret
 }
@@ -211,8 +223,9 @@ find_tool() {
   fi
 
   . $findsh
-  local MA_HAVE_XXX=MA_HAVE_$(toupper ${toolname})
-  local res=$(eval echo \$$MA_HAVE_XXX)
+  local MA_HAVE_XXX res
+  MA_HAVE_XXX="MA_HAVE_$(toupper "${toolname}")"
+  res=$(eval echo "\$${MA_HAVE_XXX}")
   if [ $res = "no" ]; then
     echo "Error: ${toolname} not found"
     return 127

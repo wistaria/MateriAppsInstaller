@@ -20,7 +20,7 @@ mkdir -p $MA_ROOT/lib/cmake
 SCALAPACK_CMAKE=$(ls /usr/lib/cmake/scalapack-*.openmpi/scalapack*.cmake 2> /dev/null)
 if [ -z "${SCALAPACK_CMAKE}" ]; then :; else
   for f in ${SCALAPACK_CMAKE}; do
-    sed -e 's%${_IMPORT_PREFIX}/lib%/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}%g' ${f} > $MA_ROOT/lib/cmake/$(basename ${f})
+    sed -e 's%${_IMPORT_PREFIX}/lib%/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}%g' ${f} > "$MA_ROOT/lib/cmake/$(basename ${f})"
   done
   echo "export scalapack_DIR=\$MA_ROOT/lib/cmake" >> $MA_ROOT/env.sh
   echo "export SCALAPACK_DIR=\$scalapack_DIR" >> $MA_ROOT/env.sh
