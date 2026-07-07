@@ -79,6 +79,8 @@ $ sh runtest.sh
 If you pause in the middle of downloading and installing an application, the source files may remain, which may not work when you reinstall. In that case, delete the directory of the target application in the source file ($HOME/materiapps/source by default).
 
 If you get errors during installation, take a closer look at the error messages. Errors often occur because the necessary tools are not installed. Read the required tools from the error message and install the tools.
+A detailed build log is saved as ``$BUILD_DIR/<name>-<version>-<revision>.log`` (``$HOME/build`` by default); when a build command fails, the installer prints its path as ``See log for details: <path>``.
+If the installation stops with ``Error: <directory> exists``, the same version is already installed. Remove that directory, or increase the ``<NAME>_MA_REVISION`` number in ``version.sh`` to install as a new revision.
 
 Once you've successfully completed the test, use the following command to make a link of the preferences file of the application (see also the next section): ::
 

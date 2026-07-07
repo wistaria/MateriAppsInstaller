@@ -43,7 +43,7 @@ set_prefix
 export PREFIX="${MA_ROOT}/${__NAME__}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}"
 if [ -d $PREFIX ]; then
   echo "Error: $PREFIX exists"
-  echo "To reinstall, remove it first or increase the MA_REVISION in version.sh"
+  echo "To reinstall, remove it first or increase the <NAME>_MA_REVISION number in version.sh"
   exit 127
 fi
 export LOG=${BUILD_DIR}/${__NAME__}-${__VERSION__}-${__MA_REVISION__}.log
