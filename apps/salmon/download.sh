@@ -5,7 +5,7 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 . $SCRIPT_DIR/version.sh
 set_prefix
 
-URL=http://salmon-tddft.jp/download/SALMON-v.${__VERSION__}.tar.gz
+URL=https://salmon-tddft.jp/download/SALMON-v.${__VERSION__}.tar.gz
 ARCHIVE=${SOURCE_DIR}/${__NAME__}-${__VERSION__}.tar.gz
 
 if [ -f $ARCHIVE ]; then :; else

@@ -147,6 +147,12 @@ Setup
    - If this file does not exist, the software will be installed under ``$ HOME materiapps``
    - (*) Note that the actual installation location uses the contents of the ``.mainstaller`` file at the time of the installation work described below.
 
+- Note on network environment
+
+   - All source archives are downloaded over HTTPS. If you build behind a proxy server, set ``https_proxy`` (not only ``http_proxy``) in your shell environment.
+   - If the download fails with a TLS certificate error, update the CA certificates of your system (e.g. the ``ca-certificates`` package).
+   - On machines without network access, you can download the source archives on another machine and place them in ``SOURCE_DIR`` (default: ``$HOME/source``) in advance; the installer then skips the download.
+
 Install
 ============
 

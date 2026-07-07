@@ -10,7 +10,7 @@ set_prefix() {
   MA_ROOT_DEF="$HOME/materiapps"
   BUILD_DIR_DEF="$HOME/build"
   SOURCE_DIR_DEF="$HOME/source"
-  MALIVE_REPOSITORY_DEF="http://download.sourceforge.net/project/materiappslive/Debian/archive/buster"
+  MALIVE_REPOSITORY_DEF="https://download.sourceforge.net/project/materiappslive/Debian/archive/buster"
 
   if [ -n "$MAINSTALLER_CONFIG" ]; then
     if [ -f "$MAINSTALLER_CONFIG" ]; then
