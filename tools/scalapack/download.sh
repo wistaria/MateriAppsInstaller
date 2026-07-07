@@ -6,5 +6,5 @@ SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 set_prefix
 
 if [ -f $SOURCE_DIR/${__NAME__}-${__VERSION__}.tgz ]; then :; else
-  check wget -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tgz http://www.netlib.org/${__NAME__}/${__NAME__}-${__VERSION__}.tgz
+  check wget -O $SOURCE_DIR/${__NAME__}-${__VERSION__}.tgz https://www.netlib.org/${__NAME__}/${__NAME__}-${__VERSION__}.tgz
 fi
