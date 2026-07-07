@@ -9,8 +9,13 @@ mkdir build
 # DFT-D3 and the unit tests are disabled because their bundled test-drive
 # dependency does not compile with Intel ifort classic; both are kept off
 # in every mode for consistency.
+#
+# The two cmake invocations below must stay identical except for the
+# trailing -DSCALAPACK_LIBRARY option.
 
 if [ -z "${SCALAPACK_LIBRARIES}" ]; then
+  echo "SCALAPACK_LIBRARIES is not set; relying on CMake auto-detection."
+  echo "If configuration fails, retry with e.g. SCALAPACK_LIBRARIES=\"-L/path/to/lib -lscalapack\""
   ${CMAKE} -S . -B build \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \

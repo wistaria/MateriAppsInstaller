@@ -13,7 +13,8 @@ MateriApps Installer の CI ではテストされておらず、MateriApps チ�
 
 - CMake >= 3.20、pkg-config、Fortran/C コンパイラ、MPI、BLAS/LAPACK、ScaLAPACK
 - `install.sh` 実行時にネットワークが必要（SIESTA 5.x は configure 時に
-  内部ライブラリ libfdf, xmlf90, libpsml, libgridxc をダウンロードする）
+  内部ライブラリ libfdf, xmlf90, libpsml, libgridxc をダウンロードする）。
+  オフラインのビルドホストはそのままでは非対応
 - ScaLAPACK が自動検出されない場合は明示的に指定する:
   `SCALAPACK_LIBRARIES="-L/path/to/lib -lscalapack" sh install.sh`
 

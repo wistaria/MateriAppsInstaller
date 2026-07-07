@@ -13,7 +13,9 @@ not to the SIESTA developers.
 
 - CMake >= 3.20, pkg-config, a Fortran/C compiler, MPI, BLAS/LAPACK, ScaLAPACK
 - Network access during `install.sh`: SIESTA 5.x downloads internal
-  libraries (libfdf, xmlf90, libpsml, libgridxc) at configure time
+  libraries (libfdf, xmlf90, libpsml, libgridxc) at configure time.
+  Offline build hosts are not supported out of the box; run the
+  configure step on a machine with network access first
 - If ScaLAPACK is not found automatically, pass it explicitly:
   `SCALAPACK_LIBRARIES="-L/path/to/lib -lscalapack" sh install.sh`
 
