@@ -10,8 +10,10 @@
 .. toctree::
    :maxdepth: 1
 
+   README_alamode
    README_alps
    README_alpscore
+   README_dcore
    README_dsqss
    README_espresso
    README_hphi
@@ -21,3 +23,4 @@
    README_openmx
    README_respack
    README_tenes
+   README_triqs

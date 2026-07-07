@@ -1,10 +1,14 @@
 TRIQS
-========
+=====
 
 SUMMARY
 -------
 
-A library collection for numerical calculation of interacting quantum systems. Modern programming techniques are used in this library to implement common tasks for solving quantum impurity problems in dynamic mean-field theory in a simple and efficient way. It is written in C++ and Python, and includes tutorials using Jupyter Notebook.
+A library collection for numerical calculation of interacting quantum
+systems. Modern programming techniques are used in this library to
+implement common tasks for solving quantum impurity problems in dynamic
+mean-field theory in a simple and efficient way. It is written in C++
+and Python, and includes tutorials using Jupyter Notebook.
 
 LICENSE
 -------

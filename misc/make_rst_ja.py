@@ -46,7 +46,7 @@ with open(os.path.join(path_to_sphinx_ja, "index.rst"), "w") as fw:
     fw.write(text)
     fw.write("\n")
     for dir_name in dirs_apps:
-        path_to_README = os.path.join(dir_name, "README.md")
+        path_to_README = os.path.join(dir_name, "README_ja.md")
         if os.path.isfile(path_to_README):
             dir_name = dir_name[2:]
             fw.write("   README_{}\n".format(dir_name))
