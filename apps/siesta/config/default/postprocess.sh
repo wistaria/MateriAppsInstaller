@@ -1,0 +1,18 @@
+set -u
+
+# install the H2O example used by runtest.sh
+mkdir -p $PREFIX/share/examples
+cp -r Examples/H2O $PREFIX/share/examples/
+
+if [ -x $ISSP_UCOUNT ]; then
+  cd $PREFIX/bin
+  for file in siesta; do
+    mv ${file} ${file}_nocount
+    cat << EOF > ${file}
+#!/bin/sh
+${ISSP_UCOUNT} siesta
+${PREFIX}/bin/${file}_nocount \$@
+EOF
+    chmod +x ${file}
+  done
+fi
