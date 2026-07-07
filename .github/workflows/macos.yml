@@ -1,0 +1,47 @@
+name: macos
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 1,15 * *' # JST 9:00 on 1st and 15th every month
+
+jobs:
+  smoke:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: brew
+        run: |
+          # wget is used by all download.sh; open-mpi pulls in Homebrew gcc,
+          # which gcc-wrapper requires
+          brew install wget open-mpi
+
+      - name: configure
+        run: echo "MA_ROOT=$HOME/materiapps" > $HOME/.mainstaller
+
+      - name: setup
+        run: sh setup/setup.sh
+
+      - name: gcc-wrapper
+        run: |
+          cd tools/gcc-wrapper
+          sh install.sh
+          sh link.sh
+          . $HOME/materiapps/env.sh
+          gcc --version
+          gfortran --version
+
+      - name: komega
+        run: |
+          cd apps/komega
+          sh install.sh
+          sh link.sh
+
+      - name: komega test
+        run: |
+          cd apps/komega
+          sh runtest.sh
