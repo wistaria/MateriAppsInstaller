@@ -1,0 +1,15 @@
+#!/bin/sh
+
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+. $SCRIPT_DIR/../../scripts/util.sh
+. $SCRIPT_DIR/version.sh
+set_prefix
+
+# when bumping the version, confirm the release asset still follows this
+# pattern at https://gitlab.com/siesta-project/siesta/-/releases
+URL=https://gitlab.com/siesta-project/siesta/-/releases/${__VERSION__}/downloads/siesta-${__VERSION__}.tar.gz
+ARCHIVE=${SOURCE_DIR}/${__NAME__}-${__VERSION__}.tar.gz
+
+if [ -f $ARCHIVE ]; then :; else
+  check wget $URL -O $ARCHIVE
+fi
