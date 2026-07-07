@@ -74,6 +74,9 @@ check() {
   "$@" 2>&1 || result=$?
   if [ $result -ne 0 ]; then
     echo "Failed: $@"
+    if [ -n "$LOG" ]; then
+      echo "See log for details: $LOG"
+    fi
     exit $result
   fi
   return 0
