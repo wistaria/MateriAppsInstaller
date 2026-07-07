@@ -10,11 +10,13 @@ Application list
 .. toctree::
    :maxdepth: 1
 
+   README_alamode
    README_alps
    README_alpscore
    README_dsqss
    README_espresso
    README_hphi
+   README_itensor
    README_komega
    README_lammps
    README_mvmc
