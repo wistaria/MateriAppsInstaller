@@ -1,0 +1,22 @@
+name: version watch
+
+on:
+  schedule:
+    - cron: '0 2 1,15 * *' # JST 11:00 on 1st and 15th every month
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check upstream versions and file issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: sh scripts/check_upstream_versions.sh --create-issues
