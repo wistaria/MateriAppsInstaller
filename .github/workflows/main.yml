@@ -8,6 +8,20 @@ on:
 
 
 jobs:
+  shellcheck:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: shellcheck shared scripts
+        run: |
+          shellcheck --version
+          shellcheck --severity=warning -s sh \
+            scripts/*.sh \
+            setup/setup.sh setup/config/default/setup.sh \
+            check_prefix.sh
+
   apps:
     runs-on: ${{ matrix.os }}
 
