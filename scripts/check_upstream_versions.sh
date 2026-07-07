@@ -23,6 +23,15 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 ROOT_DIR=$(dirname "$SCRIPT_DIR")
 CREATE_ISSUES=${1:-}
 
+open_titles=""
+if [ "$CREATE_ISSUES" = "--create-issues" ]; then
+  # fetched once; created titles are appended locally below
+  open_titles=$(gh issue list --state open --limit 1000 --json title --jq '.[].title') || {
+    echo "Fatal: cannot list open issues"
+    exit 1
+  }
+fi
+
 outdated=0
 errors=0
 for dir in "$ROOT_DIR"/apps/* "$ROOT_DIR"/tools/*; do
@@ -89,19 +98,21 @@ for dir in "$ROOT_DIR"/apps/* "$ROOT_DIR"/tools/*; do
 
   if [ "$CREATE_ISSUES" = "--create-issues" ]; then
     title="[$name] New upstream version $latest_norm"
-    if gh issue list --state open --limit 500 \
-         --json title --jq '.[].title' | grep -Fxq "$title"; then
+    if printf '%s\n' "$open_titles" | grep -Fxq "$title"; then
       echo "         issue already open: $title"
-    else
-      gh issue create --title "$title" --body "The upstream release of \`$name\` (https://github.com/$ownerrepo) is now **$latest_norm**, while \`version.sh\` pins **$pinned**.
+    elif gh issue create --title "$title" --body "The upstream release of \`$name\` (https://github.com/$ownerrepo) is now **$latest_norm**, while \`version.sh\` pins **$pinned**.
 
 To update:
 1. Bump the version (and reset the MA_REVISION to 1) in the package's \`version.sh\`
 2. Check whether the URL pattern in \`download.sh\` still matches
 3. Rename or drop stale \`patch/$name-$pinned.patch\` files if present
 
-_Opened automatically by the version watch workflow._"
+_Opened automatically by the version watch workflow._"; then
       echo "         issue created: $title"
+      open_titles=$(printf '%s\n%s' "$open_titles" "$title")
+    else
+      echo "ERROR    $name: gh issue create failed"
+      errors=$((errors + 1))
     fi
   fi
 done
