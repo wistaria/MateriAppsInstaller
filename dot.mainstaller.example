@@ -7,9 +7,9 @@
 #   - put NO spaces around '='   (MA_ROOT=... , not MA_ROOT = ...)
 #   - none of the directory paths may contain whitespace
 #
-# Every variable is optional; the default (shown after '=' below) is
-# used when a variable is unset. Run `sh check_prefix.sh` to print the
-# directories that are actually in effect.
+# The three directory variables below are optional; the value shown
+# after '=' is the built-in default used when the variable is unset.
+# Run `sh check_prefix.sh` to print the directories actually in effect.
 
 # Directory where the software is installed.
 MA_ROOT=$HOME/materiapps
@@ -20,8 +20,10 @@ BUILD_DIR=$HOME/build
 # Directory where downloaded source archives are cached.
 SOURCE_DIR=$HOME/source
 
-# Base URL of the MateriApps LIVE! Debian repository. Most users never
-# need this; it is only used by a few Debian-packaged applications.
+# Optional: override the base URL of the MateriApps LIVE! Debian
+# repository (used only by a few Debian-packaged applications). Leave
+# this commented out to keep the built-in default; most users never
+# need it.
 # MALIVE_REPOSITORY=https://download.sourceforge.net/project/materiappslive/Debian/archive/buster
 
 # You can keep several configuration files (e.g. one per machine) and
