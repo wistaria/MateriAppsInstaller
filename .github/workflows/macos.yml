@@ -32,6 +32,15 @@ jobs:
           sh install.sh
           sh link.sh
           . $HOME/materiapps/env.sh
+          # the wrapper, not a compiler that happens to be on the runner
+          # PATH, must resolve first
+          for prog in gcc gfortran; do
+            p=$(command -v $prog)
+            case "$p" in
+              $HOME/materiapps/gcc-wrapper/*) echo "$prog -> $p" ;;
+              *) echo "Error: $prog resolves to $p, not to the gcc-wrapper"; exit 1 ;;
+            esac
+          done
           gcc --version
           gfortran --version
 
