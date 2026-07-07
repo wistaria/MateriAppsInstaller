@@ -4,6 +4,7 @@ reject_whitespace() {
   case "$2" in
     *[' 	']*)
       echo "Fatal: $1 ($2) must not contain whitespace"
+      echo "Set a whitespace-free path for $1 in \$HOME/.mainstaller"
       exit 127
       ;;
   esac

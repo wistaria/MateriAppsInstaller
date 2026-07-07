@@ -144,6 +144,7 @@ Setup
        ``BUILD_DIR`` , ``$HOME/build`` , Installation directory
        ``SOURCE_DIR`` , ``$HOME/source`` , Source code archive file download directory
 
+   - None of these directories may contain whitespace in its path; the installer aborts with an error if one does. If your home directory contains whitespace, set whitespace-free paths in ``$HOME/.mainstaller``.
    - If this file does not exist, the software will be installed under ``$ HOME materiapps``
    - (*) Note that the actual installation location uses the contents of the ``.mainstaller`` file at the time of the installation work described below.
 
