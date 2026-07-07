@@ -6,7 +6,13 @@ import h5py
 
 def get_retry(url, retry_times, errs):
     for t in range(retry_times + 1):
-        r = requests.get(url, timeout=30)
+        try:
+            r = requests.get(url, timeout=30)
+        except requests.exceptions.RequestException:
+            if t < retry_times:
+                time.sleep(2)
+                continue
+            raise
         if t < retry_times:
             if r.status_code in errs:
                 time.sleep(2)
