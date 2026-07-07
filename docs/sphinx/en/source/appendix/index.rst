@@ -13,6 +13,7 @@ Application list
    README_alamode
    README_alps
    README_alpscore
+   README_dcore
    README_dsqss
    README_espresso
    README_hphi
@@ -23,3 +24,4 @@ Application list
    README_openmx
    README_respack
    README_tenes
+   README_triqs
