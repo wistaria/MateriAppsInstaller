@@ -58,9 +58,10 @@ MateriAppsInstallerのディレクトリにはいり、 ::
 
 $ sh setup/setup.sh
 
-を実行します。macOSでは、アプリのビルドにApple clang（多くのアプリをビルド
-できない）ではなくHomebrewのGCC/GFortran（上記の ``brew install gcc`` ）を
-使わせるため、GCCラッパーをインストール・リンクします。 ::
+を実行します。macOSでは、いずれかのアプリをインストールする前に一度だけ、
+GCCラッパーをセットアップします。これにより、アプリのビルドにApple clang
+（多くのアプリをビルドできない）ではなくHomebrewのGCC/GFortran（上記ツール
+一覧の ``brew install gcc`` が必要）を使わせます。 ::
 
 $ (cd tools/gcc-wrapper && sh install.sh && sh link.sh)
 $ source $HOME/materiapps/env.sh

@@ -56,9 +56,10 @@ Go to the MateriAppsInstaller directory, and run the following command. ::
 
 $ sh setup/setup.sh
 
-On macOS, install and link the GCC wrapper so that the application builds use
-the Homebrew GCC/GFortran (``brew install gcc`` above) instead of Apple clang,
-which cannot build most of the applications. ::
+On macOS, set up the GCC wrapper once, before installing any application, so
+that the application builds use the Homebrew GCC/GFortran (this requires
+``brew install gcc`` from the tool list above) instead of Apple clang, which
+cannot build most of the applications. ::
 
 $ (cd tools/gcc-wrapper && sh install.sh && sh link.sh)
 $ source $HOME/materiapps/env.sh

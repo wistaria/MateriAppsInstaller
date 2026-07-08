@@ -98,9 +98,9 @@ Files marked with * indicate files that always exist in the directory.
 
     - A directory containing the manual and its source code
 
-  - macosx directory
+  - macos directory
 
-    - A directory containing scripts to install the necessary tools using Macports
+    - A directory containing scripts to install the necessary tools using MacPorts
 
   - scripts directory
 
