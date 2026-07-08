@@ -194,7 +194,7 @@ Install
 
       - ``ISSP_UCOUNT`` is the path of the utilization rate measurement script in Supercomputer on Institute for Solid State Physics, and most users do not have to worry about it
 
-      - For other variables available, see the beginning description of ``install.sh``.
+      - For other variables available, see the beginning of ``install.sh`` (or of ``scripts/install_common.sh`` for applications whose ``install.sh`` uses the shared install driver).
 
 - Run a simple test with ``sh runtest.sh``
 
