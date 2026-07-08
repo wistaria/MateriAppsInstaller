@@ -31,7 +31,7 @@
 		  |─ apps
 		  |─ check_prefix.sh
 		  |─ docs
-		  |─ macos
+		  |─ misc
 		  |- scripts
 		  |─ setup
 		  |─ tools
@@ -98,10 +98,6 @@
   - docsディレクトリ
 
     - マニュアル及びそのソースコード一式が格納されているディレクトリ
-
-  - macosディレクトリ
-
-    - Macports を用いて必要なツールをインストールするためのスクリプトが格納されているディレクトリ
 
   - scriptsディレクトリ
 
