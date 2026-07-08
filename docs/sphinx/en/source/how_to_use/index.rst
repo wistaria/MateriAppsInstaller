@@ -27,16 +27,16 @@ Directory Structure
 
   .. code-block:: bash
 
-          |─ setup
-          |─ apps
-          |─ docs
-          |─ tools
-          |─ check_prefix.sh
-          |─ macosx
-          |   |─ install.sh
-          |   |─ ports.sh
           |- README.md
-          |- util.sh
+          |─ apps
+          |─ check_prefix.sh
+          |─ docs
+          |─ macos
+          |   |─ ports.sh
+          |─ misc
+          |─ scripts
+          |─ setup
+          |─ tools
 
 
 - The directory structure in setup, tools, and apps is given as follows.

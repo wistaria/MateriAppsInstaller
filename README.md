@@ -21,6 +21,8 @@ Install script collection for MateriApps Software
     - `source $HOME/materiapps/hphi/hphivars.sh`
     - `HPhi --version`
 
+On **macOS** (verified on recent macOS by CI), install and link `tools/gcc-wrapper` and `source $HOME/materiapps/env.sh` before building applications, so the builds use the Homebrew GCC/GFortran instead of Apple clang. See the macOS tutorial in the [manual](https://wistaria.github.io/MateriAppsInstaller/manual/master/en/index.html) for details.
+
 # License and Copyright
 
 The University of Tokyo holds the copyright of MateriApps Installer, and it is distributed under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.
