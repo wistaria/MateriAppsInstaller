@@ -27,16 +27,14 @@ Directory Structure
 
   .. code-block:: bash
 
-          |─ setup
-          |─ apps
-          |─ docs
-          |─ tools
-          |─ check_prefix.sh
-          |─ macosx
-          |   |─ install.sh
-          |   |─ ports.sh
           |- README.md
-          |- util.sh
+          |─ apps
+          |─ check_prefix.sh
+          |─ docs
+          |─ misc
+          |─ scripts
+          |─ setup
+          |─ tools
 
 
 - The directory structure in setup, tools, and apps is given as follows.
@@ -97,10 +95,6 @@ Files marked with * indicate files that always exist in the directory.
   - docs directory
 
     - A directory containing the manual and its source code
-
-  - macosx directory
-
-    - A directory containing scripts to install the necessary tools using Macports
 
   - scripts directory
 
