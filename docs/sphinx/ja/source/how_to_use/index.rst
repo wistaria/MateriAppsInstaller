@@ -32,6 +32,8 @@
 		  |─ check_prefix.sh
 		  |─ docs
 		  |─ macos
+		  |   |─ ports.sh
+		  |─ misc
 		  |- scripts
 		  |─ setup
 		  |─ tools

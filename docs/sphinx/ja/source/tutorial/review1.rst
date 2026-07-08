@@ -1,9 +1,11 @@
 
 
-macOS 10.15 (Catalina)へのインストール
+macOSへのインストール
 ------------------------------------------------------------
 
-本節では、macOS 10.15 (Catalina)でMateriApps Installerを利用する方法を記載します。
+本節では、macOSでMateriApps Installerを利用する方法を記載します。本手順は、
+プロジェクトの継続的インテグレーション（ ``macos`` ワークフロー）により、
+近年のmacOS（Apple Silicon・Intelの両方）で動作確認されています。
 
 ツールのインストール
 ****************************
@@ -56,11 +58,21 @@ MateriAppsInstallerのディレクトリにはいり、 ::
 
 $ sh setup/setup.sh
 
-を実行します。次にインストールしたいアプリのディレクトリに入り、 ::
+を実行します。macOSでは、いずれかのアプリをインストールする前に一度だけ、
+GCCラッパーをセットアップします。これにより、アプリのビルドにApple clang
+（多くのアプリをビルドできない）ではなくHomebrewのGCC/GFortran（上記ツール
+一覧の ``brew install gcc`` が必要）を使わせます。 ::
 
-$ CC=gcc-10 CXX=g++-10 FC=gfortran-10 CPP=cpp-10 sh install.sh
+$ (cd tools/gcc-wrapper && sh install.sh && sh link.sh)
+$ source $HOME/materiapps/env.sh
 
-を実行すればインストールができるはずです。正しくインストールされているかどうかは、各アプリのディレクトリで ::
+次にインストールしたいアプリのディレクトリに入り、 ::
+
+$ sh install.sh
+
+を実行すればインストールができるはずです。GCCラッパーを設定済みであれば、
+コンパイラを明示的に指定する必要はありません。正しくインストールされているか
+どうかは、各アプリのディレクトリで ::
 
 $ sh runtest.sh
 
