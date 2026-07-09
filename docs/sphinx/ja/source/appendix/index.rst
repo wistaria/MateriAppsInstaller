@@ -21,3 +21,4 @@
    README_openmx
    README_respack
    README_tenes
+   README_turbogenius
