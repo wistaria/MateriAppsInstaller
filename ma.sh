@@ -98,11 +98,15 @@ ma_do_install() {
 }
 
 ma_cmd_list() {
+  # version.sh is external, third-party-editable metadata; relax nounset
+  # only while sourcing it, so a var reference before __VERSION__ can't
+  # abort the subshell (see ma_do_install for the same pattern).
   echo "[Applications]"
   for d in "$MA_TOP"/apps/*/; do
     [ -f "$d/version.sh" ] || continue
     name=$(basename "$d")
-    ver=$( . "$d/version.sh" >/dev/null 2>&1; printf '%s' "${__VERSION__:-?}" )
+    ver=$( set +u; . "$d/version.sh" >/dev/null 2>&1; set -u
+           printf '%s' "${__VERSION__:-?}" )
     if [ -n "$(ma_requires apps "$name")" ]; then tag=" [deps]"; else tag=""; fi
     printf '  %s %s%s\n' "$name" "$ver" "$tag"
   done
@@ -110,7 +114,8 @@ ma_cmd_list() {
   for d in "$MA_TOP"/tools/*/; do
     [ -f "$d/version.sh" ] || continue
     name=$(basename "$d")
-    ver=$( . "$d/version.sh" >/dev/null 2>&1; printf '%s' "${__VERSION__:-?}" )
+    ver=$( set +u; . "$d/version.sh" >/dev/null 2>&1; set -u
+           printf '%s' "${__VERSION__:-?}" )
     printf '  %s %s\n' "$name" "$ver"
   done
 }

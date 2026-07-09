@@ -17,8 +17,14 @@ ma_requires() {
   _vf="$MA_TOP/$1/$2/version.sh"
   [ -f "$_vf" ] || return 0
   _rv=$(ma_reqvar "$2")
-  # shellcheck disable=SC1090
-  ( . "$_vf" >/dev/null 2>&1; eval "printf '%s' \"\${$_rv:-}\"" )
+  # version.sh is external, third-party-editable metadata; source it with
+  # nounset relaxed so a var reference before its _REQUIRES line can't abort
+  # the sourcing subshell and silently yield an empty (dropped) deps list.
+  ( set +u
+    # shellcheck disable=SC1090
+    . "$_vf" >/dev/null 2>&1
+    set -u
+    eval "printf '%s' \"\${$_rv:-}\"" )
 }
 
 # Exact whole-line membership test (never substring).
