@@ -57,3 +57,37 @@ ma_resolve() {
   done
   printf '%s' "$_out"
 }
+
+# ma__tool_prefix_exists <tool> -> 0 if $MA_ROOT/<t>/<t>-<ver>-<rev> exists
+ma__tool_prefix_exists() {
+  local _t="$1"
+  ( . "$MA_TOP/tools/$_t/version.sh" >/dev/null 2>&1
+    [ -n "${__VERSION__:-}" ] || exit 1
+    [ -d "$MA_ROOT/$_t/$_t-${__VERSION__}-${__MA_REVISION__}" ] )
+}
+
+# ma__find_have <tool> -> value of MA_HAVE_<TOOL> from tools/<t>/find.sh (or empty)
+ma__find_have() {
+  local _t="$1" _hv
+  _hv="MA_HAVE_$(printf '%s' "$_t" | tr '[:lower:]' '[:upper:]' | tr -c 'A-Z0-9' '_')"
+  # find.sh derives paths from SCRIPT_DIR; set it so it resolves correctly.
+  # shellcheck disable=SC2034
+  ( SCRIPT_DIR="$MA_TOP/tools/$_t"
+    . "$MA_TOP/tools/$_t/find.sh" >/dev/null 2>&1
+    eval "printf '%s' \"\${$_hv:-}\"" )
+}
+
+# ma_tool_status <tool> -> available | partial | absent
+ma_tool_status() {
+  local _t="$1" _marker="$MA_ROOT/env.d/${1}vars.sh"
+  if [ -f "$_marker" ] && [ -r "$_marker" ]; then
+    echo available; return 0
+  fi
+  if ma__tool_prefix_exists "$_t"; then
+    echo partial; return 0
+  fi
+  if [ -f "$MA_TOP/tools/$_t/find.sh" ] && [ "$(ma__find_have "$_t")" = "yes" ]; then
+    echo available; return 0
+  fi
+  echo absent
+}

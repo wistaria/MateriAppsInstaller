@@ -78,5 +78,32 @@ mkdir -p "$FIX/apps/nodeps"; : > "$FIX/apps/nodeps/version.sh"
 order=$(ma_resolve nodeps) || fail "nodeps should exit 0"
 assert_eq "$order" "" "nodeps empty order"
 
+# --- ma_tool_status ---
+MA_ROOT="$FIX/maroot"
+mkdir -p "$MA_ROOT/env.d"
+# tool st1 with a version.sh (needed for prefix path)
+mkdir -p "$FIX/tools/st1"; printf '__VERSION__=1.0\n__MA_REVISION__=1\n' > "$FIX/tools/st1/version.sh"
+
+# absent: nothing installed, no find.sh
+assert_eq "$(ma_tool_status st1)" "absent" "status absent"
+
+# partial: prefix dir exists, no marker
+mkdir -p "$MA_ROOT/st1/st1-1.0-1"
+assert_eq "$(ma_tool_status st1)" "partial" "status partial"
+
+# available: readable marker present
+target="$MA_ROOT/st1/st1vars-1.0-1.sh"; : > "$target"
+ln -s "$target" "$MA_ROOT/env.d/st1vars.sh"
+assert_eq "$(ma_tool_status st1)" "available" "status available (marker)"
+
+# dangling marker -> not available (falls back to partial, prefix still there)
+rm -f "$target"
+assert_eq "$(ma_tool_status st1)" "partial" "status dangling marker -> partial"
+
+# find.sh available for a tool with no installer state
+mkdir -p "$FIX/tools/st2"; printf '__VERSION__=1.0\n__MA_REVISION__=1\n' > "$FIX/tools/st2/version.sh"
+printf 'MA_HAVE_ST2=yes\n' > "$FIX/tools/st2/find.sh"
+assert_eq "$(ma_tool_status st2)" "available" "status find.sh yes"
+
 [ "$FAILED" -eq 0 ] && echo "ALL TESTS PASSED"
 exit "$FAILED"
