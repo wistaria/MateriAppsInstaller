@@ -150,6 +150,24 @@ Setup
 Install
 ============
 
+Quick install with ``ma.sh``
+-----------------------------
+
+- For apps that declare their tool dependencies, a single command builds the
+  missing tools (in dependency order) and then the app. ::
+
+    sh ma.sh install hphi        # build cmake/openmpi/scalapack as needed, then HPhi
+    sh ma.sh list                # available apps/tools ([deps] = auto-resolves tools)
+    sh ma.sh installed           # what is already installed
+
+  - Automatic dependency resolution applies only to apps tagged ``[deps]`` in
+    ``sh ma.sh list``; for other apps ``ma.sh`` installs just that app and you
+    install its tools first (the per-directory flow below).
+  - ``ma.sh`` builds tools in their default mode.
+
+- The steps below describe the detailed, per-directory install flow that
+  ``ma.sh`` runs on your behalf.
+
 - Move to each software directory and run ``install.sh``. ::
 
     sh install.sh
