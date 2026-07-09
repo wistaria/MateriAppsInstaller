@@ -22,7 +22,7 @@
 
 `install.sh` runs an out-of-source CMake build with the default options
 (`EXT_SERIAL=ON`, `EXT_PARALLEL=ON`, QMC + DFT + tools). Set `CC` / `FC` in
-`~/.mainstaller` or the environment to select a specific compiler (CMake honours
+`~/.mainstaller` or the environment to select a specific compiler (CMake honors
 the `CC` / `FC` variables); `MA_EXTRA_FLAGS` is passed as extra C/Fortran flags
 and `MAKE_J` controls the parallel make.
 
@@ -35,7 +35,7 @@ Installed executables (`$TURBORVB_ROOT/bin`) include the QMC engine
 
 - After `sh link.sh`, `source $MA_ROOT/turborvb/turborvbvars.sh` puts the
   TurboRVB binaries on `PATH` and exports `TURBORVB_ROOT`.
-- **TurboGenius integration:** the [turbogenius](../turbogenius) Python wrapper
+- **TurboGenius integration:** the TurboGenius Python wrapper (`apps/turbogenius`)
   reads `TURBORVB_ROOT` at import time. Source `turborvbvars.sh` before
   `turbogeniusvars.sh` so TurboGenius drives this TurboRVB build. TurboRVB
   v1.0.0 names some serial tools with a `-serial` suffix

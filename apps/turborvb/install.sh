@@ -9,7 +9,8 @@ export MAKE_J="${MAKE_J:-"-j1"}"
 export MA_EXTRA_FLAGS="${MA_EXTRA_FLAGS:-}"
 
 # export explicitly if defined
-test -n "${CXX+defined}" && export CXX="$CXX"
+test -n "${CC+defined}" && export CC="$CC"
+test -n "${FC+defined}" && export FC="$FC"
 EOF
 . ./config.txt
 

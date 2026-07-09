@@ -33,7 +33,7 @@ tools）で out-of-source の CMake ビルドを行う。特定のコンパイ�
 
 - `sh link.sh` 後、`source $MA_ROOT/turborvb/turborvbvars.sh` で TurboRVB の
   バイナリを `PATH` に通し、`TURBORVB_ROOT` を export する。
-- **TurboGenius 連携:** [turbogenius](../turbogenius) の Python ラッパーは
+- **TurboGenius 連携:** TurboGenius（`apps/turbogenius`）の Python ラッパーは
   import 時に `TURBORVB_ROOT` を参照する。`turbogeniusvars.sh` より先に
   `turborvbvars.sh` を source すれば、TurboGenius がこの TurboRVB を利用する。
   TurboRVB v1.0.0 は一部のシリアルツールを `-serial` 付きで命名する
