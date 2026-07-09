@@ -22,4 +22,4 @@ https://github.com/kousuke-nakano/turbogenius
 MateriApps URL
 --------------
 
-https://ma.issp.u-tokyo.ac.jp/app/7279
+https://ma.issp.u-tokyo.ac.jp/app/7273

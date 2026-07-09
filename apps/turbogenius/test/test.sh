@@ -27,5 +27,9 @@ if [ "$status" != "0" ]; then
   cat turbogenius.out
   exit 1
 fi
-grep -qi "Usage" turbogenius.out
+if ! grep -qi "Usage" turbogenius.out; then
+  echo "Error: turbogenius --help did not print a usage banner" >&2
+  cat turbogenius.out
+  exit 1
+fi
 echo "turbogenius CLI OK"
