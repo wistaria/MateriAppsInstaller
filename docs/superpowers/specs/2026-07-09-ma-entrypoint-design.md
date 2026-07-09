@@ -112,6 +112,13 @@ For each tool in the resolved order, `ma.sh` decides whether to build it:
    that one variable.
 3. Otherwise, the tool needs to be built.
 
+**Precedence.** The installer-state checks (1 = marker present → available;
+partial = prefix directory present but no readable marker → abort, see
+Build execution) are evaluated **before** `find.sh` (2). So an
+installer-managed prefix — complete or partial — always wins over a
+system copy; `find.sh` is consulted only when the installer has no prefix
+for that tool at all.
+
 **Environment propagation.** After building a tool (case 3), `ma.sh` sources
 `$MA_ROOT/env.sh` so the installer-built tool is on `PATH`/`CMAKE_PREFIX_PATH`
 for later dependency checks and builds. A tool judged available via case 2
@@ -210,6 +217,11 @@ the install-time warning for apps without `REQUIRES`, this removes the
 - **CLI smoke**: no-args/`-h`/`--help`/unknown-subcommand usage, and
   `list` (incl. the `[deps]` marker) / `installed`.
 - `shellcheck -s sh` over `ma.sh` and `scripts/ma_deps.sh`.
+- **version.sh declarative-only lint**: a CI check (and a helper the
+  resolver could reuse) asserting each `version.sh` contains only comments
+  and simple `NAME=value` / `export NAME=value` assignments — no commands,
+  pipelines, or substitutions — so sourcing them in the resolver stays
+  side-effect-free as new packages are added.
 
 ## Resolved questions (from design review)
 
