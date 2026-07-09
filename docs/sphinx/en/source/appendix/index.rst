@@ -12,6 +12,7 @@ Application list
 
    README_alps
    README_alpscore
+   README_cryspy
    README_dsqss
    README_espresso
    README_hphi
