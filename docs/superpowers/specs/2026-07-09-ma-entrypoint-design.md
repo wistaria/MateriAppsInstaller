@@ -18,17 +18,20 @@ orchestrates the existing scripts.
 ```
 sh ma.sh install <app> [mode]   # resolve deps, build missing tools, install app
 sh ma.sh list                   # available apps/tools and their pinned versions
-sh ma.sh installed              # what is currently installed under MA_ROOT
+sh ma.sh installed              # installed components (apps AND tools) under MA_ROOT
 sh ma.sh help                   # usage
 ```
 
 `sh ma.sh` with no arguments, `-h`, or `--help` prints usage and exits 0.
 An unknown subcommand prints usage and exits non-zero.
 
-`install` validates its arguments before doing any work: `<app>` must be a
-directory under `apps/` (otherwise error + `list` hint); `mode` is not
-validated by `ma.sh` — it is passed through to the app's `install.sh`,
-which already prints the available modes and exits on an unknown mode.
+`install` validates its arguments **before doing any work** (so a typo does
+not surface only after all dependencies are built):
+- `<app>` must be a directory under `apps/` (otherwise error + `list` hint).
+- `mode` (default `default`) must exist as `apps/<app>/config/<mode>/`
+  (otherwise error listing the available modes — the same list the app's
+  `install.sh` would show, just checked up front). The mode is still
+  passed through to `install.sh` for the actual build.
 
 Non-goals (YAGNI): uninstall, upgrade/version pinning, parallel builds,
 removing tools, `--force`, `--dry-run`. `install` auto-builds tools only
@@ -90,8 +93,12 @@ Implementation constraints (POSIX sh has no arrays/maps):
 - Reading a package's `REQUIRES`: source only that one `version.sh` in a
   subshell and echo the single derived variable, e.g.
   `(. tools/<t>/version.sh; eval "echo \"\$$(reqvar <t>)\"")`, so nothing
-  leaks into the resolver's shell. `reqvar <name>` =
-  `$(echo <name> | tr 'a-z-' 'A-Z_')_REQUIRES`.
+  leaks into the resolver's shell. `reqvar <name>` upcases and replaces
+  every non-alphanumeric character with `_` so the result is always a valid
+  shell identifier:
+  `$(echo <name> | tr '[:lower:]' '[:upper:]' | tr -c 'A-Z0-9' '_' | sed 's/_*$//')_REQUIRES`
+  (e.g. `gcc-wrapper` → `GCC_WRAPPER_REQUIRES`). The same normalization is
+  reused for `MA_HAVE_<TOOL>` in the availability check.
 
 Because it only reads `version.sh` (declarative) and mutates no global
 state, `ma_resolve` has no side effects and is cheap to unit-test.
@@ -106,10 +113,9 @@ For each tool in the resolved order, `ma.sh` decides whether to build it:
    across all tools, needs no `find.sh`.
 2. Otherwise, if `tools/<tool>/find.sh` exists and reports
    `MA_HAVE_<TOOL>=yes` (a system-provided copy), treat as available. The
-   variable name is `MA_HAVE_$(echo <tool> | tr 'a-z-' 'A-Z_')` (matching
-   the existing `ROOTNAME` normalization, e.g. `gcc-wrapper` →
-   `MA_HAVE_GCC_WRAPPER`). `ma.sh` sources `find.sh` in a subshell and reads
-   that one variable.
+   variable name is `MA_HAVE_<TOOL>` using the same normalization as
+   `reqvar` (e.g. `gcc-wrapper` → `MA_HAVE_GCC_WRAPPER`). `ma.sh` sources
+   `find.sh` in a subshell and reads that one variable.
 3. Otherwise, the tool needs to be built.
 
 **Precedence.** The installer-state checks (1 = marker present → available;
@@ -138,10 +144,16 @@ will rebuild it — safe, just redundant.
 ## Build execution
 
 ```
+order=$(ma_resolve <app>) || abort   # capture first; a resolver error
+                                      # (cycle/unknown) must stop ma.sh,
+                                      # not be iterated as tool names
 if <app> has no <NAME>_REQUIRES:
     warn: "no dependency metadata for <app>; assuming required tools are
            already installed. Install them first if the build fails."
-for tool in $(ma_resolve <app>):
+if mode != default and any tool in $order needs building:
+    warn: "dependencies will be built in their default mode, not '<mode>';
+           pre-build them in a matching toolchain if that matters."
+for tool in $order:
     case (availability of tool):
       available            -> skip
       prefix exists but no readable env.d marker (partial/failed install)
@@ -176,6 +188,23 @@ for tool in $(ma_resolve <app>):
 - `ma.sh` only ever calls a package's `install.sh` and `link.sh`. It does
   not call `setup.sh`/`download.sh` directly, because each `install.sh`
   already runs its own `setup.sh` (which runs `download.sh`) internally.
+
+## `installed` subcommand
+
+`ma.sh installed` reports both kinds of components, since they register in
+different places: **tools** via `$MA_ROOT/env.d/<tool>vars.sh` and **apps**
+via `$MA_ROOT/<app>/<app>vars.sh`. It scans both and prints name + version
+(read from the linked vars file's header/path).
+
+## Version matching (availability)
+
+The availability check is **presence-based**, not version-matched: an
+installer-built tool of *any* version satisfies a dependency. This is
+acceptable because the installer pins one version per tool in its
+`version.sh`, and changing it is a deliberate manual version bump; a tool
+already built at the pinned version is what the marker reflects in
+practice. Verifying the installed version against `version.sh` (to rebuild
+a stale tool automatically) is a documented non-goal for the first cut.
 
 ## Incremental metadata population
 
