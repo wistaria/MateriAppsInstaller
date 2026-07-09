@@ -105,6 +105,26 @@ mkdir -p "$FIX/tools/st2"; printf '__VERSION__=1.0\n__MA_REVISION__=1\n' > "$FIX
 printf 'MA_HAVE_ST2=yes\n' > "$FIX/tools/st2/find.sh"
 assert_eq "$(ma_tool_status st2)" "available" "status find.sh yes"
 
+# find.sh that derives its own dir from $0 and reads a sibling file -- this
+# mirrors real find.sh files (lapack, boost, fftw, eigen3, gsl, hdf5,
+# libffi, nfft, openssl, tcltk, zlib), which do
+# SCRIPT_DIR=$(cd "$(dirname $0)"; pwd) and then read paths under
+# SCRIPT_DIR. If ma__find_have sources find.sh without $0 pointing at
+# find.sh itself, dirname $0 resolves to the wrong directory, the sibling
+# file can't be read, and MA_HAVE_ST3 never becomes yes.
+mkdir -p "$FIX/tools/st3"; printf '__VERSION__=1.0\n__MA_REVISION__=1\n' > "$FIX/tools/st3/version.sh"
+printf 'present\n' > "$FIX/tools/st3/sibling.marker"
+cat > "$FIX/tools/st3/find.sh" <<'EOF'
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+if [ -r "${SCRIPT_DIR}/sibling.marker" ]; then
+  MA_HAVE_ST3=yes
+else
+  MA_HAVE_ST3=no
+fi
+EOF
+assert_eq "$(ma_tool_status st3)" "available" \
+  "status find.sh deriving SCRIPT_DIR from \$0 (sibling-file lookup)"
+
 # --- lint_version_sh ---
 LINT="$THIS_DIR/lint_version_sh.sh"
 ok="$FIX/ok.sh"; bad="$FIX/bad.sh"; subst="$FIX/subst.sh"
