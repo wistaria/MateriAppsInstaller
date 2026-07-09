@@ -1,5 +1,9 @@
 set -u
 
+# ALAMODE needs spglib (FFT is provided by Intel MKL here). On ohtaka spglib
+# comes from the MateriApps spglib tool; otherwise export SPGLIB_ROOT yourself.
+: "${SPGLIB_ROOT:?SPGLIB_ROOT is not set. Install the spglib tool or export SPGLIB_ROOT before building alamode.}"
+
 rm -rf build
 mkdir build
 cd build
