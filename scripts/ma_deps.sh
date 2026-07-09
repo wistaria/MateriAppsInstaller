@@ -68,13 +68,15 @@ ma__tool_prefix_exists() {
 
 # ma__find_have <tool> -> value of MA_HAVE_<TOOL> from tools/<t>/find.sh (or empty)
 ma__find_have() {
-  local _t="$1" _hv
+  local _t="$1" _hv _res
   _hv="MA_HAVE_$(printf '%s' "$_t" | tr '[:lower:]' '[:upper:]' | tr -c 'A-Z0-9' '_')"
-  # find.sh derives paths from SCRIPT_DIR; set it so it resolves correctly.
-  # shellcheck disable=SC2034
-  ( SCRIPT_DIR="$MA_TOP/tools/$_t"
-    . "$MA_TOP/tools/$_t/find.sh" >/dev/null 2>&1
-    eval "printf '%s' \"\${$_hv:-}\"" )
+  # find.sh re-derives SCRIPT_DIR from $0 (as it would when run directly by
+  # install.sh). If we just `. find.sh` here, $0 stays ma.sh's own $0, so
+  # `dirname $0` resolves at the wrong depth. Run it in a fresh `sh -c` with
+  # $0 pointed at find.sh itself so its own `dirname $0` is correct.
+  _res=$(sh -c '. "$0" >/dev/null 2>&1; eval "printf %s \"\${'"$_hv"':-}\""' \
+           "$MA_TOP/tools/$_t/find.sh")
+  printf '%s' "$_res"
 }
 
 # ma_tool_status <tool> -> available | partial | absent
