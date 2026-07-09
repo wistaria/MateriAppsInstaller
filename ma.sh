@@ -42,8 +42,60 @@ ma_cmd_install() {
   ma_do_install "$app" "$mode"   # implemented in Task 5
 }
 
-# placeholder until Task 5; keeps arg-validation testable now
-ma_do_install() { echo "install $1 (mode=$2) not yet implemented" >&2; return 0; }
+ma_do_install() {
+  app="$1"; mode="$2"
+
+  # util.sh/env.sh predate 'set -u' and reference vars (e.g. LD_LIBRARY_PATH)
+  # that are legitimately unset in a fresh shell; relax nounset only while
+  # sourcing them, without touching those files.
+  set +u
+  . "$MA_TOP/scripts/util.sh"
+  set_prefix
+  set -u
+  if [ ! -f "$MA_ROOT/env.sh" ]; then
+    echo "Error: $MA_ROOT/env.sh not found; run 'sh setup/setup.sh' first" >&2
+    return 1
+  fi
+  set +u
+  . "$MA_ROOT/env.sh"
+  set -u
+
+  order=$(ma_resolve "$app") || return 1   # cycle/unknown already reported
+
+  if [ -z "$(ma_requires apps "$app")" ]; then
+    echo "Notice: no dependency metadata for '$app'; assuming required tools" \
+         "are already installed (install them first if the build fails)." >&2
+  fi
+  if [ "$mode" != default ] && [ -n "$order" ]; then
+    echo "Notice: dependencies build in their default mode, not '$mode';" \
+         "pre-build them in a matching toolchain if that matters." >&2
+  fi
+
+  # build/skip each tool in dependency order
+  for tool in $order; do
+    case "$(ma_tool_status "$tool")" in
+      available) echo "== dependency '$tool' already available, skipping" ;;
+      partial)
+        echo "Error: '$tool' looks partially installed." >&2
+        echo "Remove $MA_ROOT/$tool/$tool-* and re-run." >&2
+        return 1 ;;
+      absent)
+        echo "== building dependency '$tool'"
+        ( cd "$MA_TOP/tools/$tool" && sh install.sh && sh link.sh ) || {
+          echo "Error: failed to build dependency '$tool' of '$app'" >&2
+          return 1; }
+        set +u
+        . "$MA_ROOT/env.sh"   # make it visible to later checks/builds
+        set -u ;;
+    esac
+  done
+
+  echo "== installing app '$app' (mode=$mode)"
+  ( cd "$MA_TOP/apps/$app" && sh install.sh "$mode" && sh link.sh ) || {
+    echo "Error: failed to install '$app'" >&2
+    return 1; }
+  echo "== done: $app"
+}
 
 # temporary stubs until Task 6
 ma_cmd_list() { echo "list not yet implemented" >&2; return 0; }
