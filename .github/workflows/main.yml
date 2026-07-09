@@ -54,7 +54,7 @@ jobs:
       - name: shellcheck ma scripts
         run: |
           sudo apt-get update && sudo apt-get -y install shellcheck
-          shellcheck --severity=warning -s sh ma.sh scripts/ma_deps.sh scripts/lint_version_sh.sh
+          shellcheck --severity=warning -s sh ma.sh scripts/ma_deps.sh scripts/lint_version_sh.sh scripts/ma_deps_test.sh scripts/ma_integration_test.sh
       - name: version.sh declarative lint
         run: sh scripts/lint_version_sh.sh
       - name: resolver unit tests
