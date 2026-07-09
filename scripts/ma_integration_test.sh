@@ -81,5 +81,35 @@ out=$(env MAINSTALLER_CONFIG="$RT/cfg" sh "$REPO/ma.sh" install appF 2>&1)
 echo "$out" | grep -q "partially installed" || fail "partial tF1 should report 'partially installed'"
 rm -rf "$REPO" "$RT"
 
+# list: shows apps and tools; marks apps with deps
+lst=$(sh "$MA" list 2>/dev/null) || fail "list should exit 0"
+echo "$lst" | grep -q "hphi" || fail "list should include hphi"
+
+# (Task 6 fixture for the [deps] marker)
+DT=$(mktemp -d); mkdir -p "$DT/apps/withdeps/config/default" "$DT/apps/nodeps/config/default" "$DT/tools"
+printf '__NAME__=withdeps\nWITHDEPS_VERSION=1\nWITHDEPS_REQUIRES="x"\n' > "$DT/apps/withdeps/version.sh"
+printf '__NAME__=nodeps\nNODEPS_VERSION=1\n' > "$DT/apps/nodeps/version.sh"
+mkdir -p "$DT/tools/x"; printf '__NAME__=x\nX_VERSION=1\n' > "$DT/tools/x/version.sh"
+cp -r "$TOP/scripts" "$DT/scripts"; cp "$TOP/ma.sh" "$DT/ma.sh"
+dlst=$(sh "$DT/ma.sh" list 2>/dev/null)
+echo "$dlst" | grep -E "withdeps.*\[deps\]" >/dev/null || fail "withdeps should be [deps]"
+echo "$dlst" | grep "nodeps" | grep -q "\[deps\]" && fail "nodeps must not be [deps]"
+rm -rf "$DT"
+
+# installed: reports tools (env.d) and apps (<app>/<app>vars.sh)
+IT=$(mktemp -d)
+printf 'MA_ROOT=%s/ma\nBUILD_DIR=%s/b\nSOURCE_DIR=%s/s\n' "$IT" "$IT" "$IT" > "$IT/cfg"
+env MAINSTALLER_CONFIG="$IT/cfg" sh "$TOP/setup/setup.sh" >/dev/null 2>&1
+# tool 'cmake' registers via env.d marker; app 'bar' via <app>/<app>vars.sh
+mkdir -p "$IT/ma/env.d" "$IT/ma/cmake" "$IT/ma/bar"
+: > "$IT/ma/cmake/cmakevars-1.0-1.sh"
+ln -sf "$IT/ma/cmake/cmakevars-1.0-1.sh" "$IT/ma/env.d/cmakevars.sh"
+: > "$IT/ma/bar/barvars-2.0-1.sh"
+ln -sf "$IT/ma/bar/barvars-2.0-1.sh" "$IT/ma/bar/barvars.sh"
+inst=$(env MAINSTALLER_CONFIG="$IT/cfg" sh "$MA" installed 2>/dev/null) || fail "installed should exit 0"
+echo "$inst" | grep -q "cmake" || fail "installed should list tool cmake (env.d)"
+echo "$inst" | grep -q "bar"   || fail "installed should list app bar (<app>vars)"
+rm -rf "$IT"
+
 [ "$FAILED" -eq 0 ] && echo "ALL TESTS PASSED"
 exit "$FAILED"

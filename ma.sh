@@ -97,9 +97,46 @@ ma_do_install() {
   echo "== done: $app"
 }
 
-# temporary stubs until Task 6
-ma_cmd_list() { echo "list not yet implemented" >&2; return 0; }
-ma_cmd_installed() { echo "installed not yet implemented" >&2; return 0; }
+ma_cmd_list() {
+  echo "[Applications]"
+  for d in "$MA_TOP"/apps/*/; do
+    [ -f "$d/version.sh" ] || continue
+    name=$(basename "$d")
+    ver=$( . "$d/version.sh" >/dev/null 2>&1; printf '%s' "${__VERSION__:-?}" )
+    if [ -n "$(ma_requires apps "$name")" ]; then tag=" [deps]"; else tag=""; fi
+    printf '  %s %s%s\n' "$name" "$ver" "$tag"
+  done
+  echo "[Tools]"
+  for d in "$MA_TOP"/tools/*/; do
+    [ -f "$d/version.sh" ] || continue
+    name=$(basename "$d")
+    ver=$( . "$d/version.sh" >/dev/null 2>&1; printf '%s' "${__VERSION__:-?}" )
+    printf '  %s %s\n' "$name" "$ver"
+  done
+}
+
+ma_cmd_installed() {
+  # util.sh predates 'set -u' and references vars that are legitimately
+  # unset in a fresh shell (see ma_do_install above); relax nounset only
+  # while sourcing it and calling set_prefix.
+  set +u
+  . "$MA_TOP/scripts/util.sh"; set_prefix
+  set -u
+  # Tools register an unversioned symlink under env.d/; apps register one
+  # under $MA_ROOT/<app>/<app>vars.sh (both also keep versioned files, so
+  # the unversioned symlink location is what distinguishes them).
+  echo "[Tools]"
+  for m in "$MA_ROOT"/env.d/*vars.sh; do
+    [ -e "$m" ] || continue
+    printf '  %s\n' "$(basename "$m" | sed 's/vars\.sh$//')"
+  done
+  echo "[Applications]"
+  for d in "$MA_ROOT"/*/; do
+    name=$(basename "$d")
+    [ -e "$d${name}vars.sh" ] || continue
+    printf '  %s\n' "$name"
+  done
+}
 
 case "${1:-help}" in
   -h|--help|help) ma_usage; exit 0 ;;
