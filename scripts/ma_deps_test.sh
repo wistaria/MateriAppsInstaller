@@ -105,5 +105,25 @@ mkdir -p "$FIX/tools/st2"; printf '__VERSION__=1.0\n__MA_REVISION__=1\n' > "$FIX
 printf 'MA_HAVE_ST2=yes\n' > "$FIX/tools/st2/find.sh"
 assert_eq "$(ma_tool_status st2)" "available" "status find.sh yes"
 
+# --- lint_version_sh ---
+LINT="$THIS_DIR/lint_version_sh.sh"
+ok="$FIX/ok.sh"; bad="$FIX/bad.sh"; subst="$FIX/subst.sh"
+compound1="$FIX/compound1.sh"; compound2="$FIX/compound2.sh"; btick="$FIX/btick.sh"
+printf '# comment\nFOO="1.0"\nexport BAR=baz\n' > "$ok"
+printf 'FOO=1\nrm -rf /tmp/x\n' > "$bad"
+printf 'V=$(echo 1 | tr a b)\n' > "$subst"
+printf 'FOO=1; rm -rf /tmp/x\n' > "$compound1"
+printf 'FOO=bar && echo x\n' > "$compound2"
+printf 'FOO=`echo x`\n' > "$btick"
+sh "$LINT" "$ok"    || fail "lint should accept assignments+comments"
+sh "$LINT" "$subst" || fail "lint should accept assignment with command substitution"
+sh "$LINT" "$bad"   && fail "lint should reject a bare command"
+sh "$LINT" "$compound1" && fail "lint should reject a semicolon-chained command"
+sh "$LINT" "$compound2" && fail "lint should reject an &&-chained command"
+sh "$LINT" "$btick"     && fail "lint should reject backtick command substitution"
+
+# real tree must be clean (all current version.sh are declarative)
+sh "$LINT" || fail "all repo version.sh should pass the declarative lint"
+
 [ "$FAILED" -eq 0 ] && echo "ALL TESTS PASSED"
 exit "$FAILED"

@@ -4,3 +4,6 @@ SCALAPACK_MA_REVISION="1"
 __NAME__=scalapack
 __VERSION__=${SCALAPACK_VERSION}
 __MA_REVISION__=${SCALAPACK_MA_REVISION}
+
+# Tools this tool needs (used by ma.sh dependency resolution).
+SCALAPACK_REQUIRES="openmpi lapack"

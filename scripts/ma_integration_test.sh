@@ -111,5 +111,8 @@ echo "$inst" | grep -q "cmake" || fail "installed should list tool cmake (env.d)
 echo "$inst" | grep -q "bar"   || fail "installed should list app bar (<app>vars)"
 rm -rf "$IT"
 
+echo "$(sh "$MA" list 2>/dev/null)" | grep -E "hphi .*\[deps\]" >/dev/null \
+  || fail "hphi should be marked [deps]"
+
 [ "$FAILED" -eq 0 ] && echo "ALL TESTS PASSED"
 exit "$FAILED"
