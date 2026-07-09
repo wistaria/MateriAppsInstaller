@@ -21,6 +21,20 @@ Install script collection for MateriApps Software
     - `source $HOME/materiapps/hphi/hphivars.sh`
     - `HPhi --version`
 
+## Quick install with `ma.sh`
+
+For apps that declare their tool dependencies, a single command builds the
+missing tools (in dependency order) and then the app:
+
+    sh ma.sh install hphi        # build cmake/openmpi/scalapack as needed, then HPhi
+    sh ma.sh list                # available apps/tools ([deps] = auto-resolves tools)
+    sh ma.sh installed           # what is already installed
+
+Automatic dependency resolution applies only to apps tagged `[deps]` in
+`sh ma.sh list`; for other apps `ma.sh` installs just that app and you install
+its tools first (the per-directory flow below). `ma.sh` builds tools in their
+default mode.
+
 # License and Copyright
 
 The University of Tokyo holds the copyright of MateriApps Installer, and it is distributed under the GNU General Public License version 3 (GPL v3). The patch files for each installed software are subject to the license of the respective software.
