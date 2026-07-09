@@ -8,6 +8,8 @@ export MAKE_J="${MAKE_J:-"-j1"}"
 
 # export explicitly if defined
 test -n "${CXX+defined}" && export CXX="$CXX"
+# KOKKOS GPU architecture for the "gpu" mode (e.g. AMPERE80, VOLTA70, HOPPER90)
+test -n "${KOKKOS_ARCH+defined}" && export KOKKOS_ARCH="$KOKKOS_ARCH"
 
 EOF
 . ./config.txt
