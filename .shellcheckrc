@@ -1,0 +1,5 @@
+# SC1090/SC1091: scripts source files resolved at runtime (util.sh,
+# version.sh, user config) by design.
+# SC3043: 'local' is not POSIX but supported by every shell this
+# project targets (dash, ash, bash, zsh).
+disable=SC1090,SC1091,SC3043

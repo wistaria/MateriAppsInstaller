@@ -42,5 +42,41 @@ assert_eq "$(ma_requires apps app1)" "t1 t2" "requires app1"
 assert_eq "$(ma_requires tools t1)" "" "requires t1 empty"
 assert_eq "$(ma_requires tools nope)" "" "requires missing dir empty"
 
+# --- ma_resolve: diamond + transitive ---
+# app hphix -> cmake, openmpix, scalapackx ; scalapackx -> openmpix, lapackx
+mkdir -p "$FIX/apps/hphix" "$FIX/tools/cmakex" "$FIX/tools/openmpix" \
+         "$FIX/tools/lapackx" "$FIX/tools/scalapackx"
+printf 'HPHIX_REQUIRES="cmakex openmpix scalapackx"\n'  > "$FIX/apps/hphix/version.sh"
+printf 'SCALAPACKX_REQUIRES="openmpix lapackx"\n'       > "$FIX/tools/scalapackx/version.sh"
+: > "$FIX/tools/cmakex/version.sh"
+: > "$FIX/tools/openmpix/version.sh"
+: > "$FIX/tools/lapackx/version.sh"
+
+order=$(ma_resolve hphix) || fail "resolve hphix exited nonzero"
+# openmpix must appear exactly once, before scalapackx; lapackx before scalapackx
+assert_eq "$(printf '%s\n' "$order" | grep -c '^openmpix$')" "1" "openmpix once (diamond)"
+pos_omp=$(printf '%s\n' "$order" | grep -n '^openmpix$'   | cut -d: -f1)
+pos_lap=$(printf '%s\n' "$order" | grep -n '^lapackx$'    | cut -d: -f1)
+pos_sca=$(printf '%s\n' "$order" | grep -n '^scalapackx$' | cut -d: -f1)
+[ "$pos_omp" -lt "$pos_sca" ] || fail "openmpix must precede scalapackx"
+[ "$pos_lap" -lt "$pos_sca" ] || fail "lapackx must precede scalapackx"
+
+# --- ma_resolve: cycle detection ---
+mkdir -p "$FIX/apps/cyc" "$FIX/tools/a" "$FIX/tools/b"
+printf 'CYC_REQUIRES="a"\n' > "$FIX/apps/cyc/version.sh"
+printf 'A_REQUIRES="b"\n'   > "$FIX/tools/a/version.sh"
+printf 'B_REQUIRES="a"\n'   > "$FIX/tools/b/version.sh"
+if ma_resolve cyc >/dev/null 2>&1; then fail "cycle should exit nonzero"; fi
+
+# --- ma_resolve: unknown tool ---
+mkdir -p "$FIX/apps/badref"
+printf 'BADREF_REQUIRES="ghost"\n' > "$FIX/apps/badref/version.sh"
+if ma_resolve badref >/dev/null 2>&1; then fail "unknown tool should exit nonzero"; fi
+
+# --- ma_resolve: app with no deps -> empty output, exit 0 ---
+mkdir -p "$FIX/apps/nodeps"; : > "$FIX/apps/nodeps/version.sh"
+order=$(ma_resolve nodeps) || fail "nodeps should exit 0"
+assert_eq "$order" "" "nodeps empty order"
+
 [ "$FAILED" -eq 0 ] && echo "ALL TESTS PASSED"
 exit "$FAILED"
