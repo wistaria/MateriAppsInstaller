@@ -27,11 +27,14 @@
   本体のバイナリ（`turborvb.x`, `prep.x` など）が別途必要で、これは
   <https://github.com/sissaschool/turborvb> からビルドする。
 - `pyturbo` は **import 時に** `TURBORVB_ROOT` を参照するため、`import
-  turbogenius` するだけでも設定が必須。そのため生成される
-  `turbogeniusvars.sh` は `TURBORVB_ROOT` を export する（既存の値があれば
-  それを尊重し、無ければ `$MA_ROOT/turborvb` を既定値とする）。実計算の前に
-  そこへ TurboRVB を導入するか、`TURBORVB_ROOT` を自前ビルドへ向けること。
-  既定値は Python 層を import 可能にするためだけのもの。
+  turbogenius` するだけでも設定が必須。生成される `turbogeniusvars.sh` は
+  次の順で解決する: (1) 既に設定済みの `TURBORVB_ROOT`、(2) MateriApps の
+  `turborvb` パッケージが導入済みなら、その `turborvbvars.sh` を自動 source
+  してバイナリを含むバージョン付き `TURBORVB_ROOT` を設定、(3) いずれも無ければ
+  素の `$MA_ROOT/turborvb`（import を通すだけ）。よって **`turborvb`
+  パッケージを先に入れておけば十分**で、`turborvbvars.sh` を
+  `turbogeniusvars.sh` より先に source する必要はない。MateriApps 外の
+  TurboRVB を使う場合は、実計算の前に `TURBORVB_ROOT` を自分で export すること。
 - `sh link.sh` 後、`source $MA_ROOT/turbogenius/turbogeniusvars.sh` で
   `turbogenius` コマンドを `PATH` に、パッケージを `PYTHONPATH` に通し、
   `TURBORVB_ROOT` を設定する。

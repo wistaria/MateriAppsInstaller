@@ -27,11 +27,15 @@
   you also need the TurboRVB binaries (`turborvb.x`, `prep.x`, ...), which are
   built separately from <https://github.com/sissaschool/turborvb>.
 - `pyturbo` reads `TURBORVB_ROOT` **at import time**, so it must be set even to
-  `import turbogenius`. The generated `turbogeniusvars.sh` therefore exports
-  `TURBORVB_ROOT`, keeping any existing value and otherwise defaulting to
-  `$MA_ROOT/turborvb`. Install TurboRVB there (or point `TURBORVB_ROOT` at your
-  own build) before running real calculations; the default only makes the
-  Python layer importable.
+  `import turbogenius`. The generated `turbogeniusvars.sh` resolves it in order:
+  (1) an already-set `TURBORVB_ROOT`; (2) if the MateriApps `turborvb` package
+  is installed, it sources that package's `turborvbvars.sh` automatically, which
+  sets the versioned `TURBORVB_ROOT` that actually contains the binaries; (3)
+  otherwise it falls back to the bare `$MA_ROOT/turborvb`, which only makes the
+  Python layer importable. So installing the `turborvb` package first is enough
+  — you do not have to remember to source `turborvbvars.sh` before
+  `turbogeniusvars.sh`. For a TurboRVB build outside MateriApps, export
+  `TURBORVB_ROOT` yourself before running real calculations.
 - After `sh link.sh`, `source $MA_ROOT/turbogenius/turbogeniusvars.sh` puts the
   `turbogenius` command on `PATH`, the package on `PYTHONPATH`, and sets
   `TURBORVB_ROOT`.

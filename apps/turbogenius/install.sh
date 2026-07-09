@@ -84,10 +84,17 @@ export ${ROOTNAME}=$PREFIX
 export PATH=\${${ROOTNAME}}/bin:\$PATH
 export PYTHONPATH=\${${ROOTNAME}}/lib/python${PYTHON_VERSION}/${SITE_PACKAGES}:\$PYTHONPATH
 # TurboGenius is a Python driver for TurboRVB and requires TURBORVB_ROOT to be
-# set even to import (pyturbo reads it at import time). Keep an existing value
-# (e.g. set by a MateriApps turborvb package or by the user) and otherwise fall
-# back to the conventional MateriApps turborvb prefix. Actual QMC runs need the
-# TurboRVB binaries installed there; see the TurboGenius README.
+# set even to import (pyturbo reads it at import time). Resolve it in this order
+# so that sourcing turbogeniusvars.sh alone still points at a real TurboRVB:
+#   1. an already-set TURBORVB_ROOT (user or a turborvb vars file sourced first)
+#   2. the MateriApps turborvb package, whose turborvbvars.sh exports the
+#      versioned TURBORVB_ROOT=\$MA_ROOT/turborvb/turborvb-<ver>-<rev> that
+#      actually contains the binaries
+#   3. the bare \$MA_ROOT/turborvb prefix, which only makes the Python layer
+#      importable (real QMC runs still need TurboRVB installed there)
+if [ -z "\${TURBORVB_ROOT:-}" ] && [ -f ${MA_ROOT}/turborvb/turborvbvars.sh ]; then
+  . ${MA_ROOT}/turborvb/turborvbvars.sh
+fi
 export TURBORVB_ROOT=\${TURBORVB_ROOT:-${MA_ROOT}/turborvb}
 EOF
 VARS_SH=${MA_ROOT}/${__NAME__}/${__NAME__}vars-${__VERSION__}-${__MA_REVISION__}.sh
