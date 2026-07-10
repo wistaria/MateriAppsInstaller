@@ -8,6 +8,8 @@ export MAKE_J="${MAKE_J:-"-j1"}"
 
 # export explicitly if defined
 test -n "${CXX+defined}" && export CXX="$CXX"
+# KOKKOS GPU architecture for the "gpu" mode (e.g. AMPERE80, VOLTA70, HOPPER90)
+test -n "${KOKKOS_ARCH+defined}" && export KOKKOS_ARCH="$KOKKOS_ARCH"
 
 EOF
 . ./config.txt
@@ -29,6 +31,15 @@ if [ ! -d $CONFIG_DIR ]; then
   exit 127
 fi
 DEFAULT_CONFIG_DIR=$SCRIPT_DIR/config/default
+
+# Fail fast (before the download/extract) when the gpu mode is selected without
+# its required KOKKOS_ARCH, so the user does not wait for setup only to hit the
+# guard in config/gpu/preprocess.sh.
+if [ "$mode" = "gpu" ] && [ -z "${KOKKOS_ARCH:-}" ]; then
+  echo "Error: KOKKOS_ARCH is not set (required for the gpu mode)."
+  echo "Set it to your GPU Kokkos arch, e.g. AMPERE80 (A100), VOLTA70 (V100), HOPPER90 (H100)."
+  exit 1
+fi
 
 export UTIL_SH=$SCRIPT_DIR/../../scripts/util.sh
 . $UTIL_SH

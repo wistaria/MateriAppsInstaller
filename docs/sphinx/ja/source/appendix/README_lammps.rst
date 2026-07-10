@@ -20,3 +20,14 @@ MateriApps URL
 --------------
 
 https://ma.issp.u-tokyo.ac.jp/app/596
+
+GPU ビルド（モード ``gpu``）
+----------------------------
+
+``sh install.sh gpu`` で NVIDIA GPU（KOKKOS / CUDA）版をビルドする。ビルド前に
+環境変数 ``KOKKOS_ARCH`` で対象 GPU アーキテクチャを指定する（必須・既定なし）:
+例として A100 なら ``export KOKKOS_ARCH=AMPERE80``。代表値は ``AMPERE80`` (A100),
+``VOLTA70`` (V100), ``HOPPER90`` (H100), ``TURING75`` (T4), ``ADA89`` (RTX 40),
+``PASCAL60`` (P100)。誤ったアーキテクチャでもビルドは通るが GPU 実行時に失敗する。
+CUDA ツールキット（``nvcc``）と CUDA-aware MPI が ``PATH`` に必要。本モードは
+NVIDIA GPU が必要で CI 対象外。物性研 kugui（A100）で動作確認済み。
