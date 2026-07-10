@@ -20,3 +20,14 @@ MateriApps URL
 --------------
 
 https://ma.issp.u-tokyo.ac.jp/app/720
+
+GPU ビルド（モード ``gpu``）
+----------------------------
+
+``sh install.sh gpu`` で NVIDIA GPU（CUDA / OpenACC）版を NVHPC コンパイラ
+（``nvfortran`` / ``nvc``）と CUDA-aware MPI でビルドする（例: NVHPC/CUDA 環境で
+``module load nvhpc openmpi_nvhpc``）。``nvfortran`` は既定でビルドノードの GPU を
+対象にする。対象 GPU が無いノードでビルドする場合は
+``MA_EXTRA_FLAGS="-gpu=ccXX"``（A100 なら ``cc80``）で compute capability を指定する。
+本モードは NVIDIA GPU + CUDA 環境が必要で CI 対象外。物性研 kugui（A100）で
+動作確認済み（``pw.x`` が "GPU acceleration is ACTIVE" を表示）。
