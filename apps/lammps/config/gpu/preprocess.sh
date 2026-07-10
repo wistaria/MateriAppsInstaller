@@ -7,9 +7,18 @@ set -u
 # architecture name, e.g.:
 #   AMPERE80 (A100)   VOLTA70 (V100)    HOPPER90 (H100)
 #   ADA89    (RTX 40) TURING75 (T4/RTX 20) PASCAL60 (P100)
-# See https://kokkos.org for the full list. There is no safe default because a
+# See https://kokkos.github.io/kokkos-core-wiki/get-started/configuration-guide.html
+# for the full list. There is no safe default because a
 # wrong architecture produces binaries that will not run on the GPU.
 : "${KOKKOS_ARCH:?set KOKKOS_ARCH to your GPU Kokkos arch, e.g. AMPERE80 for A100, VOLTA70 for V100, HOPPER90 for H100, TURING75, ADA89, or PASCAL60, then re-run}"
+
+# KOKKOS_ARCH becomes part of a CMake option name (-DKokkos_ARCH_<NAME>=ON), so
+# reject anything that is not a plain Kokkos arch token before it reaches cmake.
+case "$KOKKOS_ARCH" in
+  *[!A-Za-z0-9_]*)
+    echo "Error: KOKKOS_ARCH='$KOKKOS_ARCH' contains invalid characters; expected a Kokkos arch name such as AMPERE80." >&2
+    exit 1 ;;
+esac
 
 rm -rf build
 mkdir build
@@ -27,7 +36,7 @@ cmake -C../cmake/presets/all_on.cmake -C../cmake/presets/nolib.cmake \
   -DPKG_GPU=OFF -DPKG_KOKKOS=ON \
   -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_OPENMP=yes \
   -DKokkos_ARCH_${KOKKOS_ARCH}=ON \
-  -DCMAKE_CXX_COMPILER=${NVCC_WRAPPER} -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_COMPILER="${NVCC_WRAPPER}" -DCMAKE_CXX_STANDARD=17 \
   -DBUILD_SHARED_LIBS=yes \
   -DPC_FFTW3_INCLUDE_DIRS=$FFTW_ROOT/include -DPC_FFTW3_LIBRARY_DIRS=$FFTW_ROOT/lib \
   -DCMAKE_CXX_FLAGS="-DLMP_INTEL_NO_TBB ${MA_EXTRA_FLAGS}" \
